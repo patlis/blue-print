@@ -10,8 +10,8 @@ function patlis_menu_admin_menu(): void
 
     // Parent menu opens Options page
     add_menu_page(
-        'Menu',
-        'Menu',
+        'My Menu',
+        'My Menu',
         $capability,
         $parent_slug,
         'patlis_menu_render_options_page',
@@ -62,5 +62,5 @@ function patlis_menu_render_options_page(): void
     }
 
     // fallback (για να μην βγάζει λευκή σελίδα αν δεν έχεις βάλει ακόμα το step 1)
-    echo '<div class="wrap"><h1>Menu – Options</h1><p>Options page not loaded yet.</p></div>';
+    echo '<div class="wrap"><h1>My Menu – Options</h1><p>Options page not loaded yet.</p></div>';
 }
