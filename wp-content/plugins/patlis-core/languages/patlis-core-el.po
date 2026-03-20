@@ -1,0 +1,72 @@
+# Greek (Greece) translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-12-28 21:17+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: el_GR\n"
+"Language-Team: el_GR <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Address"
+msgstr "Διεύθυνση"
+
+msgid "Basic settings"
+msgstr "Βασικές ρυθμίσεις"
+
+msgid "City"
+msgstr "Πόλη"
+
+msgid "Company name"
+msgstr "Επωνυμία"
+
+msgid "Display the contact form"
+msgstr "Εμφάνιση φόρμας επικοινωνίας"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Mobile"
+msgstr "Κινητό"
+
+msgid "Mobile phone"
+msgstr "Κινητό τηλέφωνο"
+
+msgid "Opening times"
+msgstr "Ώρες λειτουργίας"
+
+msgid "Patlis.com"
+msgstr "Patlis.com"
+
+msgid "Phone"
+msgstr "Τηλέφωνο"
+
+msgid "Phone-2"
+msgstr "Τηλέφωνο 2"
+
+msgid "Show contact form (1/0)"
+msgstr "Εμφάνιση φόρμας επικοινωνίας (1/0)"
+
+msgid "Social Media"
+msgstr "Κοινωνικά δίκτυα"
+
+msgid "Time zone"
+msgstr "Ζώνη ώρας"
+
+msgid "Zip"
+msgstr "Τ.Κ."
+
+msgid "Zip code"
+msgstr "Τ.Κ."
+

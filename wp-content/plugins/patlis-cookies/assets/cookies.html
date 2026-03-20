@@ -1,0 +1,113 @@
+<div class="ex-modal" id="cookie-settings" style="display: flex;">
+    <div class="ex-modal-dialog ex-modal-xl ex-modal-dialog-centered ex-modal-dialog-scrollable">
+        <div class="ex-modal-content ex-m-auto">
+            <div class="ex-modal-body">   
+                <!--Notwendig -->                               
+                <div class="ex-border-bottom">
+                    <div id="heading0">
+                        <div class="ex-d-flex" style="justify-content: space-between;">
+                            <button class="ex-categoryname-btn" style="width:100%" type="button" onclick="toggleElm(collapse_0)">
+                                <span class="ex-prefix" id="prefix_0">+</span><span class="ex-categoryname">Necessary cookies</span>
+                            </button>
+                            <div class="ex-form-check"><input type="checkbox" id="necessary-cookies" checked="" style="transform: scale(1.5);" disabled=""></div>
+                        </div>
+                    </div>
+                    <div id="collapse_0" class="ex-d-none">
+                        <div>
+                            <p style="margin-left: 20px" id="necessary-descr">Necessary cookies help make a website usable by enabling basic functions such as page navigation and access to secure areas of the website. 
+								The website cannot function properly without these cookies.</p>
+                        </div>
+                    </div>
+                </div>
+                <!--Marketing -->                               
+                <div class="ex-border-bottom">
+                    <div id="heading1">
+                        <div class="ex-d-flex" style="justify-content: space-between;">
+                            <button class="ex-categoryname-btn" style="width:100%" type="button" onclick="toggleElm(collapse_1)">
+                                <span class="ex-prefix" id="prefix_1">+</span><span class="ex-categoryname">Marketing cookies</span>
+                            </button>
+                            <div class="ex-form-check">
+                                <input type="checkbox" id="marketing-cookies" checked="" style="transform: scale(1.5);">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_1" class="ex-d-none">
+                        <div>
+                            <p style="margin-left: 20px" id="marketing-descr">Marketing cookies are used to track visitors across websites. 
+								The intention is to display ads that are relevant and engaging for the individual user and therefore more valuable for publishers and third-party advertisers.</p>
+                        </div>
+                    </div>
+                </div>
+                <!--Präferenzen -->                               
+                <div class="ex-border-bottom">
+                    <div id="heading2">
+                        <div class="ex-d-flex" style="justify-content: space-between;">
+                            <button class="ex-categoryname-btn" style="width:100%" type="button" onclick="toggleElm(collapse_2)">
+                                <span class="ex-prefix" id="prefix_2">+</span><span class="ex-categoryname">Preference cookies</span> 
+                            </button>
+                            <div class="ex-form-check">
+                                <input type="checkbox" id="preferences-cookies" checked="" style="transform: scale(1.5);">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_2" class="ex-d-none">
+                        <div>
+                            <p style="margin-left: 20px" id="preference-descr">Preference cookies enable a website to remember information that changes the way the website behaves or looks, 
+								such as your preferred language or the region you are in.</p>
+                        </div>
+                    </div>
+                </div>
+                <!--Statistiken -->    
+                <div class="ex-border-bottom">
+                    <div id="heading3">
+                        <div class="ex-d-flex" style="justify-content: space-between;">
+                            <button class="ex-categoryname-btn" style="width:100%" type="button" onclick="toggleElm(collapse_3)">
+                                <span class="ex-prefix" id="prefix_3">+</span><span class="ex-categoryname">Statistics cookies</span>
+                            </button>
+                            <div class="ex-form-check">
+                                <input type="checkbox" id="statistics-cookies" checked="" style="transform: scale(1.5);">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_3" class="ex-d-none">
+                        <div>
+                            <p style="margin-left: 20px" id="statistic-descr">Statistics cookies help website owners understand how visitors interact with websites by collecting and reporting information anonymously.</p>
+                        </div>
+                    </div>
+                </div> 
+                <!--Nicht klassifiziert -->                             
+                <div class="ex-border-bottom">
+                    <div id="heading4">
+                        <div class="ex-d-flex" style="justify-content: space-between;">
+                            <button class="ex-categoryname-btn"  style="width:100%" type="button" onclick="toggleElm(collapse_4)">
+                                <span class="ex-prefix" id="prefix_4">+</span><span class="ex-categoryname">Unclassified cookies</span>
+                            </button>
+                            <div class="ex-form-check">
+                                <input type="checkbox" id="unclassified-cookies" checked="" style="transform: scale(1.5);" disabled="">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_4" class="ex-d-none">
+                        <div>
+                            <p style="margin-left: 20px" id="unclassified-descr">Unclassified cookies are cookies that we are currently in the process of classifying, together with the providers of individual cookies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ex-modal-footer">
+                <div class="ex-row ex-w-100">
+                    <div class="ex-btn-columns ex-p-1">
+                        <button type="button" class="ex-btn ex-btn-outline-primary ex-btn-block" onclick="acceptNecessary()" id="necessary-btn">Only necessary cookies</button>
+                    </div>
+                    <div class="ex-btn-columns ex-p-1">
+                        <button type="button" class="ex-btn ex-btn-outline-primary ex-btn-block" onclick="saveSettings()" id="apply-btn">Apply and close</button>
+                    </div>
+                    <div class="ex-btn-columns ex-p-1">
+                        <button type="button" class="ex-btn ex-btn-warning ex-btn-block" onclick="acceptAll()" id="allow-all-btn">Allow all cookies</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</div>

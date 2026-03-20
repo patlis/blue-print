@@ -1,0 +1,72 @@
+# German (Germany) translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-12-28 21:17+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de_DE\n"
+"Language-Team: de_DE <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Basic settings"
+msgstr "Grundeinstellungen"
+
+msgid "City"
+msgstr "Stadt"
+
+msgid "Company name"
+msgstr "Firmenname"
+
+msgid "Display the contact form"
+msgstr "Kontaktformular anzeigen"
+
+msgid "E-mail"
+msgstr "E-Mail"
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "Mobile phone"
+msgstr "Mobiltelefon"
+
+msgid "Opening times"
+msgstr "Öffnungszeiten"
+
+msgid "Patlis.com"
+msgstr "Patlis.com"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Phone-2"
+msgstr "Telefon 2"
+
+msgid "Show contact form (1/0)"
+msgstr "Kontaktformular anzeigen (1/0)"
+
+msgid "Social Media"
+msgstr "Soziale Medien"
+
+msgid "Time zone"
+msgstr "Zeitzone"
+
+msgid "Zip"
+msgstr "PLZ"
+
+msgid "Zip code"
+msgstr "Postleitzahl"
+

@@ -1,0 +1,124 @@
+/*
+ Theme Name:   Bricks Child Theme
+ Theme URI:    https://bricksbuilder.io/
+ Description:  Use this child theme to extend Bricks.
+ Author:       Bricks
+ Author URI:   https://bricksbuilder.io/
+ Template:     bricks
+ Version:      1.1
+ Text Domain:  bricks
+*/
+
+#brxe-layqmn { white-space: nowrap;}
+/*====================================================================== main sizes START */
+body { font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;}
+main {min-height:50vh}
+.w-100{width: 100% !important;}
+.boxed-container {padding-right: 20px; padding-left: 20px;}
+/*====================================================================== main sizes END */
+body.patlis-has-notification-bar {
+  --notification-on: 25px;
+}
+	body.patlis-has-notification-bar.patlis-has-notification-cta {
+  --notification-on: 35px;
+}	
+--news-line-height:var(--notification-on);
+/*====================================================================== Primary button inside nav START */
+a.bricks-background-primary { color: var(--body-bg) !important;}
+/*====================================================================== Primary button inside nav START */
+/*====================================================================== center popup START */
+/*
+#brxe-center-popup-header {display: flex; justify-content: space-between; flex-direction: row}
+.center-popup-body{ flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;}
+*/
+/*====================================================================== center popup END */
+
+
+#brxe-gvlyau img{
+  height: var(--logo-height);
+  width: auto;      /* κρατάει αναλογία */
+  max-width: none; 
+}
+	
+.text-center{text-align: center !important;}
+/*======================================================================  WP Gallery (Gutenberg) inside Bricks: FIXED thumbs + wrap + last row centered   */
+.wp-gallery-content .wp-block-gallery {
+  --wg-gap-lg: 15px;
+  --wg-gap-md: 10px;
+  --wg-gap-sm: 5px;
+  --thumb-lg: 200px;
+  --thumb-md: 150px;
+  --thumb-sm: 100px;
+  margin-inline: auto;
+
+  	display: flex !important;
+  	flex-wrap: wrap !important;
+  	justify-content: center !important; /* <- κεντράρει ΚΑΙ την τελευταία σειρά */
+  	gap: var(--wg-gap-lg) !important;
+
+  	/* σκοτώνουμε grid/flex rules του WP block */
+  	align-items: stretch !important;
+}
+
+/* κάθε item σταθερό πλάτος */
+.wp-gallery-content .wp-block-gallery > .wp-block-image {
+  	margin: 0 !important;
+  	width: auto !important;
+  	max-width: none !important;
+  	flex: 0 0 var(--thumb-lg) !important;
+  	max-width: var(--thumb-lg) !important;
+}
+
+/* εικόνα να γεμίζει το tile */
+.wp-gallery-content .wp-block-gallery > .wp-block-image img {
+  	width: 100% !important;
+  	height: auto;
+  	display: block;
+  	object-fit: cover;
+}
+
+/* MD */
+@media (max-width: 990px){
+	.wp-gallery-content .wp-block-gallery {gap: var(--wg-gap-md) !important;}
+	.wp-gallery-content .wp-block-gallery > .wp-block-image{
+		flex-basis: var(--thumb-md) !important;
+		max-width: var(--thumb-md) !important;
+	}
+}
+
+/* SM */
+@media (max-width: 478px)
+{
+	.wp-gallery-content .wp-block-gallery {gap: var(--wg-gap-sm) !important;}
+	.wp-gallery-content .wp-block-gallery > .wp-block-image
+	{
+		flex-basis: var(--thumb-sm) !important;
+		max-width: var(--thumb-sm) !important;
+	}
+}
+
+.no-wrap{white-space: nowrap; }
+.room-cart-img:hover {transform: scale(1.1);}
+.room-cart-img { transition: transform 0.5s ease;}
+
+.check-list ul, ul.check-list{
+  	list-style: none;
+  	padding-left: 0;
+  	padding-inline-start: 0;
+  	line-height: 1.7;
+}
+
+.check-list li{
+  	position: relative;   /* απαραίτητο */
+ 	padding-left: 22px;   /* χώρος για το icon */
+}
+
+.check-list li::before{
+  	content: "\2713";             /* fa-check */
+  	font-family: inherit;
+ 	font-weight: 900;
+  	position: absolute;
+  	left: 0;
+  	top: 0;
+	color: var(--title-color);
+}
