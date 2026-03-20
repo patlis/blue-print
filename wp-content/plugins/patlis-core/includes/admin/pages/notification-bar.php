@@ -152,10 +152,15 @@ final class Patlis_Admin_Page_Notification_Bar {
     ?>
 
     <style>
-      .patlis-notification-bar-page .form-table th,
       .patlis-notification-bar-page .form-table td {
         padding-top: 5px;
         padding-bottom: 0px;
+      }
+
+      .patlis-notification-field-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
       }
 
       .patlis-notification-lang-block {
@@ -182,24 +187,26 @@ final class Patlis_Admin_Page_Notification_Bar {
         <table class="form-table">
 
           <tr>
-            <th><?php esc_html_e('Enable', 'patlis-core'); ?></th>
             <td>
+              <label class="patlis-notification-field-label" for="patlis_nb_enabled"><?php esc_html_e('Enable', 'patlis-core'); ?></label>
               <input type="checkbox"
+                id="patlis_nb_enabled"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_NOTIFICATION_BAR); ?>[enabled]"
                 value="1" <?php checked(!empty($opt['enabled'])); ?>>
             </td>
           </tr>
 
           <tr>
-            <th><?php esc_html_e('Text', 'patlis-core'); ?></th>
             <td>
+              <span style="font-weight: 600; font-size: 24px;"><?php esc_html_e('Text', 'patlis-core'); ?></span>
+              <small> (Recommended: Maximum 50 characters)</small>
               <?php foreach ($languages as $lang_slug => $lang_label): ?>
                 <?php
                 $value = $text_all[$lang_slug] ?? '';
                 ?>
                 <div class="patlis-notification-lang-block">
                   <div class="patlis-notification-lang-label"><?php echo esc_html($lang_label); ?></div>
-                    <small>Recommended: Maximum 50 characters</small>
+                    
                     <input type="text"
                       class="large-text"
                       name="<?php echo esc_attr(Patlis_Core::OPTION_NOTIFICATION_BAR); ?>[text][<?php echo esc_attr($lang_slug); ?>]"
@@ -210,18 +217,20 @@ final class Patlis_Admin_Page_Notification_Bar {
           </tr>
 
           <tr>
-            <th><?php esc_html_e('Start date', 'patlis-core'); ?></th>
             <td>
+              <label class="patlis-notification-field-label" for="patlis_nb_start_date"><?php esc_html_e('Start date', 'patlis-core'); ?></label>
               <input type="date"
+                id="patlis_nb_start_date"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_NOTIFICATION_BAR); ?>[start_date]"
                 value="<?php echo esc_attr($opt['start_date'] ?? ''); ?>">
             </td>
           </tr>
 
           <tr>
-            <th><?php esc_html_e('Date end', 'patlis-core'); ?></th>
             <td>
+              <label class="patlis-notification-field-label" for="patlis_nb_end_date"><?php esc_html_e('Date end', 'patlis-core'); ?></label>
               <input type="date"
+                id="patlis_nb_end_date"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_NOTIFICATION_BAR); ?>[end_date]"
                 value="<?php echo esc_attr($opt['end_date'] ?? ''); ?>">
             </td>

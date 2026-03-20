@@ -156,7 +156,7 @@ final class Patlis_Admin_Page_Opening {
         <table class="form-table">
 
           <tr>
-            <th><?php esc_html_e('Show on footer', 'patlis-core'); ?></th>
+            <th><?php esc_html_e('Show Opening times', 'patlis-core'); ?></th>
             <td>
               <input type="checkbox"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[show_on_footer]"

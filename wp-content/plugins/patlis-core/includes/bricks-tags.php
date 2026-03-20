@@ -271,6 +271,136 @@ function patlis_render_dynamic_tags_in_content($content) {
       $all = get_option(Patlis_Core::OPTION_CENTER_POPUP, []);
       if (!is_array($all)) $all = [];
 
+      if ($tag === 'patlis_center_code' || $tag === 'patlis_center_html') {
+        $field = $tag === 'patlis_center_code' ? 'code' : 'html';
+        $raw = $all[$field] ?? '';
+
+        if (is_string($raw)) {
+          return $raw;
+        }
+
+        if (is_array($raw)) {
+          $current_lang = '';
+          $default_lang = '';
+
+          if (function_exists('pll_current_language')) {
+            $lang = pll_current_language('slug');
+            if (is_string($lang)) {
+              $current_lang = $lang;
+            }
+          }
+
+          if (function_exists('pll_default_language')) {
+            $lang = pll_default_language('slug');
+            if (is_string($lang)) {
+              $default_lang = $lang;
+            }
+          }
+
+          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
+            return $raw[$current_lang];
+          }
+
+          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
+            return $raw[$default_lang];
+          }
+
+          foreach ($raw as $value) {
+            if (is_string($value) && $value !== '') {
+              return $value;
+            }
+          }
+        }
+
+        return '';
+      }
+
+      if ($tag === 'patlis_center_link_url') {
+        $raw = $all['link_url'] ?? '';
+
+        if (is_string($raw)) {
+          return $raw;
+        }
+
+        if (is_array($raw)) {
+          $current_lang = '';
+          $default_lang = '';
+
+          if (function_exists('pll_current_language')) {
+            $lang = pll_current_language('slug');
+            if (is_string($lang)) {
+              $current_lang = $lang;
+            }
+          }
+
+          if (function_exists('pll_default_language')) {
+            $lang = pll_default_language('slug');
+            if (is_string($lang)) {
+              $default_lang = $lang;
+            }
+          }
+
+          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
+            return $raw[$current_lang];
+          }
+
+          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
+            return $raw[$default_lang];
+          }
+
+          foreach ($raw as $value) {
+            if (is_string($value) && $value !== '') {
+              return $value;
+            }
+          }
+        }
+
+        return '';
+      }
+
+      if ($tag === 'patlis_center_title') {
+        $raw = $all['title'] ?? '';
+
+        if (is_string($raw)) {
+          return $raw;
+        }
+
+        if (is_array($raw)) {
+          $current_lang = '';
+          $default_lang = '';
+
+          if (function_exists('pll_current_language')) {
+            $lang = pll_current_language('slug');
+            if (is_string($lang)) {
+              $current_lang = $lang;
+            }
+          }
+
+          if (function_exists('pll_default_language')) {
+            $lang = pll_default_language('slug');
+            if (is_string($lang)) {
+              $default_lang = $lang;
+            }
+          }
+
+          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
+            return $raw[$current_lang];
+          }
+
+          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
+            return $raw[$default_lang];
+          }
+
+          foreach ($raw as $value) {
+            if (is_string($value) && $value !== '') {
+              return $value;
+            }
+          }
+        }
+
+        return '';
+      }
+
       $key = $center_map[$tag];
       $val = array_key_exists($key, $all) ? $all[$key] : '';
 
@@ -308,6 +438,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (
     $clean !== 'patlis_center_image_id' &&
     $clean !== 'patlis_center_image_url' &&
+    $clean !== 'patlis_center_title' &&
     $clean !== 'patlis_center_start_date' &&
     $clean !== 'patlis_center_end_date' &&
     $clean !== 'patlis_bar_start_date' &&
@@ -336,6 +467,49 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   // CENTER POP UP
   $opt = get_option(Patlis_Core::OPTION_CENTER_POPUP, []);
   if (!is_array($opt)) $opt = [];
+
+  if ($clean === 'patlis_center_title') {
+    $raw = $opt['title'] ?? '';
+
+    if (is_string($raw)) {
+      return $raw;
+    }
+
+    if (is_array($raw)) {
+      $current_lang = '';
+      $default_lang = '';
+
+      if (function_exists('pll_current_language')) {
+        $lang = pll_current_language('slug');
+        if (is_string($lang)) {
+          $current_lang = $lang;
+        }
+      }
+
+      if (function_exists('pll_default_language')) {
+        $lang = pll_default_language('slug');
+        if (is_string($lang)) {
+          $default_lang = $lang;
+        }
+      }
+
+      if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
+        return $raw[$current_lang];
+      }
+
+      if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
+        return $raw[$default_lang];
+      }
+
+      foreach ($raw as $value) {
+        if (is_string($value) && $value !== '') {
+          return $value;
+        }
+      }
+    }
+
+    return '';
+  }
 
   $id = isset($opt['image_id']) ? (int)$opt['image_id'] : 0;
 
