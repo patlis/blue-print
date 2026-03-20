@@ -8,6 +8,7 @@ final class Patlis_Admin_Settings {
       add_action('admin_post_patlis_save_basic', [__CLASS__, 'handle_save_basic']);
       add_action('admin_post_patlis_save_center_popup', [__CLASS__, 'handle_save_center_popup']);
       add_action('admin_post_patlis_save_notification_bar', [__CLASS__, 'handle_save_notification_bar']);
+      add_action('admin_post_patlis_save_opening',           [__CLASS__, 'handle_save_opening']);
     }
 
     public static function handle_save_social(): void {
@@ -59,6 +60,19 @@ final class Patlis_Admin_Settings {
       update_option(Patlis_Core::OPTION_NOTIFICATION_BAR, $clean);
     
       wp_safe_redirect(admin_url('admin.php?page=patlis-notification-bar&patlis_saved=1'));
+      exit;
+    }
+
+    public static function handle_save_opening(): void {
+      if (!current_user_can('patlis_manage')) { wp_die('Not allowed.'); }
+      check_admin_referer('patlis_save_opening');
+
+      $raw   = isset($_POST[Patlis_Core::OPTION_OPENING]) ? wp_unslash($_POST[Patlis_Core::OPTION_OPENING]) : [];
+      $clean = Patlis_Admin_Page_Opening::sanitize($raw);
+
+      update_option(Patlis_Core::OPTION_OPENING, $clean);
+
+      wp_safe_redirect(admin_url('admin.php?page=patlis-opening&patlis_saved=1'));
       exit;
     }
  

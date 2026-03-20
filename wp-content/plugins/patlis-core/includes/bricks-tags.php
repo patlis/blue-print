@@ -28,7 +28,9 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_mobile}',            'label' => esc_html__('Mobile', 'patlis-core'),                  'group' => $group_basic];
   $tags[] = ['name' => '{patlis_whatsapp}',          'label' => 'WhatsApp',                                            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cordinates}',        'label' => 'Cordinates',                                          'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_show_contact_form}', 'label' => esc_html__('Show contact form (1/0)', 'patlis-core'), 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_show_contact_form}',        'label' => esc_html__('Show contact form (1/0)', 'patlis-core'),  'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_opening_show_on_footer}', 'label' => esc_html__('Opening: Show on footer (1/0)', 'patlis-core'), 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_opening_text}',          'label' => esc_html__('Opening: Text (HTML)', 'patlis-core'),          'group' => $group_basic];
 
   // SOCIAL
   $tags[] = ['name' => '{patlis_facebook}',        'label' => 'Facebook URL',        'group' => $group_social];
@@ -123,6 +125,12 @@ function patlis_render_dynamic_tags_in_content($content) {
     'patlis_center_html'          => 'html',
   ];
 
+  // map tag -> field key (OPENING)
+  $opening_map = [
+    'patlis_opening_show_on_footer' => 'show_on_footer',
+    'patlis_opening_text'           => 'text',
+  ];
+
   // map tag -> field key (NOTIFICATION BAR)
   $bar_map = [
     'patlis_bar_enabled'    => 'enabled',
@@ -131,7 +139,7 @@ function patlis_render_dynamic_tags_in_content($content) {
     'patlis_bar_end_date'   => 'end_date',
   ];
 
-  return preg_replace_callback('/{(patlis_[a-z0-9_]+)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map) {
+  return preg_replace_callback('/{(patlis_[a-z0-9_]+)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map) {
 
     $tag = $m[1];
 
@@ -142,6 +150,28 @@ function patlis_render_dynamic_tags_in_content($content) {
     // BASIC
     if (isset($basic_map[$tag])) {
       $val = Patlis_Core::get_basic($basic_map[$tag], '');
+      return is_scalar($val) ? (string)$val : '';
+    }
+
+    // OPENING
+    if (isset($opening_map[$tag])) {
+      $all = get_option(Patlis_Core::OPTION_OPENING, []);
+      if (!is_array($all)) $all = [];
+
+      if ($tag === 'patlis_opening_text') {
+        $raw = $all['text'] ?? '';
+        if (is_string($raw)) return $raw;
+        if (is_array($raw)) {
+          $current_lang = function_exists('pll_current_language') ? (string)(pll_current_language('slug') ?? '') : '';
+          $default_lang = function_exists('pll_default_language') ? (string)(pll_default_language('slug') ?? '') : '';
+          if ($current_lang !== '' && !empty($raw[$current_lang])) return $raw[$current_lang];
+          if ($default_lang !== '' && !empty($raw[$default_lang])) return $raw[$default_lang];
+          foreach ($raw as $v) { if (is_string($v) && $v !== '') return $v; }
+        }
+        return '';
+      }
+
+      $val = array_key_exists($opening_map[$tag], $all) ? $all[$opening_map[$tag]] : '';
       return is_scalar($val) ? (string)$val : '';
     }
 

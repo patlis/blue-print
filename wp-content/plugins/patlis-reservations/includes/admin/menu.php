@@ -11,7 +11,7 @@ add_action('admin_menu', function () {
 
     add_menu_page(
         'Patlis Reservations',                 // Page title
-        'My Reservations',                 // Menu title (άλλαξέ το σε "My Reservation" αν θες)
+        'Reservations',                 // Menu title 
          $capability,
         patlis_reservations_page_slug(),
         'patlis_reservations_render_settings_page', // αυτή η function είναι στο pages/settings.php

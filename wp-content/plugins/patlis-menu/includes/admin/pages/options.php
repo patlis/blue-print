@@ -250,7 +250,7 @@ final class Patlis_Menu_Admin_Page_Options
         $allergies_all = self::allergies_description_html_all();
         ?>
         <div class="wrap">
-            <h1><?php esc_html_e('My Menu – Options', 'patlis-menu'); ?></h1>
+            <h1><?php esc_html_e('Menu – Options', 'patlis-menu'); ?></h1>
 
             <?php if (!empty($_GET['patlis_saved'])): ?>
                 <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
