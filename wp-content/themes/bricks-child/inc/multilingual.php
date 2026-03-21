@@ -589,3 +589,48 @@ if (!function_exists('patlis_fallback_terms_query')) {
         return $query_args;
     }
 }
+
+/**
+ * Fallback content for translated posts:
+ * If current language post_content is empty, return default language post_content.
+ */
+add_filter('the_content', function ($content) {
+    if (is_admin()) {
+        return $content;
+    }
+
+    if (!function_exists('pll_current_language') || !function_exists('pll_default_language') || !function_exists('pll_get_post')) {
+        return $content;
+    }
+
+    if (!is_singular()) {
+        return $content;
+    }
+
+    global $post;
+    if (!($post instanceof WP_Post)) {
+        return $content;
+    }
+
+    $is_effectively_empty = trim(wp_strip_all_tags((string) $content)) === '';
+    if (!$is_effectively_empty) {
+        return $content;
+    }
+
+    $current_lang = pll_current_language('slug');
+    $default_lang = pll_default_language('slug');
+
+    if (!is_string($current_lang) || !is_string($default_lang) || $current_lang === '' || $default_lang === '' || $current_lang === $default_lang) {
+        return $content;
+    }
+
+    $default_post_id = (int) pll_get_post((int) $post->ID, $default_lang);
+    if ($default_post_id <= 0 || $default_post_id === (int) $post->ID) {
+        return $content;
+    }
+
+    $fallback_content = (string) get_post_field('post_content', $default_post_id);
+    $fallback_content = trim($fallback_content);
+
+    return $fallback_content !== '' ? $fallback_content : $content;
+}, 1);
