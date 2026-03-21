@@ -47,6 +47,15 @@ function patlis_menu_admin_menu(): void
         'edit-tags.php?taxonomy=menu_section&post_type=menu_item',
         null
     );
+
+    add_submenu_page(
+        $parent_slug,
+        'PDF',
+        'PDF',
+        $capability,
+        'edit.php?post_type=menu_pdf',
+        null
+    );
 }
 
 /**

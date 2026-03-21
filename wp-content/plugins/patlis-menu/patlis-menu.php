@@ -29,6 +29,7 @@ define('PATLIS_MENU_URL', plugin_dir_url(__FILE__));
 require_once PATLIS_MENU_PATH . 'includes/post-types.php';
 require_once PATLIS_MENU_PATH . 'includes/categories.php';
 require_once PATLIS_MENU_PATH . 'includes/menu-items.php';
+require_once PATLIS_MENU_PATH . 'includes/menu-pdfs.php';
 require_once PATLIS_MENU_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_MENU_PATH . 'includes/query.php';
 

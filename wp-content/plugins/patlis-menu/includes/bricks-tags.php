@@ -12,6 +12,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
 
     $gCat  = 'Patlis – Menu (Category)';
     $gItem = 'Patlis – Menu (Item)';
+    $gPdf  = 'Patlis – Menu (PDF)';
     $gOpt  = 'Patlis – Menu (Options)';
 
     // Category / Term tags
@@ -70,6 +71,8 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_menu_show_veg_filters}',  'label' => 'Options: Show veg filters (1/0)',     'group' => $gOpt];
     $tags[] = ['name' => '{patlis_menu_show_allergies}', 'label' => 'Options: Show allergies (1/0)', 'group' => $gOpt];
     $tags[] = ['name' => '{patlis_menu_allergies_description}', 'label' => 'Options: Allergies description (HTML)', 'group' => $gOpt];
+    $tags[] = ['name' => '{patlis_menu_pdf_name}', 'label' => 'PDF: Name', 'group' => $gPdf];
+    $tags[] = ['name' => '{patlis_menu_pdf_url}', 'label' => 'PDF: URL', 'group' => $gPdf];
 
     return $tags;
 });
@@ -179,6 +182,37 @@ function patlis_menu_bricks_get_value(string $tag, $post = null, $context = null
         }
 
         return '';
+    }
+
+    if ($tag === 'patlis_menu_pdf_name' || $tag === 'patlis_menu_pdf_url') {
+        $p = patlis_menu_resolve_post_context($post);
+        if (!$p || $p->post_type !== 'menu_pdf') return '';
+
+        $default_pdf = null;
+        if (function_exists('pll_default_language') && function_exists('pll_get_post')) {
+            $default_lang = pll_default_language('slug');
+            if (is_string($default_lang) && $default_lang !== '') {
+                $default_pdf_id = (int) pll_get_post($p->ID, $default_lang);
+                if ($default_pdf_id > 0) {
+                    $default_pdf = get_post($default_pdf_id);
+                    if (!($default_pdf instanceof WP_Post) || $default_pdf->post_type !== 'menu_pdf') {
+                        $default_pdf = null;
+                    }
+                }
+            }
+        }
+
+        if ($tag === 'patlis_menu_pdf_name') {
+            $title = trim((string) get_the_title($p->ID));
+            if ($title !== '') return $title;
+
+            return $default_pdf ? trim((string) get_the_title($default_pdf->ID)) : '';
+        }
+
+        $url = trim(patlis_menu_post_meta($p->ID, 'pmpdf_file_url'));
+        if ($url !== '') return $url;
+
+        return $default_pdf ? trim(patlis_menu_post_meta($default_pdf->ID, 'pmpdf_file_url')) : '';
     }
 
 

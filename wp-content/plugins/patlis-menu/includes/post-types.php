@@ -41,6 +41,36 @@ function patlis_menu_register(): void
         'show_in_menu'        => false,
     ]);
 
+    // CPT: Menu PDFs
+    register_post_type('menu_pdf', [
+        'labels' => [
+            'name'               => 'PDF',
+            'singular_name'      => 'PDF',
+            'add_new_item'       => 'Add New PDF',
+            'edit_item'          => 'Edit PDF',
+            'new_item'           => 'New PDF',
+            'view_item'          => 'View PDF',
+            'search_items'       => 'Search PDFs',
+            'not_found'          => 'No PDFs found',
+            'not_found_in_trash' => 'No PDFs found in trash',
+            'all_items'          => 'All PDFs',
+        ],
+
+        'public'              => true,
+        'publicly_queryable'  => false,
+        'exclude_from_search' => true,
+        'has_archive'         => false,
+        'rewrite'             => false,
+        'query_var'           => false,
+        'show_in_nav_menus'   => false,
+
+        'show_ui'             => true,
+        'show_in_rest'        => true,
+
+        'supports'            => ['title'],
+        'show_in_menu'        => false,
+    ]);
+
     // Taxonomy: Menu Categories
     register_taxonomy('menu_section', ['menu_item'], [
         'labels' => [
