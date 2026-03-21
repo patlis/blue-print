@@ -26,25 +26,22 @@ function patlis_reservations_page_slug_safe(): string
 
 function patlis_reservations_sanitize_settings($input): array
 {
-    // Start from current merged settings (defaults + saved)
-    $out = patlis_reservations_get_settings();
+    // Start from defaults
+    $out = patlis_reservations_defaults();
     if (!is_array($input)) return $out;
 
     $mode = isset($input['mode']) ? sanitize_text_field($input['mode']) : 'off';
-    $allowed_modes = ['off', 'simple', 'embed'];
+    $allowed_modes = ['off', 'simple', 'embed', 'redirect'];
     $out['mode'] = in_array($mode, $allowed_modes, true) ? $mode : 'off';
 
     $out['min_hours'] = isset($input['min_hours']) ? max(0, (int)$input['min_hours']) : (int)$out['min_hours'];
 
-    $uid = isset($input['notify_user_id']) ? (int)$input['notify_user_id'] : 0;
-    if ($uid > 0 && get_user_by('id', $uid)) {
-        $out['notify_user_id'] = $uid;
-    } else {
-        $out['notify_user_id'] = 0;
-    }
+    $out['notify_email'] = isset($input['notify_email']) ? sanitize_email((string)$input['notify_email']) : (string)($out['notify_email'] ?? '');
+    $out['email_subject'] = isset($input['email_subject']) ? sanitize_text_field((string)$input['email_subject']) : (string)($out['email_subject'] ?? '');
 
     // Store raw string, sanitize on output (shortcode later)
     $out['embed_code'] = isset($input['embed_code']) ? (string)$input['embed_code'] : (string)$out['embed_code'];
+    $out['redirect_url'] = isset($input['redirect_url']) ? esc_url_raw((string)$input['redirect_url']) : (string)$out['redirect_url'];
 
     $minTime = isset($input['min_time']) ? trim((string)$input['min_time']) : (string)$out['min_time'];
     $maxTime = isset($input['max_time']) ? trim((string)$input['max_time']) : (string)$out['max_time'];
@@ -60,52 +57,103 @@ function patlis_reservations_render_settings_page()
 {
     if (!current_user_can('patlis_manage')) return;
 
-    echo '<div class="wrap">';
-    echo '<h1>Patlis Reservations</h1>';
+        ?>
+        <div class="wrap">
+                <h1>Reservation Settings</h1>
 
-    if (!empty($_GET['patlis_saved'])) {
-        echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
-    }
+                <?php if (!empty($_GET['patlis_saved'])): ?>
+                        <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
+                <?php endif; ?>
 
-    echo '<p>Phase 1: μόνο Mode + λίγες βασικές ρυθμίσεις. Τα emails θα σταλούν από το Bricks (π.χ. Bricks Form → Email action).</p>';
-    echo '<p>Μπορείς να πάρεις το email του επιλεγμένου χρήστη με shortcode: <code>[patlis_res_notify_email]</code></p>';
+                <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                        <input type="hidden" name="action" value="patlis_reservations_save_settings">
+                        <?php wp_nonce_field('patlis_reservations_save_settings'); ?>
 
-    echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
-    echo '<input type="hidden" name="action" value="patlis_reservations_save_settings">';
-    wp_nonce_field('patlis_reservations_save_settings');
+                        <style>
+                            .patlis-res-tabs-panels {
+                                margin-top: 18px;
+                            }
+                            .patlis-res-tab-panel {
+                                display: none;
+                            }
+                            .patlis-res-tab-panel.is-active {
+                                display: block;
+                            }
+                            .patlis-res-mode-outside {
+                                margin: 16px 0 10px;
+                                max-width: 460px;
+                            }
+                            .patlis-res-mode-outside label {
+                                display: block;
+                                margin-bottom: 6px;
+                                font-weight: 600;
+                            }
+                        </style>
 
-    echo '<table class="form-table" role="presentation">';
+                        <div class="patlis-res-mode-outside">
+                            <label for="patlis_res_mode" style="font-size:1.5rem">Mode</label>
+                            <?php patlis_reservations_field_mode(); ?>
+                        </div>
 
-    echo '<tr><th scope="row">Mode</th><td>';
-    patlis_reservations_field_mode();
-    echo '</td></tr>';
+                        <nav class="nav-tab-wrapper">
+                            <a href="#" class="nav-tab nav-tab-active" data-tab="simple">Simple system</a>
+                            <a href="#" class="nav-tab" data-tab="embed">Embed</a>
+                            <a href="#" class="nav-tab" data-tab="redirect">Redirect</a>
+                        </nav>
 
-    echo '<tr><th scope="row">Email recipient (WP user)</th><td>';
-    patlis_reservations_field_notify_user();
-    echo '</td></tr>';
+                        <div class="patlis-res-tabs-panels">
+                            <div class="patlis-res-tab-panel is-active" data-panel="simple">
+                                <table class="form-table" role="presentation">
+                                    <tr><th scope="row">Email recipient</th><td><?php patlis_reservations_field_notify_user(); ?></td></tr>
+                                    <tr><th scope="row">Email subject</th><td><?php patlis_reservations_field_email_subject(); ?></td></tr>
+                                    <tr><th scope="row">Minimum time before reservation (hours)</th><td><?php patlis_reservations_field_min_hours(); ?></td></tr>
+                                    <tr><th scope="row">Min. time</th><td><?php patlis_reservations_field_min_time(); ?></td></tr>
+                                    <tr><th scope="row">Max. time</th><td><?php patlis_reservations_field_max_time(); ?></td></tr>
+                                </table>
+                            </div>
 
-    echo '<tr><th scope="row">Minimum time before reservation (hours)</th><td>';
-    patlis_reservations_field_min_hours();
-    echo '</td></tr>';
+                            <div class="patlis-res-tab-panel" data-panel="embed">
+                                <table class="form-table" role="presentation">
+                                    <tr><th scope="row">Code from the other company</th><td><?php patlis_reservations_field_embed_code(); ?></td></tr>
+                                </table>
+                            </div>
 
-    echo '<tr><th scope="row">Min. time</th><td>';
-    patlis_reservations_field_min_time();
-    echo '</td></tr>';
+                            <div class="patlis-res-tab-panel" data-panel="redirect">
+                                <table class="form-table" role="presentation">
+                                    <tr><th scope="row">Redirect URL</th><td><?php patlis_reservations_field_redirect_url(); ?></td></tr>
+                                </table>
+                            </div>
+                        </div>
 
-    echo '<tr><th scope="row">Max. time</th><td>';
-    patlis_reservations_field_max_time();
-    echo '</td></tr>';
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var tabs = document.querySelectorAll('.nav-tab-wrapper .nav-tab[data-tab]');
+                                var panels = document.querySelectorAll('.patlis-res-tab-panel[data-panel]');
 
-    echo '<tr><th scope="row">Code from the other company</th><td>';
-    patlis_reservations_field_embed_code();
-    echo '</td></tr>';
+                                tabs.forEach(function (tab) {
+                                    tab.addEventListener('click', function (event) {
+                                        event.preventDefault();
 
-    echo '</table>';
+                                        var target = tab.getAttribute('data-tab');
 
-    submit_button('Save settings');
-    echo '</form>';
+                                        tabs.forEach(function (item) {
+                                            item.classList.remove('nav-tab-active');
+                                        });
 
-    echo '</div>';
+                                        panels.forEach(function (panel) {
+                                            panel.classList.toggle('is-active', panel.getAttribute('data-panel') === target);
+                                        });
+
+                                        tab.classList.add('nav-tab-active');
+                                    });
+                                });
+                            });
+                        </script>
+
+                        <?php submit_button('Save settings'); ?>
+                </form>
+        </div>
+        <?php
 }
 
 /** Fields */
@@ -119,6 +167,7 @@ function patlis_reservations_field_mode()
         <option value="off" <?php selected($s['mode'], 'off'); ?>>Switched off</option>
         <option value="simple" <?php selected($s['mode'], 'simple'); ?>>With our simple system</option>
         <option value="embed" <?php selected($s['mode'], 'embed'); ?>>Code from the other company</option>
+        <option value="redirect" <?php selected($s['mode'], 'redirect'); ?>>Redirect</option>
     </select>
     <?php
 }
@@ -128,28 +177,14 @@ function patlis_reservations_field_notify_user()
     $s = patlis_reservations_get_settings();
     $key = patlis_reservations_option_key();
 
-    // δείχνουμε μόνο admins/editors για να μη γίνει τεράστια λίστα
-    $users = get_users([
-        'orderby'  => 'display_name',
-        'order'    => 'ASC',
-        'role__in' => ['administrator', 'editor'],
-        'fields'   => ['ID', 'display_name', 'user_email'],
-    ]);
+    $value = !empty($s['notify_email']) && is_string($s['notify_email']) ? $s['notify_email'] : '';
     ?>
-    <div class="patlis-res-mode-field" data-mode="simple">
-        <select name="<?php echo esc_attr($key); ?>[notify_user_id]" style="min-width: 320px;">
-            <option value="0" <?php selected((int)$s['notify_user_id'], 0); ?>>— Select user —</option>
-            <?php foreach ($users as $u): ?>
-                <option value="<?php echo (int)$u->ID; ?>" <?php selected((int)$s['notify_user_id'], (int)$u->ID); ?>>
-                    <?php echo esc_html($u->display_name . ' (' . $u->user_email . ')'); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+    <input type="email" class="regular-text"
+           name="<?php echo esc_attr($key); ?>[notify_email]"
+           value="<?php echo esc_attr($value); ?>"
+           placeholder="name@example.com">
 
-        <p class="description">
-            Αυτό ΔΕΝ στέλνει email από μόνο του. Είναι για να “τραβάς” το email μέσα στο Bricks μέσω <code>[patlis_res_notify_email]</code>.
-        </p>
-    </div>
+    <p class="description"><code>[patlis_res_notify_email]</code></p>
     <?php
 }
 
@@ -158,12 +193,22 @@ function patlis_reservations_field_min_hours()
     $s = patlis_reservations_get_settings();
     $key = patlis_reservations_option_key();
     ?>
-    <div class="patlis-res-mode-field" data-mode="simple">
-        <input type="number" min="0" style="width:120px;"
-               name="<?php echo esc_attr($key); ?>[min_hours]"
-               value="<?php echo (int)$s['min_hours']; ?>">
-        <p class="description">Θα χρησιμοποιηθεί αργότερα για validation (π.χ. να μην κλείνει κάποιος σε λιγότερο από X ώρες).</p>
-    </div>
+    <input type="number" min="0" style="width:120px;"
+           name="<?php echo esc_attr($key); ?>[min_hours]"
+           value="<?php echo (int)$s['min_hours']; ?>">
+    <?php
+}
+
+function patlis_reservations_field_email_subject()
+{
+    $s = patlis_reservations_get_settings();
+    $key = patlis_reservations_option_key();
+    ?>
+    <input type="text" class="regular-text"
+           name="<?php echo esc_attr($key); ?>[email_subject]"
+           value="<?php echo esc_attr((string)($s['email_subject'] ?? '')); ?>"
+           placeholder="New reservation">
+           <p class="description"><code>[patlis_res_subject]</code></p>
     <?php
 }
 
@@ -172,14 +217,12 @@ function patlis_reservations_field_embed_code()
     $s = patlis_reservations_get_settings();
     $key = patlis_reservations_option_key();
     ?>
-    <div class="patlis-res-mode-field" data-mode="embed">
-        <textarea class="large-text code" rows="8"
-                  name="<?php echo esc_attr($key); ?>[embed_code]"
-                  placeholder='<iframe src="..." width="330" height="400" style="border:none;"></iframe>'><?php
-            echo esc_textarea($s['embed_code']);
-        ?></textarea>
-        <p class="description">Εδώ μπαίνει iframe/script από τρίτη εταιρεία.</p>
-    </div>
+    <textarea class="large-text code" rows="8"
+              name="<?php echo esc_attr($key); ?>[embed_code]"
+              placeholder='<iframe src="..." width="330" height="400" style="border:none;"></iframe>'><?php
+        echo esc_textarea($s['embed_code']);
+    ?></textarea>
+    <p class="description">Paste hier the iframe/script from a third-party company.</p>
     <?php
 }
 
@@ -188,13 +231,11 @@ function patlis_reservations_field_min_time()
     $s = patlis_reservations_get_settings();
     $key = patlis_reservations_option_key();
     ?>
-    <div class="patlis-res-mode-field" data-mode="simple">
-        <input type="time"
-               name="<?php echo esc_attr($key); ?>[min_time]"
-               value="<?php echo esc_attr($s['min_time']); ?>"
-               step="900">
-        <p class="description">Π.χ. 09:00</p>
-    </div>
+    <input type="time"
+           name="<?php echo esc_attr($key); ?>[min_time]"
+           value="<?php echo esc_attr($s['min_time']); ?>"
+           step="900">
+    <p class="description">E.g. 09:00</p>
     <?php
 }
 
@@ -203,45 +244,26 @@ function patlis_reservations_field_max_time()
     $s = patlis_reservations_get_settings();
     $key = patlis_reservations_option_key();
     ?>
-    <div class="patlis-res-mode-field" data-mode="simple">
-        <input type="time"
-               name="<?php echo esc_attr($key); ?>[max_time]"
-               value="<?php echo esc_attr($s['max_time']); ?>"
-               step="900">
-        <p class="description">Π.χ. 20:00</p>
-    </div>
+    <input type="time"
+           name="<?php echo esc_attr($key); ?>[max_time]"
+           value="<?php echo esc_attr($s['max_time']); ?>"
+           step="900">
+    <p class="description">E.g. 20:00</p>
     <?php
 }
 
-/**
- * Show/hide ανά mode (onchange)
- */
-add_action('admin_footer', function () {
-    if (!is_admin()) return;
-    if (!isset($_GET['page']) || $_GET['page'] !== patlis_reservations_page_slug_safe()) return;
+function patlis_reservations_field_redirect_url()
+{
+    $s = patlis_reservations_get_settings();
+    $key = patlis_reservations_option_key();
     ?>
-    <script>
-    (function(){
-        function toggleByMode(){
-            var sel = document.getElementById('patlis_res_mode');
-            if(!sel) return;
-            var mode = sel.value;
-
-            document.querySelectorAll('.patlis-res-mode-field').forEach(function(el){
-                var m = el.getAttribute('data-mode');
-                el.style.display = (m === mode) ? 'block' : 'none';
-            });
-        }
-
-        var sel = document.getElementById('patlis_res_mode');
-        if(sel){
-            sel.onchange = toggleByMode;
-            toggleByMode();
-        }
-    })();
-    </script>
+    <input type="url" class="regular-text"
+           name="<?php echo esc_attr($key); ?>[redirect_url]"
+           value="<?php echo esc_attr((string)($s['redirect_url'] ?? '')); ?>"
+           placeholder="https://example.com/reservations">
+    <p class="description">In Redirect mode, users will be directed to this URL</p>
     <?php
-});
+}
 
 /**
  * Shortcode: [patlis_res_notify_email]

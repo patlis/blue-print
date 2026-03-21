@@ -41,7 +41,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_facebook">Facebook</label></th>
             <td>
-              <input id="patlis_facebook" type="url" class="regular-text"
+              <input id="patlis_facebook" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[facebook]"
                 value="<?php echo esc_attr($opt['facebook'] ?? ''); ?>">
             </td>
@@ -50,7 +50,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_instagram">Instagram</label></th>
             <td>
-              <input id="patlis_instagram" type="url" class="regular-text"
+              <input id="patlis_instagram" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[instagram]"
                 value="<?php echo esc_attr($opt['instagram'] ?? ''); ?>">
             </td>
@@ -59,7 +59,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_youtube">YouTube</label></th>
             <td>
-              <input id="patlis_youtube" type="url" class="regular-text"
+              <input id="patlis_youtube" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[youtube]"
                 value="<?php echo esc_attr($opt['youtube'] ?? ''); ?>">
             </td>
@@ -68,7 +68,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_tiktok">TikTok</label></th>
             <td>
-              <input id="patlis_tiktok" type="url" class="regular-text"
+              <input id="patlis_tiktok" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[tiktok]"
                 value="<?php echo esc_attr($opt['tiktok'] ?? ''); ?>">
             </td>
@@ -77,7 +77,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_google_business">Google Business Profile</label></th>
             <td>
-              <input id="patlis_google_business" type="url" class="regular-text"
+              <input id="patlis_google_business" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[google_business]"
                 value="<?php echo esc_attr($opt['google_business'] ?? ''); ?>">
             </td>
@@ -86,7 +86,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_tripadvisor">Tripadvisor</label></th>
             <td>
-              <input id="patlis_tripadvisor" type="url" class="regular-text"
+              <input id="patlis_tripadvisor" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[tripadvisor]"
                 value="<?php echo esc_attr($opt['tripadvisor'] ?? ''); ?>">
             </td>
@@ -95,7 +95,7 @@ final class Patlis_Admin_Page_Social {
           <tr>
             <th scope="row"><label for="patlis_x_com">X (Twitter)</label></th>
             <td>
-              <input id="patlis_x_com" type="url" class="regular-text"
+              <input id="patlis_x_com" type="url" class="large-text"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_SOCIAL); ?>[x_com]"
                 value="<?php echo esc_attr($opt['x_com'] ?? ''); ?>">
             </td>

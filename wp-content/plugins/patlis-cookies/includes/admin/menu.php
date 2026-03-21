@@ -6,8 +6,8 @@ add_action('admin_menu', function () {
     $capability  = 'patlis_manage';
 
     add_menu_page(
-        'Patlis Cookies',
-        'Patlis Cookies',
+        'Cookies',
+        'Cookies',
         $capability,
         'patlis-cookies',
         'patlis_cookies_render_integrations_page',

@@ -31,6 +31,8 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_show_contact_form}',        'label' => esc_html__('Show contact form (1/0)', 'patlis-core'),  'group' => $group_basic];
   $tags[] = ['name' => '{patlis_opening_show_on_footer}', 'label' => esc_html__('Opening: Show on footer (1/0)', 'patlis-core'), 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_opening_text}',          'label' => esc_html__('Opening: Text (HTML)', 'patlis-core'),          'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_contact_form_recipient_email}', 'label' => esc_html__('Contact form: Recipient email', 'patlis-core'), 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_contact_form_email_subject}',   'label' => esc_html__('Contact form: Email subject', 'patlis-core'),   'group' => $group_basic];
 
   // SOCIAL
   $tags[] = ['name' => '{patlis_facebook}',        'label' => 'Facebook URL',        'group' => $group_social];
@@ -95,6 +97,8 @@ function patlis_render_dynamic_tags_in_content($content) {
     'patlis_whatsapp'     => 'whatsapp',
     'patlis_cordinates'   => 'cordinates',
     'patlis_show_contact_form' => 'show_contact_form',
+    'patlis_contact_form_recipient_email' => 'contact_form_recipient_email',
+    'patlis_contact_form_email_subject'   => 'contact_form_email_subject',
   ];
 
   // map tag -> field key (SOCIAL)

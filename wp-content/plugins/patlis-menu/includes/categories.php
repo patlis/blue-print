@@ -89,6 +89,7 @@ function patlis_menu_section_add_fields(): void
 {
     // Our own nonce for term meta saves
     wp_nonce_field('patlis_menu_section_meta', 'patlis_menu_section_nonce');
+     echo '<style>.term-slug-wrap, .column-slug{display:none !important;}</style>';
 
     ?>
     <div class="form-field">
@@ -139,6 +140,8 @@ add_action('menu_section_edit_form_fields', 'patlis_menu_section_edit_fields');
 function patlis_menu_section_edit_fields($term): void
 {
     if (!($term instanceof WP_Term)) return;
+
+    echo '<style>.term-slug-wrap{display:none !important;}</style>';
 
     // Our own nonce for term meta saves
     wp_nonce_field('patlis_menu_section_meta', 'patlis_menu_section_nonce');

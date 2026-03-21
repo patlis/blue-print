@@ -128,10 +128,15 @@ final class Patlis_Admin_Page_Opening {
     ?>
 
     <style>
-      .patlis-opening-page .form-table th,
-      .patlis-opening-page .form-table td {
-        padding-top: 5px;
-        padding-bottom: 0;
+      .patlis-opening-field {
+        margin-bottom: 18px;
+        max-width: 600px;
+      }
+      .patlis-opening-field label,
+      .patlis-opening-field .patlis-opening-field-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
       }
       .patlis-opening-lang-block {
         margin-bottom: 16px;
@@ -142,7 +147,7 @@ final class Patlis_Admin_Page_Opening {
       }
     </style>
 
-    <div class="wrap patlis-opening-page">
+    <div class="wrap">
       <h1><?php esc_html_e('Opening times', 'patlis-core'); ?></h1>
 
       <?php if (!empty($_GET['patlis_saved'])): ?>
@@ -153,34 +158,26 @@ final class Patlis_Admin_Page_Opening {
         <input type="hidden" name="action" value="patlis_save_opening">
         <?php wp_nonce_field('patlis_save_opening'); ?>
 
-        <table class="form-table">
+        <div class="patlis-opening-field" style="margin-top: 1rem;">
+          <label><?php esc_html_e('Show Opening times', 'patlis-core'); ?></label>
+          <input type="checkbox"
+            name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[show_on_footer]"
+            value="1" <?php checked(!empty($opt['show_on_footer'])); ?>>
+        </div>
 
-          <tr>
-            <th><?php esc_html_e('Show Opening times', 'patlis-core'); ?></th>
-            <td>
-              <input type="checkbox"
-                name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[show_on_footer]"
-                value="1" <?php checked(!empty($opt['show_on_footer'])); ?>>
-            </td>
-          </tr>
-
-          <tr>
-            <th><?php esc_html_e('Text', 'patlis-core'); ?></th>
-            <td>
-              <?php foreach ($languages as $lang_slug => $lang_label): ?>
-                <?php $value = $text_all[$lang_slug] ?? ''; ?>
-                <div class="patlis-opening-lang-block">
-                  <div class="patlis-opening-lang-label"><?php echo esc_html($lang_label); ?></div>
-                  <textarea
-                    class="large-text"
-                    rows="3"
-                    name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[text][<?php echo esc_attr($lang_slug); ?>]"><?php echo wp_kses_post($value); ?></textarea>
-                </div>
-              <?php endforeach; ?>
-            </td>
-          </tr>
-
-        </table>
+        <div class="patlis-opening-field">
+          <div class="patlis-opening-field-label" style="font-size: 1.5rem;"><?php esc_html_e('Text', 'patlis-core'); ?></div>
+          <?php foreach ($languages as $lang_slug => $lang_label): ?>
+            <?php $value = $text_all[$lang_slug] ?? ''; ?>
+            <div class="patlis-opening-lang-block">
+              <div class="patlis-opening-lang-label"><?php echo esc_html($lang_label); ?></div>
+              <textarea
+                class="large-text"
+                rows="3"
+                name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[text][<?php echo esc_attr($lang_slug); ?>]"><?php echo wp_kses_post($value); ?></textarea>
+            </div>
+          <?php endforeach; ?>
+        </div>
 
         <?php submit_button('Save'); ?>
       </form>

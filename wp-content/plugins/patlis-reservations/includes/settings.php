@@ -9,12 +9,14 @@ function patlis_reservations_option_key(): string
 function patlis_reservations_defaults(): array
 {
     return [
-        'mode'           => 'off',   // off | simple | embed
+        'mode'           => 'off',   // off | simple | embed | redirect
         'min_hours'      => 6,
         'min_time'       => '09:00',
         'max_time'       => '20:00',
-        'notify_user_id' => 0,       // WP user id
+        'notify_email'   => '',
+        'email_subject'  => '',
         'embed_code'     => '',
+        'redirect_url'   => '',
     ];
 }
 
@@ -27,17 +29,10 @@ function patlis_reservations_get_settings(): array
 }
 
 /**
- * Helper: get selected user's email
+ * Helper: get configured recipient email
  */
 function patlis_reservations_get_notify_email(): string
 {
     $s = patlis_reservations_get_settings();
-    $uid = (int)($s['notify_user_id'] ?? 0);
-
-    if ($uid <= 0) return '';
-
-    $u = get_user_by('id', $uid);
-    if (!$u) return '';
-
-    return sanitize_email($u->user_email);
+    return isset($s['notify_email']) ? sanitize_email((string)$s['notify_email']) : '';
 }

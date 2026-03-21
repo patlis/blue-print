@@ -110,7 +110,7 @@ function patlis_cookies_render_texts_page() {
   </style>';
   
     echo '<div class="wrap">';
-    echo '<h1>Patlis Cookies – Texts</h1>';
+    echo '<h1>Cookies – Texts</h1>';
     if (!empty($_GET['patlis_saved'])) echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
 
     echo '<form method="post" action="'. esc_url(admin_url('admin-post.php')) .'">';

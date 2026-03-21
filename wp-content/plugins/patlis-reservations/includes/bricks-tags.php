@@ -12,9 +12,11 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
 
   $group = 'Patlis – Reservations';
 
-  $tags[] = ['name' => '{patlis_res_mode}',         'label' => 'Reservation mode (off/simple/embed)', 'group' => $group];
+  $tags[] = ['name' => '{patlis_res_mode}',         'label' => 'Reservation mode (off/simple/embed/redirect)', 'group' => $group];
   $tags[] = ['name' => '{patlis_res_min_hours}',    'label' => 'Minimum hours before reservation',    'group' => $group];
-  $tags[] = ['name' => '{patlis_res_notify_email}', 'label' => 'Recipient email (selected WP user)',  'group' => $group];
+  $tags[] = ['name' => '{patlis_res_notify_email}', 'label' => 'Recipient email',                      'group' => $group];
+  $tags[] = ['name' => '{patlis_res_email_subject}','label' => 'Email subject',                        'group' => $group];
+  $tags[] = ['name' => '{patlis_res_redirect_url}', 'label' => 'Redirect URL',                         'group' => $group];
   $tags[] = ['name' => '{patlis_res_min_time}', 'label' => 'Min. time (HH:MM)', 'group' => $group];
   $tags[] = ['name' => '{patlis_res_max_time}', 'label' => 'Max. time (HH:MM)', 'group' => $group];
   $tags[] = ['name' => '{patlis_res_embed_code}',   'label' => '3rd party Code', 'group' => $group];
@@ -63,6 +65,14 @@ function patlis_reservations_render_dynamic_tags_in_content($content) {
         return (string) patlis_reservations_get_notify_email();
       }
       return '';
+    }
+
+    if ($tag === 'patlis_res_email_subject') {
+      return isset($s['email_subject']) ? (string)$s['email_subject'] : '';
+    }
+
+    if ($tag === 'patlis_res_redirect_url') {
+      return isset($s['redirect_url']) ? (string)$s['redirect_url'] : '';
     }
     
     if ($tag === 'patlis_res_embed_code') {

@@ -52,53 +52,63 @@ function patlis_cookies_render_integrations_page() {
     $ga4_id        = $opt['ga4_id'] ?? '';
     $pixel_enabled = !empty($opt['pixel_enabled']);
     $pixel_id      = $opt['pixel_id'] ?? '';
+    ?>
+    <div class="wrap">
+        <h1>Cookie Settings</h1>
 
-    echo '<div class="wrap">';
-    echo '<h1>Patlis Cookies – Integrations</h1>';
-    if (!empty($_GET['patlis_saved'])) echo '<div class="notice notice-success is-dismissible"><p>Saved.</p></div>';
+        <?php if (!empty($_GET['patlis_saved'])): ?>
+            <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
+        <?php endif; ?>
 
-    echo '<form method="post" action="'. esc_url(admin_url('admin-post.php')) .'">';
-    echo '<input type="hidden" name="action" value="patlis_cookies_save_integrations">';
-    wp_nonce_field('patlis_cookies_save_integrations');
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <input type="hidden" name="action" value="patlis_cookies_save_integrations">
+            <?php wp_nonce_field('patlis_cookies_save_integrations'); ?>
 
-    echo '<table class="form-table" role="presentation">';
+            <table class="form-table" role="presentation">
 
-    // Enable banner
-    echo '<tr>';
-    echo '<th scope="row">Enable banner</th>';
-    echo '<td><label>';
-    echo '<input type="checkbox" name="patlis_cookies_integrations[enable_banner]" value="1" ' . checked($enable_banner, true, false) . ' />';
-    echo '</label></td>';
-    echo '</tr>';
+                <tr>
+                    <th scope="row">Enable Cookie banner</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="patlis_cookies_integrations[enable_banner]" value="1" <?php checked($enable_banner); ?>>
+                        </label>
+                    </td>
+                </tr>
 
-    // GTM
-    echo '<tr><th scope="row">GTM</th><td>';
-    echo '<label style="margin-right:14px;">';
-    echo '<input type="checkbox" name="patlis_cookies_integrations[gtm_enabled]" value="1" ' . checked($gtm_enabled, true, false) . ' /> ON';
-    echo '</label>';
-    echo '<input type="text" class="regular-text" placeholder="GTM-XXXXXXX" name="patlis_cookies_integrations[gtm_id]" value="' . esc_attr($gtm_id) . '" />';
-    echo '</td></tr>';
+                <tr>
+                    <th scope="row">Google Tag Manager</th>
+                    <td>
+                        <label style="margin-right:14px;">
+                            <input type="checkbox" name="patlis_cookies_integrations[gtm_enabled]" value="1" <?php checked($gtm_enabled); ?>> ON
+                        </label>
+                        <input type="text" class="regular-text" placeholder="GTM-XXXXXXX" name="patlis_cookies_integrations[gtm_id]" value="<?php echo esc_attr($gtm_id); ?>">
+                    </td>
+                </tr>
 
-    // GA4
-    echo '<tr><th scope="row">GA4</th><td>';
-    echo '<label style="margin-right:14px;">';
-    echo '<input type="checkbox" name="patlis_cookies_integrations[ga4_enabled]" value="1" ' . checked($ga4_enabled, true, false) . ' /> ON';
-    echo '</label>';
-    echo '<input type="text" class="regular-text" placeholder="G-XXXXXXXXXX" name="patlis_cookies_integrations[ga4_id]" value="' . esc_attr($ga4_id) . '" />';
-    echo '</td></tr>';
+                <tr>
+                    <th scope="row">Google Analytics 4</th>
+                    <td>
+                        <label style="margin-right:14px;">
+                            <input type="checkbox" name="patlis_cookies_integrations[ga4_enabled]" value="1" <?php checked($ga4_enabled); ?>> ON
+                        </label>
+                        <input type="text" class="regular-text" placeholder="G-XXXXXXXXXX" name="patlis_cookies_integrations[ga4_id]" value="<?php echo esc_attr($ga4_id); ?>">
+                    </td>
+                </tr>
 
-    // Pixel
-    echo '<tr><th scope="row">Facebook Pixel</th><td>';
-    echo '<label style="margin-right:14px;">';
-    echo '<input type="checkbox" name="patlis_cookies_integrations[pixel_enabled]" value="1" ' . checked($pixel_enabled, true, false) . ' /> ON';
-    echo '</label>';
-    echo '<input type="text" class="regular-text" placeholder="Pixel ID" name="patlis_cookies_integrations[pixel_id]" value="' . esc_attr($pixel_id) . '" />';
-    echo '</td></tr>';
+                <tr>
+                    <th scope="row">Facebook Pixel</th>
+                    <td>
+                        <label style="margin-right:14px;">
+                            <input type="checkbox" name="patlis_cookies_integrations[pixel_enabled]" value="1" <?php checked($pixel_enabled); ?>> ON
+                        </label>
+                        <input type="text" class="regular-text" placeholder="Pixel ID" name="patlis_cookies_integrations[pixel_id]" value="<?php echo esc_attr($pixel_id); ?>">
+                    </td>
+                </tr>
 
-    echo '</table>';
+            </table>
 
-    submit_button('Save changes');
-    echo '</form>';
-
-    echo '</div>';
+            <?php submit_button('Save changes'); ?>
+        </form>
+    </div>
+    <?php
 }
