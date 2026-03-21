@@ -120,3 +120,20 @@ add_action('template_redirect', function () {
     exit;
 
 }, 1);
+
+add_action('wp_print_footer_scripts', function () {
+    if (is_admin()) return;
+
+    $locale = determine_locale();
+    $lang   = strtolower(substr($locale, 0, 2));
+    if ($lang === 'el') $lang = 'gr';
+
+    $relative_path = "/assets/js/libs/flatpickr-l10n/{$lang}.min.js";
+    $file_url      = get_template_directory_uri() . $relative_path;
+    $file_path     = get_template_directory() . $relative_path;
+
+    if (!file_exists($file_path)) return;
+
+    // Εκτυπώνουμε το script απευθείας στο footer για να είμαστε σίγουροι ότι έρχεται μετά από όλα
+    echo '<script src="' . esc_url($file_url) . '"></script>';
+}, 100);

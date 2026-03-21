@@ -7,6 +7,7 @@ final class Patlis_Admin_Page_Basic {
     $in = is_array($input) ? $input : [];
 
     $out = [];
+    $out['logo_image_id'] = isset($in['logo_image_id']) ? max(0, (int)$in['logo_image_id']) : 0;
     $out['company_name'] = isset($in['company_name']) ? sanitize_text_field($in['company_name']) : '';
     $out['address']      = isset($in['address']) ? sanitize_text_field($in['address']) : '';
     $out['city']         = isset($in['city']) ? sanitize_text_field($in['city']) : '';
@@ -51,6 +52,12 @@ final class Patlis_Admin_Page_Basic {
     $divider  = $opt['decimal_divider'] ?? ',';
     $pos      = $opt['currency_position'] ?? 'after';
     $decimals = isset($opt['decimals']) ? (int) $opt['decimals'] : 2;
+    $logo_image_id = isset($opt['logo_image_id']) ? (int)$opt['logo_image_id'] : 0;
+    $logo_preview = $logo_image_id > 0
+      ? wp_get_attachment_image($logo_image_id, 'thumbnail', false, ['style' => 'max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;'])
+      : '';
+
+    wp_enqueue_media();
 
     ?>
     <div class="wrap">
@@ -86,6 +93,21 @@ final class Patlis_Admin_Page_Basic {
         <div class="patlis-basic-tabs-panels">
           <div class="patlis-basic-tab-panel is-active" data-panel="basic">
             <table class="form-table" role="presentation">
+
+              <tr>
+                <th scope="row"><label><?php esc_html_e('Logo image', 'patlis-core'); ?></label></th>
+                <td>
+                  <div id="patlis_logo_preview"><?php echo $logo_preview; ?></div>
+                  <input type="hidden"
+                    id="patlis_logo_image_id"
+                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[logo_image_id]"
+                    value="<?php echo esc_attr($logo_image_id); ?>">
+                  <p>
+                    <button type="button" class="button" id="patlis_logo_select"><?php esc_html_e('Select image', 'patlis-core'); ?></button>
+                    <button type="button" class="button" id="patlis_logo_remove" style="<?php echo $logo_image_id > 0 ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove', 'patlis-core'); ?></button>
+                  </p>
+                </td>
+              </tr>
 
               <tr>
                 <th scope="row"><label for="patlis_company_name"><?php esc_html_e('Company name', 'patlis-core'); ?></label></th>
@@ -275,6 +297,27 @@ final class Patlis_Admin_Page_Basic {
           document.addEventListener('DOMContentLoaded', function () {
             var tabs = document.querySelectorAll('.nav-tab-wrapper .nav-tab[data-tab]');
             var panels = document.querySelectorAll('.patlis-basic-tab-panel[data-panel]');
+            var logoFrame = null;
+            var logoInput = document.getElementById('patlis_logo_image_id');
+            var logoPreview = document.getElementById('patlis_logo_preview');
+            var logoSelect = document.getElementById('patlis_logo_select');
+            var logoRemove = document.getElementById('patlis_logo_remove');
+
+            function setLogoImage(attachment) {
+              if (!logoInput || !logoPreview || !logoRemove) return;
+              var imageId = attachment && attachment.id ? attachment.id : 0;
+              var imageUrl = '';
+
+              if (attachment && attachment.sizes && attachment.sizes.thumbnail && attachment.sizes.thumbnail.url) {
+                imageUrl = attachment.sizes.thumbnail.url;
+              } else if (attachment && attachment.url) {
+                imageUrl = attachment.url;
+              }
+
+              logoInput.value = imageId;
+              logoPreview.innerHTML = imageUrl ? '<img src="' + imageUrl + '" style="max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;" />' : '';
+              logoRemove.style.display = imageId ? '' : 'none';
+            }
 
             tabs.forEach(function (tab) {
               tab.addEventListener('click', function (event) {
@@ -293,6 +336,37 @@ final class Patlis_Admin_Page_Basic {
                 tab.classList.add('nav-tab-active');
               });
             });
+
+            if (logoSelect) {
+              logoSelect.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                if (logoFrame) {
+                  logoFrame.open();
+                  return;
+                }
+
+                logoFrame = wp.media({
+                  title: '<?php echo esc_js(__('Select logo image', 'patlis-core')); ?>',
+                  button: { text: '<?php echo esc_js(__('Use this image', 'patlis-core')); ?>' },
+                  multiple: false
+                });
+
+                logoFrame.on('select', function () {
+                  var attachment = logoFrame.state().get('selection').first().toJSON();
+                  setLogoImage(attachment);
+                });
+
+                logoFrame.open();
+              });
+            }
+
+            if (logoRemove) {
+              logoRemove.addEventListener('click', function (event) {
+                event.preventDefault();
+                setLogoImage(null);
+              });
+            }
           });
         </script>
 

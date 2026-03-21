@@ -32,7 +32,8 @@ function custom_admin_css_enqueue() {
     a.menu-icon-services,
     a.menu-icon-reviews,
     a.menu-icon-gallery_images,
-    a.menu-icon-timeline_item {
+    a.menu-icon-timeline_item,
+    a.menu-icon-slide {
         background-color: var(--second) !important;
     }
 
@@ -44,7 +45,8 @@ function custom_admin_css_enqueue() {
     a.menu-icon-services:hover, a.menu-icon-services.current, a.menu-icon-services.wp-has-current-submenu,
     a.menu-icon-reviews:hover, a.menu-icon-reviews.current, a.menu-icon-reviews.wp-has-current-submenu,
     a.menu-icon-gallery_images:hover, a.menu-icon-gallery_images.current, a.menu-icon-gallery_images.wp-has-current-submenu,
-    a.menu-icon-timeline_item:hover, a.menu-icon-timeline_item.current, a.menu-icon-timeline_item.wp-has-current-submenu {
+    a.menu-icon-timeline_item:hover, a.menu-icon-timeline_item.current, a.menu-icon-timeline_item.wp-has-current-submenu,
+    a.menu-icon-slide:hover, a.menu-icon-slide.current, a.menu-icon-slide.wp-has-current-submenu {
         background-color: var(--second) !important;
         color: var(--hover-text) !important;
     }
@@ -59,6 +61,7 @@ function custom_admin_css_enqueue() {
     a.menu-icon-reviews:hover .wp-menu-image, a.menu-icon-reviews.current .wp-menu-image, a.menu-icon-reviews.wp-has-current-submenu .wp-menu-image,
     a.menu-icon-gallery_images:hover .wp-menu-image, a.menu-icon-gallery_images.current .wp-menu-image, a.menu-icon-gallery_images.wp-has-current-submenu .wp-menu-image,
     a.menu-icon-timeline_item:hover .wp-menu-image, a.menu-icon-timeline_item.current .wp-menu-image, a.menu-icon-timeline_item.wp-has-current-submenu .wp-menu-image,
+    a.menu-icon-slide:hover .wp-menu-image, a.menu-icon-slide.current .wp-menu-image, a.menu-icon-slide.wp-has-current-submenu .wp-menu-image,
     a.toplevel_page_patlis-menu:hover .wp-menu-image::before, a.toplevel_page_patlis-menu.current .wp-menu-image::before, a.toplevel_page_patlis-menu.wp-has-current-submenu .wp-menu-image::before,
     a.toplevel_page_patlis-reservations:hover .wp-menu-image::before, a.toplevel_page_patlis-reservations.current .wp-menu-image::before, a.toplevel_page_patlis-reservations.wp-has-current-submenu .wp-menu-image::before,
     a.toplevel_page_patlis-cookies:hover .wp-menu-image::before, a.toplevel_page_patlis-cookies.current .wp-menu-image::before, a.toplevel_page_patlis-cookies.wp-has-current-submenu .wp-menu-image::before,
@@ -67,7 +70,8 @@ function custom_admin_css_enqueue() {
     a.menu-icon-services:hover .wp-menu-image::before, a.menu-icon-services.current .wp-menu-image::before, a.menu-icon-services.wp-has-current-submenu .wp-menu-image::before,
     a.menu-icon-reviews:hover .wp-menu-image::before, a.menu-icon-reviews.current .wp-menu-image::before, a.menu-icon-reviews.wp-has-current-submenu .wp-menu-image::before,
     a.menu-icon-gallery_images:hover .wp-menu-image::before, a.menu-icon-gallery_images.current .wp-menu-image::before, a.menu-icon-gallery_images.wp-has-current-submenu .wp-menu-image::before,
-    a.menu-icon-timeline_item:hover .wp-menu-image::before, a.menu-icon-timeline_item.current .wp-menu-image::before, a.menu-icon-timeline_item.wp-has-current-submenu .wp-menu-image::before {
+    a.menu-icon-timeline_item:hover .wp-menu-image::before, a.menu-icon-timeline_item.current .wp-menu-image::before, a.menu-icon-timeline_item.wp-has-current-submenu .wp-menu-image::before,
+    a.menu-icon-slide:hover .wp-menu-image::before, a.menu-icon-slide.current .wp-menu-image::before, a.menu-icon-slide.wp-has-current-submenu .wp-menu-image::before {
         color: var(--hover-text) !important;
     }
 
@@ -81,7 +85,8 @@ function custom_admin_css_enqueue() {
     body.menu-icon-services,
     body.menu-icon-reviews,
     body.menu-icon-gallery_images,
-    body.menu-icon-timeline_item {
+    body.menu-icon-timeline_item,
+    body.menu-icon-slide {
         background-color: transparent !important;
     }
     </style>';

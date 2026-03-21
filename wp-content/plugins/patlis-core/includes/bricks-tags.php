@@ -19,6 +19,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
 
   // BASIC
   $tags[] = ['name' => '{patlis_company_name}',      'label' => esc_html__('Company name', 'patlis-core'),            'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => esc_html__('Logo image URL', 'patlis-core'),          'group' => $group_basic];
   $tags[] = ['name' => '{patlis_address}',           'label' => esc_html__('Address', 'patlis-core'),                 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_city}',              'label' => esc_html__('City', 'patlis-core'),                    'group' => $group_basic];
   $tags[] = ['name' => '{patlis_zip}',               'label' => esc_html__('Zip', 'patlis-core'),                     'group' => $group_basic];
@@ -152,6 +153,12 @@ function patlis_render_dynamic_tags_in_content($content) {
     }
 
     // BASIC
+    if ($tag === 'patlis_logo_image_url') {
+      $id = (int) Patlis_Core::get_basic('logo_image_id', 0);
+      $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : '';
+      return is_string($url) ? $url : '';
+    }
+
     if (isset($basic_map[$tag])) {
       $val = Patlis_Core::get_basic($basic_map[$tag], '');
       return is_scalar($val) ? (string)$val : '';
@@ -440,6 +447,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
 
   // Only handle these tags here
   if (
+    $clean !== 'patlis_logo_image_url' &&
     $clean !== 'patlis_center_image_id' &&
     $clean !== 'patlis_center_image_url' &&
     $clean !== 'patlis_center_title' &&
@@ -452,6 +460,18 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   if (!class_exists('Patlis_Core')) return $tag;
+
+  // BASIC: Logo image URL
+  if ($clean === 'patlis_logo_image_url') {
+    $logoId = (int) Patlis_Core::get_basic('logo_image_id', 0);
+    $logoUrl = $logoId > 0 ? wp_get_attachment_image_url($logoId, 'full') : '';
+
+    if ($context === 'image') {
+      return $logoUrl ? [$logoUrl] : [];
+    }
+
+    return $logoUrl ?: '';
+  }
 
   // NOTIFICATION BAR defaults (dates)
   if ($clean === 'patlis_bar_start_date' || $clean === 'patlis_bar_end_date') {
