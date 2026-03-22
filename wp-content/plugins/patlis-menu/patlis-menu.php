@@ -37,4 +37,6 @@ if (is_admin()) {
   require_once PATLIS_MENU_PATH . 'includes/admin/menu.php';
   require_once PATLIS_MENU_PATH . 'includes/admin/settings.php'; // ΝΕΟ
   require_once PATLIS_MENU_PATH . 'includes/admin/pages/options.php';
+  require_once PATLIS_MENU_PATH . 'includes/admin/bulk-import.php';
+  require_once PATLIS_MENU_PATH . 'includes/admin/bulk-edit.php';
 }
