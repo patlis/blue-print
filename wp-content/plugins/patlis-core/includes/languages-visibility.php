@@ -369,3 +369,50 @@ add_action('admin_head', function () {
     </script>
     <?php
 });
+
+/**
+ * Remove hidden-language hreflang <link rel="alternate"> tags from <head>.
+ *
+ * Works via output buffering so it catches tags output by any plugin
+ * (Polylang, Rank Math, etc.) regardless of which hook they use.
+ */
+add_action('wp_head', function () {
+    if (is_admin()) {
+        return;
+    }
+
+    $visible = patlis_get_site_visible_language_slugs();
+    if (empty($visible)) {
+        return;
+    }
+
+    ob_start(function (string $output) use ($visible): string {
+        // Match <link rel="alternate" ... hreflang="XX" ...> (self-closing or not)
+        return preg_replace_callback(
+            '/<link\b[^>]*\brel=["\']alternate["\'][^>]*\bhreflang=["\']([^"\']+)["\'][^>]*\/?>/i',
+            function (array $m) use ($visible): string {
+                $lang   = strtolower($m[1]);
+                $short  = explode('-', $lang)[0];
+
+                if (in_array($short, $visible, true) || in_array($lang, $visible, true)) {
+                    return $m[0];
+                }
+
+                return '';
+            },
+            $output
+        );
+    });
+}, 0);
+
+add_action('wp_head', function () {
+    if (is_admin()) {
+        return;
+    }
+
+    // Only flush if we actually started a buffer above
+    $visible = patlis_get_site_visible_language_slugs();
+    if (!empty($visible)) {
+        ob_end_flush();
+    }
+}, PHP_INT_MAX);

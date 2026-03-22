@@ -92,7 +92,7 @@ define('WP_DEBUG', false);
 
 /** Sets the website Version */
 /** gastro, hotel, general, shop, amenities, dining, locations   */
-define('PATLIS_VERSION', 'gastro, hotel');
+define('PATLIS_VERSION', 'gastro');
 
 ini_set('display_errors', 'off');
 define('WP_DEBUG_DISPLAY', false);
