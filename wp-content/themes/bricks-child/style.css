@@ -16,23 +16,9 @@ main {min-height:50vh}
 .w-100{width: 100% !important;}
 .boxed-container {padding-right: 20px; padding-left: 20px;}
 /*====================================================================== main sizes END */
-body.patlis-has-notification-bar {
-  --notification-on: 25px;
-}
-	body.patlis-has-notification-bar.patlis-has-notification-cta {
-  --notification-on: 35px;
-}	
---news-line-height:var(--notification-on);
 /*====================================================================== Primary button inside nav START */
 a.bricks-background-primary { color: var(--body-bg) !important;}
 /*====================================================================== Primary button inside nav START */
-/*====================================================================== center popup START */
-/*
-#brxe-center-popup-header {display: flex; justify-content: space-between; flex-direction: row}
-.center-popup-body{ flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;}
-*/
-/*====================================================================== center popup END */
-
 
 #brxe-gvlyau img{
   height: var(--logo-height);

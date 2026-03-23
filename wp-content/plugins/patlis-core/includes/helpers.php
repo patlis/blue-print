@@ -323,9 +323,7 @@ function patlis_notification_bar_should_show(): bool
     return true;
 }
 
-/**
- * Add body classes for notification bar (for CSS variables).
- */
+
 /**
  * Add body classes for notification bar (for CSS variables).
  */

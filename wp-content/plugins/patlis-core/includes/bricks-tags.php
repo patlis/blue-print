@@ -204,6 +204,10 @@ function patlis_render_dynamic_tags_in_content($content) {
 
     // NOTIFICATION BAR
     if (isset($bar_map[$tag])) {
+
+      if ($tag === 'patlis_bar_enabled') {
+        return function_exists('patlis_notification_bar_should_show') && patlis_notification_bar_should_show() ? '1' : '0';
+      }
     
       $all = get_option(Patlis_Core::OPTION_NOTIFICATION_BAR, []);
       if (!is_array($all)) $all = [];
@@ -453,6 +457,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $clean !== 'patlis_center_title' &&
     $clean !== 'patlis_center_start_date' &&
     $clean !== 'patlis_center_end_date' &&
+    $clean !== 'patlis_bar_enabled' &&
     $clean !== 'patlis_bar_start_date' &&
     $clean !== 'patlis_bar_end_date'
   ) {
@@ -474,6 +479,10 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   // NOTIFICATION BAR defaults (dates)
+  if ($clean === 'patlis_bar_enabled') {
+    return function_exists('patlis_notification_bar_should_show') && patlis_notification_bar_should_show() ? '1' : '0';
+  }
+
   if ($clean === 'patlis_bar_start_date' || $clean === 'patlis_bar_end_date') {
 
     $bar = get_option(Patlis_Core::OPTION_NOTIFICATION_BAR, []);
