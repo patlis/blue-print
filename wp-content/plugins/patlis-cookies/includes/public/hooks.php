@@ -1,5 +1,15 @@
+
 <?php
 if (!defined('ABSPATH')) exit;
+
+// Helper: get multilingual text for current language (with fallback)
+function patlis_cookies_get_text($arr) {
+    if (!is_array($arr)) return (string)$arr;
+    $lang = function_exists('pll_current_language') ? pll_current_language('slug') : '';
+    if ($lang && isset($arr[$lang]) && $arr[$lang] !== '') return $arr[$lang];
+    foreach ($arr as $v) if ($v !== '') return $v;
+    return '';
+}
 
 function patlis_cookies_is_banner_enabled(): bool {
 
@@ -56,41 +66,33 @@ function add_cookie_banner() {
         get_option('patlis_cookies_texts', []),
         patlis_cookies_text_defaults()
     );
+
     ?>
     <!-- cookies modal -->
     <div class="ex-modal" id="cookie-banner" aria-modal="true" role="dialog" aria-labelledby="cookie-banner">
         <div class="ex-modal-dialog ">
             <div class="ex-modal-content">
                 <div class="ex-modal-body">
-                    <div id="cookie-title" class="ex-space-between">
-                        <span aria-hidden="true"><?php echo esc_html($t['title']); ?></span>
-                        <span id="cookie-question"><?php echo esc_html($t['more_label']); ?></span>
+                    <div id="cookie-title">
+                        <span aria-hidden="true"><?php echo esc_html(patlis_cookies_get_text($t['title'])); ?></span>
                     </div>
 
                     <p id="cookie-description" aria-hidden="true">
-                        <?php echo esc_html($t['description']); ?>
+                        <?php echo esc_html(patlis_cookies_get_text($t['description'])); ?>
                     </p>
                 </div>
 
                 <div class="ex-modal-footer">
                     <div class="ex-row ex-w-100">
                         <div class="ex-btn-columns ex-p-1">
-                            <button type="button"
-                                    class="ex-btn ex-btn-outline-primary ex-btn-block"
-                                    onclick="acceptNecessary()"><?php echo esc_html($t['btn_only_necessary']); ?></button>
+                            <button type="button"class="ex-btn ex-btn-warning ex-btn-block"
+                                    onclick="acceptAll()"><?php echo esc_html(patlis_cookies_get_text($t['btn_allow_all'])); ?></button>
+                        </div>
+                        <div class="ex-btn-columns ex-p-1">
+                            <button type="button" class="ex-btn ex-btn-outline-primary ex-btn-block"
+                                    onclick="getCookiehtml()"><?php echo esc_html(patlis_cookies_get_text($t['btn_customize'])); ?> »</button>
                         </div>
 
-                        <div class="ex-btn-columns ex-p-1">
-                            <button type="button"
-                                    class="ex-btn ex-btn-outline-primary ex-btn-block"
-                                    onclick="getCookiehtml()"><?php echo esc_html($t['btn_customize']); ?> »</button>
-                        </div>
-
-                        <div class="ex-btn-columns ex-p-1">
-                            <button type="button"
-                                    class="ex-btn ex-btn-warning ex-btn-block"
-                                    onclick="acceptAll()"><?php echo esc_html($t['btn_allow_all']); ?></button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -120,16 +122,22 @@ function add_cookie_banner() {
                 try {
                     const map = {
                         // Footer buttons in cookie-settings modal
-                        "allow-all-btn": <?php echo wp_json_encode($t['btn_allow_all']); ?>,
-                        "necessary-btn": <?php echo wp_json_encode($t['btn_only_necessary']); ?>,
-                        "apply-btn": <?php echo wp_json_encode($t['btn_save_close']); ?>,
+                        "allow-all-btn": <?php echo wp_json_encode(patlis_cookies_get_text($t['btn_allow_all'])); ?>,
+                        "apply-btn": <?php echo wp_json_encode(patlis_cookies_get_text($t['btn_save_close'])); ?>,
+
+                        // Category names (NEW)
+                        "catname-necessary": <?php echo wp_json_encode(patlis_cookies_get_text($t['catname_necessary'])); ?>,
+                        "catname-statistics": <?php echo wp_json_encode(patlis_cookies_get_text($t['catname_statistics'])); ?>,
+                        "catname-marketing": <?php echo wp_json_encode(patlis_cookies_get_text($t['catname_marketing'])); ?>,
+                        "catname-preferences": <?php echo wp_json_encode(patlis_cookies_get_text($t['catname_preferences'])); ?>,
+                        "catname-unclassified": <?php echo wp_json_encode(patlis_cookies_get_text($t['catname_unclassified'])); ?>,
 
                         // Category descriptions
-                        "necessary-descr": <?php echo wp_json_encode($t['cat_necessary']); ?>,
-                        "statistic-descr": <?php echo wp_json_encode($t['cat_statistics']); ?>,
-                        "marketing-descr": <?php echo wp_json_encode($t['cat_marketing']); ?>,
-                        "preference-descr": <?php echo wp_json_encode($t['cat_preferences']); ?>,
-                        "unclassified-descr": <?php echo wp_json_encode($t['cat_unclassified']); ?>
+                        "necessary-descr": <?php echo wp_json_encode(patlis_cookies_get_text($t['cat_necessary'])); ?>,
+                        "statistic-descr": <?php echo wp_json_encode(patlis_cookies_get_text($t['cat_statistics'])); ?>,
+                        "marketing-descr": <?php echo wp_json_encode(patlis_cookies_get_text($t['cat_marketing'])); ?>,
+                        "preference-descr": <?php echo wp_json_encode(patlis_cookies_get_text($t['cat_preferences'])); ?>,
+                        "unclassified-descr": <?php echo wp_json_encode(patlis_cookies_get_text($t['cat_unclassified'])); ?>
                     };
 
                     Object.keys(map).forEach(id => {

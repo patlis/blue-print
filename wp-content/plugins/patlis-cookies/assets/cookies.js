@@ -351,34 +351,6 @@ function acceptAll(){
     needsReload();
 }
 
-function acceptNecessary(){
-    try{
-        document.getElementById('cookie-banner').style.display = 'none';
-        document.getElementById('cookie-settings').style.display = 'none';
-    }
-    catch(e){}
-
-    if (!preferencesCookies && !statisticsCookies && !marketingCookies && cookie) return;
-
-    $case = 5;
-    $allowedCategories = [1,5];
-    allCookies = false; preferencesCookies = false; statisticsCookies = false; marketingCookies = false;
-
-    const cookieValue = { all: false, necessary: true, preferences: false,statistics: false,marketing: false};
-    const cookieString = JSON.stringify(cookieValue);
-    const date = new Date();
-    date.setFullYear(date.getFullYear() + 1);
-    document.cookie = `patlis-cookie=${cookieString}; path=/; expires=${date.toUTCString()};`;
-    //document.cookie = `google-ads-enabled=0; path=/; expires=${date.toUTCString()};`;
-    //document.cookie = `google-analytics-enabled=0; path=/; expires=${date.toUTCString()};`;
-    sessionStorage.setItem('allow-popup', '1');
-   
-    if($settingsExist) { checkAll(); }
-    else{ getCookieSettings(checkAll); }
-
-    needsReload();
-}
-
 function saveSettings(){
     document.getElementById('cookie-settings').style.display = 'none';
 
@@ -433,16 +405,6 @@ function showMore(){
     userClick = true;
     getCookieSettings();
 }
-
-document.addEventListener('click', function(event) {
-    if (event.target.id === 'cookie-question') {
-        const cookieDescription = document.getElementById('cookie-description');
-        cookieDescription.style.display = 'block';
-
-        const cookieQuestion = document.getElementById('cookie-question');
-        cookieQuestion.style.display = 'none';
-    }
-});
 
 function getCookieSettings(){   
     document.getElementById('cookie-banner').style.display = 'none';
