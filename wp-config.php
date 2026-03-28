@@ -89,6 +89,9 @@ define('WP_DEBUG', false);
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+define('WP_MEMORY_LIMIT', '256M');
+define('WP_MAX_MEMORY_LIMIT', '512M');
+
 
 /** Sets the website Version */
 /** gastro, hotel, general, shop, amenities, dining, locations   */

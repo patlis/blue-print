@@ -134,6 +134,7 @@ add_action('wp_print_footer_scripts', function () {
 
     if (!file_exists($file_path)) return;
 
-    // Εκτυπώνουμε το script απευθείας στο footer για να είμαστε σίγουροι ότι έρχεται μετά από όλα
-    echo '<script src="' . esc_url($file_url) . '"></script>';
+    // Load l10n only on pages that actually render the reservation calendar.
+    $json_url = wp_json_encode($file_url);
+    echo '<script>(function(){var calendar=document.querySelector("#reservation_div");if(!calendar){return;}if(typeof flatpickr==="undefined"){return;}if(flatpickr.l10ns&&flatpickr.l10ns[' . wp_json_encode($lang) . ']){return;}var s=document.createElement("script");s.src=' . $json_url . ';s.defer=true;document.head.appendChild(s);}());</script>';
 }, 100);

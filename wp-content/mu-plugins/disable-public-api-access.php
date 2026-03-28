@@ -9,8 +9,20 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Block REST API access for visitors.
- * Keep REST available only for logged-in users.
+ * Public POST routes that are required by frontend features.
+ */
+function patlis_public_rest_post_route_allowed(string $route): bool
+{
+    $allowed = [
+        '/bricks/v1/load_query_page',
+    ];
+
+    return in_array($route, $allowed, true);
+}
+
+/**
+ * Block REST write access for visitors.
+ * Public read requests stay available for frontend features.
  */
 add_filter('rest_authentication_errors', function ($result) {
     if (!empty($result)) {
@@ -21,9 +33,43 @@ add_filter('rest_authentication_errors', function ($result) {
         return $result;
     }
 
+    $method = isset($_SERVER['REQUEST_METHOD'])
+        ? strtoupper(sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD'])))
+        : 'GET';
+
+    // Allow read-only REST requests for visitors.
+    if (in_array($method, ['GET', 'HEAD', 'OPTIONS'], true)) {
+        return $result;
+    }
+
+    // Extract current REST route (supports both pretty and ?rest_route=... formats).
+    $route = '';
+
+    if (isset($_GET['rest_route'])) {
+        $route = '/' . ltrim((string) sanitize_text_field(wp_unslash($_GET['rest_route'])), '/');
+    } else {
+        $requestUri = isset($_SERVER['REQUEST_URI'])
+            ? (string) wp_unslash($_SERVER['REQUEST_URI'])
+            : '';
+
+        $path = wp_parse_url($requestUri, PHP_URL_PATH);
+        $path = is_string($path) ? $path : '';
+
+        $prefix = '/' . trim(rest_get_url_prefix(), '/') . '/';
+        $pos = strpos($path, $prefix);
+
+        if ($pos !== false) {
+            $route = '/' . ltrim(substr($path, $pos + strlen($prefix)), '/');
+        }
+    }
+
+    if ($method === 'POST' && patlis_public_rest_post_route_allowed($route)) {
+        return $result;
+    }
+
     return new WP_Error(
         'rest_forbidden',
-        __('REST API is disabled on this site.', 'default'),
+        __('REST write access is disabled for visitors.', 'default'),
         ['status' => 403]
     );
 });
