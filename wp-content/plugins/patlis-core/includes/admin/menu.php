@@ -60,6 +60,15 @@ final class Patlis_Admin_Menu {
       'patlis-notification-bar',
       ['Patlis_Admin_Page_Notification_Bar', 'render']
     );
+    
+    add_submenu_page(
+      'patlis-basic',
+      __('Translations', 'patlis-core'),
+      __('Translations', 'patlis-core'),
+      $capability,
+      'patlis-translations',
+      ['Patlis_Admin_Page_Translations', 'render']
+    );
 
     
   }

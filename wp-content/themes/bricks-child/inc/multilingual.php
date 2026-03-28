@@ -11,8 +11,6 @@ add_filter('pll_get_post_types', function ($post_types, $is_settings) {
     return $post_types;
 }, 10, 2);
 
-
-
 /**
  * Prevent Polylang from copying Bricks settings between translations
  */
@@ -26,30 +24,11 @@ add_filter('pll_copy_post_metas', function ($metas, $sync, $original_post_id) {
 }, 10, 3);
 
 /**
- * Option name for automatically collected translation keys
+ * Option name for manual translation keys
  */
 function patlis_translation_option_name(): string
 {
     return 'patlis_translation_keys';
-}
-
-/**
- * Default / predefined keys
- * Keep only stable, intentional keys here.
- */
-function patlis_strings(): array
-{
-    return [
-        'patlis_book_a_table',
-        'patlis_contact',
-        'patlis_reserve_now',
-		'patlis_form_contact_success',
-		'patlis_form_contact_error',
-		'patlis_form_reservation_success',
-		'patlis_form_reservation_error',
-		'patlis_form_booking_success',
-		'patlis_form_booking_error'
-    ];
 }
 
 /**
@@ -92,42 +71,9 @@ function patlis_is_valid_translation_key(string $key): bool
 }
 
 /**
- * Decide if runtime key collection should run
+ * Get stored manual translation keys
  */
-function patlis_should_collect_runtime_strings(): bool
-{
-    if (is_admin()) {
-        return false;
-    }
-
-    if (wp_doing_ajax()) {
-        return false;
-    }
-
-    if (defined('REST_REQUEST') && REST_REQUEST) {
-        return false;
-    }
-
-    if (defined('DOING_CRON') && DOING_CRON) {
-        return false;
-    }
-
-    /**
-     * Optional extra safety:
-     * Do not collect while logged-in.
-     * This avoids accidental key collection while editing/testing as admin.
-     */
-    if (is_user_logged_in()) {
-        return false;
-    }
-
-    return true;
-}
-
-/**
- * Get stored runtime keys
- */
-function patlis_get_runtime_strings(): array
+function patlis_get_manual_translation_keys(): array
 {
     $keys = get_option(patlis_translation_option_name(), []);
 
@@ -135,216 +81,13 @@ function patlis_get_runtime_strings(): array
         return [];
     }
 
-    $keys = array_filter(array_map('trim', $keys));
-    $keys = array_map('patlis_normalize_translation_key', $keys);
-    $keys = array_filter($keys, 'patlis_is_valid_translation_key');
-
-    return array_values(array_unique($keys));
-}
-
-/**
- * Store one runtime key if missing
- */
-function patlis_store_runtime_string(string $key): void
-{
-    if (!patlis_should_collect_runtime_strings()) {
-        return;
-    }
-
-    $key = patlis_normalize_translation_key($key);
-
-    if (!patlis_is_valid_translation_key($key)) {
-        return;
-    }
-
-    $keys = patlis_get_runtime_strings();
-
-    if (!in_array($key, $keys, true)) {
-        $keys[] = $key;
-        $keys = array_values(array_unique($keys));
-        sort($keys);
-
-        update_option(
-            patlis_translation_option_name(),
-            $keys,
-            false
-        );
-    }
-}
-
-/**
- * Register all known keys in Polylang
- */
-function patlis_register_all_strings(): void
-{
-    if (!function_exists('pll_register_string')) {
-        return;
-    }
-
-    $keys = array_merge(
-        patlis_strings(),
-        patlis_get_runtime_strings()
-    );
-
     $keys = array_map('patlis_normalize_translation_key', $keys);
     $keys = array_filter($keys, 'patlis_is_valid_translation_key');
     $keys = array_values(array_unique($keys));
     sort($keys);
 
-    foreach ($keys as $key) {
-        pll_register_string($key, $key, 'patlis');
-    }
+    return $keys;
 }
-add_action('init', 'patlis_register_all_strings');
-
-/**
- * Translation helper for Bricks
- * Usage: {echo:patlis_transl('patlis_footer_opening_hours')}
- */
-if (!function_exists('patlis_transl')) {
-
-    function patlis_transl(string $key): string
-    {
-        $key = trim($key);
-
-        if ($key === '') {
-            return '';
-        }
-
-        // Save runtime key
-        patlis_store_runtime_string($key);
-
-        if (!function_exists('pll__')) {
-            return $key;
-        }
-
-        $translated = pll__($key);
-
-        // If translation exists, return it
-        if ($translated !== $key) {
-            return $translated;
-        }
-
-        // Fallback to default language
-        if (function_exists('pll_translate_string')) {
-
-            $default_lang = patlis_get_default_language();
-
-            if ($default_lang !== '') {
-
-                $fallback = pll_translate_string($key, $default_lang);
-
-                if (is_string($fallback) && $fallback !== '') {
-                    return $fallback;
-                }
-            }
-        }
-
-        return $key;
-    }
-
-}
-
-/**
- * Admin page: Patlis Translation Keys
- */
-add_action('admin_menu', function () {
-    add_submenu_page(
-        'tools.php',
-        'Patlis Translation Keys',
-        'Patlis Translation Keys',
-        'manage_options',
-        'patlis-translation-keys',
-        'patlis_render_translation_keys_page'
-    );
-});
-
-/**
- * Render translation keys cleanup page
- */
-function patlis_render_translation_keys_page(): void
-{
-    if (!current_user_can('manage_options')) {
-        wp_die('Not allowed.');
-    }
-
-    $option_name = patlis_translation_option_name();
-
-    if (
-        isset($_POST['patlis_translation_keys_nonce']) &&
-        wp_verify_nonce($_POST['patlis_translation_keys_nonce'], 'patlis_translation_keys_action')
-    ) {
-        $keys = $_POST['keys'] ?? [];
-        $keys = is_array($keys) ? $keys : [];
-
-        $clean = [];
-
-        foreach ($keys as $key) {
-            $key = patlis_normalize_translation_key((string) $key);
-
-            if (patlis_is_valid_translation_key($key)) {
-                $clean[] = $key;
-            }
-        }
-
-        $clean = array_values(array_unique($clean));
-        sort($clean);
-
-        update_option($option_name, $clean, false);
-
-        echo '<div class="notice notice-success is-dismissible"><p>Translation keys updated.</p></div>';
-    }
-
-    $keys = get_option($option_name, []);
-    $keys = is_array($keys) ? $keys : [];
-    $keys = array_map('patlis_normalize_translation_key', $keys);
-    $keys = array_filter($keys, 'patlis_is_valid_translation_key');
-    $keys = array_values(array_unique($keys));
-    sort($keys);
-    ?>
-    <div class="wrap">
-        <h1>Patlis Translation Keys</h1>
-        <p>Uncheck keys you no longer want to keep.</p>
-
-        <form method="post">
-            <?php wp_nonce_field('patlis_translation_keys_action', 'patlis_translation_keys_nonce'); ?>
-
-            <table class="widefat striped" style="max-width: 900px;">
-                <thead>
-                    <tr>
-                        <th style="width:60px;">Keep</th>
-                        <th>Key</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($keys)) : ?>
-                        <tr>
-                            <td colspan="2">No stored runtime keys found.</td>
-                        </tr>
-                    <?php else : ?>
-                        <?php foreach ($keys as $key) : ?>
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="keys[]" value="<?php echo esc_attr($key); ?>" checked>
-                                </td>
-                                <td>
-                                    <code><?php echo esc_html($key); ?></code>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-
-            <p style="margin-top: 16px;">
-                <button type="submit" class="button button-primary">Save keys</button>
-            </p>
-        </form>
-    </div>
-    <?php
-}
-
-
 
 /**
  * Get default Polylang language slug
@@ -378,8 +121,66 @@ function patlis_get_current_language(): string
     return '';
 }
 
+/**
+ * Option name for Patlis translation values
+ */
+function patlis_translations_option_name(): string
+{
+    return 'patlis_translations';
+}
 
+/**
+ * Get stored Patlis translations
+ */
+function patlis_get_translations(): array
+{
+    $translations = get_option(patlis_translations_option_name(), []);
 
+    return is_array($translations) ? $translations : [];
+}
+
+/**
+ * Translation helper for Bricks
+ * Usage: {echo:patlis_transl('patlis_footer_opening_hours')}
+ */
+if (!function_exists('patlis_transl')) {
+    function patlis_transl(string $key): string
+    {
+        $key = trim($key);
+
+        if ($key === '') {
+            return '';
+        }
+
+        $translations = patlis_get_translations();
+
+        if (isset($translations[$key]) && is_array($translations[$key])) {
+            $current_lang = patlis_get_current_language();
+
+            if (
+                $current_lang !== ''
+                && isset($translations[$key][$current_lang])
+                && is_string($translations[$key][$current_lang])
+                && $translations[$key][$current_lang] !== ''
+            ) {
+                return $translations[$key][$current_lang];
+            }
+
+            $default_lang = patlis_get_default_language();
+
+            if (
+                $default_lang !== ''
+                && isset($translations[$key][$default_lang])
+                && is_string($translations[$key][$default_lang])
+                && $translations[$key][$default_lang] !== ''
+            ) {
+                return $translations[$key][$default_lang];
+            }
+        }
+
+        return $key;
+    }
+}
 
 /**
  * Build fallback post IDs:
@@ -396,7 +197,6 @@ function patlis_get_fallback_post_ids(array $args): array
 
     $base_args = $args;
 
-    // Δεν θέλουμε εσωτερικό pagination εδώ
     unset($base_args['paged'], $base_args['page'], $base_args['offset']);
 
     $base_args['posts_per_page']   = -1;
@@ -404,7 +204,6 @@ function patlis_get_fallback_post_ids(array $args): array
     $base_args['suppress_filters'] = false;
     $base_args['no_found_rows']    = true;
 
-    // Παίρνουμε ΜΟΝΟ τα posts της default γλώσσας σαν master list
     $default_posts = get_posts(array_merge($base_args, [
         'lang' => $default_lang,
     ]));
@@ -421,14 +220,6 @@ function patlis_get_fallback_post_ids(array $args): array
 
 /**
  * Build Bricks query with multilingual fallback
- *
- * Usage in Bricks Query editor:
- * return patlis_fallback_posts_query([
- *     'post_type' => 'services',
- *     'meta_key'  => 'service_order',
- *     'orderby'   => 'meta_value_num',
- *     'order'     => 'ASC',
- * ]);
  */
 function patlis_fallback_posts_query(array $args): array
 {
@@ -453,7 +244,6 @@ function patlis_fallback_posts_query(array $args): array
     ]);
 }
 
-//** safe */
 if (!function_exists('patlis_get_fallback_term_ids')) {
     /**
      * Build fallback term IDs:

@@ -39,6 +39,9 @@ add_action('init', function () {
     }
 });
 
+// Ensure multilingual fallback logic is loaded
+require_once get_theme_file_path('inc/multilingual.php');
+
 // Bricks local Font Awesome 6
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style(
@@ -70,10 +73,6 @@ add_action('wp_enqueue_scripts', function () {
   );
 }, 5);
 
-/**
- * Προσθετει τα functions για polylang
-*/
-require_once get_stylesheet_directory() . '/inc/multilingual.php';
 
 /**
  * Προσθετει location στο menu

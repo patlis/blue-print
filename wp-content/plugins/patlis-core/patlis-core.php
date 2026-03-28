@@ -30,9 +30,11 @@ if (is_admin()) {
     require_once PATLIS_CORE_PATH . 'includes/admin/pages/center-popup.php';
     require_once PATLIS_CORE_PATH . 'includes/admin/pages/notification-bar.php';
     require_once PATLIS_CORE_PATH . 'includes/admin/pages/opening-times.php';
+    require_once PATLIS_CORE_PATH . '/includes/admin/pages/translations.php';
     
     require_once PATLIS_CORE_PATH . '/includes/editor-restrictions.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/admin-columns.php';
+
 }
 
 add_action('plugins_loaded', function () {

@@ -10,16 +10,12 @@
 */
 
 #brxe-layqmn { white-space: nowrap;}
-/*====================================================================== main sizes START */
+/*------------------ main sizes START */
 body { font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;}
 main {min-height:50vh}
 .w-100{width: 100% !important;}
 .boxed-container {padding-right: 20px; padding-left: 20px;}
-/*====================================================================== main sizes END */
-/*====================================================================== Primary button inside nav START */
-a.bricks-background-primary { color: var(--body-bg) !important;}
-/*====================================================================== Primary button inside nav START */
-
+/*------------------ main sizes END */
 #brxe-gvlyau img{
   height: var(--logo-height);
   width: auto;      /* κρατάει αναλογία */
@@ -27,7 +23,7 @@ a.bricks-background-primary { color: var(--body-bg) !important;}
 }
 	
 .text-center{text-align: center !important;}
-/*======================================================================  WP Gallery (Gutenberg) inside Bricks: FIXED thumbs + wrap + last row centered   */
+/*------------------  WP Gallery (Gutenberg) inside Bricks: FIXED thumbs + wrap + last row centered   */
 .wp-gallery-content .wp-block-gallery {
   --wg-gap-lg: 15px;
   --wg-gap-md: 10px;
@@ -87,6 +83,7 @@ a.bricks-background-primary { color: var(--body-bg) !important;}
 .room-cart-img:hover {transform: scale(1.1);}
 .room-cart-img { transition: transform 0.5s ease;}
 
+/*------------------check-list------------------*/
 .check-list ul, ul.check-list{
   	list-style: none;
   	padding-left: 0;
@@ -109,7 +106,7 @@ a.bricks-background-primary { color: var(--body-bg) !important;}
 	color: var(--title-color);
 }
 
-/*---------------flatpickr---------------------*/
+/*---------------flatpickr Calendar---------------------*/
 .flatpickr-calendar {
   	width: 100%;
 	max-width: 400px;
