@@ -101,6 +101,10 @@ ini_set('display_errors', 'off');
 define('WP_DEBUG_DISPLAY', false);
 ini_set('log_errors', 'off');
 define('WP_DEBUG_LOG', false);
+
+/* Limit revisions for posts, pages, templates to 5 */
+define('WP_POST_REVISIONS', 5);
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */

@@ -7,6 +7,32 @@ final class Patlis_Admin_Page_Translations
 {
     public static function render(): void
     {
+
+        // Handle delete key (admin only) - must be before add key
+        if (
+            current_user_can('manage_options') &&
+            isset($_POST['patlis_delete_translation_key_nonce']) &&
+            wp_verify_nonce($_POST['patlis_delete_translation_key_nonce'], 'patlis_delete_translation_key') &&
+            !empty($_POST['patlis_delete_key'])
+        ) {
+            $delete_key = patlis_normalize_translation_key(sanitize_text_field((string) $_POST['patlis_delete_key']));
+            $manual_keys = patlis_get_manual_translation_keys();
+            if (($k = array_search($delete_key, $manual_keys, true)) !== false) {
+                unset($manual_keys[$k]);
+                $manual_keys = array_values($manual_keys);
+                update_option(patlis_translation_option_name(), $manual_keys, false);
+                // Optionally, remove translations for this key
+                $translations = function_exists('patlis_get_translations') ? patlis_get_translations() : [];
+                if (isset($translations[$delete_key])) {
+                    unset($translations[$delete_key]);
+                    update_option(patlis_translations_option_name(), $translations, false);
+                }
+            }
+            wp_safe_redirect(admin_url('admin.php?page=patlis-translations&patlis_deleted=1'));
+            exit;
+        }
+
+        // Handle add key
         if (
             current_user_can('manage_options') &&
             isset($_POST['patlis_add_translation_key_nonce']) &&
@@ -71,6 +97,10 @@ final class Patlis_Admin_Page_Translations
             }
 
             foreach ($keys as $key) {
+                // Ignore keys that are not in manual keys anymore (e.g. deleted)
+                if (!in_array($key, patlis_get_manual_translation_keys(), true)) {
+                    continue;
+                }
                 if (!isset($clean[$key]) || !is_array($clean[$key])) {
                     $clean[$key] = [];
                 }
@@ -105,6 +135,7 @@ final class Patlis_Admin_Page_Translations
                 <span>Patlis Translations</span>
                 <?php if (current_user_can('manage_options')) : ?>
                     <button id="patlis-add-translation-key" type="button" class="button button-secondary">Add New</button>
+                    <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;">Delete Key</button>
                 <?php endif; ?>
             </h1>
 
@@ -117,21 +148,49 @@ final class Patlis_Admin_Page_Translations
                     <button type="button" class="button" id="patlis-cancel-add-key">Cancel</button>
                 </form>
 
+                <form method="post" id="patlis-delete-key-form" style="display:none; margin-bottom:18px; max-width:600px;">
+                    <?php wp_nonce_field('patlis_delete_translation_key', 'patlis_delete_translation_key_nonce'); ?>
+                    <label for="patlis_delete_key"><strong>Delete Key:</strong></label>
+                    <input type="text" id="patlis_delete_key" name="patlis_delete_key" style="width:300px;" required />
+                    <button type="submit" class="button button-danger">Delete</button>
+                    <button type="button" class="button" id="patlis-cancel-delete-key">Cancel</button>
+                </form>
+
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     var btn = document.getElementById('patlis-add-translation-key');
                     var form = document.getElementById('patlis-add-key-form');
                     var cancel = document.getElementById('patlis-cancel-add-key');
 
+                    var btnDel = document.getElementById('patlis-delete-translation-key');
+                    var formDel = document.getElementById('patlis-delete-key-form');
+                    var cancelDel = document.getElementById('patlis-cancel-delete-key');
+
                     if (btn && form && cancel) {
                         btn.addEventListener('click', function() {
                             form.style.display = 'block';
                             btn.style.display = 'none';
+                            if (btnDel) btnDel.style.display = 'none';
                         });
 
                         cancel.addEventListener('click', function() {
                             form.style.display = 'none';
                             btn.style.display = '';
+                            if (btnDel) btnDel.style.display = '';
+                        });
+                    }
+
+                    if (btnDel && formDel && cancelDel) {
+                        btnDel.addEventListener('click', function() {
+                            formDel.style.display = 'block';
+                            btnDel.style.display = 'none';
+                            if (btn) btn.style.display = 'none';
+                        });
+
+                        cancelDel.addEventListener('click', function() {
+                            formDel.style.display = 'none';
+                            btnDel.style.display = '';
+                            if (btn) btn.style.display = '';
                         });
                     }
                 });

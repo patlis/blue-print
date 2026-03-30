@@ -14,7 +14,10 @@ function patlis_cookies_output_integrations() {
     // If banner OFF => don't load integrations either.
     $opt = get_option('patlis_cookies_integrations', []);
     if (empty($opt['enable_banner'])) {
-        return;
+      // Hide the cookie settings link if banner is not enabled
+      echo "<script>document.addEventListener('DOMContentLoaded',function(){
+      var l=document.getElementById('cookie-settings-link');if(l)l.style.display='none';});</script>";
+      return;
     }
 
     $gtm_enabled   = !empty($opt['gtm_enabled']);

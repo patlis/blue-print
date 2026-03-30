@@ -183,8 +183,6 @@ function patlis_reservations_field_notify_user()
            name="<?php echo esc_attr($key); ?>[notify_email]"
            value="<?php echo esc_attr($value); ?>"
            placeholder="name@example.com">
-
-    <p class="description"><code>[patlis_res_notify_email]</code></p>
     <?php
 }
 
@@ -208,7 +206,6 @@ function patlis_reservations_field_email_subject()
            name="<?php echo esc_attr($key); ?>[email_subject]"
            value="<?php echo esc_attr((string)($s['email_subject'] ?? '')); ?>"
            placeholder="New reservation">
-           <p class="description"><code>[patlis_res_subject]</code></p>
     <?php
 }
 
