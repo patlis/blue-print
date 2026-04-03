@@ -4,12 +4,19 @@ Plugin Name: Patlis Accommodation
 Description: Accommodation module (Hotel) + bookings table
 Version: 1.0.0
 Author: Patlis
+Update URI: https://updates.patlis.com/patlis-accommodation/
 */
 
 if (!defined('ABSPATH')) exit;
 
 define('PATLIS_ACCOMMODATION_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_ACCOMMODATION_URL',  plugin_dir_url(__FILE__));
+define('PATLIS_ACCOMMODATION_VERSION', '1.0.0');
+
+// Updater
+if (function_exists('patlis_register_plugin_updater')) {
+    patlis_register_plugin_updater(__FILE__, 'patlis-accommodation', PATLIS_ACCOMMODATION_VERSION);
+}
 
 /* ============================================================
  * Version gating (multi-version support: e.g. "gastro, hotel")

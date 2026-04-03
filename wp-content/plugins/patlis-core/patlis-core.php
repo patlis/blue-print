@@ -12,11 +12,17 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_CORE_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_CORE_URL',  plugin_dir_url(__FILE__));
+define('PATLIS_CORE_VERSION', '0.1.0');
 
 require_once PATLIS_CORE_PATH . 'includes/core.php';
 require_once PATLIS_CORE_PATH . 'includes/helpers.php';
 require_once PATLIS_CORE_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_CORE_PATH . 'includes/languages-visibility.php';
+
+// Updater 
+if (function_exists('patlis_register_plugin_updater')) {
+    patlis_register_plugin_updater(__FILE__, 'patlis-core', PATLIS_CORE_VERSION);
+}
 
 if (is_admin()) {
     require_once PATLIS_CORE_PATH . 'includes/admin/menu.php';
@@ -34,6 +40,7 @@ if (is_admin()) {
     
     require_once PATLIS_CORE_PATH . '/includes/editor-restrictions.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/admin-columns.php';
+
 
 }
 

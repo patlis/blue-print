@@ -1,0 +1,27 @@
+{
+  "name": "Patlis Menu",
+  "slug": "patlis-menu",
+  "version": "0.1.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-menu-0.1.0.zip",
+  "homepage": "https://patlis.com",
+  "author": "Patlis Ioannis",
+  "requires": "6.0",
+  "tested": "6.9.4",
+  "requires_php": "8.1",
+  "last_updated": "2026-03-30",
+  "sections": {
+    "description": "Menu module for gastro/dining sites",
+    "installation": "<p>Upload and activate.</p>",
+    "changelog": "<p>Initial version</p>",
+    "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>What does this plugin do?</h4><p>It allows you to create and manage digital menus for gastronomy websites.</p><h4>Can I manage multiple categories and items?</h4><p>Yes, you can organize your menu into categories and add multiple items with prices, descriptions, and images.</p><h4>Does it support multiple prices or sizes?</h4><p>Yes, you can define multiple prices and sizes for each menu item.</p><h4>Can I display allergens or additional information?</h4><p>Yes, the plugin supports allergens and additional labels for each item.</p>",
+    "screenshots": "<p>No screenshots yet.</p>"
+  },
+  "icons": {
+    "1x": "https://updates.patlis.com/assets/patlis-menu-128.png",
+    "2x": "https://updates.patlis.com/assets/patlis-menu-256.png"
+  },
+  "banners": {
+    "low": "https://updates.patlis.com/assets/patlis-menu-banner-772x250.png",
+    "high": "https://updates.patlis.com/assets/patlis-menu-banner-1544x500.png"
+  }
+}

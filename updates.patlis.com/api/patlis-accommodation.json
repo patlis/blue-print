@@ -1,0 +1,27 @@
+{
+  "name": "Patlis Accommodation",
+  "slug": "patlis-accommodation",
+  "version": "0.1.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-accommodation-0.1.0.zip",
+  "homepage": "https://patlis.com",
+  "author": "Patlis Ioannis",
+  "requires": "6.0",
+  "tested": "6.9.4",
+  "requires_php": "8.1",
+  "last_updated": "2026-03-30",
+  "sections": {
+    "description": "Accommodation management for Patlis sites.",
+    "installation": "<p>Upload and activate.</p>",
+    "changelog": "<p>Initial version</p>",
+    "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>Does it support room bookings?</h4><p>Yes, the plugin includes a built-in booking system for managing room reservations.</p><h4>Can I manage multiple room types?</h4><p>Yes, you can create and manage multiple room types with different prices and details.</p><h4>Does it support availability management?</h4><p>Yes, you can control availability and booking rules directly from the admin panel.</p><h4>Is it suitable for hotels and apartments?</h4><p>Yes, the plugin is designed for hotels, apartments, and other accommodation businesses.</p>",
+    "screenshots": "<p>No screenshots yet.</p>"
+  },
+  "icons": {
+    "1x": "https://updates.patlis.com/assets/patlis-accommodation-128.png",
+    "2x": "https://updates.patlis.com/assets/patlis-accommodation-256.png"
+  },
+  "banners": {
+    "low": "https://updates.patlis.com/assets/patlis-accommodation-banner-772x250.png",
+    "high": "https://updates.patlis.com/assets/patlis-accommodation-banner-1544x500.png"
+  }
+}

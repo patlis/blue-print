@@ -1,0 +1,27 @@
+{
+  "name": "Patlis Cookies",
+  "slug": "patlis-cookies",
+  "version": "0.1.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-cookies-0.1.0.zip",
+  "homepage": "https://patlis.com",
+  "author": "Patlis Ioannis",
+  "requires": "6.0",
+  "tested": "6.9.4",
+  "requires_php": "8.1",
+  "last_updated": "2026-03-30",
+  "sections": {
+    "description": "Cookie banner for Patlis sites.",
+    "installation": "<p>Upload and activate.</p>",
+    "changelog": "<p>Initial version</p>",
+    "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>Does it support Google Analytics and Google Tag Manager?</h4><p>Yes, the plugin includes built-in integration for Google Analytics 4 (GA4) and Google Tag Manager (GTM), with proper consent handling.</p><h4>How does it handle user consent?</h4><p>The plugin blocks scripts and tracking tools until the user gives consent, ensuring compliance with GDPR requirements.</p><h4>Does it support external cookie tools?</h4><p>No, it includes its own built-in cookie system and does not require third-party solutions.</p>",
+    "screenshots": "<p>No screenshots yet.</p>"
+  },
+  "icons": {
+    "1x": "https://updates.patlis.com/assets/patlis-cookies-128.png",
+    "2x": "https://updates.patlis.com/assets/patlis-cookies-256.png"
+  },
+  "banners": {
+    "low": "https://updates.patlis.com/assets/patlis-cookies-banner-772x250.png",
+    "high": "https://updates.patlis.com/assets/patlis-cookies-banner-1544x500.png"
+  }
+}

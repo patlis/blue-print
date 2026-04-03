@@ -1,0 +1,27 @@
+{
+  "name": "Patlis Reservations",
+  "slug": "patlis-reservations",
+  "version": "0.1.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-reservations-0.1.0.zip",
+  "homepage": "https://patlis.com",
+  "author": "Patlis Ioannis",
+  "requires": "6.0",
+  "tested": "6.9.4",
+  "requires_php": "8.1",
+  "last_updated": "2026-03-30",
+  "sections": {
+    "description": "Reservation module for gastronomy sites.",
+    "installation": "<p>Upload and activate.</p>",
+    "changelog": "<p>Initial version</p>",
+    "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>What does this plugin do?</h4><p>It allows you to manage table reservations and customer booking requests directly from your website.</p><h4>Does it support automatic confirmations?</h4><p>Yes, the plugin can handle reservation requests and send automatic confirmations based on your settings.</p><h4>Can I control availability and time slots?</h4><p>Yes, you can define available days, time slots, and reservation rules from the admin panel.</p><h4>Can I use an external reservation system?</h4><p>Yes, the plugin supports integration with third-party reservation systems or custom code.</p><h4>Can I redirect users to another booking page?</h4><p>Yes, you can redirect users to an external booking page or platform if needed.</p><h4>Does it reduce phone calls and manual work?</h4><p>Yes, the plugin automates the reservation process, reducing the need for phone calls and manual confirmations.</p>",
+    "screenshots": "<p>No screenshots yet.</p>"
+  },
+  "icons": {
+    "1x": "https://updates.patlis.com/assets/patlis-reservations-128.png",
+    "2x": "https://updates.patlis.com/assets/patlis-reservations-256.png"
+  },
+  "banners": {
+    "low": "https://updates.patlis.com/assets/patlis-reservations-banner-772x250.png",
+    "high": "https://updates.patlis.com/assets/patlis-reservations-banner-1544x500.png"
+  }
+}

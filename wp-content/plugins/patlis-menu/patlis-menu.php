@@ -1,14 +1,22 @@
 <?php
 /**
  * Plugin Name: Patlis Menu
- * Description: Menu module (items + categories) for gastro/dining sites.
- * Version: 0.3.0
+ * Description: Menu module for gastro/dining sites.
+ * Version: 0.1.0
  * Author: Patlis Ioannis
  * Text Domain: patlis-menu
+ * Update URI: https://updates.patlis.com/patlis-menu/
  */
 
-if (!defined('ABSPATH')) {
-  exit;
+if (!defined('ABSPATH')) { exit; }
+
+define('PATLIS_MENU_PATH', plugin_dir_path(__FILE__));
+define('PATLIS_MENU_URL', plugin_dir_url(__FILE__));
+define('PATLIS_MENU_VERSION', '0.1.0');
+
+// Updater — πριν το gating ωστε να ελεγχει updates παντα
+if (function_exists('patlis_register_plugin_updater')) {
+    patlis_register_plugin_updater(__FILE__, 'patlis-menu', PATLIS_MENU_VERSION);
 }
 
 /**
@@ -16,15 +24,12 @@ if (!defined('ABSPATH')) {
  * Uses MU-plugin functions: patlis_version_has_gastro(), patlis_version_has_dining()
  */
 if (
-  !function_exists('patlis_version_has_gastro') ||
-  !function_exists('patlis_version_has_dining') ||
-  (!patlis_version_has_gastro() && !patlis_version_has_dining())
+    !function_exists('patlis_version_has_gastro') ||
+    !function_exists('patlis_version_has_dining') ||
+    (!patlis_version_has_gastro() && !patlis_version_has_dining())
 ) {
-  return;
+    return;
 }
-
-define('PATLIS_MENU_PATH', plugin_dir_path(__FILE__));
-define('PATLIS_MENU_URL', plugin_dir_url(__FILE__));
 
 require_once PATLIS_MENU_PATH . 'includes/post-types.php';
 require_once PATLIS_MENU_PATH . 'includes/categories.php';
