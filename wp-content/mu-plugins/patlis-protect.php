@@ -4,7 +4,7 @@
  * Description: Hard security rules (MU plugin).
  */
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {  exit; }
 
 /**
  * Site Owner: μπορεί να διαχειρίζεται χρήστες,
