@@ -17,11 +17,11 @@
     "screenshots": "<p>No screenshots yet.</p>"
   },
   "icons": {
-    "1x": "https://updates.patlis.com/assets/patlis-reservations-128.png",
-    "2x": "https://updates.patlis.com/assets/patlis-reservations-256.png"
+    "1x": "https://updates.patlis.com/assets/reservations/patlis-reservations-128.png",
+    "2x": "https://updates.patlis.com/assets/reservations/patlis-reservations-256.png"
   },
   "banners": {
-    "low": "https://updates.patlis.com/assets/patlis-reservations-banner-772x250.png",
-    "high": "https://updates.patlis.com/assets/patlis-reservations-banner-1544x500.png"
+    "low": "https://updates.patlis.com/assets/reservations/patlis-reservations-banner-772x250.png",
+    "high": "https://updates.patlis.com/assets/reservations/patlis-reservations-banner-1544x500.png"
   }
 }
