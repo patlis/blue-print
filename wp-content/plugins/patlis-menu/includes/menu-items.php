@@ -347,6 +347,40 @@ add_filter('posts_distinct', function ($distinct, WP_Query $q) {
     return 'DISTINCT';
 }, 10, 2);
 
+/* ------------------------------------------------------------
+ * Admin search: include Item Nr (pmi_itemnr)
+ * ------------------------------------------------------------ */
+add_filter('posts_search', function ($search, WP_Query $q) {
+    if (!is_admin()) return $search;
+    if (!$q->is_main_query()) return $search;
+    if (!$q->is_search()) return $search;
+    if ($q->get('post_type') !== 'menu_item') return $search;
+
+    $term = trim((string) $q->get('s'));
+    if ($term === '') return $search;
+
+    global $wpdb;
+
+    $meta_condition = $wpdb->prepare(
+        "EXISTS (
+            SELECT 1
+            FROM {$wpdb->postmeta} pmi_itemnr_search
+            WHERE pmi_itemnr_search.post_id = {$wpdb->posts}.ID
+              AND pmi_itemnr_search.meta_key = %s
+              AND pmi_itemnr_search.meta_value LIKE %s
+        )",
+        'pmi_itemnr',
+        '%' . $wpdb->esc_like($term) . '%'
+    );
+
+    // Keep default WP text search and extend it with Item Nr matches.
+    if ($search !== '') {
+        return preg_replace('/\)\s*$/', " OR {$meta_condition})", $search, 1) ?: $search;
+    }
+
+    return " AND ({$meta_condition}) ";
+}, 10, 2);
+
 
 /* prosthethei ena button sto header , back to all menu   */ 
 

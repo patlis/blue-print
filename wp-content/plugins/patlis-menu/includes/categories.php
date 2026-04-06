@@ -309,3 +309,60 @@ function patlis_menu_section_is_open_now(int $term_id): bool
 
     return ($nowMin >= $aMin || $nowMin < $bMin);
 }
+
+/* ------------------------------------------------------------
+ * Admin list columns (menu_section)
+ * ------------------------------------------------------------ */
+add_filter('manage_edit-menu_section_columns', function (array $columns): array {
+    $new = [];
+
+    foreach ($columns as $key => $label) {
+        // Place pmc_sort right before Name.
+        if ($key === 'name') {
+            $new['pmc_sort'] = 'Sort';
+        }
+        $new[$key] = $label;
+    }
+
+    if (!isset($new['pmc_sort'])) {
+        $new = ['pmc_sort' => 'Sort'] + $new;
+    }
+
+    return $new;
+});
+
+add_filter('manage_menu_section_custom_column', function ($content, string $column_name, int $term_id) {
+    if ($column_name !== 'pmc_sort') return $content;
+
+    $sort = get_term_meta($term_id, 'pmc_sort', true);
+    return esc_html((string)($sort === '' ? '0' : $sort));
+}, 10, 3);
+
+add_filter('manage_edit-menu_section_sortable_columns', function (array $sortable): array {
+    $sortable['pmc_sort'] = 'pmc_sort';
+    return $sortable;
+});
+
+add_action('pre_get_terms', function (WP_Term_Query $query): void {
+    if (!is_admin()) return;
+
+    $taxonomy = $query->query_vars['taxonomy'] ?? null;
+    if (is_array($taxonomy)) {
+        if (!in_array('menu_section', $taxonomy, true)) return;
+    } elseif ($taxonomy !== 'menu_section') {
+        return;
+    }
+
+    $orderby = (string)($query->query_vars['orderby'] ?? '');
+    if ($orderby !== 'pmc_sort') return;
+
+    // Rebuild meta_query here because pre_get_terms fires after the initial parse.
+    $query->query_vars['meta_key'] = 'pmc_sort';
+    $query->query_vars['orderby']  = 'meta_value_num';
+    $query->query_vars['meta_type'] = 'NUMERIC';
+
+    if (class_exists('WP_Meta_Query')) {
+        $query->meta_query = new WP_Meta_Query();
+        $query->meta_query->parse_query_vars($query->query_vars);
+    }
+});
