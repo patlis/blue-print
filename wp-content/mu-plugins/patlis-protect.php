@@ -79,10 +79,4 @@ add_action('init', function () {
         }
     }
 
-    // Extra safety: κανείς non-admin να μην έχει file editor, ακόμα κι αν πάρει cap κατά λάθος
-    if (is_admin() && !current_user_can('administrator')) {
-        if (!defined('DISALLOW_FILE_EDIT')) {
-            define('DISALLOW_FILE_EDIT', true);
-        }
-    }
 }, 20);

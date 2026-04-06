@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Disable Public API Access
- * Description: Blocks REST API for non-logged-in users and disables XML-RPC/Application Passwords.
+ * Plugin Name: Patlis Security
+ * Description: Core security rules for Patlis WordPress platform.
  */
 
 if (!defined('ABSPATH')) {
@@ -9,7 +9,8 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Public POST routes that are required by frontend features.
+ * Public POST routes that are required by frontend features. 
+ * SOS is currently the only one, but this can be extended in the future if needed.
  */
 function patlis_public_rest_post_route_allowed(string $route): bool
 {
@@ -92,3 +93,42 @@ add_action('init', function () {
     remove_action('wp_head', 'rest_output_link_wp_head', 10);
     remove_action('template_redirect', 'rest_output_link_header', 11);
 });
+
+/**
+ * Remove user endpoints from REST API for visitors to prevent username enumeration.
+ */
+add_filter('rest_endpoints', function ($endpoints) {
+    if (!is_user_logged_in()) {
+        unset($endpoints['/wp/v2/users']);
+        unset($endpoints['/wp/v2/users/(?P<id>[\\d]+)']);
+        unset($endpoints['/wp/v2/users/me']);
+    }
+    return $endpoints;
+});
+
+/**
+ * Block public author archive access to reduce username enumeration.
+ */
+add_action('template_redirect', function () {
+    if (is_user_logged_in()) {
+        return;
+    }
+
+    if (is_author()) {
+        wp_safe_redirect(home_url('/'), 301);
+        exit;
+    }
+});
+
+/**
+ * Block ?author=1 style enumeration for visitors.
+ */
+add_action('init', function () {
+    if (is_admin() || is_user_logged_in()) {
+        return;
+    }
+
+    if (isset($_GET['author'])) {
+        wp_die(__('Author pages are not available.', 'default'), '', ['response' => 403]);
+    }
+}, 1);
