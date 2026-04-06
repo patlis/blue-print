@@ -105,6 +105,9 @@ define('WP_DEBUG_LOG', false);
 /* Limit revisions for posts, pages, templates to 5 */
 define('WP_POST_REVISIONS', 5);
 
+/* Disable file editors for all users. */
+define('DISALLOW_FILE_EDIT', true);
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
