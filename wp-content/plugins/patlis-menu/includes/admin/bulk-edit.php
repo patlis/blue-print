@@ -67,8 +67,6 @@ final class Patlis_Menu_Admin_Bulk_Edit
 
 			<div class="patlis-bulk-edit-wrap">
 			<h1>Bulk Edit Menu Items</h1>
-			<p class="patlis-intro">Μαζικό edit στα υπάρχοντα items της default γλώσσας (χωρίς αλλαγή category).</p>
-
 			<?php if (is_array($result)) : ?>
 				<div class="patlis-result">
 					<?php if (!empty($result['updated'])) : ?>
@@ -129,8 +127,6 @@ final class Patlis_Menu_Admin_Bulk_Edit
 											<th style="width:50px;">Sort</th>
 											<th style="width:50px;">Item Nr</th>
 											<th style="width:220px;">Name</th>
-											<th style="width:350px;">Description</th>
-											<th style="width:100px;">Allergies</th>
 											<th style="width:120px;">Size 1</th>
 											<th style="width:50px;">Price</th>
 											<th style="width:120px;">Size 2</th>
@@ -142,7 +138,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 									<tbody>
 										<?php if (empty($section_items)) : ?>
 											<tr>
-												<td colspan="11">No items in this section.</td>
+												<td colspan="9">No items in this section.</td>
 											</tr>
 										<?php else : ?>
 											<?php foreach ($section_items as $item) : ?>
@@ -150,8 +146,6 @@ final class Patlis_Menu_Admin_Bulk_Edit
 												$post_id    = (int) $item->ID;
 												$sort       = (string) get_post_meta($post_id, 'pmi_sort', true);
 												$itemnr     = (string) get_post_meta($post_id, 'pmi_itemnr', true);
-												$desc       = (string) get_post_meta($post_id, 'pmi_description', true);
-												$allergies  = (string) get_post_meta($post_id, 'pmi_allergies', true);
 												$price      = (string) get_post_meta($post_id, 'pmi_price', true);
 												$price2     = (string) get_post_meta($post_id, 'pmi_price2', true);
 												$price3     = (string) get_post_meta($post_id, 'pmi_price3', true);
@@ -166,9 +160,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 													</td>
 													<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][itemnr]" value="<?php echo esc_attr($itemnr); ?>"></td>
 													<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][name]" value="<?php echo esc_attr($item->post_title); ?>"></td>
-													<td><textarea name="items[<?php echo esc_attr((string) $post_id); ?>][description]" rows="2"><?php echo esc_textarea($desc); ?></textarea></td>
-													<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][allergies]" value="<?php echo esc_attr($allergies); ?>"></td>
-												<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][size1]" value="<?php echo esc_attr($size1); ?>"></td>
+												<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][size1]" style="width:100%" value="<?php echo esc_attr($size1); ?>"></td>
 										<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][price]" value="<?php echo esc_attr($price); ?>"></td>
 										<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][size2]" value="<?php echo esc_attr($size2); ?>"></td>
 										<td><input type="text" name="items[<?php echo esc_attr((string) $post_id); ?>][price2]" value="<?php echo esc_attr($price2); ?>"></td>
@@ -376,9 +368,6 @@ final class Patlis_Menu_Admin_Bulk_Edit
 			}
 
 			update_post_meta($post_id, 'pmi_itemnr', sanitize_text_field((string) ($row['itemnr'] ?? '')));
-			update_post_meta($post_id, 'pmi_description', sanitize_textarea_field((string) ($row['description'] ?? '')));
-			update_post_meta($post_id, 'pmi_allergies', sanitize_text_field((string) ($row['allergies'] ?? '')));
-
 			update_post_meta($post_id, 'pmi_price', self::sanitize_price((string) ($row['price'] ?? '')));
 			update_post_meta($post_id, 'pmi_price2', self::sanitize_price((string) ($row['price2'] ?? '')));
 			update_post_meta($post_id, 'pmi_price3', self::sanitize_price((string) ($row['price3'] ?? '')));
