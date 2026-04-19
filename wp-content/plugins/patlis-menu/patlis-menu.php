@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) { exit; }
 
 define('PATLIS_MENU_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_MENU_URL', plugin_dir_url(__FILE__));
-define('PATLIS_MENU_VERSION', '0.1.0');
+define('PATLIS_MENU_VERSION', '0.1.2');
 
 // Updater — πριν το gating ωστε να ελεγχει updates παντα
 if (function_exists('patlis_register_plugin_updater')) {
