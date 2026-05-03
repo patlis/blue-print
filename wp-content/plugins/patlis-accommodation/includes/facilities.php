@@ -7,7 +7,7 @@ add_action('init', function () {
         return;
     }
 
-    register_taxonomy('property_facility', ['patlis_room'], [
+    register_taxonomy('property_facility', [], [
         'labels' => [
             'name'          => __('Facilities', 'patlis-accommodation'),
             'singular_name' => __('Facility', 'patlis-accommodation'),

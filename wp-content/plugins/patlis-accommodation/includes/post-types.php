@@ -28,8 +28,8 @@ function patlis_accommodation_register_cpt_rooms() {
         'labels'             => $labels,
         'public'             => true,
         'show_in_menu'       => false, // θα το βάλουμε κάτω από Accommodation menu αργότερα
-        'has_archive'        => true,
-        'rewrite'            => ['slug' => 'rooms', 'with_front' => true],
+        'has_archive'        => false,
+        'rewrite'            => ['slug' => 'rooms', 'with_front' => false],
         'supports'           => ['title', 'editor', 'thumbnail', 'page-attributes'], // page-attributes => menu_order
         'menu_position'      => 58,
         'menu_icon'          => 'dashicons-admin-multisite',
