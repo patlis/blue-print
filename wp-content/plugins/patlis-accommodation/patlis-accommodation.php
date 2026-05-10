@@ -50,6 +50,7 @@ require_once PATLIS_ACCOMMODATION_PATH . 'includes/post-types.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/rooms-query.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/booking-form.php';
+require_once PATLIS_ACCOMMODATION_PATH . 'includes/multilingual.php';
 
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/amenities.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/facilities.php';

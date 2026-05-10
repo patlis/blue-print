@@ -54,7 +54,7 @@ function patlis_accommodation_render_settings_page() {
                 </tr>
 
                 <tr id="patlis-acc-row-redirect-url">
-                    <th scope="row">Redirect URL</th>
+                    <th scope="row">Fallback Redirect URL (if room has no book_url)</th>
                     <td>
                         <input id="patlis-acc-booking-redirect-url" type="text" class="regular-text" name="booking_redirect_url" value="<?php echo esc_attr($s['booking_redirect_url'] ?? ''); ?>">
                         <p><code>[patlis_acc_booking_redirect_url]</code></p>
@@ -140,17 +140,17 @@ function patlis_accommodation_render_settings_page() {
                 // 0 = off
                 // 1 = our system (needs email + days)
                 // 2 = 3rd-party code (needs code)
-                // 3 = redirect (needs redirect url)
+                // redirect URL is always visible (fallback for rooms without book_url)
             
                 setRowVisible(rowEmail,    mode === 1);
                 setRowVisible(rowDays,     mode === 1);
                 setRowVisible(row3party,   mode === 2);
-                setRowVisible(rowRedirect, mode === 3);
+                setRowVisible(rowRedirect, true);
             
                 setRequired(emailEl,    mode === 1);
                 setRequired(daysEl,     mode === 1);
-                setRequired(redirectEl, mode === 3);
-                setRequired(codeEl, mode === 2);
+                setRequired(codeEl,     mode === 2);
+                setRequired(redirectEl, false);
             
               }
             

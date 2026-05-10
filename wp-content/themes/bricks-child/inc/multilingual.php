@@ -244,6 +244,108 @@ function patlis_fallback_posts_query(array $args): array
     ]);
 }
 
+/**
+ * Read a raw post meta value without triggering metadata filters.
+ */
+function patlis_get_raw_post_meta_value(int $post_id, string $meta_key)
+{
+    global $wpdb;
+
+    if ($post_id <= 0 || $meta_key === '') {
+        return null;
+    }
+
+    $meta_value = $wpdb->get_var($wpdb->prepare(
+        "SELECT meta_value FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key = %s ORDER BY meta_id ASC LIMIT 1",
+        $post_id,
+        $meta_key
+    ));
+
+    if ($meta_value === null) {
+        return null;
+    }
+
+    return maybe_unserialize($meta_value);
+}
+
+/**
+ * Check whether a meta value should be treated as empty for fallback purposes.
+ */
+function patlis_is_empty_meta_value($value): bool
+{
+    return $value === null || $value === '' || $value === false || $value === [];
+}
+
+/**
+ * Build fallback meta value for translated Rates posts.
+ */
+function patlis_get_fallback_rate_meta_value(int $post_id, string $meta_key)
+{
+    if ($post_id <= 0 || $meta_key === '') {
+        return null;
+    }
+
+    if (!function_exists('pll_current_language') || !function_exists('pll_default_language') || !function_exists('pll_get_post')) {
+        return null;
+    }
+
+    $current_lang = pll_current_language();
+    $default_lang = pll_default_language();
+
+    if (!is_string($current_lang) || !is_string($default_lang) || $current_lang === '' || $default_lang === '' || $current_lang === $default_lang) {
+        return null;
+    }
+
+    if (get_post_type($post_id) !== 'rates') {
+        return null;
+    }
+
+    $current_value = patlis_get_raw_post_meta_value($post_id, $meta_key);
+
+    if (!patlis_is_empty_meta_value($current_value)) {
+        return null;
+    }
+
+    $default_post_id = (int) pll_get_post($post_id, $default_lang);
+
+    if ($default_post_id <= 0 || $default_post_id === $post_id) {
+        return null;
+    }
+
+    $fallback_value = patlis_get_raw_post_meta_value($default_post_id, $meta_key);
+
+    return patlis_is_empty_meta_value($fallback_value) ? null : $fallback_value;
+}
+
+/**
+ * Fallback Rates meta values to the default language when the translation value is empty.
+ */
+add_filter('get_post_metadata', function ($value, $post_id, $meta_key, $single) {
+    if (is_admin()) {
+        return $value;
+    }
+
+    if (!is_int($post_id)) {
+        $post_id = (int) $post_id;
+    }
+
+    if ($post_id <= 0 || !is_string($meta_key) || $meta_key === '') {
+        return $value;
+    }
+
+    $fallback_value = patlis_get_fallback_rate_meta_value($post_id, $meta_key);
+
+    if ($fallback_value === null) {
+        return $value;
+    }
+
+    if ($single) {
+        return $fallback_value;
+    }
+
+    return [$fallback_value];
+}, 10, 4);
+
 if (!function_exists('patlis_get_fallback_term_ids')) {
     /**
      * Build fallback term IDs:

@@ -32,6 +32,7 @@ function patlis_accommodation_register_admin_menu() {
         'patlis_accommodation_render_placeholder'
     );
 
+
     // Amenities (core taxonomy screen)
     add_submenu_page(
         'patlis-accommodation',
@@ -58,6 +59,26 @@ function patlis_accommodation_register_admin_menu() {
         $capability,
         'edit-tags.php?taxonomy=property_service&post_type=patlis_room'
     );
+
+    // Experiences
+    add_submenu_page(
+        'patlis-accommodation',
+        'Experiences',
+        'Experiences',
+        $capability,
+        'edit.php?post_type=experience'
+    );
+
+    // Offers & Packages
+    add_submenu_page(
+        'patlis-accommodation',
+        'Offers & Packages',
+        'Offers & Packages',
+        $capability,
+        'edit.php?post_type=rates'
+    );
+
+
 
     // Settings (separate slug)
     add_submenu_page(
@@ -102,8 +123,11 @@ add_action('admin_init', function () {
 add_filter('parent_file', function ($parent_file) {
     global $current_screen;
 
-    // CPT screens for patlis_room
-    if (!empty($current_screen->post_type) && $current_screen->post_type === 'patlis_room') {
+    // CPT screens for patlis_room, experience, and rates
+    if (
+        !empty($current_screen->post_type)
+        && in_array($current_screen->post_type, ['patlis_room', 'experience', 'rates'], true)
+    ) {
         return 'patlis-accommodation';
     }
 
@@ -113,7 +137,29 @@ add_filter('parent_file', function ($parent_file) {
 add_filter('submenu_file', function ($submenu_file) {
     global $current_screen;
 
-    if (empty($current_screen->post_type) || $current_screen->post_type !== 'patlis_room') {
+    if (empty($current_screen->post_type)) {
+        return $submenu_file;
+    }
+
+    // Experience list / edit experience
+    if ($current_screen->post_type === 'experience') {
+        if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
+            return 'edit.php?post_type=experience';
+        }
+
+        return $submenu_file;
+    }
+
+    // Rates list / edit rate
+    if ($current_screen->post_type === 'rates') {
+        if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
+            return 'edit.php?post_type=rates';
+        }
+
+        return $submenu_file;
+    }
+
+    if ($current_screen->post_type !== 'patlis_room') {
         return $submenu_file;
     }
 

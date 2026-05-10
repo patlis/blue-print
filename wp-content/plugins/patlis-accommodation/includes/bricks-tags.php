@@ -18,6 +18,7 @@ if (!defined('ABSPATH')) exit;
 add_filter('bricks/dynamic_tags_list', function ($tags) {
 
     $gRoom = 'Patlis – Accommodation (Room)';
+    $gRate = 'Patlis – Accommodation (Offer/Package)';
     $gOpt  = 'Patlis – Accommodation (Options)';
     $gProp = 'Patlis – Accommodation (Property)';
 
@@ -35,12 +36,13 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_room_360_url}',    'label' => 'Room: 360 Image URL',  'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_book_url}',   'label' => 'Room: Booking URL',    'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_sticky}',     'label' => 'Room: Sticky (1/0)',   'group' => $gRoom];
+    $tags[] = ['name' => '{patlis_acc_package_booking_url}', 'label' => 'Offer/Package: Booking URL (ACF + fallback)', 'group' => $gRate];
 
     // OPTIONS tags (from plugin settings)
     $tags[] = ['name' => '{patlis_acc_booking_mode}',         'label' => 'Options: Booking mode (0/1/2/3)', 'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_booking_email}',        'label' => 'Options: Booking email',          'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_booking_days_before}',  'label' => 'Options: Days before',           'group' => $gOpt];
-    $tags[] = ['name' => '{patlis_acc_booking_redirect_url}', 'label' => 'Options: Redirect URL',          'group' => $gOpt];
+    $tags[] = ['name' => '{patlis_acc_booking_redirect_url}', 'label' => 'Options: Fallback redirect URL',  'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_booking_3party_code}',  'label' => 'Options: 3rd-party code (HTML)', 'group' => $gOpt];
 
     $tags[] = ['name' => '{patlis_acc_rooms_per_page}', 'label' => 'Options: Rooms per page (0=all)', 'group' => $gOpt];
@@ -94,6 +96,18 @@ add_filter('bricks/dynamic_data/render_content', function ($content, $post, $con
  * ============================================================ */
 function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null): string
 {
+    // Offer/Package ACF booking URL with fallback to global booking_redirect_url
+    if ($tag === 'patlis_acc_package_booking_url') {
+        $p = patlis_acc_resolve_post_context($post);
+        if (!$p || get_post_type($p) !== 'rates') return '';
+
+        $v = patlis_acc_post_meta((int) $p->ID, 'package_booking_url');
+        if (!empty($v)) return $v;
+
+        $s = function_exists('patlis_accommodation_get_settings') ? patlis_accommodation_get_settings() : [];
+        return isset($s['booking_redirect_url']) ? (string) $s['booking_redirect_url'] : '';
+    }
+
     // Room amenities TOP/ALL (HTML)
     if ($tag === 'patlis_acc_room_amenities_top' || $tag === 'patlis_acc_room_amenities_all') {
         $p = patlis_acc_resolve_post_context($post);
@@ -184,6 +198,13 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
 
             // Sticky: πάντα 1/0
             if ($sub === 'sticky') return ((int)$v) ? '1' : '0';
+
+            // FALLBACK: if room_book_url is empty, use global booking_redirect_url
+            if ($sub === 'book_url' && empty($v)) {
+                $s = function_exists('patlis_accommodation_get_settings') ? patlis_accommodation_get_settings() : [];
+                $fallback = isset($s['booking_redirect_url']) ? (string) $s['booking_redirect_url'] : '';
+                return $fallback;
+            }
 
             return $v;
         }
