@@ -9,7 +9,7 @@ function patlis_acc_rooms_register_metabox() {
 
     add_meta_box(
         'patlis_acc_room_fields',
-        'Room Fields (Patlis)',
+        'Room Fields',
         'patlis_acc_rooms_render_metabox',
         'patlis_room',
         'normal',

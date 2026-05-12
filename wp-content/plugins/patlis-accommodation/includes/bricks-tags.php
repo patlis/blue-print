@@ -219,11 +219,60 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
 /**
  * Room amenities:
  * - TOP: flat <ul> with highlighted assigned terms  * - ALL: grouped by parent categories (for assigned child terms)
+ * 
+ * Works with Polylang: if room is translated, fetches amenities from default language
+ * and translates the term IDs to current language.
  */
 function patlis_acc_render_room_amenities_html(int $room_id, bool $top_only): string
 {
+    // Polylang: if this is a translated room, get amenities from default language
+    if (function_exists('pll_get_post_language') && function_exists('pll_default_language')) {
+        $current_lang = pll_get_post_language((int) $room_id);
+        $default_lang = pll_default_language();
+        
+        if (is_string($current_lang) && is_string($default_lang) && $current_lang !== $default_lang && function_exists('pll_get_post')) {
+            $default_room_id = pll_get_post((int) $room_id, $default_lang);
+            if ($default_room_id > 0) {
+                $room_id = (int) $default_room_id;
+            }
+        }
+    }
+
     $terms = get_the_terms($room_id, 'room_amenity');
     if (is_wp_error($terms) || empty($terms)) return '';
+    
+    // Polylang: translate term IDs to current language if needed
+    if (function_exists('pll_get_term_language') && function_exists('pll_get_term') && function_exists('pll_current_language')) {
+        $current_lang = pll_current_language('slug');
+        
+        if (is_string($current_lang) && $current_lang !== '') {
+            $translated_terms = [];
+            
+            foreach ($terms as $t) {
+                $term_lang = pll_get_term_language((int) $t->term_id);
+                
+                // If term is in default language (or no language info), try to get translation
+                if ($term_lang && is_string($term_lang)) {
+                    $translated_term_id = pll_get_term((int) $t->term_id, $current_lang);
+                    if ($translated_term_id > 0) {
+                        $translated_term = get_term((int) $translated_term_id, 'room_amenity');
+                        if ($translated_term && !is_wp_error($translated_term)) {
+                            $translated_terms[] = $translated_term;
+                        }
+                    } else {
+                        // No translation, keep original
+                        $translated_terms[] = $t;
+                    }
+                } else {
+                    $translated_terms[] = $t;
+                }
+            }
+            
+            if (!empty($translated_terms)) {
+                $terms = $translated_terms;
+            }
+        }
+    }
 
     $highlight_key = defined('PATLIS_AMENITY_META_HIGHLIGHT') ? PATLIS_AMENITY_META_HIGHLIGHT : 'patlis_is_highlight';
     $order_key     = defined('PATLIS_AMENITY_META_ORDER') ? PATLIS_AMENITY_META_ORDER : 'patlis_order';
@@ -354,9 +403,49 @@ function patlis_acc_render_property_terms_html(string $taxonomy, bool $top_only)
     // If taxonomy doesn't exist, return empty (safe)
     if (!taxonomy_exists($taxonomy)) return '';
 
-    $parents = get_terms(['taxonomy' => $taxonomy, 'hide_empty' => false, 'parent' => 0]);
-    $parents = array_values(array_filter((array)$parents, fn($t) => $t && !is_wp_error($t)));
-    if (empty($parents)) return '';
+    $pll_ready    = function_exists('pll_current_language') && function_exists('pll_default_language') && function_exists('pll_get_term');
+    $current_lang = $pll_ready ? (string) pll_current_language('slug') : '';
+    $default_lang = $pll_ready ? (string) pll_default_language('slug') : '';
+    $source_lang  = ($pll_ready && $current_lang !== '' && $default_lang !== '' && $current_lang !== $default_lang)
+        ? $default_lang
+        : $current_lang;
+
+    $parent_query = [
+        'taxonomy'   => $taxonomy,
+        'hide_empty' => false,
+        'parent'     => 0,
+    ];
+
+    if ($source_lang !== '') {
+        $parent_query['lang'] = $source_lang;
+    }
+
+    $source_parents = get_terms($parent_query);
+    $source_parents = array_values(array_filter((array) $source_parents, fn($t) => $t && !is_wp_error($t)));
+    if (empty($source_parents)) return '';
+
+    $map_term_to_current = function ($term) use ($taxonomy, $pll_ready, $current_lang, $source_lang) {
+        if (!$term || is_wp_error($term)) {
+            return null;
+        }
+
+        if (!$pll_ready || $current_lang === '' || $source_lang === '' || $current_lang === $source_lang) {
+            return $term;
+        }
+
+        $translated_id = (int) pll_get_term((int) $term->term_id, $current_lang);
+        if ($translated_id <= 0) {
+            // Missing translation -> keep source term as fallback.
+            return $term;
+        }
+
+        $translated = get_term($translated_id, $taxonomy);
+        if (!$translated || is_wp_error($translated)) {
+            return $term;
+        }
+
+        return $translated;
+    };
 
     $highlight_key = 'patlis_is_highlight';
     $order_key     = 'patlis_order';
@@ -365,15 +454,31 @@ function patlis_acc_render_property_terms_html(string $taxonomy, bool $top_only)
     if ($top_only) {
         $items = [];
 
-        foreach ($parents as $p) {
-            $children = get_terms(['taxonomy' => $taxonomy, 'hide_empty' => false, 'parent' => (int)$p->term_id]);
+        foreach ($source_parents as $source_parent) {
+            $child_query = [
+                'taxonomy'   => $taxonomy,
+                'hide_empty' => false,
+                'parent'     => (int) $source_parent->term_id,
+            ];
+            if ($source_lang !== '') {
+                $child_query['lang'] = $source_lang;
+            }
+
+            $children = get_terms($child_query);
             foreach ((array)$children as $c) {
                 if (!$c || is_wp_error($c)) continue;
                 if ((int) get_term_meta($c->term_id, $highlight_key, true) === 1) {
-                    $items[] = $c;
+                    $items[] = $map_term_to_current($c);
                 }
             }
         }
+
+        $items = array_values(array_filter((array) $items, fn($t) => $t && !is_wp_error($t)));
+        $unique_items = [];
+        foreach ($items as $item) {
+            $unique_items[(int) $item->term_id] = $item;
+        }
+        $items = array_values($unique_items);
 
         if (empty($items)) return '';
 
@@ -395,6 +500,53 @@ function patlis_acc_render_property_terms_html(string $taxonomy, bool $top_only)
     }
 
     // ALL grouped
+    $groups = [];
+
+    foreach ($source_parents as $source_parent) {
+        $render_parent = $map_term_to_current($source_parent);
+        if (!$render_parent || is_wp_error($render_parent)) {
+            continue;
+        }
+
+        $group_key = (int) $render_parent->term_id;
+        if (!isset($groups[$group_key])) {
+            $groups[$group_key] = [
+                'parent' => $render_parent,
+                'children' => [],
+            ];
+        }
+
+        $child_query = [
+            'taxonomy'   => $taxonomy,
+            'hide_empty' => false,
+            'parent'     => (int) $source_parent->term_id,
+        ];
+        if ($source_lang !== '') {
+            $child_query['lang'] = $source_lang;
+        }
+
+        $source_children = get_terms($child_query);
+        $source_children = array_values(array_filter((array) $source_children, fn($t) => $t && !is_wp_error($t)));
+
+        foreach ($source_children as $source_child) {
+            $render_child = $map_term_to_current($source_child);
+            if (!$render_child || is_wp_error($render_child)) {
+                continue;
+            }
+
+            $groups[$group_key]['children'][(int) $render_child->term_id] = $render_child;
+        }
+    }
+
+    if (empty($groups)) return '';
+
+    foreach ($groups as &$group) {
+        $group['children'] = array_values($group['children']);
+    }
+    unset($group);
+
+    $parents = array_map(fn($g) => $g['parent'], array_values($groups));
+
     uasort($parents, function($a, $b) use ($order_key) {
         $oa = (int) get_term_meta($a->term_id, $order_key, true);
         $ob = (int) get_term_meta($b->term_id, $order_key, true);
@@ -405,8 +557,8 @@ function patlis_acc_render_property_terms_html(string $taxonomy, bool $top_only)
     $html = '<div class="patlis-features-grouped patlis-features-grouped--' . esc_attr($taxonomy) . '">';
 
     foreach ($parents as $p) {
-        $children = get_terms(['taxonomy' => $taxonomy, 'hide_empty' => false, 'parent' => (int)$p->term_id]);
-        $children = array_values(array_filter((array)$children, fn($t) => $t && !is_wp_error($t)));
+        $group_key = (int) $p->term_id;
+        $children = isset($groups[$group_key]) ? (array) $groups[$group_key]['children'] : [];
         if (empty($children)) continue;
 
         usort($children, function($a, $b) use ($order_key) {

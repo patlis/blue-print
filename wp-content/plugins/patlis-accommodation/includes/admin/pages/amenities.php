@@ -5,6 +5,67 @@ const PATLIS_AMENITY_META_HIGHLIGHT = 'patlis_is_highlight';
 const PATLIS_AMENITY_META_ORDER     = 'patlis_order';
 const PATLIS_AMENITY_META_ICON      = 'patlis_icon';
 
+function patlis_cascade_delete_amenity_translations_by_term_id(int $term_id): void
+{
+  if ($term_id <= 0) {
+    return;
+  }
+
+  if (!function_exists('pll_default_language') || !function_exists('pll_get_term_language') || !function_exists('pll_get_term_translations')) {
+    return;
+  }
+
+  $default_lang = pll_default_language();
+  $term_lang    = pll_get_term_language($term_id);
+
+  if (!is_string($default_lang) || !is_string($term_lang) || $term_lang !== $default_lang) {
+    return;
+  }
+
+  $translations = pll_get_term_translations($term_id);
+  if (!is_array($translations) || empty($translations)) {
+    return;
+  }
+
+  foreach ($translations as $translated_id) {
+    $translated_id = (int) $translated_id;
+    if ($translated_id <= 0 || $translated_id === $term_id) {
+      continue;
+    }
+
+    wp_delete_term($translated_id, 'room_amenity');
+  }
+}
+
+/**
+ * JS reload: force page refresh after any taxonomy AJAX action (add / delete).
+ */
+add_action('admin_footer-edit-tags.php', function () {
+  if (!function_exists('get_current_screen')) {
+    return;
+  }
+  $screen = get_current_screen();
+  if (!$screen || ($screen->taxonomy ?? '') !== 'room_amenity') {
+    return;
+  }
+  ?>
+  <script>
+  jQuery(document).ajaxComplete(function(event, xhr, settings) {
+    if (!settings || !settings.data) return;
+    
+    // Check if the ajax request was for adding or deleting a term
+    if (typeof settings.data === 'string' && (settings.data.includes('action=add-tag') || settings.data.includes('action=delete-tag'))) {
+      if (settings.data.includes('taxonomy=room_amenity') || settings.data.includes('screen=edit-room_amenity')) {
+        setTimeout(function() {
+          window.location.reload();
+        }, 500);
+      }
+    }
+  });
+  </script>
+  <?php
+});
+
 /**
  * Add form fields (new term)
  */
@@ -120,6 +181,128 @@ $patlis_save_amenity_meta = function ($term_id) {
 add_action('created_room_amenity', $patlis_save_amenity_meta);
 add_action('edited_room_amenity',  $patlis_save_amenity_meta);
 
+/**
+ * Auto-create missing translations for newly created amenities.
+ * Source term remains the single place editors create terms; translations are generated automatically.
+ */
+add_action('created_room_amenity', function ($term_id) {
+  static $is_creating = false;
+
+  if ($is_creating) {
+    return;
+  }
+
+  if (!function_exists('pll_languages_list') || !function_exists('pll_get_term_language') || !function_exists('pll_set_term_language') || !function_exists('pll_save_term_translations')) {
+    return;
+  }
+
+  $source = get_term((int) $term_id, 'room_amenity');
+  if (!$source || is_wp_error($source)) {
+    return;
+  }
+
+  $default_lang = function_exists('pll_default_language') ? pll_default_language() : null;
+  $source_lang  = pll_get_term_language((int) $term_id);
+
+  if (!is_string($source_lang) || $source_lang === '') {
+    $source_lang = is_string($default_lang) && $default_lang !== '' ? $default_lang : '';
+    if ($source_lang !== '') {
+      pll_set_term_language((int) $term_id, $source_lang);
+    }
+  }
+
+  if ($source_lang === '') {
+    return;
+  }
+
+  $langs = pll_languages_list(['fields' => 'slug']);
+  if (!is_array($langs) || empty($langs)) {
+    return;
+  }
+
+  $map = function_exists('pll_get_term_translations') ? pll_get_term_translations((int) $term_id) : [];
+  if (!is_array($map)) {
+    $map = [];
+  }
+  $map[$source_lang] = (int) $term_id;
+
+  $is_creating = true;
+
+  foreach ($langs as $lang) {
+    $lang = is_string($lang) ? trim($lang) : '';
+    if ($lang === '' || isset($map[$lang])) {
+      continue;
+    }
+
+    $target_parent = 0;
+    if ((int) $source->parent > 0 && function_exists('pll_get_term')) {
+      $translated_parent = (int) pll_get_term((int) $source->parent, $lang);
+      if ($translated_parent > 0) {
+        $target_parent = $translated_parent;
+      }
+    }
+
+    $insert = wp_insert_term(
+      (string) $source->name,
+      'room_amenity',
+      [
+        'slug'        => sanitize_title($source->slug . '-' . $lang),
+        'description' => (string) $source->description,
+        'parent'      => $target_parent,
+      ]
+    );
+
+    if (is_wp_error($insert)) {
+      if ($insert->get_error_code() === 'term_exists') {
+        $existing_id = (int) $insert->get_error_data('term_exists');
+        if ($existing_id > 0) {
+          pll_set_term_language($existing_id, $lang);
+          $map[$lang] = $existing_id;
+        }
+      }
+      continue;
+    }
+
+    $new_id = (int) ($insert['term_id'] ?? 0);
+    if ($new_id <= 0) {
+      continue;
+    }
+
+    pll_set_term_language($new_id, $lang);
+
+    // Copy synced meta defaults to all generated translations.
+    update_term_meta($new_id, PATLIS_AMENITY_META_HIGHLIGHT, (int) get_term_meta((int) $term_id, PATLIS_AMENITY_META_HIGHLIGHT, true));
+    update_term_meta($new_id, PATLIS_AMENITY_META_ORDER, (int) get_term_meta((int) $term_id, PATLIS_AMENITY_META_ORDER, true));
+
+    $icon = (string) get_term_meta((int) $term_id, PATLIS_AMENITY_META_ICON, true);
+    if ($icon === '') {
+      delete_term_meta($new_id, PATLIS_AMENITY_META_ICON);
+    } else {
+      update_term_meta($new_id, PATLIS_AMENITY_META_ICON, $icon);
+    }
+
+    $map[$lang] = $new_id;
+  }
+
+  if (count($map) > 1) {
+    pll_save_term_translations($map);
+  }
+
+  $is_creating = false;
+}, 50, 1);
+
+/**
+ * Cascade delete translations whenever a room_amenity term is being deleted.
+ * This path is taxonomy-native and works for both list and edit delete flows.
+ */
+add_action('pre_delete_term', function ($term_id, $taxonomy) {
+  if ($taxonomy !== 'room_amenity') {
+    return;
+  }
+
+  patlis_cascade_delete_amenity_translations_by_term_id((int) $term_id);
+}, 10, 2);
+
 
 /**
  * Columns in amenities list
@@ -158,4 +341,6 @@ add_filter('manage_edit-room_amenity_columns', function ($cols) {
     'patlis_highlight'=> 'Highlight',
   ];
 });
+
+ 
 

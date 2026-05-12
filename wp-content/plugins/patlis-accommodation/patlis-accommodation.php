@@ -52,6 +52,8 @@ require_once PATLIS_ACCOMMODATION_PATH . 'includes/rooms-query.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/booking-form.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/multilingual.php';
 
+require_once PATLIS_ACCOMMODATION_PATH . 'includes/term-sync.php';
+
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/amenities.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/facilities.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/services.php';
