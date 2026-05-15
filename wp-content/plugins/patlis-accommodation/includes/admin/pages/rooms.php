@@ -1,6 +1,39 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+add_action('admin_enqueue_scripts', 'patlis_acc_rooms_enqueue_gallery_assets');
+function patlis_acc_rooms_enqueue_gallery_assets($hook) {
+    if ($hook !== 'post.php' && $hook !== 'post-new.php') {
+        return;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'patlis_room') {
+        return;
+    }
+
+    wp_enqueue_media();
+    wp_enqueue_script('jquery-ui-sortable');
+}
+
+function patlis_acc_parse_gallery_ids($raw): array {
+    if (is_array($raw)) {
+        $ids = $raw;
+    } elseif (is_string($raw)) {
+        $parts = preg_split('/[\s,]+/', trim($raw));
+        $ids = is_array($parts) ? $parts : [];
+    } else {
+        $ids = [];
+    }
+
+    $ids = array_map('absint', $ids);
+    $ids = array_values(array_filter($ids, function ($id) {
+        return $id > 0;
+    }));
+
+    return array_values(array_unique($ids));
+}
+
 add_action('add_meta_boxes', 'patlis_acc_rooms_register_metabox');
 function patlis_acc_rooms_register_metabox() {
     if (!function_exists('patlis_accommodation_is_enabled_for_version') || !patlis_accommodation_is_enabled_for_version()) {
@@ -38,6 +71,10 @@ function patlis_acc_rooms_render_metabox($post) {
     $size_m2    = esc_attr($v('room_size_m2'));
     $bed_type   = esc_attr($v('room_bed_type'));
     $view       = esc_attr($v('room_view'));
+
+    $gallery_ids_raw = $v('room_gallery_ids');
+    $gallery_ids = patlis_acc_parse_gallery_ids($gallery_ids_raw);
+    $gallery_ids_csv = esc_attr(implode(',', $gallery_ids));
 
     echo '<table class="form-table" role="presentation">';
 
@@ -77,7 +114,146 @@ function patlis_acc_rooms_render_metabox($post) {
     echo '<tr><th scope="row"><label for="room_view">View</label></th>
               <td><input type="text" class="regular-text" id="room_view" name="room_view" value="'.$view.'"></td></tr>';
 
+    echo '<tr><th scope="row"><label for="room_gallery_ids">Room Gallery</label></th><td>';
+    echo '<input type="hidden" id="room_gallery_ids" name="room_gallery_ids" value="' . $gallery_ids_csv . '">';
+    echo '<div id="patlis-room-gallery" class="patlis-room-gallery">';
+    foreach ($gallery_ids as $attachment_id) {
+        $thumb = wp_get_attachment_image((int) $attachment_id, 'thumbnail');
+        if (empty($thumb)) {
+            continue;
+        }
+        echo '<div class="patlis-room-gallery__item" data-id="' . (int) $attachment_id . '">';
+        echo '<button type="button" class="button-link-delete patlis-room-gallery__remove" aria-label="Remove image">&times;</button>';
+        echo $thumb;
+        echo '</div>';
+    }
+    echo '</div>';
+    echo '<p>';
+    echo '<button type="button" class="button" id="patlis-room-gallery-add">Add Images</button> ';
+    echo '<button type="button" class="button" id="patlis-room-gallery-clear">Clear</button>';
+    echo '</p>';
+    echo '<p class="description">Select multiple images, drag to reorder, remove what you do not need.</p>';
+    echo '</td></tr>';
+
     echo '</table>';
+
+    ?>
+    <style>
+    .patlis-room-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    .patlis-room-gallery__item {
+        position: relative;
+        width: 96px;
+        height: 96px;
+        border: 1px solid #ccd0d4;
+        background: #fff;
+        cursor: move;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+    .patlis-room-gallery__item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .patlis-room-gallery__remove {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        z-index: 2;
+        color: #b32d2e;
+        text-decoration: none;
+        font-size: 18px;
+        line-height: 1;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 2px;
+        padding: 0 2px;
+    }
+    </style>
+    <script>
+    (function($){
+        var $list = $('#patlis-room-gallery');
+        var $input = $('#room_gallery_ids');
+        var frame = null;
+
+        function updateIds() {
+            var ids = [];
+            $list.find('.patlis-room-gallery__item').each(function(){
+                var id = parseInt($(this).attr('data-id'), 10);
+                if (id > 0) {
+                    ids.push(id);
+                }
+            });
+            $input.val(ids.join(','));
+        }
+
+        function hasImage(id) {
+            return $list.find('.patlis-room-gallery__item[data-id="' + id + '"]').length > 0;
+        }
+
+        function addItem(id, url) {
+            if (!id || hasImage(id)) {
+                return;
+            }
+            var html = '' +
+                '<div class="patlis-room-gallery__item" data-id="' + id + '">' +
+                    '<button type="button" class="button-link-delete patlis-room-gallery__remove" aria-label="Remove image">&times;</button>' +
+                    '<img src="' + url + '" alt="">' +
+                '</div>';
+            $list.append(html);
+        }
+
+        $list.sortable({
+            items: '.patlis-room-gallery__item',
+            update: updateIds
+        });
+
+        $('#patlis-room-gallery-add').on('click', function(e){
+            e.preventDefault();
+
+            if (!frame) {
+                frame = wp.media({
+                    title: 'Select Room Gallery Images',
+                    library: { type: 'image' },
+                    button: { text: 'Use selected images' },
+                    multiple: true
+                });
+
+                frame.on('select', function(){
+                    var selection = frame.state().get('selection');
+                    selection.each(function(attachment){
+                        var data = attachment.toJSON();
+                        var thumb = data.sizes && data.sizes.thumbnail ? data.sizes.thumbnail.url : data.url;
+                        addItem(data.id, thumb);
+                    });
+                    updateIds();
+                });
+            }
+
+            frame.open();
+        });
+
+        $list.on('click', '.patlis-room-gallery__remove', function(e){
+            e.preventDefault();
+            $(this).closest('.patlis-room-gallery__item').remove();
+            updateIds();
+        });
+
+        $('#patlis-room-gallery-clear').on('click', function(e){
+            e.preventDefault();
+            $list.empty();
+            updateIds();
+        });
+
+        updateIds();
+    })(jQuery);
+    </script>
+    <?php
 }
 
 add_action('save_post_patlis_room', 'patlis_acc_rooms_save_metabox');
@@ -117,4 +293,11 @@ function patlis_acc_rooms_save_metabox($post_id) {
 
     $set('room_bed_type', isset($_POST['room_bed_type']) ? sanitize_text_field((string)$_POST['room_bed_type']) : '');
     $set('room_view',     isset($_POST['room_view']) ? sanitize_text_field((string)$_POST['room_view']) : '');
+
+    $gallery_ids = patlis_acc_parse_gallery_ids($_POST['room_gallery_ids'] ?? '');
+    if (empty($gallery_ids)) {
+        delete_post_meta($post_id, 'room_gallery_ids');
+    } else {
+        $set('room_gallery_ids', $gallery_ids);
+    }
 }

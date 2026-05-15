@@ -51,9 +51,12 @@ function patlis_synced_meta_fields(): array
         'room_item_nr','room_beds','room_persons','room_count',
         'room_img_360_url','room_sticky','room_size_m2','room_video_url',
 
-        //   (term meta) amenities & facilities & services
-        'patlis_is_highlight','patlis_order','amenity_show','patlis_icon'
+        // (term meta) amenities & facilities & services
+        'patlis_is_highlight','patlis_order','amenity_show','patlis_icon',
 
+        // rate periods       
+        'hotel_rate_period_start_day','hotel_rate_period_start_month','hotel_rate_period_end_day',
+        'hotel_rate_period_end_month','hotel_rate_period_active','hotel_rate_period_priority','hotel_rate_period_order',   
 
     ];
 }

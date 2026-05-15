@@ -66,6 +66,8 @@ require_once PATLIS_ACCOMMODATION_PATH . 'includes/services.php';
     
     require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/settings.php';
     require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/rooms.php';
+    require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/hotel-rate-periods.php';
+    require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/room-rates.php';
     require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/amenities.php';
     require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/facilities.php';
     require_once PATLIS_ACCOMMODATION_PATH . 'includes/admin/pages/services.php';

@@ -27,6 +27,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_room_title}',      'label' => 'Room: Title',          'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_image_id}',   'label' => 'Room: Featured image ID',  'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_image_url}',  'label' => 'Room: Featured image URL', 'group' => $gRoom];
+    $tags[] = ['name' => '{patlis_acc_room_gallery_json}','label' => 'Room: Gallery JSON (ids + urls + meta)', 'group' => $gRoom];
 
     $tags[] = ['name' => '{patlis_acc_room_item_nr}',    'label' => 'Room: Item Nr',        'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_beds}',       'label' => 'Room: Beds',           'group' => $gRoom];
@@ -77,7 +78,6 @@ add_filter('bricks/dynamic_data/render_tag', function ($value, $tag, $post = nul
     if (!is_string($tag)) return $value;
 
     $tag = trim($tag, '{}');
-    $rawLower = strtolower($raw);
     if (strpos(strtolower($tag), 'patlis_acc_') !== 0) return $value;
 
     $resolved = patlis_acc_bricks_get_value(strtolower($tag), $post, $context);
@@ -160,7 +160,14 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
     if (strpos($tag, 'patlis_acc_room_') === 0) {
 
         $p = patlis_acc_resolve_post_context($post);
-        if (!$p) return '';
+        if ((!$p || get_post_type($p) !== 'patlis_room') && function_exists('get_queried_object_id')) {
+            $queried_id = (int) get_queried_object_id();
+            if ($queried_id > 0 && get_post_type($queried_id) === 'patlis_room') {
+                $p = get_post($queried_id);
+            }
+        }
+
+        if (!$p || get_post_type($p) !== 'patlis_room') return '';
         $pid = (int) $p->ID;
 
         if ($tag === 'patlis_acc_room_id')    return (string) $pid;
@@ -174,6 +181,11 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
         if ($tag === 'patlis_acc_room_image_url') {
             $img_id = get_post_thumbnail_id($pid);
             return $img_id ? (string) wp_get_attachment_image_url($img_id, 'full') : '';
+        }
+
+        if ($tag === 'patlis_acc_room_gallery_json') {
+            $gallery = patlis_acc_get_room_gallery_items($pid);
+            return wp_json_encode($gallery);
         }
 
         // Meta keys (ΜΟΝΟ δικά μας — όχι cf_*)
@@ -290,7 +302,7 @@ function patlis_acc_render_room_amenities_html(int $room_id, bool $top_only): st
 
         $html = '<ul class="patlis-features check-list patlis-features--top patlis-features--amenities">';
         foreach ($top as $t) {
-            $html .= '<li class="patlis-feature" data-term-id="' . (int)$t->term_id . '">' . esc_html($t->name) . '</li>';
+            $html .= '<li>' . esc_html($t->name) . '</li>';
         }
         $html .= '</ul>';
 
@@ -307,7 +319,7 @@ function patlis_acc_render_room_amenities_html(int $room_id, bool $top_only): st
         usort($terms, fn($a, $b) => strcasecmp((string)$a->name, (string)$b->name));
         $html = '<ul class="patlis-features check-list patlis-features--amenities">';
         foreach ($terms as $t) {
-            $html .= '<li class="patlis-feature" data-term-id="' . (int)$t->term_id . '">' . esc_html($t->name) . '</li>';
+            $html .= '<li>' . esc_html($t->name) . '</li>';
         }
         $html .= '</ul>';
         return $html;
@@ -383,7 +395,7 @@ function patlis_acc_render_room_amenities_html(int $room_id, bool $top_only): st
         $html .= '<ul class="patlis-features check-list patlis-features--amenities">';
 
         foreach ($g['children'] as $c) {
-            $html .= '<li class="patlis-feature" data-term-id="' . (int)$c->term_id . '">' . esc_html($c->name) . '</li>';
+            $html .= '<li>' . esc_html($c->name) . '</li>';
         }
 
         $html .= '</ul></section>';
@@ -492,7 +504,7 @@ function patlis_acc_render_property_terms_html(string $taxonomy, bool $top_only)
 
         $html = '<ul class="patlis-features check-list patlis-features--top patlis-features--' . esc_attr($taxonomy) . '">';
         foreach ($items as $t) {
-            $html .= '<li class="patlis-feature" data-term-id="' . (int)$t->term_id . '">' . esc_html($t->name) . '</li>';
+            $html .= '<li>' . esc_html($t->name) . '</li>';
         }
         $html .= '</ul>';
 
@@ -586,7 +598,7 @@ function patlis_acc_render_property_terms_html(string $taxonomy, bool $top_only)
         $html .= '<ul class="patlis-features check-list patlis-features--' . esc_attr($taxonomy) . '">';
 
         foreach ($children as $c) {
-            $html .= '<li class="patlis-feature" data-term-id="' . (int)$c->term_id . '">' . esc_html($c->name) . '</li>';
+            $html .= '<li>' . esc_html($c->name) . '</li>';
         }
 
         $html .= '</ul></section>';
@@ -631,6 +643,97 @@ function patlis_acc_resolve_post_context($obj)
     if ($obj instanceof WP_Post) return $obj;
     if (is_numeric($obj)) return get_post($obj);
     return get_post();
+}
+
+function patlis_acc_get_room_gallery_items(int $post_id): array
+{
+    if ($post_id <= 0) {
+        return [];
+    }
+
+    $resolve_ids = function (int $id): array {
+        $raw_ids = get_post_meta($id, 'room_gallery_ids', true);
+        if (is_array($raw_ids)) {
+            $ids = $raw_ids;
+        } elseif (is_string($raw_ids)) {
+            $parts = preg_split('/[\s,]+/', trim($raw_ids));
+            $ids = is_array($parts) ? $parts : [];
+        } else {
+            $ids = [];
+        }
+
+        return array_values(array_unique(array_filter(array_map('absint', $ids), function ($item_id) {
+            return $item_id > 0;
+        })));
+    };
+
+    $ids = $resolve_ids($post_id);
+
+    if (
+        empty($ids)
+        && function_exists('pll_get_post_language')
+        && function_exists('pll_default_language')
+        && function_exists('pll_get_post')
+    ) {
+        $current_lang = pll_get_post_language($post_id, 'slug');
+        $default_lang = pll_default_language('slug');
+
+        if (
+            is_string($current_lang)
+            && is_string($default_lang)
+            && $current_lang !== ''
+            && $default_lang !== ''
+            && $current_lang !== $default_lang
+        ) {
+            $default_post_id = (int) pll_get_post($post_id, $default_lang);
+            if ($default_post_id > 0 && $default_post_id !== $post_id) {
+                $ids = $resolve_ids($default_post_id);
+            }
+        }
+    }
+
+    if (empty($ids)) {
+        return [];
+    }
+
+    $items = [];
+
+    foreach ($ids as $id) {
+        $full = wp_get_attachment_image_src($id, 'full');
+        if (!is_array($full) || empty($full[0])) {
+            continue;
+        }
+
+        $caption = wp_get_attachment_caption($id);
+        $alt = get_post_meta($id, '_wp_attachment_image_alt', true);
+        $thumb_url = wp_get_attachment_image_url($id, 'thumbnail') ?: '';
+        $medium_url = wp_get_attachment_image_url($id, 'medium') ?: '';
+        $large_url = wp_get_attachment_image_url($id, 'large') ?: '';
+        $full_url = (string) $full[0];
+
+        $items[] = [
+            'id' => (int) $id,
+            'title' => (string) get_the_title($id),
+            'alt' => is_string($alt) ? $alt : '',
+            'caption' => is_string($caption) ? $caption : '',
+            'url' => $full_url,
+            'width' => (int) ($full[1] ?? 0),
+            'height' => (int) ($full[2] ?? 0),
+            // Flat size keys for Bricks query_array access: {query_array @key:'thumbnail'}
+            'thumbnail' => $thumb_url,
+            'medium' => $medium_url,
+            'large' => $large_url,
+            'full' => $full_url,
+            'sizes' => [
+                'thumbnail' => $thumb_url,
+                'medium' => $medium_url,
+                'large' => $large_url,
+                'full' => $full_url,
+            ],
+        ];
+    }
+
+    return $items;
 }
 
 function patlis_acc_is_known_tag(string $tag): bool

@@ -227,21 +227,78 @@ function patlis_fallback_posts_query(array $args): array
         return $args;
     }
 
+    $exclude_ids = [];
+
+    if (!empty($args['post__not_in']) && is_array($args['post__not_in'])) {
+        $exclude_ids = array_map('intval', $args['post__not_in']);
+    }
+
+    if (!empty($args['exclude_post_ids']) && is_array($args['exclude_post_ids'])) {
+        $exclude_ids = array_merge($exclude_ids, array_map('intval', $args['exclude_post_ids']));
+    }
+
+    if (!empty($args['exclude_current'])) {
+        $queried_id = (int) get_queried_object_id();
+        if ($queried_id > 0) {
+            $exclude_ids[] = $queried_id;
+
+            if (function_exists('pll_languages_list') && function_exists('pll_get_post')) {
+                $langs = pll_languages_list(['fields' => 'slug']);
+                if (is_array($langs)) {
+                    foreach ($langs as $lang) {
+                        if (!is_string($lang) || $lang === '') {
+                            continue;
+                        }
+
+                        $translated_id = (int) pll_get_post($queried_id, $lang);
+                        if ($translated_id > 0) {
+                            $exclude_ids[] = $translated_id;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $exclude_ids = array_values(array_unique(array_filter(array_map('intval', $exclude_ids), function ($id) {
+        return $id > 0;
+    })));
+
     $post_ids = patlis_get_fallback_post_ids($args);
 
+    if (!empty($exclude_ids)) {
+        $post_ids = array_values(array_diff($post_ids, $exclude_ids));
+    }
+
     if (empty($post_ids)) {
-        return [
+        $fallback_args = [
             'post_type' => $args['post_type'] ?? 'post',
             'post__in'  => [0],
         ];
+
+        if (!empty($exclude_ids)) {
+            $fallback_args['post__not_in'] = $exclude_ids;
+        }
+
+        return $fallback_args;
     }
 
-    return array_merge($args, [
+    $query_args = $args;
+    unset($query_args['exclude_current'], $query_args['exclude_post_ids']);
+
+    $final_args = array_merge($query_args, [
         'post__in'         => $post_ids,
-        'orderby'          => 'post__in',
+        'post__not_in'     => $exclude_ids,
         'lang'             => '',
         'suppress_filters' => true,
     ]);
+
+    // Keep caller ordering (e.g. orderby => rand). Only default to post__in when no orderby is provided.
+    if (empty($query_args['orderby'])) {
+        $final_args['orderby'] = 'post__in';
+    }
+
+    return $final_args;
 }
 
 /**

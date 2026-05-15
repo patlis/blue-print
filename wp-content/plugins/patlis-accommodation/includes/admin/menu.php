@@ -78,6 +78,24 @@ function patlis_accommodation_register_admin_menu() {
         'edit.php?post_type=rates'
     );
 
+    // Rate Periods
+    add_submenu_page(
+        'patlis-accommodation',
+        'Rate Periods',
+        'Rate Periods',
+        $capability,
+        'edit.php?post_type=hotel_rate_periods'
+    );
+
+    // Room Rates
+    add_submenu_page(
+        'patlis-accommodation',
+        'Room Rates',
+        'Room Rates',
+        $capability,
+        'edit.php?post_type=patlis_room_rate'
+    );
+
 
 
     // Settings (separate slug)
@@ -123,10 +141,10 @@ add_action('admin_init', function () {
 add_filter('parent_file', function ($parent_file) {
     global $current_screen;
 
-    // CPT screens for patlis_room, experience, and rates
+    // CPT screens for patlis_room, experience, rates, hotel_rate_periods, and patlis_room_rate
     if (
         !empty($current_screen->post_type)
-        && in_array($current_screen->post_type, ['patlis_room', 'experience', 'rates'], true)
+        && in_array($current_screen->post_type, ['patlis_room', 'experience', 'rates', 'hotel_rate_periods', 'patlis_room_rate'], true)
     ) {
         return 'patlis-accommodation';
     }
@@ -154,6 +172,24 @@ add_filter('submenu_file', function ($submenu_file) {
     if ($current_screen->post_type === 'rates') {
         if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
             return 'edit.php?post_type=rates';
+        }
+
+        return $submenu_file;
+    }
+
+    // Hotel Rates list / edit hotel rate
+    if ($current_screen->post_type === 'hotel_rate_periods') {
+        if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
+            return 'edit.php?post_type=hotel_rate_periods';
+        }
+
+        return $submenu_file;
+    }
+
+    // Room Rates list / edit room rate
+    if ($current_screen->post_type === 'patlis_room_rate') {
+        if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
+            return 'edit.php?post_type=patlis_room_rate';
         }
 
         return $submenu_file;

@@ -83,11 +83,30 @@ if (!function_exists('patlis_rates_query_for_current_room')) {
     {
         $input_args = $args;
 
+        $queried_id = (int) get_queried_object_id();
+        if ($queried_id > 0) {
+            $exclude_ids = patlis_get_post_translation_ids($queried_id);
+            if (!empty($exclude_ids)) {
+                $existing_not_in = [];
+                if (!empty($args['post__not_in']) && is_array($args['post__not_in'])) {
+                    $existing_not_in = array_map('intval', $args['post__not_in']);
+                }
+
+                $args['post__not_in'] = array_values(array_unique(array_filter(array_merge(
+                    $existing_not_in,
+                    $exclude_ids
+                ), function ($id) {
+                    return (int) $id > 0;
+                })));
+            }
+        }
+
         if (function_exists('patlis_fallback_posts_query')) {
             $args = patlis_fallback_posts_query($args);
         }
 
-        $room_id = (int) get_queried_object_id();
+        $room_id = $queried_id;
+
         if ($room_id <= 0 || get_post_type($room_id) !== 'patlis_room') {
             return $args;
         }
