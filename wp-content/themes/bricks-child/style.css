@@ -142,3 +142,87 @@ main {min-height:50vh}
   	fill: var(--body-hover) !important;
 	color:var(--body-hover) !important;
 }
+
+/*kiosk positioning 9 positions*/
+.kiosk-pos-top-left {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
+.kiosk-pos-top-center {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+}
+
+.kiosk-pos-top-right {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-end !important;
+}
+
+.kiosk-pos-center-left {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+}
+
+.kiosk-pos-center-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.kiosk-pos-center-right {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.kiosk-pos-bottom-left {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: flex-start !important;
+}
+
+.kiosk-pos-bottom-center {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.kiosk-pos-bottom-right {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+}
+
+/* Kiosk Text Themes */
+.kiosk-theme-light, .kiosk-theme-light *
+ {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.kiosk-theme-dark, .kiosk-theme-dark *
+ {
+  color: #000000 !important;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.3);
+}
+
+.kiosk-hero-slider h1{
+  font-size: 100px !important;}
+  .kiosk-hero-slider h2{
+  font-size: 75px !important;}
+  .kiosk-hero-slider h3{
+  font-size: 50px !important;}
+  .kiosk-hero-slider h4{
+  font-size: 40px !important;}
+  .kiosk-hero-slider h5{
+  font-size: 30px !important;}
+  .kiosk-hero-slider h6, .kiosk-hero-slider p{
+  font-size: 20px !important;}
+
+
+

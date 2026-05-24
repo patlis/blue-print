@@ -9,6 +9,20 @@ var PatlisKiosk = (function() {
     let settings = {};
     let inactivityTimer = null;
 
+    // --- GDPR: Clear cookies and history except allowed cookies ---
+    function clearCookiesAndHistory() {
+        // Allowed cookies
+        const allowed = ['patlis_kiosk', 'patlis-cookie'];
+        // Delete all cookies except allowed
+        document.cookie.split(';').forEach(function(cookie) {
+            const eqPos = cookie.indexOf('=');
+            const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+            if (!allowed.includes(name)) {
+                document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Lax';
+            }
+        });
+    }
+
     /**
      * Initialize kiosk mode
      */
@@ -21,6 +35,9 @@ var PatlisKiosk = (function() {
         if (!settings.redirectUrl) {
             settings.redirectUrl = window.location.href;
         }
+
+            // GDPR: Clear cookies and history on kiosk page load
+            clearCookiesAndHistory();
 
         setupEventListeners();
         startInactivityMonitoring();

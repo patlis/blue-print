@@ -21,9 +21,12 @@ define('PATLIS_KIOSK_ASSETS_URL', PATLIS_KIOSK_PLUGIN_URL . 'assets/');
 define('PATLIS_KIOSK_INCLUDES_DIR', PATLIS_KIOSK_PLUGIN_DIR . 'includes/');
 
 // Include core functions
+require_once PATLIS_KIOSK_INCLUDES_DIR . 'post-types.php';
 require_once PATLIS_KIOSK_INCLUDES_DIR . 'kiosk-functions.php';
 require_once PATLIS_KIOSK_INCLUDES_DIR . 'admin/menu.php';
 require_once PATLIS_KIOSK_INCLUDES_DIR . 'admin/settings.php';
+require_once PATLIS_KIOSK_INCLUDES_DIR . 'admin/metaboxes.php';
+require_once PATLIS_KIOSK_INCLUDES_DIR . 'bricks-tags.php';
 
 // Activation and deactivation hooks
 register_activation_hook(__FILE__, 'patlis_kiosk_activate');

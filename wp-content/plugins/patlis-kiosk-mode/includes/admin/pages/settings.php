@@ -13,11 +13,9 @@ if (!defined('ABSPATH')) exit;
     </form>
 
     <p>
-        <strong>Note:</strong> The kiosk cookie is automatically set whenever someone visits the <code>/kiosk/</code> landing page. Lifetime is 10 years.<br>
+        <strong>Note:</strong> The kiosk cookie is automatically set whenever someone visits the <code>/kiosk/</code> <br>
         To forcefully disable it on a device, clear your browser cookies.<br>
         <br>
-        Inactivity redirect URL: <code><?php echo esc_html(home_url('/kiosk/')); ?></code><br>
-        Plugin image trigger / buttons target: <code><?php echo esc_html(patlis_kiosk_get_target_url()); ?></code><br>
-        Language links helper (for custom query loop): <code>patlis_kiosk_get_target_links_by_language()</code>
+        The browser refresh every 15 minutes to get the latest settings and slides. 
     </p>
 </div>

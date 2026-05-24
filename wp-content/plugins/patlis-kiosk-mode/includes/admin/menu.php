@@ -14,6 +14,16 @@ function patlis_kiosk_add_admin_menu() {
         'dashicons-layout',
         58
     );
+    
+    // Add Settings as a submenu so it isn't overwritten by the Custom Post Type
+    add_submenu_page(
+        'patlis-kiosk-mode',
+        'Settings',
+        'Settings',
+        'manage_options',
+        'patlis-kiosk-mode', // Uses the same slug as the parent to set it as the first item
+        'patlis_kiosk_settings_page'
+    );
 }
 
 /**
