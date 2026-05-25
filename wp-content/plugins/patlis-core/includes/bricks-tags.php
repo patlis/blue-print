@@ -16,6 +16,8 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $group_social = 'Patlis – Social';
   $group_center = 'Patlis – Center Pop up';
   $group_bar    = 'Patlis – Notification Bar';
+  $group_events = 'Patlis – Events';
+  $group_services = 'Patlis – Services';
 
   // BASIC
   $tags[] = ['name' => '{patlis_company_name}',      'label' => esc_html__('Company name', 'patlis-core'),            'group' => $group_basic];
@@ -64,6 +66,9 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_bar_start_date}', 'label' => esc_html__('Start date', 'patlis-core'),    'group' => $group_bar];
   $tags[] = ['name' => '{patlis_bar_end_date}',   'label' => esc_html__('End date', 'patlis-core'),      'group' => $group_bar];
 
+  $tags[] = ['name' => '{patlis_events_gallery_json}', 'label' => esc_html__('Events: Gallery JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_events];
+  $tags[] = ['name' => '{patlis_services_gallery_json}', 'label' => esc_html__('Services: Gallery JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_services];
+
   return $tags;
 });
 
@@ -72,15 +77,15 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
  * 2) Render tags inside content (Text, Heading, etc)
  * -------------------------------------------------------------------------- */
 add_filter('bricks/dynamic_data/render_content', function($content, $post, $context = 'text') {
-  return patlis_render_dynamic_tags_in_content($content);
+  return patlis_render_dynamic_tags_in_content($content, $post);
 }, 20, 3);
 
 add_filter('bricks/frontend/render_data', function($content, $post) {
-  return patlis_render_dynamic_tags_in_content($content);
+  return patlis_render_dynamic_tags_in_content($content, $post);
 }, 20, 2);
 
 
-function patlis_render_dynamic_tags_in_content($content) {
+function patlis_render_dynamic_tags_in_content($content, $post = null) {
   if (!is_string($content) || strpos($content, '{patlis_') === false) {
     return $content;
   }
@@ -150,6 +155,50 @@ function patlis_render_dynamic_tags_in_content($content) {
 
     if (!class_exists('Patlis_Core')) {
       return $m[0];
+    }
+
+    if ($tag === 'patlis_events_gallery_json') {
+      if (!function_exists('patlis_core_get_events_gallery_items')) {
+        return '';
+      }
+
+      $post_obj = null;
+
+      if ($post instanceof WP_Post) {
+        $post_obj = $post;
+      } elseif (is_numeric($post)) {
+        $post_obj = get_post((int) $post);
+      } else {
+        $post_obj = get_post();
+      }
+
+      if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'events') {
+        return '';
+      }
+
+      return wp_json_encode(patlis_core_get_events_gallery_items((int) $post_obj->ID));
+    }
+
+    if ($tag === 'patlis_services_gallery_json') {
+      if (!function_exists('patlis_core_get_services_gallery_items')) {
+        return '';
+      }
+
+      $post_obj = null;
+
+      if ($post instanceof WP_Post) {
+        $post_obj = $post;
+      } elseif (is_numeric($post)) {
+        $post_obj = get_post((int) $post);
+      } else {
+        $post_obj = get_post();
+      }
+
+      if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'services') {
+        return '';
+      }
+
+      return wp_json_encode(patlis_core_get_services_gallery_items((int) $post_obj->ID));
     }
 
     // BASIC
@@ -452,6 +501,8 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   // Only handle these tags here
   if (
     $clean !== 'patlis_logo_image_url' &&
+    $clean !== 'patlis_events_gallery_json' &&
+    $clean !== 'patlis_services_gallery_json' &&
     $clean !== 'patlis_center_image_id' &&
     $clean !== 'patlis_center_image_url' &&
     $clean !== 'patlis_center_title' &&
@@ -465,6 +516,50 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   if (!class_exists('Patlis_Core')) return $tag;
+
+  if ($clean === 'patlis_events_gallery_json') {
+    if (!function_exists('patlis_core_get_events_gallery_items')) {
+      return '';
+    }
+
+    $post_obj = null;
+
+    if ($post instanceof WP_Post) {
+      $post_obj = $post;
+    } elseif (is_numeric($post)) {
+      $post_obj = get_post((int) $post);
+    } else {
+      $post_obj = get_post();
+    }
+
+    if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'events') {
+      return '';
+    }
+
+    return wp_json_encode(patlis_core_get_events_gallery_items((int) $post_obj->ID));
+  }
+
+  if ($clean === 'patlis_services_gallery_json') {
+    if (!function_exists('patlis_core_get_services_gallery_items')) {
+      return '';
+    }
+
+    $post_obj = null;
+
+    if ($post instanceof WP_Post) {
+      $post_obj = $post;
+    } elseif (is_numeric($post)) {
+      $post_obj = get_post((int) $post);
+    } else {
+      $post_obj = get_post();
+    }
+
+    if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'services') {
+      return '';
+    }
+
+    return wp_json_encode(patlis_core_get_services_gallery_items((int) $post_obj->ID));
+  }
 
   // BASIC: Logo image URL
   if ($clean === 'patlis_logo_image_url') {

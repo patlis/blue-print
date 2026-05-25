@@ -18,6 +18,7 @@ function patlis_synced_meta_fields(): array
         //events
         'events_date_start','events_time_start',
         'events_date_end','events_time_end',
+        'events_gallery_ids',
 
         //Offers & Packages
         'packages_valid_from','packages_valid_until',
@@ -28,6 +29,7 @@ function patlis_synced_meta_fields(): array
         //Services
         'create_service_page','service_sticky',
         'service_order','service_show',
+        'services_gallery_ids',
 
         //timeline
         'timeline_sort','timeline_image',

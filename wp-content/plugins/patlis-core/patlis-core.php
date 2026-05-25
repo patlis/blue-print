@@ -19,6 +19,7 @@ require_once PATLIS_CORE_PATH . 'includes/helpers.php';
 require_once PATLIS_CORE_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_CORE_PATH . 'includes/languages-visibility.php';
 require_once PATLIS_CORE_PATH . 'includes/field-sync.php';
+require_once PATLIS_CORE_PATH . 'includes/events-gallery.php';
 
 // Updater 
 if (function_exists('patlis_register_plugin_updater')) {

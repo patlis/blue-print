@@ -197,7 +197,18 @@ function patlis_get_fallback_post_ids(array $args): array
 
     $base_args = $args;
 
-    unset($base_args['paged'], $base_args['page'], $base_args['offset']);
+    // Remove runtime/transformed args so fallback IDs are rebuilt consistently.
+    unset(
+        $base_args['paged'],
+        $base_args['page'],
+        $base_args['offset'],
+        $base_args['post__in'],
+        $base_args['post__not_in'],
+        $base_args['lang'],
+        $base_args['suppress_filters'],
+        $base_args['no_found_rows'],
+        $base_args['fields']
+    );
 
     $base_args['posts_per_page']   = -1;
     $base_args['fields']           = 'ids';
@@ -291,7 +302,23 @@ function patlis_fallback_posts_query(array $args): array
         'post__not_in'     => $exclude_ids,
         'lang'             => '',
         'suppress_filters' => true,
+        '__patlis_fallback' => 1,
     ]);
+
+    // Normalize pagination for both regular and AJAX requests.
+    $posts_per_page = isset($query_args['posts_per_page']) ? (int) $query_args['posts_per_page'] : -1;
+    $has_paged = !empty($query_args['paged']) || !empty($query_args['page']);
+    $offset = isset($query_args['offset']) ? (int) $query_args['offset'] : 0;
+
+    if ($posts_per_page > 0 && !$has_paged && $offset > 0) {
+        $final_args['paged'] = (int) floor($offset / $posts_per_page) + 1;
+        $has_paged = true;
+    }
+
+    if ($posts_per_page > 0 && $has_paged) {
+        unset($final_args['offset']);
+        $final_args['no_found_rows'] = false;
+    }
 
     // Keep caller ordering (e.g. orderby => rand). Only default to post__in when no orderby is provided.
     if (empty($query_args['orderby'])) {
@@ -300,6 +327,46 @@ function patlis_fallback_posts_query(array $args): array
 
     return $final_args;
 }
+
+/**
+ * Keep fallback queries language-neutral (incl. Bricks AJAX pagination).
+ */
+add_action('pre_get_posts', function ($query) {
+    if (!($query instanceof WP_Query)) {
+        return;
+    }
+
+    if (!(int) $query->get('__patlis_fallback')) {
+        return;
+    }
+
+    // Bricks AJAX may re-inject current lang (e.g. de).
+    $query->set('lang', '');
+    $query->set('suppress_filters', true);
+
+    $tax_query = $query->get('tax_query');
+    if (!is_array($tax_query) || empty($tax_query)) {
+        return;
+    }
+
+    // Remove Polylang language taxonomy constraints.
+    $clean_tax_query = [];
+    foreach ($tax_query as $tax_clause) {
+        if (!is_array($tax_clause)) {
+            $clean_tax_query[] = $tax_clause;
+            continue;
+        }
+
+        $taxonomy = $tax_clause['taxonomy'] ?? '';
+        if ($taxonomy === 'language') {
+            continue;
+        }
+
+        $clean_tax_query[] = $tax_clause;
+    }
+
+    $query->set('tax_query', $clean_tax_query);
+}, 999);
 
 /**
  * Read a raw post meta value without triggering metadata filters.
