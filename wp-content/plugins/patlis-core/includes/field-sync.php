@@ -58,7 +58,11 @@ function patlis_synced_meta_fields(): array
 
         // rate periods       
         'hotel_rate_period_start_day','hotel_rate_period_start_month','hotel_rate_period_end_day',
-        'hotel_rate_period_end_month','hotel_rate_period_active','hotel_rate_period_priority','hotel_rate_period_order',   
+        'hotel_rate_period_end_month','hotel_rate_period_active','hotel_rate_period_priority','hotel_rate_period_order', 
+        
+        //room rates
+        'patlis_acc_period_id','patlis_acc_price','patlis_acc_price_type','patlis_acc_min_nights','patlis_acc_active',
+        'patlis_acc_room_ids','patlis_acc_price_surfix',
 
     ];
 }
@@ -329,10 +333,20 @@ add_action('admin_head', function () {
 (function() {
     function hideFields() {
         var syncedFields = {$fields_json};
+
+        function findElementsByFieldName(fieldName) {
+            var selectors = [
+                '[name=\"' + fieldName + '\"]',
+                '[name=\"' + fieldName + '[]\"]',
+                '[name^=\"' + fieldName + '[\"]'
+            ];
+
+            return document.querySelectorAll(selectors.join(','));
+        }
         
         syncedFields.forEach(function(fieldName) {
-            // Try to find by name attribute
-            var elements = document.querySelectorAll('[name=\"' + fieldName + '\"]');
+            // Find standard inputs and array-style inputs (e.g. field[], field[key]).
+            var elements = findElementsByFieldName(fieldName);
             elements.forEach(function(el) {
                 // Find closest wrapper (could be .pm-field, tr, div, etc)
                 var parent = el.closest('.pm-field') || el.closest('tr') || el.closest('.acf-field') || el.closest('.form-field');

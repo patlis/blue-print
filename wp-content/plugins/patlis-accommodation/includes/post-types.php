@@ -171,6 +171,8 @@ function patlis_accommodation_register_cpt_room_rates() {
     register_post_type('patlis_room_rate', [
         'labels'             => $labels,
         'public'             => true,
+        'publicly_queryable' => false,
+        'query_var'          => false,
         'show_in_menu'       => false,
         'has_archive'        => false,
         'rewrite'            => false,

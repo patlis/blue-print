@@ -38,6 +38,8 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_room_book_url}',   'label' => 'Room: Booking URL',    'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_sticky}',     'label' => 'Room: Sticky (1/0)',   'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_package_booking_url}', 'label' => 'Offer/Package: Booking URL (ACF + fallback)', 'group' => $gRate];
+    $tags[] = ['name' => '{patlis_acc_room_rates_json}', 'label' => 'Room Rates: JSON array (room periods + prices)', 'group' => $gRate];
+    $tags[] = ['name' => '{patlis_acc_room_rates_count}', 'label' => 'Room Rates: Count for current room', 'group' => $gRate];
 
     // OPTIONS tags (from plugin settings)
     $tags[] = ['name' => '{patlis_acc_booking_mode}',         'label' => 'Options: Booking mode (0/1/2/3)', 'group' => $gOpt];
@@ -96,6 +98,26 @@ add_filter('bricks/dynamic_data/render_content', function ($content, $post, $con
  * ============================================================ */
 function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null): string
 {
+    // Room rates payload for Query Array loops inside room pages/templates.
+    if ($tag === 'patlis_acc_room_rates_json' || $tag === 'patlis_acc_room_rates_count') {
+        $room_id = 0;
+        $p = patlis_acc_resolve_post_context($post);
+
+        if ($p && get_post_type($p) === 'patlis_room') {
+            $room_id = (int) $p->ID;
+        }
+
+        $rows = function_exists('patlis_acc_get_room_rates_payload')
+            ? patlis_acc_get_room_rates_payload($room_id > 0 ? $room_id : null)
+            : [];
+
+        if ($tag === 'patlis_acc_room_rates_count') {
+            return (string) count($rows);
+        }
+
+        return wp_json_encode($rows);
+    }
+
     // Offer/Package ACF booking URL with fallback to global booking_redirect_url
     if ($tag === 'patlis_acc_package_booking_url') {
         $p = patlis_acc_resolve_post_context($post);
@@ -754,3 +776,45 @@ function patlis_acc_is_known_tag(string $tag): bool
 
     return strpos($tag, 'patlis_acc_') === 0;
 }
+
+/**
+ * Bricks {echo:...} wrappers for room rates payload.
+ */
+if (!function_exists('patlis_acc_room_rates_json')) {
+    function patlis_acc_room_rates_json(?int $room_id = null): string
+    {
+        if (!function_exists('patlis_acc_get_room_rates_payload')) {
+            return '[]';
+        }
+
+        $rows = patlis_acc_get_room_rates_payload($room_id !== null ? (int) $room_id : null);
+        return wp_json_encode($rows);
+    }
+}
+
+if (!function_exists('patlis_acc_room_rates_count')) {
+    function patlis_acc_room_rates_count(?int $room_id = null): string
+    {
+        if (!function_exists('patlis_acc_get_room_rates_payload')) {
+            return '0';
+        }
+
+        $rows = patlis_acc_get_room_rates_payload($room_id !== null ? (int) $room_id : null);
+        return (string) count($rows);
+    }
+}
+
+add_filter('bricks/code/echo_function_names', function ($functions) {
+    if (empty($functions)) {
+        $functions = [];
+    } elseif (is_string($functions)) {
+        $functions = array_map('trim', explode(',', $functions));
+    } elseif (!is_array($functions)) {
+        $functions = [];
+    }
+
+    $functions[] = 'patlis_acc_room_rates_json';
+    $functions[] = 'patlis_acc_room_rates_count';
+
+    return array_values(array_unique($functions));
+});

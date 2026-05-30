@@ -185,6 +185,12 @@ function patlis_acc_room_rates_save_metabox($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
+    // Shared rate fields are synchronized across translations.
+    // Never overwrite them from non-default language edit screens.
+    if (function_exists('patlis_is_non_default_language_edit_context') && patlis_is_non_default_language_edit_context()) {
+        return;
+    }
+
     $clamp = function ($value, $min, $max) {
         $value = (int) $value;
         if ($value < $min) return $min;
@@ -215,3 +221,41 @@ function patlis_acc_room_rates_save_metabox($post_id) {
         update_post_meta($post_id, 'patlis_acc_room_ids', $room_ids);
     }
 }
+
+add_filter('manage_patlis_room_rate_posts_columns', function (array $columns): array {
+    $out = [];
+
+    foreach ($columns as $key => $label) {
+        $out[$key] = $label;
+
+        if ($key === 'title') {
+            $out['patlis_acc_price_col'] = 'Price';
+        }
+    }
+
+    if (!isset($out['patlis_acc_price_col'])) {
+        $out['patlis_acc_price_col'] = 'Price';
+    }
+
+    return $out;
+});
+
+add_action('manage_patlis_room_rate_posts_custom_column', function (string $column, int $post_id): void {
+    if ($column !== 'patlis_acc_price_col') {
+        return;
+    }
+
+    $price = (string) get_post_meta($post_id, 'patlis_acc_price', true);
+    if ($price === '') {
+        echo '&mdash;';
+        return;
+    }
+
+    if (function_exists('patlis_format_currency')) {
+        $formatted = patlis_format_currency($price);
+        echo esc_html($formatted !== '' ? $formatted : $price);
+        return;
+    }
+
+    echo esc_html($price);
+}, 10, 2);
