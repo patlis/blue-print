@@ -47,24 +47,26 @@ function patlis_kiosk_enqueue_scripts() {
         return;
     }
 
-    if (patlis_kiosk_is_kiosk_landing_page()) {
-        return;
-    }
+    $is_landing_page = patlis_kiosk_is_kiosk_landing_page();
+
+    $script_handle = $is_landing_page ? 'patlis-kiosk-landing-script' : 'patlis-kiosk-runtime-script';
+    $script_file = $is_landing_page ? 'kiosk-landing.js' : 'kiosk-runtime.js';
 
     // Enqueue JS
     wp_enqueue_script(
-        'patlis-kiosk-script',
-        PATLIS_KIOSK_ASSETS_URL . 'kiosk.js',
+        $script_handle,
+        PATLIS_KIOSK_ASSETS_URL . $script_file,
         [],
         PATLIS_KIOSK_VERSION,
         true
     );
 
     // Localize script with settings
-    wp_localize_script('patlis-kiosk-script', 'PatlisKioskSettings', [
+    wp_localize_script($script_handle, 'PatlisKioskSettings', [
         'inactivityTimeout' => (int) get_option('patlis_kiosk_inactivity_timeout', 60),
         'redirectUrl'       => esc_url(home_url('/kiosk/')),
         'imageRedirectUrl'  => esc_url(patlis_kiosk_get_target_url()),
+        'isLandingPage'     => $is_landing_page ? 1 : 0,
     ]);
 }
 
@@ -72,62 +74,8 @@ function patlis_kiosk_enqueue_scripts() {
  * Output initialization script in footer
  */
 function patlis_kiosk_init_script() {
-    if (!patlis_kiosk_is_active()) {
-        return;
-    }
-
-    if (patlis_kiosk_is_kiosk_landing_page()) {
-        ?>
-        <script>
-        (function() {
-            function getCookie(name) {
-                var row = document.cookie.split('; ').find(function(item) {
-                    return item.indexOf(name + '=') === 0;
-                });
-                return row ? row.substring(name.length + 1) : null;
-            }
-
-            function isFullAcceptCookie(raw) {
-                if (!raw) {
-                    return false;
-                }
-
-                try {
-                    var v = JSON.parse(raw);
-                    return !!(v && v.all === true && v.necessary === true && v.preferences === true && v.statistics === true && v.marketing === true);
-                } catch (e) {
-                    return false;
-                }
-            }
-
-            var cookieRaw = getCookie('patlis-cookie');
-            if (!isFullAcceptCookie(cookieRaw)) {
-                var cookieValue = '{"all":true,"necessary":true,"preferences":true,"statistics":true,"marketing":true}';
-                var date = new Date();
-                date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
-                document.cookie = 'patlis-cookie=' + cookieValue + '; path=/; expires=' + date.toUTCString() + '; SameSite=Lax';
-                window.location.reload();
-                return;
-            }
-
-            setTimeout(function() {
-                window.location.reload();
-            }, 15 * 60 * 1000); //SOS 1st number is for minutes
-        })();
-        </script>
-        <?php
-        return;
-    }
-    ?>
-    <script>
-    (function() {
-        if (typeof PatlisKiosk !== 'undefined' && !window.PatlisKioskInitialized) {
-            window.PatlisKioskInitialized = true;
-            PatlisKiosk.init(PatlisKioskSettings);
-        }
-    })();
-    </script>
-    <?php
+    // Legacy hook retained intentionally. Runtime and landing initialization now lives in dedicated JS files.
+    return;
 }
 
 /**
@@ -274,7 +222,14 @@ function patlis_kiosk_apply_single_slide_override($query) {
         return;
     }
 
-    $single_slide_id = (int) get_option('patlis_kiosk_single_slide_id', 0);
+    $orientation = patlis_kiosk_get_orientation_for_query();
+    if ($orientation === 'vertical') {
+        $single_slide_id = (int) get_option('patlis_kiosk_single_slide_id_vertical', 0);
+    } else {
+        // horizontal or unknown — fall back to horizontal slide
+        $single_slide_id = (int) get_option('patlis_kiosk_single_slide_id_horizontal', 0);
+    }
+
     if ($single_slide_id <= 0) {
         return;
     }
@@ -305,6 +260,53 @@ function patlis_kiosk_apply_single_slide_override($query) {
     $query->set('posts_per_page', 1);
 }
 add_action('pre_get_posts', 'patlis_kiosk_apply_single_slide_override');
+
+/**
+ * Resolve kiosk orientation from stored cookie for query filtering.
+ */
+function patlis_kiosk_get_orientation_for_query(): string {
+    $cookie_value = isset($_COOKIE['patlis_kiosk_orientation']) ? sanitize_key((string) $_COOKIE['patlis_kiosk_orientation']) : '';
+    if ($cookie_value === 'vertical' || $cookie_value === 'horizontal') {
+        return $cookie_value;
+    }
+
+    return '';
+}
+
+/**
+ * Bricks Query Editor helper.
+ * Usage in Bricks Query editor (PHP): return kiosk_slides();
+ */
+function kiosk_slides(): array {
+    $args = [
+        'post_type' => 'kiosk_slide',
+        'post_status' => 'publish',
+        'orderby' => 'menu_order',
+        'order' => 'ASC',
+        'posts_per_page' => 99,
+    ];
+
+    $orientation = patlis_kiosk_get_orientation_for_query();
+    if ($orientation === 'vertical') {
+        $args['meta_query'] = [
+            [
+                'key' => '_show_vertical',
+                'value' => '1',
+                'compare' => '=',
+            ],
+        ];
+    } elseif ($orientation === 'horizontal') {
+        $args['meta_query'] = [
+            [
+                'key' => '_show_horizontal',
+                'value' => '1',
+                'compare' => '=',
+            ],
+        ];
+    }
+
+    return $args;
+}
 
 /**
  * Resolve redirect target URL for a specific language.
@@ -415,6 +417,23 @@ function patlis_kiosk_get_target_links_by_language(): array {
             'url'       => patlis_kiosk_get_target_url_for_language($slug),
         ];
     }
+
+    // Sort: default language first, then alphabetically by lang_name.
+    $default_lang = '';
+    if (function_exists('pll_default_language')) {
+        $default_lang = (string) pll_default_language('slug');
+    }
+
+    usort($links, function (array $a, array $b) use ($default_lang): int {
+        $a_is_default = ($default_lang !== '' && $a['lang_slug'] === $default_lang) ? 0 : 1;
+        $b_is_default = ($default_lang !== '' && $b['lang_slug'] === $default_lang) ? 0 : 1;
+
+        if ($a_is_default !== $b_is_default) {
+            return $a_is_default - $b_is_default;
+        }
+
+        return strcmp($a['lang_name'], $b['lang_name']);
+    });
 
     return $links;
 }

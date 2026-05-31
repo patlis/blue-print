@@ -31,6 +31,8 @@ function patlis_kiosk_slide_settings_html($post) {
     $html_bg_image = get_post_meta($post->ID, '_html_bg_image', true);
     $html_overlay_opacity = get_post_meta($post->ID, '_html_overlay_opacity', true) ?: '50';
     $slide_duration = get_post_meta($post->ID, '_slide_duration', true) ?: '5';
+    $show_horizontal = get_post_meta($post->ID, '_show_horizontal', true);
+    $show_vertical = get_post_meta($post->ID, '_show_vertical', true);
 
     ?>
     <style>
@@ -141,6 +143,20 @@ function patlis_kiosk_slide_settings_html($post) {
         <label for="slide_duration"><?php _e('Slide Duration (seconds)', 'patlis-kiosk-mode'); ?></label>
         <input type="number" name="slide_duration" id="slide_duration" value="<?php echo esc_attr($slide_duration); ?>" step="1" min="1"/>
         <p class="description">How long should this slide stay on screen? (e.g., 5 seconds)</p>
+    </div>
+
+    <!-- Orientation visibility -->
+    <div class="patlis-kiosk-field">
+        <label><?php _e('Visible On Orientation', 'patlis-kiosk-mode'); ?></label>
+        <label style="font-weight:normal; display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+            <input type="checkbox" name="show_horizontal" value="1" <?php checked($show_horizontal, '1'); ?> />
+            <?php _e('Horizontal', 'patlis-kiosk-mode'); ?>
+        </label>
+        <label style="font-weight:normal; display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" name="show_vertical" value="1" <?php checked($show_vertical, '1'); ?> />
+            <?php _e('Vertical', 'patlis-kiosk-mode'); ?>
+        </label>
+        <p class="description">Select where this slide is allowed to appear based on device orientation.</p>
     </div>
 
     <!-- Order -->
@@ -276,6 +292,10 @@ function patlis_kiosk_save_meta_box($post_id) {
         }
     }
 
+    // Checkboxes must be saved explicitly even when unchecked (missing from POST).
+    update_post_meta($post_id, '_show_horizontal', isset($_POST['show_horizontal']) ? '1' : '0');
+    update_post_meta($post_id, '_show_vertical', isset($_POST['show_vertical']) ? '1' : '0');
+
     if (isset($_POST['html_content'])) {
         update_post_meta($post_id, '_html_content', wp_kses_post($_POST['html_content']));
     }
@@ -306,6 +326,8 @@ function patlis_kiosk_admin_columns($columns) {
         if ($key === 'title') {
             $new_columns['slide_type'] = __('Slide Type', 'patlis-kiosk-mode');
             $new_columns['slide_duration'] = __('Duration', 'patlis-kiosk-mode');
+            $new_columns['show_horizontal'] = __('Horizontal', 'patlis-kiosk-mode');
+            $new_columns['show_vertical'] = __('Vertical', 'patlis-kiosk-mode');
             $new_columns['menu_order'] = __('Order', 'patlis-kiosk-mode');
         }
     }
@@ -333,6 +355,16 @@ function patlis_kiosk_admin_column_content($column, $post_id) {
     if ($column === 'slide_duration') {
         $duration = (int) get_post_meta($post_id, '_slide_duration', true);
         echo esc_html($duration > 0 ? $duration . 's' : '-');
+    }
+
+    if ($column === 'show_horizontal') {
+        $value = get_post_meta($post_id, '_show_horizontal', true);
+        echo esc_html($value === '1' ? __('✓', 'patlis-kiosk-mode') : __('', 'patlis-kiosk-mode'));
+    }
+
+    if ($column === 'show_vertical') {
+        $value = get_post_meta($post_id, '_show_vertical', true);
+        echo esc_html($value === '1' ? __('✓', 'patlis-kiosk-mode') : __('', 'patlis-kiosk-mode'));
     }
 
     if ($column === 'menu_order') {

@@ -17,7 +17,11 @@ function patlis_kiosk_register_settings() {
         'sanitize_callback' => 'patlis_kiosk_sanitize_slide_mode',
     ]);
 
-    register_setting('patlis_kiosk_settings', 'patlis_kiosk_single_slide_id', [
+    register_setting('patlis_kiosk_settings', 'patlis_kiosk_single_slide_id_horizontal', [
+        'sanitize_callback' => 'patlis_kiosk_sanitize_single_slide_id',
+    ]);
+
+    register_setting('patlis_kiosk_settings', 'patlis_kiosk_single_slide_id_vertical', [
         'sanitize_callback' => 'patlis_kiosk_sanitize_single_slide_id',
     ]);
 
@@ -63,9 +67,17 @@ function patlis_kiosk_register_settings() {
     );
 
     add_settings_field(
-        'patlis_kiosk_single_slide_id',
-        'Single Slide',
-        'patlis_kiosk_field_single_slide_id',
+        'patlis_kiosk_single_slide_id_horizontal',
+        'Single Slide (Horizontal)',
+        'patlis_kiosk_field_single_slide_id_horizontal',
+        'patlis_kiosk_settings',
+        'patlis_kiosk_main'
+    );
+
+    add_settings_field(
+        'patlis_kiosk_single_slide_id_vertical',
+        'Single Slide (Vertical)',
+        'patlis_kiosk_field_single_slide_id_vertical',
         'patlis_kiosk_settings',
         'patlis_kiosk_main'
     );
@@ -162,8 +174,8 @@ function patlis_kiosk_field_slide_mode() {
     <?php
 }
 
-function patlis_kiosk_field_single_slide_id() {
-    $selected_slide_id = (int) get_option('patlis_kiosk_single_slide_id', 0);
+function patlis_kiosk_render_single_slide_select(string $option_name, string $description): void {
+    $selected_slide_id = (int) get_option($option_name, 0);
 
     $slide_ids = get_posts([
         'post_type'      => 'kiosk_slide',
@@ -178,7 +190,8 @@ function patlis_kiosk_field_single_slide_id() {
         $slide_ids = [];
     }
 
-    echo '<select name="patlis_kiosk_single_slide_id" id="patlis_kiosk_single_slide_id">';
+    $esc_name = esc_attr($option_name);
+    echo '<select name="' . $esc_name . '" id="' . $esc_name . '">';
     echo '<option value="0">- Select slide -</option>';
 
     foreach ($slide_ids as $slide_id) {
@@ -201,9 +214,21 @@ function patlis_kiosk_field_single_slide_id() {
     }
 
     echo '</select>';
-    ?>
-    <p class="description">Shown only when Slides Mode is set to Single Slide Mode.</p>
-    <?php
+    echo '<p class="description">' . esc_html($description) . '</p>';
+}
+
+function patlis_kiosk_field_single_slide_id_horizontal() {
+    patlis_kiosk_render_single_slide_select(
+        'patlis_kiosk_single_slide_id_horizontal',
+        'Shown on horizontal (landscape) devices when Single Slide Mode is active.'
+    );
+}
+
+function patlis_kiosk_field_single_slide_id_vertical() {
+    patlis_kiosk_render_single_slide_select(
+        'patlis_kiosk_single_slide_id_vertical',
+        'Shown on vertical (portrait) devices when Single Slide Mode is active.'
+    );
 }
 
 function patlis_kiosk_field_single_mode_start() {
