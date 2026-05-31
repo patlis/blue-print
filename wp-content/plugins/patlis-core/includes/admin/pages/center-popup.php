@@ -374,7 +374,7 @@ final class Patlis_Admin_Page_Center_Popup {
               <?php if (!in_array($show_from, ['html', 'image', 'video', 'code'], true)) $show_from = 'html'; ?>
               <select id="patlis_cp_show_from"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_CENTER_POPUP); ?>[show_from]">
-                <option value="html" <?php selected($show_from, 'html'); ?>>Text</option>
+                <option value="html" <?php selected($show_from, 'html'); ?>>Formatted Text</option>
                 <option value="code" <?php selected($show_from, 'code'); ?>>Html Code</option>
                 <option value="image" <?php selected($show_from, 'image'); ?>>Image</option>
                 <option value="video" <?php selected($show_from, 'video'); ?>>Video</option>
@@ -392,7 +392,7 @@ final class Patlis_Admin_Page_Center_Popup {
                   <a href="#" class="nav-tab nav-tab-active" data-tab="basic">Basic Settings</a>
                   <a href="#" class="nav-tab" data-tab="image">Image</a>
                   <a href="#" class="nav-tab" data-tab="video">Video</a>
-                  <a href="#" class="nav-tab" data-tab="html">Text</a>
+                  <a href="#" class="nav-tab" data-tab="html">Formatted Text</a>
                   <a href="#" class="nav-tab" data-tab="code">Html Code</a>
                 </div>
 

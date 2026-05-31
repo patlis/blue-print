@@ -5,7 +5,7 @@ add_action('admin_init', function () {
     $post_types = get_post_types(['show_ui' => true], 'names');
 
     foreach ($post_types as $post_type) {
-        if (in_array($post_type, ['attachment', 'acf-field', 'acf-field-group'], true)) {
+        if (in_array($post_type, ['attachment', 'acf-field', 'acf-field-group', 'reviews'], true)) {
             continue;
         }
 
@@ -58,6 +58,14 @@ add_action('admin_head', function () {
         }
         .column-patlis_event_start {
             width: 180px;
+        }
+        .column-patlis_review_rating {
+            width: 70px;
+            text-align: center;
+        }
+        .column-patlis_review_show {
+            width: 60px;
+            text-align: center;
         }
     </style>';
 });
@@ -135,5 +143,70 @@ add_action('pre_get_posts', function (WP_Query $query): void {
 
     if ($is_default_admin_load && !isset($_GET['order'])) {
         $query->set('order', 'DESC');
+    }
+});
+
+// ── Reviews columns: Rating + Show ───────────────────────────────────────────
+
+add_filter('manage_reviews_posts_columns', function (array $columns): array {
+    $new = [];
+
+    foreach ($columns as $key => $label) {
+        if ($key === 'title') {
+            $new['patlis_review_rating'] = 'Score';
+            $new['patlis_review_show']   = 'Show';
+        }
+
+        $new[$key] = $label;
+    }
+
+    return $new;
+});
+
+add_action('manage_reviews_posts_custom_column', function (string $column, int $post_id): void {
+    if ($column === 'patlis_review_rating') {
+        $value = get_post_meta($post_id, 'review_rating', true);
+        if ($value !== '' && $value !== false) {
+            echo '<strong>' . esc_html($value) . '</strong>';
+        } else {
+            echo '—';
+        }
+        return;
+    }
+
+    if ($column === 'patlis_review_show') {
+        $value = get_post_meta($post_id, 'review_show', true);
+        if ($value === '1' || $value === 1 || $value === true || $value === 'true') {
+            echo '<span style="color:#2e7d32;font-size:16px;" title="Visible">✓</span>';
+        } else {
+            echo '<span style="color:#c62828;font-size:16px;" title="Hidden">✗</span>';
+        }
+    }
+}, 10, 2);
+
+add_filter('manage_edit-reviews_sortable_columns', function (array $columns): array {
+    $columns['patlis_review_rating'] = 'patlis_review_rating';
+    $columns['patlis_review_show']   = 'patlis_review_show';
+
+    return $columns;
+});
+
+add_action('pre_get_posts', function (WP_Query $query): void {
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    if ($query->get('post_type') !== 'reviews') {
+        return;
+    }
+
+    $orderby = $query->get('orderby');
+
+    if ($orderby === 'patlis_review_rating') {
+        $query->set('meta_key', 'review_rating');
+        $query->set('orderby', 'meta_value_num');
+    } elseif ($orderby === 'patlis_review_show') {
+        $query->set('meta_key', 'review_show');
+        $query->set('orderby', 'meta_value');
     }
 });

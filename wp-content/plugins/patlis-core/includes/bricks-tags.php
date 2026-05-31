@@ -18,6 +18,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $group_bar    = 'Patlis – Notification Bar';
   $group_events = 'Patlis – Events';
   $group_services = 'Patlis – Services';
+  $group_gallery = 'Patlis – Gallery';
 
   // BASIC
   $tags[] = ['name' => '{patlis_company_name}',      'label' => esc_html__('Company name', 'patlis-core'),            'group' => $group_basic];
@@ -68,6 +69,10 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
 
   $tags[] = ['name' => '{patlis_events_gallery_json}', 'label' => esc_html__('Events: Gallery JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_events];
   $tags[] = ['name' => '{patlis_services_gallery_json}', 'label' => esc_html__('Services: Gallery JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_services];
+  $tags[] = ['name' => '{patlis_gallery_json}', 'label' => esc_html__('Gallery: Images JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_gallery_all_images_json:gallery}', 'label' => esc_html__('Gallery: All images JSON (except Home)', 'patlis-core'), 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_gallery_all_images_json:home}', 'label' => esc_html__('Gallery: Home images JSON', 'patlis-core'), 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_home_gallery_json}', 'label' => esc_html__('Gallery: Home gallery JSON', 'patlis-core'), 'group' => $group_gallery];
 
   return $tags;
 });
@@ -149,9 +154,12 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     'patlis_bar_end_date'   => 'end_date',
   ];
 
-  return preg_replace_callback('/{(patlis_[a-z0-9_]+)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map) {
+  return preg_replace_callback('/{(patlis_[a-z0-9_]+(?::[a-z0-9_]+)?)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
 
     $tag = $m[1];
+    $tag_parts = explode(':', $tag, 2);
+    $tag_base = $tag_parts[0];
+    $tag_arg = isset($tag_parts[1]) ? sanitize_key($tag_parts[1]) : '';
 
     if (!class_exists('Patlis_Core')) {
       return $m[0];
@@ -199,6 +207,45 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       }
 
       return wp_json_encode(patlis_core_get_services_gallery_items((int) $post_obj->ID));
+    }
+
+    if ($tag === 'patlis_gallery_json') {
+      if (!function_exists('patlis_gallery_get_items')) {
+        return '';
+      }
+
+      $post_obj = null;
+
+      if ($post instanceof WP_Post) {
+        $post_obj = $post;
+      } elseif (is_numeric($post)) {
+        $post_obj = get_post((int) $post);
+      } else {
+        $post_obj = get_post();
+      }
+
+      if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'patlis_gallery') {
+        return '';
+      }
+
+      return wp_json_encode(patlis_gallery_get_items((int) $post_obj->ID));
+    }
+
+    if ($tag_base === 'patlis_gallery_all_images_json') {
+      if (!function_exists('patlis_gallery_get_all_images_items')) {
+        return '';
+      }
+
+      $scope = $tag_arg !== '' ? $tag_arg : 'gallery';
+      return wp_json_encode(patlis_gallery_get_all_images_items($scope));
+    }
+
+    if ($tag === 'patlis_home_gallery_json') {
+      if (!function_exists('patlis_gallery_get_home_items')) {
+        return '';
+      }
+
+      return wp_json_encode(patlis_gallery_get_home_items());
     }
 
     // BASIC
@@ -455,10 +502,8 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
             return $raw[$default_lang];
           }
 
-          foreach ($raw as $value) {
-            if (is_string($value) && $value !== '') {
-              return $value;
-            }
+          if ($default_lang !== '' && array_key_exists($default_lang, $raw) && is_scalar($raw[$default_lang])) {
+            return (string) $raw[$default_lang];
           }
         }
 
@@ -497,27 +542,72 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (!is_string($tag)) return $tag;
 
   $clean = str_replace(['{', '}'], '', $tag);
+  $parts = explode(':', $clean, 2);
+  $base = $parts[0];
+  $arg = isset($parts[1]) ? sanitize_key($parts[1]) : '';
 
   // Only handle these tags here
   if (
-    $clean !== 'patlis_logo_image_url' &&
-    $clean !== 'patlis_events_gallery_json' &&
-    $clean !== 'patlis_services_gallery_json' &&
-    $clean !== 'patlis_center_image_id' &&
-    $clean !== 'patlis_center_image_url' &&
-    $clean !== 'patlis_center_title' &&
-    $clean !== 'patlis_center_start_date' &&
-    $clean !== 'patlis_center_end_date' &&
-    $clean !== 'patlis_bar_enabled' &&
-    $clean !== 'patlis_bar_start_date' &&
-    $clean !== 'patlis_bar_end_date'
+    $base !== 'patlis_logo_image_url' &&
+    $base !== 'patlis_events_gallery_json' &&
+    $base !== 'patlis_services_gallery_json' &&
+    $base !== 'patlis_gallery_json' &&
+    $base !== 'patlis_gallery_all_images_json' &&
+    $base !== 'patlis_home_gallery_json' &&
+    $base !== 'patlis_center_image_id' &&
+    $base !== 'patlis_center_image_url' &&
+    $base !== 'patlis_center_title' &&
+    $base !== 'patlis_center_start_date' &&
+    $base !== 'patlis_center_end_date' &&
+    $base !== 'patlis_bar_enabled' &&
+    $base !== 'patlis_bar_start_date' &&
+    $base !== 'patlis_bar_end_date'
   ) {
     return $tag;
   }
 
   if (!class_exists('Patlis_Core')) return $tag;
 
-  if ($clean === 'patlis_events_gallery_json') {
+  if ($base === 'patlis_home_gallery_json') {
+    if (!function_exists('patlis_gallery_get_home_items')) {
+      return '';
+    }
+
+    return wp_json_encode(patlis_gallery_get_home_items());
+  }
+
+  if ($base === 'patlis_gallery_all_images_json') {
+    if (!function_exists('patlis_gallery_get_all_images_items')) {
+      return '';
+    }
+
+    $scope = $arg !== '' ? $arg : 'gallery';
+    return wp_json_encode(patlis_gallery_get_all_images_items($scope));
+  }
+
+  if ($base === 'patlis_gallery_json') {
+    if (!function_exists('patlis_gallery_get_items')) {
+      return '';
+    }
+
+    $post_obj = null;
+
+    if ($post instanceof WP_Post) {
+      $post_obj = $post;
+    } elseif (is_numeric($post)) {
+      $post_obj = get_post((int) $post);
+    } else {
+      $post_obj = get_post();
+    }
+
+    if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'patlis_gallery') {
+      return '';
+    }
+
+    return wp_json_encode(patlis_gallery_get_items((int) $post_obj->ID));
+  }
+
+  if ($base === 'patlis_events_gallery_json') {
     if (!function_exists('patlis_core_get_events_gallery_items')) {
       return '';
     }
@@ -539,7 +629,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     return wp_json_encode(patlis_core_get_events_gallery_items((int) $post_obj->ID));
   }
 
-  if ($clean === 'patlis_services_gallery_json') {
+  if ($base === 'patlis_services_gallery_json') {
     if (!function_exists('patlis_core_get_services_gallery_items')) {
       return '';
     }
@@ -562,7 +652,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   // BASIC: Logo image URL
-  if ($clean === 'patlis_logo_image_url') {
+  if ($base === 'patlis_logo_image_url') {
     $logoId = (int) Patlis_Core::get_basic('logo_image_id', 0);
     $logoUrl = $logoId > 0 ? wp_get_attachment_image_url($logoId, 'full') : '';
 
@@ -574,16 +664,16 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   // NOTIFICATION BAR defaults (dates)
-  if ($clean === 'patlis_bar_enabled') {
+  if ($base === 'patlis_bar_enabled') {
     return function_exists('patlis_notification_bar_should_show') && patlis_notification_bar_should_show() ? '1' : '0';
   }
 
-  if ($clean === 'patlis_bar_start_date' || $clean === 'patlis_bar_end_date') {
+  if ($base === 'patlis_bar_start_date' || $base === 'patlis_bar_end_date') {
 
     $bar = get_option(Patlis_Core::OPTION_NOTIFICATION_BAR, []);
     if (!is_array($bar)) $bar = [];
 
-    if ($clean === 'patlis_bar_start_date') {
+    if ($base === 'patlis_bar_start_date') {
       $start = isset($bar['start_date']) ? trim((string)$bar['start_date']) : '';
       return $start === '' ? '1900-01-01' : $start;
     }
@@ -596,7 +686,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   $opt = get_option(Patlis_Core::OPTION_CENTER_POPUP, []);
   if (!is_array($opt)) $opt = [];
 
-  if ($clean === 'patlis_center_title') {
+  if ($base === 'patlis_center_title') {
     $raw = $opt['title'] ?? '';
 
     if (is_string($raw)) {
@@ -629,10 +719,8 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
         return $raw[$default_lang];
       }
 
-      foreach ($raw as $value) {
-        if (is_string($value) && $value !== '') {
-          return $value;
-        }
+      if ($default_lang !== '' && array_key_exists($default_lang, $raw) && is_scalar($raw[$default_lang])) {
+        return (string) $raw[$default_lang];
       }
     }
 
@@ -642,19 +730,19 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   $id = isset($opt['image_id']) ? (int)$opt['image_id'] : 0;
 
   // Start date default
-  if ($clean === 'patlis_center_start_date') {
+  if ($base === 'patlis_center_start_date') {
     $start = isset($opt['start_date']) ? trim((string)$opt['start_date']) : '';
     return $start === '' ? '1900-01-01' : $start;
   }
 
   // End date default
-  if ($clean === 'patlis_center_end_date') {
+  if ($base === 'patlis_center_end_date') {
     $end = isset($opt['end_date']) ? trim((string)$opt['end_date']) : '';
     return $end === '' ? '2100-01-01' : $end;
   }
 
   // Image ID
-  if ($clean === 'patlis_center_image_id') {
+  if ($base === 'patlis_center_image_id') {
     if ($context === 'image') {
       return $id > 0 ? [$id] : [];
     }
