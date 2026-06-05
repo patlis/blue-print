@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) exit;
 
 function patlis_room_synced_taxonomies(): array
 {
-    return ['room_amenity'];
+    return ['room_amenity', 'room_meal_plan'];
 }
 
 /**

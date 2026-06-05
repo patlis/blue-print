@@ -60,6 +60,15 @@ function patlis_accommodation_register_admin_menu() {
         'edit-tags.php?taxonomy=property_service&post_type=patlis_room'
     );
 
+    // Meal Plans
+    add_submenu_page(
+        'patlis-accommodation',
+        'Meal Plans',
+        'Meal Plans',
+        $capability,
+        'edit-tags.php?taxonomy=room_meal_plan&post_type=patlis_room'
+    );
+
     // Experiences
     add_submenu_page(
         'patlis-accommodation',

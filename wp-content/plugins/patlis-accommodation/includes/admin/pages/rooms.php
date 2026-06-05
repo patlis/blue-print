@@ -1,6 +1,42 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+/**
+ * List columns for Rooms (patlis_room CPT)
+ */
+add_filter('manage_patlis_room_posts_columns', function ($columns) {
+    $new = [];
+    foreach ($columns as $key => $label) {
+        if (in_array($key, ['taxonomy-room_amenity', 'taxonomy-room_meal_plan'], true)) continue;
+        $new[$key] = $label;
+        if ($key === 'title') {
+            $new['room_sort'] = 'Sort';
+        }
+    }
+    return $new;
+});
+
+add_action('manage_patlis_room_posts_custom_column', function ($column, $post_id) {
+    if ($column === 'room_sort') {
+        $val = get_post_meta((int) $post_id, 'room_sort', true);
+        echo $val !== '' ? (int) $val : '—';
+    }
+}, 10, 2);
+
+add_filter('manage_edit-patlis_room_sortable_columns', function ($columns) {
+    $columns['room_sort'] = 'room_sort';
+    return $columns;
+});
+
+add_action('pre_get_posts', function ($query) {
+    if (!is_admin() || !$query->is_main_query()) return;
+    if ($query->get('post_type') !== 'patlis_room') return;
+    if ($query->get('orderby') !== 'room_sort') return;
+
+    $query->set('meta_key', 'room_sort');
+    $query->set('orderby', 'meta_value_num');
+});
+
 add_action('admin_enqueue_scripts', 'patlis_acc_rooms_enqueue_gallery_assets');
 function patlis_acc_rooms_enqueue_gallery_assets($hook) {
     if ($hook !== 'post.php' && $hook !== 'post-new.php') {
@@ -65,6 +101,7 @@ function patlis_acc_rooms_render_metabox($post) {
     $img360    = esc_attr($v('room_img_360_url'));
     $book_url  = esc_attr($v('room_book_url'));
     $sticky    = (int) $v('room_sticky') === 1;
+    $sort      = esc_attr($v('room_sort'));
 
     // New fields
     $short_desc = esc_textarea($v('room_short_desc'));
@@ -77,6 +114,9 @@ function patlis_acc_rooms_render_metabox($post) {
     $gallery_ids_csv = esc_attr(implode(',', $gallery_ids));
 
     echo '<table class="form-table" role="presentation">';
+
+    echo '<tr><th scope="row"><label for="room_sort">Sort</label></th>
+              <td><input type="number" step="1" class="small-text" id="room_sort" name="room_sort" value="'.$sort.'"></td></tr>';
 
     echo '<tr><th scope="row"><label for="room_item_nr">Room Item Nr</label></th>
               <td><input type="text" class="regular-text" id="room_item_nr" name="room_item_nr" value="'.$item_nr.'"></td></tr>';
@@ -270,6 +310,7 @@ function patlis_acc_rooms_save_metabox($post_id) {
         update_post_meta($post_id, $key, $val);
     };
 
+    $set('room_sort',    isset($_POST['room_sort']) ? (int)$_POST['room_sort'] : 0);
     $set('room_item_nr', sanitize_text_field($_POST['room_item_nr'] ?? ''));
 
     $set('room_beds',    isset($_POST['room_beds']) ? max(0, (int)$_POST['room_beds']) : 0);

@@ -15,6 +15,9 @@ if (!defined('ABSPATH')) {
 function patlis_synced_meta_fields(): array
 {
     return [
+        // featured image
+        '_thumbnail_id',
+
         //events
         'events_date_start','events_time_start',
         'events_date_end','events_time_end',
@@ -50,7 +53,7 @@ function patlis_synced_meta_fields(): array
         'pmc_day6a','pmc_day6b',
 
         // rooms
-        'room_item_nr','room_beds','room_persons','room_count',
+        'room_sort','room_item_nr','room_beds','room_persons','room_count',
         'room_img_360_url','room_sticky','room_size_m2','room_video_url',
 
         // (term meta) amenities & facilities & services
@@ -61,8 +64,14 @@ function patlis_synced_meta_fields(): array
         'hotel_rate_period_end_month','hotel_rate_period_active','hotel_rate_period_priority','hotel_rate_period_order', 
         
         //room rates
-        'patlis_acc_period_id','patlis_acc_price','patlis_acc_price_type','patlis_acc_min_nights','patlis_acc_active',
-        'patlis_acc_room_ids','patlis_acc_price_surfix',
+        'patlis_acc_period_id','patlis_acc_price','patlis_acc_price_type',
+        'patlis_acc_min_nights','patlis_acc_active',
+        'patlis_acc_room_ids','patlis_acc_price_surfix','room_sort',
+        'room_gallery_ids', 'room_book_url',
+
+        //experiences
+        'experience_order',
+
 
     ];
 }

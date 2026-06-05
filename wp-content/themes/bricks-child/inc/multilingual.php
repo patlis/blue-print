@@ -197,6 +197,11 @@ function patlis_get_fallback_post_ids(array $args): array
 
     $base_args = $args;
 
+    // Capture post__in before unsetting so we can re-apply it translated.
+    $original_post_in = !empty($args['post__in']) && is_array($args['post__in'])
+        ? array_values(array_filter(array_map('intval', $args['post__in']), fn($id) => $id > 0))
+        : [];
+
     // Remove runtime/transformed args so fallback IDs are rebuilt consistently.
     unset(
         $base_args['paged'],
@@ -209,6 +214,16 @@ function patlis_get_fallback_post_ids(array $args): array
         $base_args['no_found_rows'],
         $base_args['fields']
     );
+
+    // If caller specified post__in, translate those IDs to default language and re-apply.
+    if (!empty($original_post_in)) {
+        $default_post_in = [];
+        foreach ($original_post_in as $id) {
+            $def_id = (int) pll_get_post($id, $default_lang);
+            $default_post_in[] = $def_id > 0 ? $def_id : $id;
+        }
+        $base_args['post__in'] = array_values(array_unique($default_post_in));
+    }
 
     $base_args['posts_per_page']   = -1;
     $base_args['fields']           = 'ids';

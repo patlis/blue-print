@@ -29,6 +29,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_room_image_url}',  'label' => 'Room: Featured image URL', 'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_gallery_json}','label' => 'Room: Gallery JSON (ids + urls + meta)', 'group' => $gRoom];
 
+    $tags[] = ['name' => '{patlis_acc_room_sort}',       'label' => 'Room: Sort',           'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_item_nr}',    'label' => 'Room: Item Nr',        'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_beds}',       'label' => 'Room: Beds',           'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_persons}',    'label' => 'Room: Persons',        'group' => $gRoom];
@@ -53,7 +54,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_prices_text}',    'label' => 'Options: Prices text',           'group' => $gOpt];
 
     $tags[] = ['name' => '{patlis_acc_rooms_options}',     'label' => 'Booking: Rooms options (Label|ID)',  'group' => $gOpt];
-    $tags[] = ['name' => '{patlis_acc_selected_room_id}',  'label' => 'Booking: Selected room_id from URL', 'group' => $gOpt];
+    $tags[] = ['name' => '{patlis_acc_selected_room_meal_plans_options}', 'label' => 'Booking: Selected room meal plan options (Label|ID)', 'group' => $gOpt];
 
     $tags[] = ['name' => '{patlis_acc_room_short_desc}', 'label' => 'Room: Short description', 'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_size_m2}',    'label' => 'Room: Size (m²)',         'group' => $gRoom];
@@ -68,6 +69,8 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
 
     $tags[] = ['name' => '{patlis_acc_property_facilities_top}',   'label' => 'Property: Facilities TOP (HTML list)', 'group' => $gProp];
     $tags[] = ['name' => '{patlis_acc_property_facilities_all}',   'label' => 'Property: Facilities ALL (grouped HTML)','group' => $gProp];
+
+    $tags[] = ['name' => '{patlis_acc_room_meal_plans_json}', 'label' => 'Room: Meal Plans JSON (assigned plans)', 'group' => $gRoom];
 
     return $tags;
 });
@@ -147,6 +150,14 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
         return patlis_acc_render_property_terms_html('property_facility', $tag === 'patlis_acc_property_facilities_top');
     }
 
+    // Room meal plans JSON
+    if ($tag === 'patlis_acc_room_meal_plans_json') {
+        $p = patlis_acc_resolve_post_context($post);
+        if (!$p || get_post_type($p) !== 'patlis_room') return '';
+        $plans = function_exists('patlis_acc_get_room_meal_plans') ? patlis_acc_get_room_meal_plans((int) $p->ID) : [];
+        return wp_json_encode($plans);
+    }
+
     /* ----------------------------
      * OPTIONS
      * ---------------------------- */
@@ -169,8 +180,21 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
             return function_exists('patlis_acc_get_rooms_options_string') ? patlis_acc_get_rooms_options_string() : '';
         }
 
-        if ($tag === 'patlis_acc_selected_room_id') {
-            return function_exists('patlis_acc_get_selected_room_id_from_url') ? patlis_acc_get_selected_room_id_from_url() : '';
+        if ($tag === 'patlis_acc_selected_room_meal_plans_options') {
+            $rid = isset($_GET['room_id']) ? (int) $_GET['room_id'] : 0;
+            if ($rid <= 0 || !function_exists('patlis_acc_get_room_meal_plans')) return '';
+            $plans = patlis_acc_get_room_meal_plans($rid);
+            if (empty($plans)) return '';
+            $lines = [];
+            foreach ($plans as $plan) {
+                $label = !empty($plan['label']) ? $plan['label'] : $plan['name'];
+                $price = isset($plan['price_adult']) ? (float) $plan['price_adult'] : 0.0;
+                if ($price > 0) {
+                    $label .= ' (+' . number_format($price, 2, '.', '') . '€)';
+                }
+                $lines[] = $plan['name'] . ':' . $label;
+            }
+            return implode("\n", $lines);
         }
 
         return '';
@@ -212,6 +236,7 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
 
         // Meta keys (ΜΟΝΟ δικά μας — όχι cf_*)
         $meta_map = [
+            'sort'       => 'room_sort',
             'item_nr'    => 'room_item_nr',
             'beds'       => 'room_beds',
             'persons'    => 'room_persons',

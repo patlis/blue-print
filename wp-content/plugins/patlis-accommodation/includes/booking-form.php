@@ -9,6 +9,33 @@ if (!defined('ABSPATH')) exit;
  * - Preselect via URL: /booking/?room_id=123
  */
 
+function patlis_acc_get_selected_room_id_from_url(): string
+{
+    $room_id = isset($_GET['room_id']) ? (int) $_GET['room_id'] : 0;
+    return $room_id > 0 ? (string) $room_id : '';
+}
+
+function patlis_acc_get_rooms_options_string(): string
+{
+    $q = new WP_Query([
+        'post_type'      => 'patlis_room',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'orderby'        => ['menu_order' => 'ASC', 'title' => 'ASC'],
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ]);
+
+    if (empty($q->posts)) return '';
+
+    $lines = [];
+    foreach ($q->posts as $pid) {
+        $lines[] = get_the_title((int) $pid) . '|' . (int) $pid;
+    }
+
+    return implode("\n", $lines);
+}
+
 function patlis_acc_is_booking_page(): bool
 {
     $path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
@@ -23,7 +50,7 @@ function patlis_acc_is_booking_page(): bool
  * ============================================================ */
 function patlis_acc_rooms_list_cache_clear(): void
 {
-    delete_transient('patlis_acc_rooms_list_v1');
+    delete_transient('patlis_acc_rooms_list_v2');
 }
 
 add_action('save_post_patlis_room', function ($post_id) {
@@ -55,7 +82,7 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
         'callback' => function () {
 
-            $cache_key = 'patlis_acc_rooms_list_v1';
+            $cache_key = 'patlis_acc_rooms_list_v2';
             $cached = get_transient($cache_key);
             if (is_array($cached)) {
                 return rest_ensure_response($cached);
@@ -74,9 +101,12 @@ add_action('rest_api_init', function () {
             if (!empty($q->posts)) {
                 foreach ($q->posts as $pid) {
                     $out[] = [
-                        'id'    => (int) $pid,
-                        'title' => (string) get_the_title($pid),
-                        'slug'  => (string) get_post_field('post_name', $pid),
+                        'id'         => (int) $pid,
+                        'title'      => (string) get_the_title($pid),
+                        'slug'       => (string) get_post_field('post_name', $pid),
+                        'meal_plans' => function_exists('patlis_acc_get_room_meal_plans')
+                            ? patlis_acc_get_room_meal_plans((int) $pid)
+                            : [],
                     ];
                 }
             }
@@ -99,6 +129,8 @@ add_action('wp_footer', function () {
     ?>
     <script>
     (function () {
+        var roomsData = [];
+
         function getParam(name) {
             try {
                 return (new URLSearchParams(window.location.search)).get(name) || '';
@@ -112,6 +144,42 @@ add_action('wp_footer', function () {
             opt.value = String(value);
             opt.textContent = String(text);
             return opt;
+        }
+
+        function updateMealPlans(roomId) {
+            var mpSelect = document.querySelector('select[name="diet_type_id"]');
+            if (!mpSelect) return;
+
+            var room = null;
+            for (var i = 0; i < roomsData.length; i++) {
+                if (String(roomsData[i].id) === String(roomId)) {
+                    room = roomsData[i];
+                    break;
+                }
+            }
+
+            var plans = (room && Array.isArray(room.meal_plans)) ? room.meal_plans : [];
+
+            // preserve placeholder if first option has empty value
+            var placeholderText = '';
+            if (mpSelect.options.length > 0 && mpSelect.options[0].value === '') {
+                placeholderText = mpSelect.options[0].textContent || '';
+            }
+            mpSelect.innerHTML = '';
+
+            if (placeholderText) {
+                mpSelect.appendChild(buildOption('', placeholderText));
+            }
+
+            var defaultId = '';
+            plans.forEach(function (plan) {
+                if (!plan || !plan.id) return;
+                var label = plan.name || plan.code || ('Plan ' + plan.id);
+                mpSelect.appendChild(buildOption(plan.id, label));
+                if (plan.is_default && !defaultId) defaultId = String(plan.id);
+            });
+
+            if (defaultId) mpSelect.value = defaultId;
         }
 
         function init() {
@@ -128,14 +196,19 @@ add_action('wp_footer', function () {
             select.innerHTML = '';
 
             if (placeholderText) {
-                var ph = buildOption('', placeholderText);
-                select.appendChild(ph);
+                select.appendChild(buildOption('', placeholderText));
             }
+
+            select.addEventListener('change', function () {
+                updateMealPlans(this.value);
+            });
 
             fetch(<?php echo wp_json_encode($rest_url); ?>, { credentials: 'same-origin' })
                 .then(function (r) { return r.json(); })
                 .then(function (list) {
                     if (!Array.isArray(list)) return;
+
+                    roomsData = list;
 
                     list.forEach(function (room) {
                         if (!room || !room.id) return;
@@ -146,6 +219,9 @@ add_action('wp_footer', function () {
                     if (selectedId) {
                         select.value = String(parseInt(selectedId, 10));
                     }
+
+                    // populate meal plans for the initially selected room
+                    updateMealPlans(select.value);
                 })
                 .catch(function () {
                     // silent fail

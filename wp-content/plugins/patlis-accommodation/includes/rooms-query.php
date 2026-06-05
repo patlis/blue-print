@@ -32,8 +32,9 @@ add_action('pre_get_posts', function ($q) {
         $q->set('posts_per_page', $per_page);
     }
 
-    // Sorting: menu_order ASC
-    $q->set('orderby', 'menu_order');
+    // Sorting: room_sort meta field ASC
+    $q->set('orderby', 'meta_value_num');
+    $q->set('meta_key', 'room_sort');
     $q->set('order', 'ASC');
 
     // (Optional) ignore sticky posts (CPT usually doesn't use WP sticky, but safe)
