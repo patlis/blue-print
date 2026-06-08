@@ -7,7 +7,7 @@ final class Patlis_Admin_Page_Basic {
     $in = is_array($input) ? $input : [];
 
     $out = [];
-    $out['logo_image_id'] = isset($in['logo_image_id']) ? max(0, (int)$in['logo_image_id']) : 0;
+    $out['logo_image_id']   = isset($in['logo_image_id']) ? max(0, (int)$in['logo_image_id']) : 0;
     $out['company_name'] = isset($in['company_name']) ? sanitize_text_field($in['company_name']) : '';
     $out['address']      = isset($in['address']) ? sanitize_text_field($in['address']) : '';
     $out['city']         = isset($in['city']) ? sanitize_text_field($in['city']) : '';
@@ -297,27 +297,29 @@ final class Patlis_Admin_Page_Basic {
           document.addEventListener('DOMContentLoaded', function () {
             var tabs = document.querySelectorAll('.nav-tab-wrapper .nav-tab[data-tab]');
             var panels = document.querySelectorAll('.patlis-basic-tab-panel[data-panel]');
-            var logoFrame = null;
-            var logoInput = document.getElementById('patlis_logo_image_id');
+            var logoFrame   = null;
+            var logoInput   = document.getElementById('patlis_logo_image_id');
             var logoPreview = document.getElementById('patlis_logo_preview');
-            var logoSelect = document.getElementById('patlis_logo_select');
-            var logoRemove = document.getElementById('patlis_logo_remove');
+            var logoSelect  = document.getElementById('patlis_logo_select');
+            var logoRemove  = document.getElementById('patlis_logo_remove');
 
-            function setLogoImage(attachment) {
-              if (!logoInput || !logoPreview || !logoRemove) return;
-              var imageId = attachment && attachment.id ? attachment.id : 0;
-              var imageUrl = '';
-
-              if (attachment && attachment.sizes && attachment.sizes.thumbnail && attachment.sizes.thumbnail.url) {
-                imageUrl = attachment.sizes.thumbnail.url;
-              } else if (attachment && attachment.url) {
-                imageUrl = attachment.url;
-              }
-
-              logoInput.value = imageId;
-              logoPreview.innerHTML = imageUrl ? '<img src="' + imageUrl + '" style="max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;" />' : '';
-              logoRemove.style.display = imageId ? '' : 'none';
+            function makeImageSetter(input, preview, removeBtn) {
+              return function (attachment) {
+                if (!input || !preview || !removeBtn) return;
+                var imageId  = attachment && attachment.id ? attachment.id : 0;
+                var imageUrl = '';
+                if (attachment && attachment.sizes && attachment.sizes.thumbnail && attachment.sizes.thumbnail.url) {
+                  imageUrl = attachment.sizes.thumbnail.url;
+                } else if (attachment && attachment.url) {
+                  imageUrl = attachment.url;
+                }
+                input.value      = imageId;
+                preview.innerHTML = imageUrl ? '<img src="' + imageUrl + '" style="max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;" />' : '';
+                removeBtn.style.display = imageId ? '' : 'none';
+              };
             }
+
+            var setLogoImage  = makeImageSetter(logoInput,  logoPreview,  logoRemove);
 
             tabs.forEach(function (tab) {
               tab.addEventListener('click', function (event) {
@@ -367,6 +369,7 @@ final class Patlis_Admin_Page_Basic {
                 setLogoImage(null);
               });
             }
+
           });
         </script>
 

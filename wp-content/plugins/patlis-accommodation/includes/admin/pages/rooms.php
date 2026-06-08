@@ -10,7 +10,8 @@ add_filter('manage_patlis_room_posts_columns', function ($columns) {
         if (in_array($key, ['taxonomy-room_amenity', 'taxonomy-room_meal_plan'], true)) continue;
         $new[$key] = $label;
         if ($key === 'title') {
-            $new['room_sort'] = 'Sort';
+            $new['room_sort']   = 'Sort';
+            $new['room_sticky'] = '⭐';
         }
     }
     return $new;
@@ -21,20 +22,32 @@ add_action('manage_patlis_room_posts_custom_column', function ($column, $post_id
         $val = get_post_meta((int) $post_id, 'room_sort', true);
         echo $val !== '' ? (int) $val : '—';
     }
+    if ($column === 'room_sticky') {
+        $val = (int) get_post_meta((int) $post_id, 'room_sticky', true);
+        echo $val === 1
+            ? '<span style="color:#f57c00;font-size:16px;" title="Sticky">★</span>'
+            : '<span style="color:#bdbdbd;font-size:16px;" title="Not sticky">☆</span>';
+    }
 }, 10, 2);
 
 add_filter('manage_edit-patlis_room_sortable_columns', function ($columns) {
-    $columns['room_sort'] = 'room_sort';
+    $columns['room_sort']   = 'room_sort';
+    $columns['room_sticky'] = 'room_sticky';
     return $columns;
 });
 
 add_action('pre_get_posts', function ($query) {
     if (!is_admin() || !$query->is_main_query()) return;
     if ($query->get('post_type') !== 'patlis_room') return;
-    if ($query->get('orderby') !== 'room_sort') return;
 
-    $query->set('meta_key', 'room_sort');
-    $query->set('orderby', 'meta_value_num');
+    $orderby = $query->get('orderby');
+    if ($orderby === 'room_sort') {
+        $query->set('meta_key', 'room_sort');
+        $query->set('orderby', 'meta_value_num');
+    } elseif ($orderby === 'room_sticky') {
+        $query->set('meta_key', 'room_sticky');
+        $query->set('orderby', 'meta_value_num');
+    }
 });
 
 add_action('admin_enqueue_scripts', 'patlis_acc_rooms_enqueue_gallery_assets');
@@ -114,42 +127,42 @@ function patlis_acc_rooms_render_metabox($post) {
     $gallery_ids_csv = esc_attr(implode(',', $gallery_ids));
 
     echo '<table class="form-table" role="presentation">';
+    
+    echo '<tr><th scope="row"><label for="room_short_desc">Short description</label></th>
+    <td><textarea class="large-text" rows="3" id="room_short_desc" name="room_short_desc">'.$short_desc.'</textarea></td></tr>';
 
     echo '<tr><th scope="row"><label for="room_sort">Sort</label></th>
               <td><input type="number" step="1" class="small-text" id="room_sort" name="room_sort" value="'.$sort.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_item_nr">Room Item Nr</label></th>
-              <td><input type="text" class="regular-text" id="room_item_nr" name="room_item_nr" value="'.$item_nr.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_beds">Beds</label></th>
-              <td><input type="number" min="0" step="1" class="small-text" id="room_beds" name="room_beds" value="'.$beds.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_persons">Persons</label></th>
-              <td><input type="number" min="0" step="1" class="small-text" id="room_persons" name="room_persons" value="'.$persons.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_count">Count (how many identical rooms)</label></th>
-              <td><input type="number" min="0" step="1" class="small-text" id="room_count" name="room_count" value="'.$count.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_video_url">Room Video URL</label></th>
-              <td><input type="url" class="regular-text" id="room_video_url" name="room_video_url" value="'.$video_url.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_img_360_url">Room 360° Image URL</label></th>
-              <td><input type="url" class="regular-text" id="room_img_360_url" name="room_img_360_url" value="'.$img360.'"></td></tr>';
-
-    echo '<tr><th scope="row"><label for="room_book_url">Room Booking URL</label></th>
-              <td><input type="url" class="regular-text" id="room_book_url" name="room_book_url" value="'.$book_url.'"></td></tr>';
-
+              
     echo '<tr><th scope="row">Sticky</th>
-              <td><label><input type="checkbox" name="room_sticky" value="1" '.checked($sticky, true, false).'> Sticky room</label></td></tr>';
+    <td><label><input type="checkbox" name="room_sticky" value="1" '.checked($sticky, true, false).'> Sticky room</label></td></tr>';
 
-    echo '<tr><th scope="row"><label for="room_short_desc">Short description</label></th>
-              <td><textarea class="large-text" rows="3" id="room_short_desc" name="room_short_desc">'.$short_desc.'</textarea></td></tr>';
-
+    echo '<tr><th scope="row"><label for="room_item_nr">Room Item Nr (for internal use)</label></th>
+              <td><input type="text" class="regular-text" id="room_item_nr" name="room_item_nr" value="'.$item_nr.'"></td></tr>';
+              
+    echo '<tr><th scope="row"><label for="room_persons">Persons</label></th>
+    <td><input type="number" min="0" step="1" class="small-text" id="room_persons" name="room_persons" value="'.$persons.'"></td></tr>';
+    
+    echo '<tr><th scope="row"><label for="room_count">Count (how many identical rooms)</label></th>
+    <td><input type="number" min="0" step="1" class="small-text" id="room_count" name="room_count" value="'.$count.'"></td></tr>';
+    
+    echo '<tr><th scope="row"><label for="room_video_url">Room Video URL</label></th>
+    <td><input type="url" class="regular-text" id="room_video_url" name="room_video_url" value="'.$video_url.'"></td></tr>';
+        
+    echo '<tr><th scope="row"><label for="room_img_360_url">Room 360° Image URL</label></th>
+    <td><input type="url" class="regular-text" id="room_img_360_url" name="room_img_360_url" value="'.$img360.'"></td></tr>';
+    
+    echo '<tr><th scope="row"><label for="room_book_url">Room Booking URL (if using 3rd party service)</label></th>
+    <td><input type="url" class="regular-text" id="room_book_url" name="room_book_url" value="'.$book_url.'"></td></tr>';
+    
     echo '<tr><th scope="row"><label for="room_size_m2">Room size (m²)</label></th>
-              <td><input type="text" class="small-text" id="room_size_m2" name="room_size_m2" value="'.$size_m2.'"></td></tr>';
-
+    <td><input type="number" class="small-text" id="room_size_m2" name="room_size_m2" value="'.$size_m2.'"></td></tr>';
+    
     echo '<tr><th scope="row"><label for="room_bed_type">Bed type</label></th>
-              <td><input type="text" class="regular-text" id="room_bed_type" name="room_bed_type" value="'.$bed_type.'"></td></tr>';
+    <td><input type="text" class="regular-text" id="room_bed_type" name="room_bed_type" value="'.$bed_type.'"></td></tr>';
+    
+    echo '<tr><th scope="row"><label for="room_beds">Beds (used for filtering)</label></th>
+            <td><input type="number" min="0" step="1" class="small-text" id="room_beds" name="room_beds" value="'.$beds.'"></td></tr>';
 
     echo '<tr><th scope="row"><label for="room_view">View</label></th>
               <td><input type="text" class="regular-text" id="room_view" name="room_view" value="'.$view.'"></td></tr>';

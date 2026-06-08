@@ -85,10 +85,19 @@ final class Patlis_Admin_Page_Translations
         $keys = patlis_get_manual_translation_keys();
         $translations = function_exists('patlis_get_translations') ? patlis_get_translations() : [];
 
+        // Search & pagination params
+        $search   = isset($_GET['s']) ? sanitize_text_field((string) $_GET['s']) : '';
+        $per_page = 20;
+        $paged    = max(1, (int) ($_GET['paged'] ?? 1));
+
         if (
             isset($_POST['patlis_translations_nonce']) &&
             wp_verify_nonce($_POST['patlis_translations_nonce'], 'patlis_save_translations')
         ) {
+            // Restore search/page state from hidden inputs after save
+            $search = isset($_POST['_search']) ? sanitize_text_field((string) $_POST['_search']) : '';
+            $paged  = max(1, (int) ($_POST['_paged'] ?? 1));
+
             $posted = $_POST['patlis_translations'] ?? [];
             $clean  = $translations;
 
@@ -96,11 +105,23 @@ final class Patlis_Admin_Page_Translations
                 $clean = [];
             }
 
-            foreach ($keys as $key) {
-                // Ignore keys that are not in manual keys anymore (e.g. deleted)
-                if (!in_array($key, patlis_get_manual_translation_keys(), true)) {
-                    continue;
-                }
+            // Only update keys visible on the current page (filtered + paged)
+            $all_keys_for_save = patlis_get_manual_translation_keys();
+            if ($search !== '') {
+                $all_keys_for_save = array_values(array_filter($all_keys_for_save, function ($k) use ($search, $translations) {
+                    if (stripos($k, $search) !== false) return true;
+                    if (!empty($translations[$k]) && is_array($translations[$k])) {
+                        foreach ($translations[$k] as $val) {
+                            if (is_string($val) && stripos($val, $search) !== false) return true;
+                        }
+                    }
+                    return false;
+                }));
+            }
+            $offset_save = ($paged - 1) * $per_page;
+            $page_keys   = array_slice($all_keys_for_save, $offset_save, $per_page);
+
+            foreach ($page_keys as $key) {
                 if (!isset($clean[$key]) || !is_array($clean[$key])) {
                     $clean[$key] = [];
                 }
@@ -126,8 +147,35 @@ final class Patlis_Admin_Page_Translations
             update_option(patlis_translations_option_name(), $clean, false);
             $translations = $clean;
 
-            echo '<div class="notice notice-success is-dismissible"><p>Translations saved.</p></div>';
+            $redirect = admin_url('admin.php?page=patlis-translations&patlis_saved=1');
+            if ($search !== '') $redirect = add_query_arg('s', urlencode($search), $redirect);
+            if ($paged > 1)     $redirect = add_query_arg('paged', $paged, $redirect);
+            wp_safe_redirect($redirect);
+            exit;
         }
+
+        // Apply search filter
+        if ($search !== '') {
+            $keys = array_values(array_filter($keys, function ($k) use ($search, $translations) {
+                if (stripos($k, $search) !== false) return true;
+                if (!empty($translations[$k]) && is_array($translations[$k])) {
+                    foreach ($translations[$k] as $val) {
+                        if (is_string($val) && stripos($val, $search) !== false) return true;
+                    }
+                }
+                return false;
+            }));
+        }
+
+        // Pagination
+        $total_keys  = count($keys);
+        $total_pages = max(1, (int) ceil($total_keys / $per_page));
+        $paged       = min($paged, $total_pages);
+        $offset      = ($paged - 1) * $per_page;
+        $page_keys   = array_slice($keys, $offset, $per_page);
+
+        $base_url = admin_url('admin.php?page=patlis-translations');
+        if ($search !== '') $base_url = add_query_arg('s', urlencode($search), $base_url);
 
         ?>
         <div class="wrap">
@@ -138,6 +186,10 @@ final class Patlis_Admin_Page_Translations
                     <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;">Delete Key</button>
                 <?php endif; ?>
             </h1>
+
+            <?php if (isset($_GET['patlis_saved'])) : ?>
+                <div class="notice notice-success is-dismissible"><p>Translations saved.</p></div>
+            <?php endif; ?>
 
             <?php if (current_user_can('manage_options')) : ?>
                 <form method="post" id="patlis-add-key-form" style="display:none; margin-bottom:18px; max-width:600px;">
@@ -197,8 +249,24 @@ final class Patlis_Admin_Page_Translations
                 </script>
             <?php endif; ?>
 
+            <!-- Search filter -->
+            <form method="get" style="margin-bottom:16px;">
+                <input type="hidden" name="page" value="patlis-translations">
+                <input type="search" name="s" value="<?php echo esc_attr($search); ?>" placeholder="Filter keys..." style="width:280px;">
+                <button type="submit" class="button">Filter</button>
+                <?php if ($search !== '') : ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=patlis-translations')); ?>" class="button">Clear</a>
+                <?php endif; ?>
+                <span style="margin-left:12px; color:#666;">
+                    <?php echo esc_html($total_keys); ?> key<?php echo $total_keys !== 1 ? 's' : ''; ?>
+                    <?php if ($search !== '') echo ' matching <em>' . esc_html($search) . '</em>'; ?>
+                </span>
+            </form>
+
             <form method="post">
                 <?php wp_nonce_field('patlis_save_translations', 'patlis_translations_nonce'); ?>
+                <input type="hidden" name="_search" value="<?php echo esc_attr($search); ?>">
+                <input type="hidden" name="_paged" value="<?php echo esc_attr($paged); ?>">
 
                 <table class="widefat striped" style="max-width:1100px;">
                     <thead>
@@ -209,12 +277,12 @@ final class Patlis_Admin_Page_Translations
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (empty($keys)) : ?>
+                        <?php if (empty($page_keys)) : ?>
                             <tr>
                                 <td colspan="3">No keys found.</td>
                             </tr>
                         <?php else : ?>
-                            <?php foreach ($keys as $key) : ?>
+                            <?php foreach ($page_keys as $key) : ?>
                                 <?php foreach ($languages as $index => $lang) : ?>
                                     <tr>
                                         <?php if ($index === 0) : ?>
@@ -244,9 +312,23 @@ final class Patlis_Admin_Page_Translations
                     </tbody>
                 </table>
 
-                <p style="margin-top:16px;">
+                <div style="display:flex;align-items:center;gap:16px;margin-top:16px;">
                     <button type="submit" class="button button-primary">Save translations</button>
-                </p>
+
+                    <?php if ($total_pages > 1) : ?>
+                        <span style="color:#666;">Page <?php echo $paged; ?> of <?php echo $total_pages; ?></span>
+                        <div>
+                            <?php for ($p = 1; $p <= $total_pages; $p++) : ?>
+                                <?php $page_url = add_query_arg('paged', $p, $base_url); ?>
+                                <?php if ($p === $paged) : ?>
+                                    <span style="display:inline-block;padding:4px 10px;background:#0073aa;color:#fff;border-radius:3px;margin:0 2px;"><?php echo $p; ?></span>
+                                <?php else : ?>
+                                    <a href="<?php echo esc_url($page_url); ?>" style="display:inline-block;padding:4px 10px;border:1px solid #ccc;border-radius:3px;margin:0 2px;"><?php echo $p; ?></a>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </form>
         </div>
         <?php

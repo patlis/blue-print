@@ -25,6 +25,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     // ROOM / Post tags
     $tags[] = ['name' => '{patlis_acc_room_id}',         'label' => 'Room: Post ID',        'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_title}',      'label' => 'Room: Title',          'group' => $gRoom];
+    $tags[] = ['name' => '{patlis_acc_room_content}',    'label' => 'Room: Content (with fallback)', 'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_image_id}',   'label' => 'Room: Featured image ID',  'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_image_url}',  'label' => 'Room: Featured image URL', 'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_gallery_json}','label' => 'Room: Gallery JSON (ids + urls + meta)', 'group' => $gRoom];
@@ -219,6 +220,22 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
         if ($tag === 'patlis_acc_room_id')    return (string) $pid;
         if ($tag === 'patlis_acc_room_title') return (string) get_the_title($pid);
 
+        if ($tag === 'patlis_acc_room_content') {
+            $post_obj = get_post($pid);
+            $content = $post_obj ? trim((string) $post_obj->post_content) : '';
+            if ($content === '' && function_exists('pll_default_language') && function_exists('pll_get_post')) {
+                $default_lang = pll_default_language('slug');
+                if (is_string($default_lang) && $default_lang !== '') {
+                    $default_pid = (int) pll_get_post($pid, $default_lang);
+                    if ($default_pid > 0 && $default_pid !== $pid) {
+                        $default_post = get_post($default_pid);
+                        $content = $default_post ? trim((string) $default_post->post_content) : '';
+                    }
+                }
+            }
+            return apply_filters('the_content', $content);
+        }
+
         if ($tag === 'patlis_acc_room_image_id') {
             $img_id = get_post_thumbnail_id($pid);
             return $img_id ? (string) $img_id : '';
@@ -263,6 +280,19 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
                 $s = function_exists('patlis_accommodation_get_settings') ? patlis_accommodation_get_settings() : [];
                 $fallback = isset($s['booking_redirect_url']) ? (string) $s['booking_redirect_url'] : '';
                 return $fallback;
+            }
+
+            // FALLBACK to default language for translatable text fields
+            if ($v === '' && in_array($sub, ['short_desc', 'bed_type', 'view'], true)) {
+                if (function_exists('pll_default_language') && function_exists('pll_get_post')) {
+                    $default_lang = pll_default_language('slug');
+                    if (is_string($default_lang) && $default_lang !== '') {
+                        $default_pid = (int) pll_get_post($pid, $default_lang);
+                        if ($default_pid > 0 && $default_pid !== $pid) {
+                            $v = patlis_acc_post_meta($default_pid, $meta_map[$sub]);
+                        }
+                    }
+                }
             }
 
             return $v;

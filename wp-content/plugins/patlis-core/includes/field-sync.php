@@ -72,6 +72,9 @@ function patlis_synced_meta_fields(): array
         //experiences
         'experience_order',
 
+        //Timelines (Anout)
+        'timeline_date',
+
 
     ];
 }

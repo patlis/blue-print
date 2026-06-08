@@ -398,3 +398,58 @@ function patlis_menu_resolve_term_context($obj)
 
     return null;
 }
+
+/**
+ * Returns the count of menu_item posts that match the carousel query loop.
+ * Use as {echo:menu_carousel_count} in Bricks.
+ */
+if (!function_exists('menu_carousel_count')) {
+    function menu_carousel_count(): string
+    {
+        $base_args = [
+            'post_type'  => 'menu_item',
+            'meta_query' => [
+                [
+                    'key'     => 'pmi_carousel',
+                    'value'   => '1',
+                    'compare' => '=',
+                ],
+                [
+                    'key'     => 'pmi_show',
+                    'value'   => '1',
+                    'compare' => '=',
+                ],
+                [
+                    'key'     => '_thumbnail_id',
+                    'compare' => 'EXISTS',
+                ],
+            ],
+        ];
+
+        $query_args = function_exists('patlis_fallback_posts_query')
+            ? patlis_fallback_posts_query($base_args)
+            : $base_args;
+
+        $query_args['posts_per_page'] = -1;
+        $query_args['fields']         = 'ids';
+        $query_args['no_found_rows']  = true;
+
+        $q = new WP_Query($query_args);
+
+        return (string) count($q->posts);
+    }
+}
+
+add_filter('bricks/code/echo_function_names', function ($functions) {
+    if (empty($functions)) {
+        $functions = [];
+    } elseif (is_string($functions)) {
+        $functions = array_map('trim', explode(',', $functions));
+    } elseif (!is_array($functions)) {
+        $functions = [];
+    }
+
+    $functions[] = 'menu_carousel_count';
+
+    return array_values(array_unique($functions));
+});

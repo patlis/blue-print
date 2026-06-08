@@ -8,13 +8,24 @@
  Version:      1.1
  Text Domain:  bricks
 */
+:root {
+  --card-width: 300px !important;
+}
+@media (max-width: 412px) {
+  :root {
+    --card-width: 100% !important;
+  }
+}
 
 #brxe-layqmn { white-space: nowrap;}
 /*------------------ main sizes START */
 body { font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;}
+h1, h2, h3, h4, .h1, .h2, .h3, .h4 { font-family: var(--headers-font-family);}
 main {min-height:50vh}
 .w-100{width: 100% !important;}
 .boxed-container {padding-right: 20px; padding-left: 20px;}
+
+
 /*------------------ main sizes END */
 #brxe-gvlyau img{
   height: var(--logo-height);

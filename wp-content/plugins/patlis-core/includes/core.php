@@ -8,6 +8,7 @@ final class Patlis_Core {
   const OPTION_OPENING      = 'patlis_opening';
   const OPTION_CENTER_POPUP = 'patlis_center_popup';
   const OPTION_NOTIFICATION_BAR = 'patlis_notification_bar';
+  const OPTION_HOMEPAGE         = 'patlis_homepage';
   
     // One capability for all Patlis admin pages
   const CAP_MANAGE = 'patlis_manage';
@@ -42,6 +43,10 @@ final class Patlis_Core {
   
   public static function get_notification_bar(string $key, $default = '') {
     return self::get_option_value(self::OPTION_NOTIFICATION_BAR, $key, $default);
+  }
+
+  public static function get_homepage(string $key, $default = '') {
+    return self::get_option_value(self::OPTION_HOMEPAGE, $key, $default);
   }
 
 

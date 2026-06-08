@@ -176,7 +176,7 @@ function patlis_accommodation_register_cpt_room_rates() {
         'show_in_menu'       => false,
         'has_archive'        => false,
         'rewrite'            => false,
-        'supports'           => ['title', 'editor'],
+        'supports'           => ['title'],
         'menu_position'      => 62,
         'menu_icon'          => 'dashicons-tag',
         'capability_type'    => 'post',

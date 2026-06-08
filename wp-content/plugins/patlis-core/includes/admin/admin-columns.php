@@ -67,6 +67,13 @@ add_action('admin_head', function () {
             width: 60px;
             text-align: center;
         }
+        .column-patlis_review_featured {
+            width: 60px;
+            text-align: center;
+        }
+        .column-patlis_review_date {
+            width: 110px;
+        }
     </style>';
 });
 
@@ -153,8 +160,10 @@ add_filter('manage_reviews_posts_columns', function (array $columns): array {
 
     foreach ($columns as $key => $label) {
         if ($key === 'title') {
-            $new['patlis_review_rating'] = 'Score';
-            $new['patlis_review_show']   = 'Show';
+            $new['patlis_review_date']     = 'Date';
+            $new['patlis_review_rating']   = 'Score';
+            $new['patlis_review_show']     = 'Show';
+            $new['patlis_review_featured'] = 'Featured';
         }
 
         $new[$key] = $label;
@@ -164,6 +173,17 @@ add_filter('manage_reviews_posts_columns', function (array $columns): array {
 });
 
 add_action('manage_reviews_posts_custom_column', function (string $column, int $post_id): void {
+    if ($column === 'patlis_review_date') {
+        $value = get_post_meta($post_id, 'review_date', true);
+        if (is_string($value) && trim($value) !== '') {
+            $timestamp = strtotime(trim($value));
+            echo $timestamp !== false ? esc_html(date_i18n('d M Y', $timestamp)) : esc_html($value);
+        } else {
+            echo '—';
+        }
+        return;
+    }
+
     if ($column === 'patlis_review_rating') {
         $value = get_post_meta($post_id, 'review_rating', true);
         if ($value !== '' && $value !== false) {
@@ -181,12 +201,24 @@ add_action('manage_reviews_posts_custom_column', function (string $column, int $
         } else {
             echo '<span style="color:#c62828;font-size:16px;" title="Hidden">✗</span>';
         }
+        return;
+    }
+
+    if ($column === 'patlis_review_featured') {
+        $value = get_post_meta($post_id, 'review_featured', true);
+        if ($value === '1' || $value === 1 || $value === true || $value === 'true') {
+            echo '<span style="color:#f57c00;font-size:16px;" title="Featured">★</span>';
+        } else {
+            echo '<span style="color:#bdbdbd;font-size:16px;" title="Not featured">☆</span>';
+        }
     }
 }, 10, 2);
 
 add_filter('manage_edit-reviews_sortable_columns', function (array $columns): array {
-    $columns['patlis_review_rating'] = 'patlis_review_rating';
-    $columns['patlis_review_show']   = 'patlis_review_show';
+    $columns['patlis_review_date']     = 'patlis_review_date';
+    $columns['patlis_review_rating']    = 'patlis_review_rating';
+    $columns['patlis_review_show']      = 'patlis_review_show';
+    $columns['patlis_review_featured']  = 'patlis_review_featured';
 
     return $columns;
 });
@@ -202,11 +234,29 @@ add_action('pre_get_posts', function (WP_Query $query): void {
 
     $orderby = $query->get('orderby');
 
-    if ($orderby === 'patlis_review_rating') {
+    $requested_orderby = isset($_GET['orderby']) ? sanitize_key((string) wp_unslash($_GET['orderby'])) : '';
+    $is_default_load = ($requested_orderby === '');
+
+    if ($is_default_load) {
+        $query->set('meta_key', 'review_date');
+        $query->set('orderby', 'meta_value');
+        if (!isset($_GET['order'])) {
+            $query->set('order', 'DESC');
+        }
+        return;
+    }
+
+    if ($orderby === 'patlis_review_date') {
+        $query->set('meta_key', 'review_date');
+        $query->set('orderby', 'meta_value');
+    } elseif ($orderby === 'patlis_review_rating') {
         $query->set('meta_key', 'review_rating');
         $query->set('orderby', 'meta_value_num');
     } elseif ($orderby === 'patlis_review_show') {
         $query->set('meta_key', 'review_show');
+        $query->set('orderby', 'meta_value');
+    } elseif ($orderby === 'patlis_review_featured') {
+        $query->set('meta_key', 'review_featured');
         $query->set('orderby', 'meta_value');
     }
 });

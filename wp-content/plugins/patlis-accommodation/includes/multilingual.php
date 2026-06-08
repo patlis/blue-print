@@ -499,9 +499,20 @@ if (!function_exists('patlis_acc_get_room_rates_payload')) {
                 'rate_price_surfix' => (int) patlis_acc_get_room_rate_meta_with_translation_fallback($source_rate_id, 'patlis_acc_price_surfix'),
                 'rate_min_nights' => (int) patlis_acc_get_room_rate_meta_with_translation_fallback($source_rate_id, 'patlis_acc_min_nights'),
                 'rate_title' => (string) get_the_title($rate_post->ID),
-                'rate_content' => function_exists('patlis_acc_prepare_rate_content')
-                    ? patlis_acc_prepare_rate_content($rate_post)
-                    : (string) $rate_post->post_content,
+                'period_content' => (function () use ($period_post, $source_period_id): string {
+                    $content = function_exists('patlis_acc_prepare_rate_content')
+                        ? patlis_acc_prepare_rate_content($period_post)
+                        : trim((string) $period_post->post_content);
+                    if ($content === '' && $source_period_id !== (int) $period_post->ID) {
+                        $source_period_post = get_post($source_period_id);
+                        if ($source_period_post instanceof WP_Post) {
+                            $content = function_exists('patlis_acc_prepare_rate_content')
+                                ? patlis_acc_prepare_rate_content($source_period_post)
+                                : trim((string) $source_period_post->post_content);
+                        }
+                    }
+                    return $content;
+                })(),
             ];
         }
 

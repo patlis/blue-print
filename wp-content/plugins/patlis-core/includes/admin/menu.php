@@ -70,6 +70,15 @@ final class Patlis_Admin_Menu {
       ['Patlis_Admin_Page_Translations', 'render']
     );
 
+    add_submenu_page(
+      'patlis-basic',
+      __('Home page', 'patlis-core'),
+      __('Home page', 'patlis-core'),
+      $capability,
+      'patlis-homepage',
+      ['Patlis_Admin_Page_Homepage', 'render']
+    );
+
     
   }
 }
