@@ -22,6 +22,7 @@ function patlis_synced_meta_fields(): array
         'events_date_start','events_time_start',
         'events_date_end','events_time_end',
         'events_gallery_ids',
+        'events_video_url',
 
         //Offers & Packages
         'packages_valid_from','packages_valid_until',
@@ -32,7 +33,7 @@ function patlis_synced_meta_fields(): array
         //Services
         'create_service_page','service_sticky',
         'service_order','service_show',
-        'services_gallery_ids',
+        'services_gallery_ids','service_video_url',
 
         //timeline
         'timeline_sort','timeline_image',
@@ -236,16 +237,28 @@ add_action('save_post', function ($post_id, $post) {
     }
 }, 100, 2);
 
-/**
- * Sync selected term meta fields from the saved translation to sibling translations.
- * Needed for taxonomy terms (e.g. menu_section categories).
- */
-add_action('edited_term', function ($term_id, $tt_id, $taxonomy) {
+function patlis_sync_term_meta_to_translations(int $term_id): void
+{
     if (!is_admin()) {
         return;
     }
 
-    if (!function_exists('pll_get_term_translations')) {
+    // Only sync FROM the default-language term → translations.
+    // If the term being saved is a translation (non-default lang), skip entirely
+    // so we never overwrite the default-lang values with empty/partial data.
+    if (function_exists('pll_get_term_language') && function_exists('pll_default_language')) {
+        $term_lang    = pll_get_term_language($term_id, 'slug');
+        $default_lang = pll_default_language('slug');
+        if (
+            is_string($term_lang) && $term_lang !== '' &&
+            is_string($default_lang) && $default_lang !== '' &&
+            $term_lang !== $default_lang
+        ) {
+            return;
+        }
+    }
+
+    if (!function_exists('pll_get_term_translations') || !function_exists('pll_languages_list')) {
         return;
     }
 
@@ -254,9 +267,29 @@ add_action('edited_term', function ($term_id, $tt_id, $taxonomy) {
         return;
     }
 
+    // Try pll_get_term_translations first (works when taxonomy is registered as translatable in Polylang).
     $translations = pll_get_term_translations((int) $term_id);
+
+    // Fallback: if only 1 entry (taxonomy not registered as translatable), iterate all languages
+    // and use pll_get_term() to find sibling terms.
     if (!is_array($translations) || count($translations) < 2) {
-        return;
+        if (!function_exists('pll_get_term') || !function_exists('pll_languages_list')) {
+            return;
+        }
+        $langs = pll_languages_list(['fields' => 'slug']);
+        if (!is_array($langs) || empty($langs)) {
+            return;
+        }
+        $translations = [];
+        foreach ($langs as $lang) {
+            $tid = (int) pll_get_term($term_id, $lang);
+            if ($tid > 0) {
+                $translations[$lang] = $tid;
+            }
+        }
+        if (count($translations) < 2) {
+            return;
+        }
     }
 
     foreach ($fields as $meta_key) {
@@ -282,7 +315,132 @@ add_action('edited_term', function ($term_id, $tt_id, $taxonomy) {
             update_term_meta($translated_term_id, $meta_key, $value);
         }
     }
+}
+
+function patlis_sync_term_meta_between_terms(int $source_term_id, int $target_term_id): void
+{
+    if ($source_term_id <= 0 || $target_term_id <= 0 || $source_term_id === $target_term_id) {
+        return;
+    }
+
+    $fields = patlis_synced_meta_fields();
+    if (empty($fields) || !is_array($fields)) {
+        return;
+    }
+
+    foreach ($fields as $meta_key) {
+        $meta_key = is_string($meta_key) ? trim($meta_key) : '';
+        if ($meta_key === '') {
+            continue;
+        }
+
+        if (!metadata_exists('term', $source_term_id, $meta_key)) {
+            delete_term_meta($target_term_id, $meta_key);
+            continue;
+        }
+
+        $value = get_term_meta($source_term_id, $meta_key, true);
+        update_term_meta($target_term_id, $meta_key, $value);
+    }
+}
+
+function patlis_get_default_language_term_id(int $term_id): int
+{
+    if ($term_id <= 0 || !function_exists('pll_default_language')) {
+        return 0;
+    }
+
+    $default_lang = pll_default_language('slug');
+    if (!is_string($default_lang) || $default_lang === '') {
+        return 0;
+    }
+
+    if (function_exists('pll_get_term_language')) {
+        $term_lang = pll_get_term_language($term_id, 'slug');
+        if (is_string($term_lang) && $term_lang === $default_lang) {
+            return $term_id;
+        }
+    }
+
+    if (function_exists('pll_get_term')) {
+        $default_term_id = (int) pll_get_term($term_id, $default_lang);
+        if ($default_term_id > 0) {
+            return $default_term_id;
+        }
+    }
+
+    if (function_exists('pll_get_term_translations')) {
+        $translations = pll_get_term_translations($term_id);
+        if (is_array($translations) && !empty($translations[$default_lang])) {
+            return (int) $translations[$default_lang];
+        }
+    }
+
+    return 0;
+}
+
+function patlis_get_translation_source_term_from_request(): int
+{
+    $candidate_keys = ['from_tag', 'from_term', 'tr_term_id', 'source_term_id'];
+
+    foreach ($candidate_keys as $key) {
+        if (!isset($_REQUEST[$key])) {
+            continue;
+        }
+
+        $raw_term_id = wp_unslash($_REQUEST[$key]);
+        if (!is_scalar($raw_term_id)) {
+            continue;
+        }
+
+        $term_id = absint($raw_term_id);
+        if ($term_id > 0) {
+            return $term_id;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Sync selected term meta fields from the saved translation to sibling translations.
+ * Needed for taxonomy terms (e.g. menu_section categories).
+ */
+add_action('edited_term', function ($term_id, $tt_id, $taxonomy) {
+    patlis_sync_term_meta_to_translations((int) $term_id);
 }, 100, 3);
+
+// menu_section saves custom term meta on edited_menu_section; sync after that save has completed.
+add_action('edited_menu_section', function ($term_id): void {
+    patlis_sync_term_meta_to_translations((int) $term_id);
+}, 200, 1);
+
+/**
+ * When a new translated term is created (e.g. "Add translation" in Polylang),
+ * immediately push all synced meta from the default-language sibling to it.
+ * This way the user doesn't need to manually re-save the default-lang term.
+ *
+ * Polylang sends the original term ID in the request when submitting a
+ * translation form, so we use that instead of pll_get_term_translations()
+ * (which may not be set up yet at created-term time).
+ */
+add_action('created_menu_section', function ($term_id): void {
+    if (!function_exists('pll_default_language')) {
+        return;
+    }
+
+    $source_term_id = patlis_get_translation_source_term_from_request();
+    if ($source_term_id <= 0) {
+        return;
+    }
+
+    $default_source_term_id = patlis_get_default_language_term_id($source_term_id);
+    if ($default_source_term_id <= 0 || $default_source_term_id === (int) $term_id) {
+        return;
+    }
+
+    patlis_sync_term_meta_between_terms($default_source_term_id, (int) $term_id);
+}, 999, 1);
 
 /**
  * Mark synced fields for hiding via CSS class when not in default language.

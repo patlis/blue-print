@@ -261,7 +261,7 @@ function patlis_cookies_render_texts_page() {
                             <?php endforeach; ?>
                         </td>
                     </tr>
-                    <tr>
+                    <tr style=" padding-top:20px;">
                         <th scope="row">Category descriptions</th>
                         <td>
                             <?php foreach ([
@@ -271,7 +271,7 @@ function patlis_cookies_render_texts_page() {
                                 'cat_preferences' => 'Preferences',
                                 'cat_unclassified' => 'Unclassified',
                             ] as $cat_key => $cat_label): ?>
-                                <p><strong><?php echo esc_html($cat_label); ?></strong><br>
+                                <p style=" padding-top:40px;"><strong><?php echo esc_html($cat_label); ?></strong><br>
                                     <?php foreach ($languages as $lang_slug => $lang_label): ?>
                                         <div class="patlis-lang-block">
                                             <div class="patlis-lang-label"><?php echo esc_html($lang_label); ?></div>

@@ -3,21 +3,51 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-12-28 21:17+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: el_GR\n"
+"PO-Revision-Date: 2026-06-09 01:16+0200\n"
+"Last-Translator: \n"
 "Language-Team: el_GR <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: el_GR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "Contact form"
+msgstr "Φόρμα επικοινωνίας"
+
+msgid "Currency"
+msgstr "Νόμισμα"
+
+msgid "Recipient email"
+msgstr "Email παραλήπτη"
+
+msgid "Email subject"
+msgstr "Θέμα του Email"
+
+msgid "Currency symbol"
+msgstr "Σύμβολο νομίσματος"
+
+msgid "Currency position"
+msgstr "Θέση νομίσματος"
+
+msgid "Decimal divider"
+msgstr "Διαχωριστικό δεκαδικών"
+
+msgid "After the amount"
+msgstr "Μετά το ποσό"
+
+msgid "Before the amount"
+msgstr "Πριν από το ποσό"
+
+msgid "Decimals"
+msgstr "Δεκαδικά"
 
 msgid "Address"
 msgstr "Διεύθυνση"
@@ -65,8 +95,100 @@ msgid "Time zone"
 msgstr "Ζώνη ώρας"
 
 msgid "Zip"
-msgstr "Τ.Κ."
+msgstr "ΤΚ"
 
 msgid "Zip code"
-msgstr "Τ.Κ."
+msgstr "ΤΚ"
 
+msgid "Action banner (CTA)"
+msgstr "Banner δράσης (CTA)"
+
+msgid "CTA Background"
+msgstr "Φόντο CTA"
+
+msgid "CTA Background image"
+msgstr "Εικόνα φόντου CTA"
+
+msgid "Drag to reorder."
+msgstr "Σύρετε για αναδιάταξη."
+
+msgid "Home Gallery"
+msgstr "Γκαλερί αρχικής σελίδας"
+
+msgid "Home page settings"
+msgstr "Ρυθμίσεις αρχικής σελίδας"
+
+msgid "Last Reviews"
+msgstr "Τελευταίες κριτικές"
+
+msgid "Offers and Packages"
+msgstr "Προσφορές και πακέτα"
+
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+msgid "Sections order"
+msgstr "Σειρά ενοτήτων"
+
+msgid "Select CTA background image"
+msgstr "Επιλογή εικόνας φόντου CTA"
+
+msgid "Select image"
+msgstr "Επιλογή εικόνας"
+
+msgid "Top Dishes"
+msgstr "Κορυφαία πιάτα"
+
+msgid "Top Rooms"
+msgstr "Κορυφαία δωμάτια"
+
+msgid "Top Services"
+msgstr "Κορυφαίες υπηρεσίες"
+
+msgid "Upcoming Events"
+msgstr "Επερχόμενες εκδηλώσεις"
+
+msgid "Use this image"
+msgstr "Χρήση αυτής της εικόνας"
+
+msgid "Welcome Section"
+msgstr "Ενότητα καλωσορίσματος"
+
+msgid "Center Pop up"
+msgstr "Κεντρικό Pop up"
+
+msgid "Home page"
+msgstr "Αρχική σελίδα"
+
+msgid "Notification Bar"
+msgstr "Γραμμή ειδοποιήσεων"
+
+msgid "Translations"
+msgstr "Μεταφράσεις"
+
+msgid "Coordinates"
+msgstr "Συντεταγμένες"
+
+msgid "Logo image"
+msgstr "Εικόνα λογότυπου"
+
+msgid "Social Media URLs"
+msgstr "URL κοινωνικών μέσων"
+
+msgid "Show Opening hours"
+msgstr "Εμφάνιση ωρών λειτουργίας"
+
+msgid "Text"
+msgstr "Κείμενο"
+
+msgid "Site Settings"
+msgstr "Ρυθμίσεις ιστότοπου"
+
+msgid "Active"
+msgstr "Ενεργό"
+
+msgid "Start date"
+msgstr "Ημερομηνία έναρξης"
+
+msgid "Expiry date"
+msgstr "Ημερομηνία έναρξης"

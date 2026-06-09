@@ -159,7 +159,7 @@ final class Patlis_Admin_Page_Opening {
         <?php wp_nonce_field('patlis_save_opening'); ?>
 
         <div class="patlis-opening-field" style="margin-top: 1rem;">
-          <label><?php esc_html_e('Show Opening times', 'patlis-core'); ?></label>
+          <label><?php esc_html_e('Show opening hours', 'patlis-core'); ?></label>
           <input type="checkbox"
             name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[show_on_footer]"
             value="1" <?php checked(!empty($opt['show_on_footer'])); ?>>

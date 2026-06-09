@@ -180,7 +180,7 @@ final class Patlis_Admin_Page_Translations
         ?>
         <div class="wrap">
             <h1 style="display:flex;align-items:center;justify-content:space-between;">
-                <span>Patlis Translations</span>
+                <span><?php esc_html_e('Translations', 'patlis-core'); ?></span>
                 <?php if (current_user_can('manage_options')) : ?>
                     <button id="patlis-add-translation-key" type="button" class="button button-secondary">Add New</button>
                     <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;">Delete Key</button>

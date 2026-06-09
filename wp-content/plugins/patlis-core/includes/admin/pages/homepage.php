@@ -5,18 +5,20 @@ final class Patlis_Admin_Page_Homepage {
 
     const DEFAULT_ORDER = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
 
-    const LABELS = [
-        'welcome'    => 'Welcome',
-        'dishes'     => 'Dishes',
-        'rooms'      => 'Rooms',
-        'offers'     => 'Offers',
-        'experience' => 'Experience',
-        'services'   => 'Services',
-        'events'     => 'Events',
-        'gallery'    => 'Gallery',
-        'reviews'    => 'Reviews',
-        'cta'        => 'CTA',
-    ];
+    private static function labels(): array {
+        return [
+            'welcome'    => __('Welcome Section',        'patlis-core'),
+            'dishes'     => __('Top Dishes',             'patlis-core'),
+            'rooms'      => __('Top Rooms',              'patlis-core'),
+            'offers'     => __('Offers and Packages',    'patlis-core'),
+            'experience' => __('Experience',             'patlis-core'),
+            'services'   => __('Top Services',           'patlis-core'),
+            'events'     => __('Upcoming Events',        'patlis-core'),
+            'gallery'    => __('Home Gallery',           'patlis-core'),
+            'reviews'    => __('Last Reviews',           'patlis-core'),
+            'cta'        => __('Action banner (CTA)',    'patlis-core'),
+        ];
+    }
 
     public static function render(): void {
         if (!current_user_can('patlis_manage')) return;
@@ -31,7 +33,8 @@ final class Patlis_Admin_Page_Homepage {
 
         wp_enqueue_media();
 
-        $order = array_values(array_filter($saved, fn($s) => isset(self::LABELS[$s])));
+        $labels = self::labels();
+        $order  = array_values(array_filter($saved, fn($s) => isset($labels[$s])));
 
         foreach (self::DEFAULT_ORDER as $s) {
             if (!in_array($s, $order, true)) {
@@ -68,7 +71,7 @@ final class Patlis_Admin_Page_Homepage {
                 </table>
 
                 <h2><?php esc_html_e('Sections order', 'patlis-core'); ?></h2>
-                <p class="description"><?php esc_html_e('Drag to reorder. The CSS flex order value will follow this list (1 = top).', 'patlis-core'); ?></p>
+                <p class="description"><?php esc_html_e('Drag to reorder.', 'patlis-core'); ?></p>
 
                 <style>
                     #patlis-sections-sortable {
@@ -117,7 +120,7 @@ final class Patlis_Admin_Page_Homepage {
                         <li data-slug="<?php echo esc_attr($slug); ?>">
                             <span class="patlis-drag-handle" aria-hidden="true">&#9776;</span>
                             <span class="patlis-section-nr"><?php echo ($i + 1); ?></span>
-                            <?php echo esc_html(self::LABELS[$slug] ?? $slug); ?>
+                            <?php echo esc_html($labels[$slug] ?? $slug); ?>
                             <input type="hidden" name="patlis_sections_order[]" value="<?php echo esc_attr($slug); ?>">
                         </li>
                     <?php endforeach; ?>

@@ -870,6 +870,75 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
 
     $functions[] = 'patlis_acc_room_rates_json';
     $functions[] = 'patlis_acc_room_rates_count';
+    $functions[] = 'patlis_is_local_video_url'; // defined in patlis-core
+    $functions[] = 'patlis_video_embed_url';
+    $functions[] = 'patlis_video_html';
 
     return array_values(array_unique($functions));
 });
+
+/**
+ * Converts a YouTube or Vimeo watch URL to its embed URL. Local URLs unchanged.
+ * YouTube: youtube.com/watch?v=ID or youtu.be/ID → youtube.com/embed/ID
+ * Vimeo:   vimeo.com/ID                          → player.vimeo.com/video/ID
+ * Usage: {echo:patlis_video_embed_url({patlis_acc_room_video_url})}
+ */
+function patlis_video_embed_url(string $url): string
+{
+    $url = trim($url);
+    if ($url === '') {
+        return '';
+    }
+
+    if (preg_match('~(?:youtube\.com/watch\?.*v=|youtu\.be/)([a-zA-Z0-9_\-]{11})~', $url, $m)) {
+        $parsed = wp_parse_url($url);
+        $query  = [];
+        if (!empty($parsed['query'])) {
+            wp_parse_str($parsed['query'], $query);
+        }
+        $embed  = 'https://www.youtube.com/embed/' . $m[1];
+        $params = [];
+        if (!empty($query['t'])) {
+            $params['start'] = (int) $query['t'];
+        }
+        if (!empty($params)) {
+            $embed .= '?' . http_build_query($params);
+        }
+        return $embed;
+    }
+
+    if (preg_match('~vimeo\.com/(\d+)~', $url, $m)) {
+        return 'https://player.vimeo.com/video/' . $m[1];
+    }
+
+    return $url;
+}
+
+/**
+ * Returns ready-to-render video HTML:
+ * - Local MP4      → <video controls>
+ * - YouTube/Vimeo  → responsive 16:9 <iframe>
+ * - Empty URL      → ''
+ * Usage: {echo:patlis_video_html({patlis_acc_room_video_url})}
+ */
+function patlis_video_html(string $url): string
+{
+    $url = trim($url);
+    if ($url === '') {
+        return '';
+    }
+
+    if (patlis_is_local_video_url($url) === '1') {
+        return '<video controls style="width:100%;max-width:100%;" src="' . esc_attr($url) . '">'
+             . '<p>Your browser does not support the video tag.</p>'
+             . '</video>';
+    }
+
+    $embed = patlis_video_embed_url($url);
+    return '<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;" class="brxe-video">'
+         . '<iframe src="' . esc_attr($embed) . '" '
+         . 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" '
+         . 'allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin">'
+         . '</iframe>'
+         . '</div>';
+}

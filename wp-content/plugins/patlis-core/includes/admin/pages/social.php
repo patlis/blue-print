@@ -26,7 +26,7 @@ final class Patlis_Admin_Page_Social {
 
     ?>
     <div class="wrap">
-      <h1>Social Media URLs</h1>
+      <h1><?php esc_html_e('Social Media URLs', 'patlis-core'); ?></h1>
 
       <?php if (!empty($_GET['patlis_saved'])): ?>
         <div class="notice notice-success is-dismissible"><p>Saved.</p></div>

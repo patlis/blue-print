@@ -3,21 +3,51 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-12-28 21:17+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: de_DE\n"
+"PO-Revision-Date: 2026-06-09 01:14+0200\n"
+"Last-Translator: \n"
 "Language-Team: de_DE <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+
+msgid "Contact form"
+msgstr "Kontaktformular"
+
+msgid "Currency"
+msgstr "Währung"
+
+msgid "Recipient email"
+msgstr "E-Mail-Adresse des Empfängers"
+
+msgid "Email subject"
+msgstr "E-Mail-Betreff"
+
+msgid "Currency symbol"
+msgstr "Währungssymbol"
+
+msgid "Currency position"
+msgstr "Währungsposition"
+
+msgid "Decimal divider"
+msgstr "Dezimaltrennzeichen"
+
+msgid "After the amount"
+msgstr "Nach dem Betrag"
+
+msgid "Before the amount"
+msgstr "Vor dem Betrag"
+
+msgid "Decimals"
+msgstr "Dezimalstellen"
 
 msgid "Address"
 msgstr "Adresse"
@@ -70,3 +100,95 @@ msgstr "PLZ"
 msgid "Zip code"
 msgstr "Postleitzahl"
 
+msgid "Action banner (CTA)"
+msgstr "Aktionsbanner (CTA)"
+
+msgid "CTA Background"
+msgstr "CTA-Hintergrund"
+
+msgid "CTA Background image"
+msgstr "CTA-Hintergrundbild"
+
+msgid "Drag to reorder."
+msgstr "Ziehen zum Neuordnen. Der CSS-Flex-Reihenfolgewert folgt dieser Liste (1 = oben)."
+
+msgid "Home Gallery"
+msgstr "Startseiten-Galerie"
+
+msgid "Home page settings"
+msgstr "Startseiten-Einstellungen"
+
+msgid "Last Reviews"
+msgstr "Neueste Bewertungen"
+
+msgid "Offers and Packages"
+msgstr "Angebote und Pakete"
+
+msgid "Remove"
+msgstr "Entfernen"
+
+msgid "Sections order"
+msgstr "Reihenfolge der Bereiche"
+
+msgid "Select CTA background image"
+msgstr "CTA-Hintergrundbild auswählen"
+
+msgid "Select image"
+msgstr "Bild auswählen"
+
+msgid "Top Dishes"
+msgstr "Top-Gerichte"
+
+msgid "Top Rooms"
+msgstr "Top-Zimmer"
+
+msgid "Top Services"
+msgstr "Top-Leistungen"
+
+msgid "Upcoming Events"
+msgstr "Bevorstehende Veranstaltungen"
+
+msgid "Use this image"
+msgstr "Dieses Bild verwenden"
+
+msgid "Welcome Section"
+msgstr "Willkommensbereich"
+
+msgid "Center Pop up"
+msgstr "Zentriertes Pop-up"
+
+msgid "Home page"
+msgstr "Start Seite"
+
+msgid "Notification Bar"
+msgstr "Benachrichtigungsleiste"
+
+msgid "Translations"
+msgstr "Übersetzungen"
+
+msgid "Coordinates"
+msgstr "Koordinaten"
+
+msgid "Logo image"
+msgstr "Logo-Bild"
+
+msgid "Social Media URLs"
+msgstr "Social-Media-URLs"
+
+msgid "Show opening hours"
+msgstr "Öffnungszeiten anzeigen"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Site Settings"
+msgstr "Website-Einstellungen"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Start date"
+msgstr "Startdatum"
+
+msgid "Expiry date"
+msgstr "Verfallsdatum"

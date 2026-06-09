@@ -188,7 +188,7 @@ final class Patlis_Admin_Page_Notification_Bar {
 
           <tr>
             <td>
-              <label class="patlis-notification-field-label" for="patlis_nb_enabled"><?php esc_html_e('Enable', 'patlis-core'); ?></label>
+              <label class="patlis-notification-field-label" for="patlis_nb_enabled"><?php esc_html_e('Active', 'patlis-core'); ?></label>
               <input type="checkbox"
                 id="patlis_nb_enabled"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_NOTIFICATION_BAR); ?>[enabled]"
@@ -228,7 +228,7 @@ final class Patlis_Admin_Page_Notification_Bar {
 
           <tr>
             <td>
-              <label class="patlis-notification-field-label" for="patlis_nb_end_date"><?php esc_html_e('Date end', 'patlis-core'); ?></label>
+              <label class="patlis-notification-field-label" for="patlis_nb_end_date"><?php esc_html_e('Expiry date', 'patlis-core'); ?></label>
               <input type="date"
                 id="patlis_nb_end_date"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_NOTIFICATION_BAR); ?>[end_date]"

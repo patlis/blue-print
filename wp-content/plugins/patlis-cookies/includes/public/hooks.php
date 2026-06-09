@@ -25,6 +25,26 @@ function patlis_cookies_is_banner_enabled(): bool {
     return !empty($opt['enable_banner']);
 }
 
+function get_marketing_cookie_value(): int
+{
+    if (empty($_COOKIE['patlis-cookie'])) {
+        return 0;
+    }
+
+    $cookie_value = wp_unslash($_COOKIE['patlis-cookie']);
+    $consent = json_decode($cookie_value, true);
+
+    if (!is_array($consent) || !array_key_exists('marketing', $consent)) {
+        return 0;
+    }
+
+    if (is_bool($consent['marketing'])) {
+        return $consent['marketing'] ? 1 : 0;
+    }
+
+    return filter_var($consent['marketing'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+}
+
 add_action('init', function () {
     if (is_admin()) return;
     if (!patlis_cookies_is_banner_enabled()) return;

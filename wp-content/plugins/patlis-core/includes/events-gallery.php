@@ -314,6 +314,49 @@ function patlis_core_save_events_gallery_metabox(int $post_id): void
 }
 add_action('save_post_events', 'patlis_core_save_events_gallery_metabox');
 
+/**
+ * ACF: add "Select Video" button next to the events_video_url text field.
+ */
+add_action('acf/render_field/name=events_video_url', function ($field) {
+    echo '<a href="#" class="button patlis-acf-video-upload-btn" style="margin-top:6px;" data-target="events_video_url">Select Video</a>';
+});
+
+add_action('acf/render_field/name=service_video_url', function ($field) {
+    echo '<a href="#" class="button patlis-acf-video-upload-btn" style="margin-top:6px;" data-target="service_video_url">Select Video</a>';
+});
+
+add_action('acf/input/admin_head', function () {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || !in_array($screen->post_type, ['events', 'services'], true)) {
+        return;
+    }
+    ?>
+    <script>
+    (function($){
+        $(document).on('click', '.patlis-acf-video-upload-btn', function(e){
+            e.preventDefault();
+            var $btn    = $(this);
+            var $input  = $btn.closest('.acf-input').find('input[type="url"], input[type="text"]').first();
+
+            var videoFrame = wp.media({
+                title: 'Select Video',
+                button: { text: 'Use this video' },
+                library: { type: 'video' },
+                multiple: false
+            });
+
+            videoFrame.on('select', function(){
+                var attachment = videoFrame.state().get('selection').first().toJSON();
+                $input.val(attachment.url).trigger('change');
+            });
+
+            videoFrame.open();
+        });
+    })(jQuery);
+    </script>
+    <?php
+});
+
 function patlis_core_get_events_gallery_items(int $post_id): array
 {
     return patlis_core_get_gallery_items_by_meta($post_id, 'events_gallery_ids');

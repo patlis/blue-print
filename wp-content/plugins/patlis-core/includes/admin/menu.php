@@ -7,8 +7,8 @@ final class Patlis_Admin_Menu {
       $capability  = 'patlis_manage';
 
     add_menu_page(
-      __('Patlis.com', 'patlis-core'),
-      __('Patlis.com', 'patlis-core'),
+      __('Site Settings', 'patlis-core'),
+      __('Site Settings', 'patlis-core'),
       $capability,
       'patlis-basic',
       ['Patlis_Admin_Page_Basic', 'render'],

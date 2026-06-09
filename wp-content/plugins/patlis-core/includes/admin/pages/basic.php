@@ -18,7 +18,7 @@ final class Patlis_Admin_Page_Basic {
     $out['phone2']       = isset($in['phone2']) ? sanitize_text_field($in['phone2']) : '';
     $out['mobile']       = isset($in['mobile']) ? sanitize_text_field($in['mobile']) : '';
     $out['whatsapp']     = isset($in['whatsapp']) ? sanitize_text_field($in['whatsapp']) : '';
-    $out['cordinates']          = isset($in['cordinates']) ? sanitize_text_field($in['cordinates']) : '';
+    $out['cordinates']   = isset($in['cordinates']) ? sanitize_text_field($in['cordinates']) : '';
 
     $out['timezone']     = isset($in['timezone']) ? sanitize_text_field($in['timezone']) : wp_timezone_string();
 
@@ -59,6 +59,22 @@ final class Patlis_Admin_Page_Basic {
 
     wp_enqueue_media();
 
+    // Resolve tab labels early; on some installs late gettext calls inside hidden tab panels return source strings.
+    $labels = [
+      'basic'                    => __('Basic', 'patlis-core'),
+      'contact_form'             => __('Contact form', 'patlis-core'),
+      'currency'                 => __('Currency', 'patlis-core'),
+      'display_contact_form'     => __('Display the contact form', 'patlis-core'),
+      'recipient_email'          => __('Recipient email', 'patlis-core'),
+      'email_subject'            => __('Email subject', 'patlis-core'),
+      'currency_symbol'          => __('Currency symbol', 'patlis-core'),
+      'decimal_divider'          => __('Decimal divider', 'patlis-core'),
+      'currency_position'        => __('Currency position', 'patlis-core'),
+      'after_the_amount'         => __('After the amount', 'patlis-core'),
+      'before_the_amount'        => __('Before the amount', 'patlis-core'),
+      'decimals'                 => __('Decimals', 'patlis-core'),
+    ];
+
     ?>
     <div class="wrap">
       <h1><?php esc_html_e('Basic settings', 'patlis-core'); ?></h1>
@@ -85,9 +101,9 @@ final class Patlis_Admin_Page_Basic {
         </style>
 
         <nav class="nav-tab-wrapper">
-          <a href="#" class="nav-tab nav-tab-active" data-tab="basic"><?php esc_html_e('Basic', 'patlis-core'); ?></a>
-          <a href="#" class="nav-tab" data-tab="contact"><?php esc_html_e('Contact form', 'patlis-core'); ?></a>
-          <a href="#" class="nav-tab" data-tab="currency"><?php esc_html_e('Currency', 'patlis-core'); ?></a>
+          <a href="#" class="nav-tab nav-tab-active" data-tab="basic"><?php echo esc_html($labels['basic']); ?></a>
+          <a href="#" class="nav-tab" data-tab="contact"><?php echo esc_html($labels['contact_form']); ?></a>
+          <a href="#" class="nav-tab" data-tab="currency"><?php echo esc_html($labels['currency']); ?></a>
         </nav>
 
         <div class="patlis-basic-tabs-panels">
@@ -191,7 +207,7 @@ final class Patlis_Admin_Page_Basic {
               </tr>
 
               <tr>
-                <th scope="row"><label for="patlis_cordinates">Cordinates</label></th>
+                <th scope="row"><label for="patlis_cordinates"><?php esc_html_e('Coordinates', 'patlis-core'); ?></label></th>
                 <td>
                   <input id="patlis_cordinates" type="text" class="regular-text"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[cordinates]"
@@ -213,7 +229,7 @@ final class Patlis_Admin_Page_Basic {
           <div class="patlis-basic-tab-panel" data-panel="contact">
             <table class="form-table" role="presentation">
               <tr>
-                <th scope="row"><?php esc_html_e('Display the contact form', 'patlis-core'); ?></th>
+                <th scope="row"><?php echo esc_html($labels['display_contact_form']); ?></th>
                 <td>
                   <label>
                     <input type="checkbox"
@@ -224,7 +240,7 @@ final class Patlis_Admin_Page_Basic {
               </tr>
 
               <tr>
-                <th scope="row"><label for="patlis_contact_form_recipient_email"><?php esc_html_e('Recipients email', 'patlis-core'); ?></label></th>
+                <th scope="row"><label for="patlis_contact_form_recipient_email"><?php echo esc_html($labels['recipient_email']); ?></label></th>
                 <td>
                   <input id="patlis_contact_form_recipient_email" type="email" class="regular-text"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[contact_form_recipient_email]"
@@ -233,7 +249,7 @@ final class Patlis_Admin_Page_Basic {
               </tr>
 
               <tr>
-                <th scope="row"><label for="patlis_contact_form_email_subject"><?php esc_html_e('Email subject', 'patlis-core'); ?></label></th>
+                <th scope="row"><label for="patlis_contact_form_email_subject"><?php echo esc_html($labels['email_subject']); ?></label></th>
                 <td>
                   <input id="patlis_contact_form_email_subject" type="text" class="large-text"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[contact_form_email_subject]"
@@ -246,7 +262,7 @@ final class Patlis_Admin_Page_Basic {
           <div class="patlis-basic-tab-panel" data-panel="currency">
             <table class="form-table" role="presentation">
               <tr>
-                <th scope="row"><label for="patlis_currency_symbol"><?php esc_html_e('Currency symbol', 'patlis-core'); ?></label></th>
+                <th scope="row"><label for="patlis_currency_symbol"><?php echo esc_html($labels['currency_symbol']); ?></label></th>
                 <td>
                   <input id="patlis_currency_symbol" type="text" class="regular-text"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[currency_symbol]"
@@ -255,7 +271,7 @@ final class Patlis_Admin_Page_Basic {
               </tr>
 
               <tr>
-                <th scope="row"><label for="patlis_decimal_divider"><?php esc_html_e('Decimal divider', 'patlis-core'); ?></label></th>
+                <th scope="row"><label for="patlis_decimal_divider"><?php echo esc_html($labels['decimal_divider']); ?></label></th>
                 <td>
                   <select id="patlis_decimal_divider"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[decimal_divider]">
@@ -268,18 +284,18 @@ final class Patlis_Admin_Page_Basic {
               </tr>
 
               <tr>
-                <th scope="row"><label for="patlis_currency_position"><?php esc_html_e('Currency position', 'patlis-core'); ?></label></th>
+                <th scope="row"><label for="patlis_currency_position"><?php echo esc_html($labels['currency_position']); ?></label></th>
                 <td>
                   <select id="patlis_currency_position"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[currency_position]">
-                    <option value="after" <?php selected($pos, 'after'); ?>><?php esc_html_e('After the amount', 'patlis-core'); ?></option>
-                    <option value="before" <?php selected($pos, 'before'); ?>><?php esc_html_e('Before the amount', 'patlis-core'); ?></option>
+                    <option value="after" <?php selected($pos, 'after'); ?>><?php echo esc_html($labels['after_the_amount']); ?></option>
+                    <option value="before" <?php selected($pos, 'before'); ?>><?php echo esc_html($labels['before_the_amount']); ?></option>
                   </select>
                 </td>
               </tr>
 
               <tr>
-                <th scope="row"><label for="patlis_decimals"><?php esc_html_e('Decimals', 'patlis-core'); ?></label></th>
+                <th scope="row"><label for="patlis_decimals"><?php echo esc_html($labels['decimals']); ?></label></th>
                 <td>
                   <select id="patlis_decimals"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[decimals]">

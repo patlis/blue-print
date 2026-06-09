@@ -180,6 +180,7 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
     $functions[] = 'patlis_bricks_number';
  	$functions[] = 'patlis_bricks_home_url';
 	$functions[] = 'patlis_transl';
+	$functions[] = 'patlis_is_local_video_url';
 	
     return array_unique($functions);
 });
@@ -194,6 +195,32 @@ function patlis_bricks_home_url(): string
     return home_url('/');
 }
 
+/**
+ * Returns '1' if the URL is hosted on this site, '0' if external (YouTube, Vimeo, etc.).
+ * Used by multiple plugins. Usage: {echo:patlis_is_local_video_url({tag})}
+ */
+function patlis_is_local_video_url(string $url): string
+{
+    $url = trim($url);
+    if ($url === '') {
+        return '0';
+    }
+
+    $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
+    $site_host = is_string($site_host) ? strtolower($site_host) : '';
+    $url_host  = wp_parse_url($url, PHP_URL_HOST);
+
+    if ($url_host === null || $url_host === false || $url_host === '') {
+        return '1'; // relative = local
+    }
+
+    $url_host  = strtolower((string) $url_host);
+    $normalize = static function (string $host): string {
+        return preg_replace('/^www\./', '', $host) ?? $host;
+    };
+
+    return $normalize($url_host) === $normalize($site_host) ? '1' : '0';
+}
 
 /**
  * Normalize date to Y-m-d.  Accepts: Y-m-d, d/m/Y or m/d/Y (tries to detect), d.m.Y

@@ -147,7 +147,7 @@ function patlis_acc_rooms_render_metabox($post) {
     <td><input type="number" min="0" step="1" class="small-text" id="room_count" name="room_count" value="'.$count.'"></td></tr>';
     
     echo '<tr><th scope="row"><label for="room_video_url">Room Video URL</label></th>
-    <td><input type="url" class="regular-text" id="room_video_url" name="room_video_url" value="'.$video_url.'"></td></tr>';
+    <td><div style="display:flex;gap:10px;align-items:center;"><input type="url" class="regular-text" id="room_video_url" name="room_video_url" value="'.$video_url.'"><a href="#" class="button patlis-room-video-upload-btn" data-target="#room_video_url">Select Video</a></div></td></tr>';
         
     echo '<tr><th scope="row"><label for="room_img_360_url">Room 360° Image URL</label></th>
     <td><input type="url" class="regular-text" id="room_img_360_url" name="room_img_360_url" value="'.$img360.'"></td></tr>';
@@ -304,6 +304,26 @@ function patlis_acc_rooms_render_metabox($post) {
         });
 
         updateIds();
+
+        // Video URL picker
+        $(document).on('click', '.patlis-room-video-upload-btn', function(e){
+            e.preventDefault();
+            var $target = $($(this).data('target'));
+
+            var videoFrame = wp.media({
+                title: 'Select Video',
+                button: { text: 'Use this video' },
+                library: { type: 'video' },
+                multiple: false
+            });
+
+            videoFrame.on('select', function(){
+                var attachment = videoFrame.state().get('selection').first().toJSON();
+                $target.val(attachment.url);
+            });
+
+            videoFrame.open();
+        });
     })(jQuery);
     </script>
     <?php

@@ -605,13 +605,10 @@ if (!function_exists('patlis_fallback_terms_query')) {
             $query_args['number'] = (int) $args['number'];
         }
 
-        if (!empty($args['meta_key'])) {
-            $query_args['meta_key'] = $args['meta_key'];
-        }
-
-        if (!empty($args['meta_query']) && is_array($args['meta_query'])) {
-            $query_args['meta_query'] = $args['meta_query'];
-        }
+        // meta_key / meta_query are intentionally NOT forwarded here:
+        // filtering and ordering were already applied against the default-language terms
+        // in patlis_get_fallback_term_ids(). Re-applying them on current-language terms
+        // would exclude items whose synced meta is missing and break the query.
 
         if (!empty($args['childless'])) {
             $query_args['childless'] = true;
