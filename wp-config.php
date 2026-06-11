@@ -94,8 +94,8 @@ define('WP_MAX_MEMORY_LIMIT', '512M');
 
 
 /** Sets the website Version */
-/** gastro, hotel, general, shop, amenities, dining, locations   */
-define('PATLIS_VERSION', 'gastro');
+/** gastro, hotel, general, shop, amenities, dining, locations, kiosk   */
+define('PATLIS_VERSION', 'gastro,hotel,kiosk');
 
 ini_set('display_errors', 'off');
 define('WP_DEBUG_DISPLAY', false);

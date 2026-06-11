@@ -5,6 +5,30 @@ final class Patlis_Admin_Page_Homepage {
 
     const DEFAULT_ORDER = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
 
+    private static function restricted_section_slug_map(): array {
+        return [
+            'dishes'     => 'menu-carousel-section',
+            'rooms'      => 'top-rooms-section',
+            'offers'     => 'offers-packages-section',
+            'experience' => 'experience-section',
+        ];
+    }
+
+    private static function is_section_allowed(string $section): bool {
+        $map = self::restricted_section_slug_map();
+
+        // Sections without mapping are common sections and always visible in backend.
+        if (!isset($map[$section])) {
+            return true;
+        }
+
+        if (!function_exists('allowed_section')) {
+            return true;
+        }
+
+        return allowed_section($map[$section]) === 1;
+    }
+
     private static function labels(): array {
         return [
             'welcome'    => __('Welcome Section',        'patlis-core'),
@@ -34,9 +58,13 @@ final class Patlis_Admin_Page_Homepage {
         wp_enqueue_media();
 
         $labels = self::labels();
-        $order  = array_values(array_filter($saved, fn($s) => isset($labels[$s])));
+        $order  = array_values(array_filter($saved, fn($s) => isset($labels[$s]) && self::is_section_allowed($s)));
 
         foreach (self::DEFAULT_ORDER as $s) {
+            if (!self::is_section_allowed($s)) {
+                continue;
+            }
+
             if (!in_array($s, $order, true)) {
                 $order[] = $s;
             }

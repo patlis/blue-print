@@ -32,6 +32,10 @@ add_filter( 'bricks/builder/i18n', function( $i18n ) {
   return $i18n;
 } );
 
+add_filter('bricks/builder/max_revisions_to_keep', function ($max_revisions) {
+        return 5;
+});
+
 // disable adding comments using POST requests
 add_action('init', function () {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && strpos($_SERVER['REQUEST_URI'], 'wp-comments-post.php') !== false) {
