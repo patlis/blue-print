@@ -16,6 +16,8 @@ define('PATLIS_CORE_VERSION', '0.1.0');
 
 require_once PATLIS_CORE_PATH . 'includes/core.php';
 require_once PATLIS_CORE_PATH . 'includes/helpers.php';
+require_once PATLIS_CORE_PATH . 'includes/translations-db.php';
+require_once PATLIS_CORE_PATH . 'includes/translations-helpers.php';
 require_once PATLIS_CORE_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_CORE_PATH . 'includes/languages-visibility.php';
 require_once PATLIS_CORE_PATH . 'includes/field-sync.php';

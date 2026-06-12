@@ -109,7 +109,7 @@ final class Patlis_Admin_Settings {
       wp_safe_redirect(admin_url('admin.php?page=patlis-homepage&patlis_saved=1'));
       exit;
     }
- 
+
 }
 
 Patlis_Admin_Settings::init();

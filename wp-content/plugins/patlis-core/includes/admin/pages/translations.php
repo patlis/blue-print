@@ -16,17 +16,8 @@ final class Patlis_Admin_Page_Translations
             !empty($_POST['patlis_delete_key'])
         ) {
             $delete_key = patlis_normalize_translation_key(sanitize_text_field((string) $_POST['patlis_delete_key']));
-            $manual_keys = patlis_get_manual_translation_keys();
-            if (($k = array_search($delete_key, $manual_keys, true)) !== false) {
-                unset($manual_keys[$k]);
-                $manual_keys = array_values($manual_keys);
-                update_option(patlis_translation_option_name(), $manual_keys, false);
-                // Optionally, remove translations for this key
-                $translations = function_exists('patlis_get_translations') ? patlis_get_translations() : [];
-                if (isset($translations[$delete_key])) {
-                    unset($translations[$delete_key]);
-                    update_option(patlis_translations_option_name(), $translations, false);
-                }
+            if (function_exists('patlis_core_delete_translation_key_from_db')) {
+                patlis_core_delete_translation_key_from_db($delete_key);
             }
             wp_safe_redirect(admin_url('admin.php?page=patlis-translations&patlis_deleted=1'));
             exit;
@@ -41,18 +32,8 @@ final class Patlis_Admin_Page_Translations
         ) {
             $new_key = patlis_normalize_translation_key(sanitize_text_field((string) $_POST['patlis_new_key']));
 
-            if (patlis_is_valid_translation_key($new_key)) {
-                $manual_keys = patlis_get_manual_translation_keys();
-
-                if (!in_array($new_key, $manual_keys, true)) {
-                    $manual_keys[] = $new_key;
-                    $manual_keys = array_map('patlis_normalize_translation_key', $manual_keys);
-                    $manual_keys = array_filter($manual_keys, 'patlis_is_valid_translation_key');
-                    $manual_keys = array_values(array_unique($manual_keys));
-                    sort($manual_keys);
-
-                    update_option(patlis_translation_option_name(), $manual_keys, false);
-                }
+            if (patlis_is_valid_translation_key($new_key) && function_exists('patlis_core_upsert_translation') && function_exists('patlis_core_manual_translation_lang_marker')) {
+                patlis_core_upsert_translation($new_key, patlis_core_manual_translation_lang_marker(), '');
             }
 
             wp_safe_redirect(admin_url('admin.php?page=patlis-translations&patlis_added=1'));
@@ -99,11 +80,6 @@ final class Patlis_Admin_Page_Translations
             $paged  = max(1, (int) ($_POST['_paged'] ?? 1));
 
             $posted = $_POST['patlis_translations'] ?? [];
-            $clean  = $translations;
-
-            if (!is_array($clean)) {
-                $clean = [];
-            }
 
             // Only update keys visible on the current page (filtered + paged)
             $all_keys_for_save = patlis_get_manual_translation_keys();
@@ -122,30 +98,28 @@ final class Patlis_Admin_Page_Translations
             $page_keys   = array_slice($all_keys_for_save, $offset_save, $per_page);
 
             foreach ($page_keys as $key) {
-                if (!isset($clean[$key]) || !is_array($clean[$key])) {
-                    $clean[$key] = [];
+                if (function_exists('patlis_core_delete_translation_row') && function_exists('patlis_core_manual_translation_lang_marker')) {
+                    patlis_core_delete_translation_row($key, patlis_core_manual_translation_lang_marker());
                 }
+
+                $has_saved_language_row = false;
 
                 foreach ($languages as $lang) {
                     $value = $posted[$key][$lang] ?? '';
                     $value = stripslashes((string) $value);
-                    $value = wp_kses_post($value);
-                    $value = trim($value);
+                    $value = trim(wp_kses_post($value));
 
-                    if ($value === '') {
-                        unset($clean[$key][$lang]);
-                    } else {
-                        $clean[$key][$lang] = $value;
+                    if (function_exists('patlis_core_upsert_translation') && patlis_core_upsert_translation($key, $lang, $value)) {
+                        $has_saved_language_row = true;
                     }
                 }
 
-                if (empty($clean[$key])) {
-                    unset($clean[$key]);
+                if (!$has_saved_language_row && function_exists('patlis_core_upsert_translation') && function_exists('patlis_core_manual_translation_lang_marker')) {
+                    patlis_core_upsert_translation($key, patlis_core_manual_translation_lang_marker(), '');
                 }
             }
 
-            update_option(patlis_translations_option_name(), $clean, false);
-            $translations = $clean;
+            $translations = function_exists('patlis_get_translations') ? patlis_get_translations() : [];
 
             $redirect = admin_url('admin.php?page=patlis-translations&patlis_saved=1');
             if ($search !== '') $redirect = add_query_arg('s', urlencode($search), $redirect);
@@ -182,8 +156,10 @@ final class Patlis_Admin_Page_Translations
             <h1 style="display:flex;align-items:center;justify-content:space-between;">
                 <span><?php esc_html_e('Translations', 'patlis-core'); ?></span>
                 <?php if (current_user_can('manage_options')) : ?>
-                    <button id="patlis-add-translation-key" type="button" class="button button-secondary">Add New</button>
-                    <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;">Delete Key</button>
+                    <span>
+                        <button id="patlis-add-translation-key" type="button" class="button button-secondary">Add New</button>
+                        <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;">Delete Key</button>
+                    </span>
                 <?php endif; ?>
             </h1>
 
