@@ -10,6 +10,7 @@ final class Patlis_Admin_Settings {
       add_action('admin_post_patlis_save_notification_bar', [__CLASS__, 'handle_save_notification_bar']);
       add_action('admin_post_patlis_save_opening',           [__CLASS__, 'handle_save_opening']);
       add_action('admin_post_patlis_save_homepage',           [__CLASS__, 'handle_save_homepage']);
+      add_action('admin_post_patlis_save_white_label',        [__CLASS__, 'handle_save_white_label']);
     }
 
     public static function handle_save_social(): void {
@@ -107,6 +108,19 @@ final class Patlis_Admin_Settings {
       ]));
 
       wp_safe_redirect(admin_url('admin.php?page=patlis-homepage&patlis_saved=1'));
+      exit;
+    }
+
+    public static function handle_save_white_label(): void {
+      if (!current_user_can('manage_options')) { wp_die('Not allowed.'); }
+      check_admin_referer('patlis_save_white_label');
+
+      $raw = isset($_POST[Patlis_Core::OPTION_WHITE_LABEL]) ? wp_unslash($_POST[Patlis_Core::OPTION_WHITE_LABEL]) : [];
+      $clean = Patlis_Admin_Page_White_Label::sanitize($raw);
+
+      update_option(Patlis_Core::OPTION_WHITE_LABEL, $clean);
+
+      wp_safe_redirect(admin_url('admin.php?page=patlis-white-label&patlis_saved=1'));
       exit;
     }
 

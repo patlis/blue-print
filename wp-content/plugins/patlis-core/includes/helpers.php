@@ -31,6 +31,43 @@ function patlis_get_appearance_mode(): string
 }
 
 /**
+ * Get white label settings array.
+ */
+function patlis_get_white_label_option(): array
+{
+    $optionName = 'patlis_white_label';
+
+    if (class_exists('Patlis_Core') && defined('Patlis_Core::OPTION_WHITE_LABEL')) {
+        $optionName = constant('Patlis_Core::OPTION_WHITE_LABEL');
+    }
+
+    $opt = get_option($optionName, []);
+    return is_array($opt) ? $opt : [];
+}
+
+/**
+ * Helper: get reseller domain.
+ */
+function patlis_get_reseller_domain(): string
+{
+    $opt = patlis_get_white_label_option();
+    $domain = isset($opt['reseller_domain']) ? esc_url_raw((string) $opt['reseller_domain']) : '';
+
+    return $domain !== '' ? $domain : 'https://patlis.com';
+}
+
+/**
+ * Helper: get reseller company name.
+ */
+function patlis_get_reseller_company_name(): string
+{
+    $opt = patlis_get_white_label_option();
+    $name = isset($opt['reseller_company_name']) ? sanitize_text_field((string) $opt['reseller_company_name']) : '';
+
+    return $name !== '' ? $name : 'Patlis.com';
+}
+
+/**
  * Read formatting settings from basic.php (your keys).
  */
 function patlis_get_format_settings(): array
@@ -204,6 +241,8 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
 	$functions[] = 'patlis_transl';
 	$functions[] = 'patlis_is_local_video_url';
     $functions[] = 'patlis_bricks_appearance_mode';
+	$functions[] = 'patlis_get_reseller_domain';
+	$functions[] = 'patlis_get_reseller_company_name';
 	
     return array_unique($functions);
 });

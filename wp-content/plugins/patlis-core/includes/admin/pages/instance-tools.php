@@ -131,7 +131,7 @@ final class Patlis_Admin_Page_Instance_Tools
                     'count' => self::count_post_types(['kiosk_slide']),
                 ],
             ],
-            'Accomidation' => [
+            'Accommodation' => [
                 [
                     'label' => 'Delete rooms',
                     'count' => self::count_post_types(['patlis_room', 'room']),
@@ -169,21 +169,6 @@ final class Patlis_Admin_Page_Instance_Tools
                     'count' => self::count_post_types(['patlis_room_rate']),
                 ],
             ],
-            'Reset values' => [
-                ['label' => 'Basic settings'],
-                ['label' => 'Contact form'],
-                ['label' => 'Currency'],
-                ['label' => 'Social Media'],
-                ['label' => 'Opening times'],
-                ['label' => 'Center Pop up'],
-                ['label' => 'Notification Bar'],
-                ['label' => 'Home page settings'],
-                ['label' => 'Cookie Settings'],
-                ['label' => 'Menu options'],
-                ['label' => 'Reservation Settings'],
-                ['label' => 'Accommodation - Settings'],
-                ['label' => 'Kiosk Mode Settings'],
-            ],
         ];
     }
 
@@ -196,13 +181,7 @@ final class Patlis_Admin_Page_Instance_Tools
         $sections = self::definition();
         $nonce    = wp_create_nonce('patlis_instance_tool');
         ?>
-        <div class="wrap">
-            <h1><?php esc_html_e('Instance Tools', 'patlis-core'); ?></h1>
-
-            <p class="description">
-                <?php esc_html_e('Destructive actions. Each active button will ask for confirmation before executing.', 'patlis-core'); ?>
-            </p>
-
+        
             <style>
                 .patlis-instance-tools-grid {
                     display: grid;
@@ -267,6 +246,47 @@ final class Patlis_Admin_Page_Instance_Tools
                     pointer-events: none;
                 }
             </style>
+        <div class="wrap">
+            <h1><?php esc_html_e('Instance Tools', 'patlis-core'); ?></h1>
+
+            <h2>Steps for Installation: </h2>
+            <h3>aapanel</h3>
+            <ol>
+                <li>Wp Toolkit > Select site > Config > Config file > Copy the configuration file from dev (replace the dev.patlis.com with the appropriate domain)</li>
+                <li>Files > /www/wwwroot/site-domain > wp-config.php > Set: <b style="color: red;">PATLIS_VERSION</b></li>
+            </ol>
+            
+            <h3>Bricks</h3>
+            <ol>
+                <li>Settings > Custom code > Regenerate code signatures</li>
+                <li>Settings > Performance > Regenerate CSS files"</li>
+            </ol>
+
+            <h3>WordPress settings</h3>
+            <ol>
+                <li>Settings > General Settings > set: Site Title & Tagline</li>                
+                <li>Settings > General Settings > set: WordPress Address (URL) & Site Address (URL)</li>
+                <li>Settings > General Settings > Set: Time zone</li>
+                <li>Plugin Languages > Set: default language</li>
+                <li>Settings > Permalinks > Save (to flush rewrite rules)</li>  
+                <li>Plugin WP Mail SMTP: SMTP Username & Password</li>
+                <li>Appearance > Menus: Create the main menu with the required structure</li>
+                <li>Settings > MainWP Child: configure the child settings</li>
+                <li>Users > Add new: Create a user with <b style="color: red;">Site Owner</b> role for the client (and share credentials)</li>
+            </ol>
+            
+            <h3>Theme settings</h3>
+            <ol>
+                <li>Plugin Site settings >  Fill all the required fields</li>
+                <li>Plugin Site settings > Languages: Set Languages Visibility (only 2 by default)</li>
+                <li>Plugin Cookies: Set Google Tag Manager ID & GA4 if existing</li> 
+                <li>Plugin Reservations: Set the reservation settings (Gastro & Dining Version)</li> 
+                <li>Plugin Accommodation > Settings: Set the accommodation settings (Hotel version)</li>
+                <li>Plugin Kiosk Mode: Set the kiosk mode settings (kiosk version)</li>
+            </ol>
+
+
+            <h2 style="margin-top: 4em;">Database Cleanup Tools</h2>
 
             <div class="patlis-instance-tools-grid">
                 <?php foreach ($sections as $section_title => $actions) : ?>
@@ -288,9 +308,7 @@ final class Patlis_Admin_Page_Instance_Tools
                                     <?php endif; ?>
                                 >
                                     <span><?php echo esc_html((string) ($action['label'] ?? '')); ?></span>
-                                    <?php if ($section_title !== 'Reset values') : ?>
-                                        <span class="patlis-instance-tool-badge"><?php echo esc_html((string) ((int) ($action['count'] ?? 0))); ?></span>
-                                    <?php endif; ?>
+                                    <span class="patlis-instance-tool-badge"><?php echo esc_html((string) ((int) ($action['count'] ?? 0))); ?></span>
                                 </button>
                             <?php endforeach; ?>
                         </div>

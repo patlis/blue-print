@@ -194,6 +194,59 @@ function patlis_menu_items_save(int $post_id, WP_Post $post): void
     update_post_meta($post_id, 'pmi_carousel',   isset($_POST['pmi_carousel']) ? '1' : '0');
 }
 
+/* ------------------------------------------------------------
+ * Admin list filter: Menu Category (menu_section)
+ * ------------------------------------------------------------ */
+add_action('restrict_manage_posts', function (): void {
+    global $typenow;
+
+    if ($typenow !== 'menu_item') {
+        return;
+    }
+
+    $taxonomy = 'menu_section';
+    if (!taxonomy_exists($taxonomy)) {
+        return;
+    }
+
+    $selected = isset($_GET[$taxonomy]) ? absint($_GET[$taxonomy]) : 0;
+
+    wp_dropdown_categories([
+        'show_option_all' => __('All categories', 'patlis-menu'),
+        'taxonomy'        => $taxonomy,
+        'name'            => $taxonomy,
+        'orderby'         => 'name',
+        'hierarchical'    => true,
+        'hide_empty'      => false,
+        'selected'        => $selected,
+        'value_field'     => 'term_id',
+    ]);
+}, 10, 0);
+
+add_action('pre_get_posts', function (WP_Query $q): void {
+    if (!is_admin() || !$q->is_main_query()) {
+        return;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->id !== 'edit-menu_item') {
+        return;
+    }
+
+    $term_id = isset($_GET['menu_section']) ? absint($_GET['menu_section']) : 0;
+    if ($term_id <= 0) {
+        return;
+    }
+
+    $q->set('tax_query', [
+        [
+            'taxonomy' => 'menu_section',
+            'field'    => 'term_id',
+            'terms'    => [$term_id],
+        ],
+    ]);
+});
+
 function patlis_menu_sanitize_price($v): string
 {
     $v = is_string($v) ? trim($v) : '';

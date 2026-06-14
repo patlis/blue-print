@@ -88,6 +88,15 @@ final class Patlis_Admin_Menu {
       ['Patlis_Admin_Page_Instance_Tools', 'render']
     );
 
+    add_submenu_page(
+      'patlis-basic',
+      __('White label settings', 'patlis-core'),
+      __('White label settings', 'patlis-core'),
+      'manage_options',
+      'patlis-white-label',
+      ['Patlis_Admin_Page_White_Label', 'render']
+    );
+
     
   }
 }
