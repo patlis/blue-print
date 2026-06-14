@@ -253,6 +253,7 @@ add_filter('plugin_row_meta', function ($links, $file, $plugin_data) {
         'patlis-menu/patlis-menu.php',
         'patlis-reservations/patlis-reservations.php',
         'patlis-accommodation/patlis-accommodation.php',
+        'patlis-kiosk-mode/patlis-kiosk-mode.php',
     ];
 
     if (!in_array($file, $allowed, true)) {

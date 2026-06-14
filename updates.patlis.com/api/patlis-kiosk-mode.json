@@ -1,0 +1,27 @@
+{
+  "name": "Patlis Kiosk Mode",
+  "slug": "patlis-kiosk-mode",
+  "version": "1.0.12",
+  "download_url": "https://updates.patlis.com/downloads/patlis-kiosk-mode-1.0.12.zip",
+  "homepage": "https://patlis.com",
+  "author": "Patlis Ioannis",
+  "requires": "6.0",
+  "tested": "6.9.4",
+  "requires_php": "8.1",
+  "last_updated": "2026-06-14",
+  "sections": {
+    "description": "Kiosk mode module for Patlis sites.",
+    "installation": "<p>Upload and activate.</p>",
+    "changelog": "<h4>1.0.12</h4><ul><li>Added compatibility with the Patlis custom updater flow.</li></ul>",
+    "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>What does this plugin do?</h4><p>It provides kiosk mode behavior including slide display and inactivity redirect logic.</p><h4>Is this plugin required?</h4><p>Only for sites that use the kiosk feature set.</p><h4>Where can I configure kiosk behavior?</h4><p>Use the Kiosk Mode settings page in WordPress admin.</p>",
+    "screenshots": "<p>No screenshots yet.</p>"
+  },
+  "icons": {
+    "1x": "https://updates.patlis.com/assets/kiosk/patlis-kiosk-mode-128.png",
+    "2x": "https://updates.patlis.com/assets/kiosk/patlis-kiosk-mode-256.png"
+  },
+  "banners": {
+    "low": "https://updates.patlis.com/assets/kiosk/patlis-kiosk-mode-banner-772x250.png",
+    "high": "https://updates.patlis.com/assets/kiosk/patlis-kiosk-mode-banner-1544x500.png"
+  }
+}
