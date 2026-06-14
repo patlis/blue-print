@@ -36,6 +36,12 @@ final class Patlis_Admin_Page_Basic {
     if ($out['decimals'] < 0) $out['decimals'] = 0;
     if ($out['decimals'] > 2) $out['decimals'] = 2;
 
+    $allowed_appearance_modes = ['light_dark', 'light_only', 'dark_only'];
+    $out['appearance_mode'] = isset($in['appearance_mode']) ? sanitize_key((string) $in['appearance_mode']) : 'light_dark';
+    if (!in_array($out['appearance_mode'], $allowed_appearance_modes, true)) {
+      $out['appearance_mode'] = 'light_dark';
+    }
+
     return $out;
   }
 
@@ -52,6 +58,7 @@ final class Patlis_Admin_Page_Basic {
     $divider  = $opt['decimal_divider'] ?? ',';
     $pos      = $opt['currency_position'] ?? 'after';
     $decimals = isset($opt['decimals']) ? (int) $opt['decimals'] : 2;
+    $appearance_mode = isset($opt['appearance_mode']) ? (string) $opt['appearance_mode'] : 'light_dark';
     $logo_image_id = isset($opt['logo_image_id']) ? (int)$opt['logo_image_id'] : 0;
     $logo_preview = $logo_image_id > 0
       ? wp_get_attachment_image($logo_image_id, 'thumbnail', false, ['style' => 'max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;'])
@@ -73,6 +80,11 @@ final class Patlis_Admin_Page_Basic {
       'after_the_amount'         => __('After the amount', 'patlis-core'),
       'before_the_amount'        => __('Before the amount', 'patlis-core'),
       'decimals'                 => __('Decimals', 'patlis-core'),
+      'appearance'               => __('Appearance', 'patlis-core'),
+      'display_mode'             => __('Display mode', 'patlis-core'),
+      'appearance_light_dark'    => __('Light & Dark mode', 'patlis-core'),
+      'appearance_light_only'    => __('Light mode only', 'patlis-core'),
+      'appearance_dark_only'     => __('Dark mode only', 'patlis-core'),
     ];
 
     ?>
@@ -104,6 +116,7 @@ final class Patlis_Admin_Page_Basic {
           <a href="#" class="nav-tab nav-tab-active" data-tab="basic"><?php echo esc_html($labels['basic']); ?></a>
           <a href="#" class="nav-tab" data-tab="contact"><?php echo esc_html($labels['contact_form']); ?></a>
           <a href="#" class="nav-tab" data-tab="currency"><?php echo esc_html($labels['currency']); ?></a>
+          <a href="#" class="nav-tab" data-tab="appearance"><?php echo esc_html($labels['appearance']); ?></a>
         </nav>
 
         <div class="patlis-basic-tabs-panels">
@@ -302,6 +315,22 @@ final class Patlis_Admin_Page_Basic {
                     <option value="0" <?php selected($decimals, 0); ?>>0</option>
                     <option value="1" <?php selected($decimals, 1); ?>>1</option>
                     <option value="2" <?php selected($decimals, 2); ?>>2</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="patlis-basic-tab-panel" data-panel="appearance">
+            <table class="form-table" role="presentation">
+              <tr>
+                <th scope="row"><label for="patlis_appearance_mode"><?php echo esc_html($labels['display_mode']); ?></label></th>
+                <td>
+                  <select id="patlis_appearance_mode"
+                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[appearance_mode]">
+                    <option value="light_dark" <?php selected($appearance_mode, 'light_dark'); ?>><?php echo esc_html($labels['appearance_light_dark']); ?></option>
+                    <option value="light_only" <?php selected($appearance_mode, 'light_only'); ?>><?php echo esc_html($labels['appearance_light_only']); ?></option>
+                    <option value="dark_only" <?php selected($appearance_mode, 'dark_only'); ?>><?php echo esc_html($labels['appearance_dark_only']); ?></option>
                   </select>
                 </td>
               </tr>

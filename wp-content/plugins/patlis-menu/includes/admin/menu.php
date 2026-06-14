@@ -56,6 +56,15 @@ function patlis_menu_admin_menu(): void
         'edit.php?post_type=menu_pdf',
         null
     );
+
+    add_submenu_page(
+        $parent_slug,
+        'Bulk Edit Menu Items',
+        'Bulk Edit',
+        'manage_options',
+        Patlis_Menu_Admin_Bulk_Edit::SLUG,
+        ['Patlis_Menu_Admin_Bulk_Edit', 'render_page']
+    );
 }
 
 /**

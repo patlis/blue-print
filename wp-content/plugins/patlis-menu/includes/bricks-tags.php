@@ -233,13 +233,13 @@ function patlis_menu_bricks_get_value(string $tag, $post = null, $context = null
         if ($tag === 'patlis_menu_cat_sort')        return patlis_menu_term_meta($tid, 'pmc_sort');
 
         if ($tag === 'patlis_menu_cat_image_id') {
-            $id = get_term_meta($tid, 'pmc_image_id', true);
-            return $id ? (string) $id : '';
+            $id = patlis_menu_term_image_id($tid);
+            return $id > 0 ? (string) $id : '';
         }
 
         if ($tag === 'patlis_menu_cat_image_url') {
-            $id = get_term_meta($tid, 'pmc_image_id', true);
-            if (!$id) return '';
+            $id = patlis_menu_term_image_id($tid);
+            if ($id <= 0) return '';
             $url = wp_get_attachment_image_url($id, 'full');
             return $url ? (string) $url : '';
         }
@@ -354,6 +354,39 @@ function patlis_menu_term_meta($tid, $key)
     return is_scalar($v) ? (string) $v : '';
 }
 
+/**
+ * Resolve menu_section image id with default-language priority.
+ * This avoids translated-term drift and keeps section images consistent.
+ */
+function patlis_menu_term_image_id(int $term_id): int
+{
+    if ($term_id <= 0) {
+        return 0;
+    }
+
+    // Primary source: current term (same context as title/items).
+    $id = (int) get_term_meta($term_id, 'pmc_image_id', true);
+    if ($id > 0) {
+        return $id;
+    }
+
+    // Fallback source: default-language sibling term.
+    if (function_exists('pll_default_language') && function_exists('pll_get_term')) {
+        $default_lang = pll_default_language('slug');
+        if (is_string($default_lang) && $default_lang !== '') {
+            $default_term_id = (int) pll_get_term($term_id, $default_lang);
+            if ($default_term_id > 0 && $default_term_id !== $term_id) {
+                $fallback_id = (int) get_term_meta($default_term_id, 'pmc_image_id', true);
+                if ($fallback_id > 0) {
+                    return $fallback_id;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
 function patlis_menu_resolve_post_context($obj)
 {
     if ($obj instanceof WP_Post) return $obj;
@@ -366,35 +399,17 @@ function patlis_menu_resolve_term_context($obj)
     // 1. Direct Term Object
     if ($obj instanceof WP_Term) return $obj;
 
-    // 2. Correct Bricks API Check
+    // 1b. Common structured context payloads
+    if (is_object($obj) && isset($obj->term_id)) return get_term((int) $obj->term_id);
+    if (is_array($obj) && isset($obj['term_id'])) return get_term((int) $obj['term_id']);
+
+    // 3. Bricks loop object: use only real term contexts.
+    // Do NOT infer from WP_Post here (nested item loops can leak wrong category context).
     if (class_exists('\Bricks\Query')) {
         $loop_obj = \Bricks\Query::get_loop_object();
 
         if ($loop_obj instanceof WP_Term) return $loop_obj;
-
-        if ($loop_obj instanceof WP_Post) {
-            $terms = get_the_terms($loop_obj->ID, 'menu_section');
-            if (!is_wp_error($terms) && !empty($terms)) return $terms[0];
-        }
     }
-
-    // 3. Global Loop Object Fallback
-    global $bricks_loop_object;
-    if ($bricks_loop_object instanceof WP_Term) return $bricks_loop_object;
-
-    // 4. Input Object Fallbacks
-    if (is_object($obj) && isset($obj->term_id)) return get_term($obj->term_id);
-    if (is_array($obj) && isset($obj['term_id'])) return get_term($obj['term_id']);
-
-    // 5. Fallback if $obj is a Post
-    if ($obj instanceof WP_Post) {
-        $terms = get_the_terms($obj->ID, 'menu_section');
-        if (!is_wp_error($terms) && !empty($terms)) return $terms[0];
-    }
-
-    // 6. Queried Object
-    $qo = get_queried_object();
-    if ($qo instanceof WP_Term) return $qo;
 
     return null;
 }

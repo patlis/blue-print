@@ -17,6 +17,20 @@ function patlis_get_basic_option(): array
 }
 
 /**
+ * Get appearance mode from basic settings.
+ * Returns one of: light_dark, light_only, dark_only.
+ */
+function patlis_get_appearance_mode(): string
+{
+    $opt = patlis_get_basic_option();
+
+    $mode = isset($opt['appearance_mode']) ? sanitize_key((string) $opt['appearance_mode']) : 'light_dark';
+    $allowed = ['light_dark', 'light_only', 'dark_only'];
+
+    return in_array($mode, $allowed, true) ? $mode : 'light_dark';
+}
+
+/**
  * Read formatting settings from basic.php (your keys).
  */
 function patlis_get_format_settings(): array
@@ -165,6 +179,14 @@ function patlis_bricks_number(string $dynamicTag): string
 }
 
 /**
+ * Usage in Bricks: {echo:patlis_bricks_appearance_mode()}
+ */
+function patlis_bricks_appearance_mode(): string
+{
+    return patlis_get_appearance_mode();
+}
+
+/**
  * Allow wrappers in Bricks {echo:...}
  */
 add_filter('bricks/code/echo_function_names', function ($functions) {
@@ -181,6 +203,7 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
  	$functions[] = 'patlis_bricks_home_url';
 	$functions[] = 'patlis_transl';
 	$functions[] = 'patlis_is_local_video_url';
+    $functions[] = 'patlis_bricks_appearance_mode';
 	
     return array_unique($functions);
 });
@@ -362,3 +385,46 @@ function patlis_filter_body_classes(array $classes): array
 
     return $classes;
 }
+
+/**
+ * Enforce appearance mode on frontend when mode is locked.
+ * This keeps Bricks dark-mode class and localStorage value in sync.
+ */
+function patlis_output_appearance_mode_lock_script(): void
+{
+        if (is_admin()) {
+                return;
+        }
+
+        $mode = patlis_get_appearance_mode();
+        if ($mode !== 'dark_only' && $mode !== 'light_only') {
+                return;
+        }
+
+        $force_dark = $mode === 'dark_only' ? 'true' : 'false';
+        ?>
+        <script>
+            (function () {
+                var forceDark = <?php echo $force_dark; ?>;
+
+                function applyLockedMode() {
+                    var root = document.documentElement;
+                    if (!root) return;
+
+                    root.setAttribute('data-brx-theme', forceDark ? 'dark' : 'light');
+
+                    try {
+                        localStorage.setItem('darkMode', forceDark ? 'true' : 'false');
+                    } catch (e) {
+                        // Ignore storage failures (private mode, blocked storage, etc.)
+                    }
+                }
+
+                // Run immediately to reduce flash and run again after DOM is ready.
+                applyLockedMode();
+                document.addEventListener('DOMContentLoaded', applyLockedMode, { once: true });
+            })();
+        </script>
+        <?php
+}
+add_action('wp_head', 'patlis_output_appearance_mode_lock_script', 1);

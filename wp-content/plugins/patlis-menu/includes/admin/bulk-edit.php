@@ -5,23 +5,6 @@ final class Patlis_Menu_Admin_Bulk_Edit
 {
 	public const SLUG = 'patlis-menu-bulk-edit';
 
-	public static function init(): void
-	{
-		add_action('admin_menu', [__CLASS__, 'register_submenu'], 30);
-	}
-
-	public static function register_submenu(): void
-	{
-		add_submenu_page(
-			'patlis-menu',
-			'Bulk Edit Menu Items',
-			'Bulk Edit',
-			'manage_options',
-			self::SLUG,
-			[__CLASS__, 'render_page']
-		);
-	}
-
 	public static function render_page(): void
 	{
 		if (!current_user_can('manage_options')) {
@@ -422,5 +405,3 @@ final class Patlis_Menu_Admin_Bulk_Edit
 		return $post_lang === $default_lang;
 	}
 }
-
-Patlis_Menu_Admin_Bulk_Edit::init();

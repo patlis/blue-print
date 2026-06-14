@@ -79,6 +79,15 @@ final class Patlis_Admin_Menu {
       ['Patlis_Admin_Page_Homepage', 'render']
     );
 
+    add_submenu_page(
+      'patlis-basic',
+      __('Instance Tools', 'patlis-core'),
+      __('Instance Tools', 'patlis-core'),
+      'manage_options',
+      'patlis-instance-tools',
+      ['Patlis_Admin_Page_Instance_Tools', 'render']
+    );
+
     
   }
 }

@@ -1,0 +1,99 @@
+# Replace xxx.patlis.com with  new domain
+
+
+server
+{
+    listen 80;
+    server_name xxx.patlis.com;
+    index index.php index.html index.htm default.php default.htm default.html;
+    root /www/wwwroot/xxx.patlis.com;
+
+    # Extra custom configs from aaPanel
+    include /www/server/panel/vhost/nginx/extension/xxx.patlis.com/*.conf;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1000;
+    gzip_comp_level 5;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/javascript
+        application/json
+        application/xml
+        application/xml+rss
+        image/svg+xml;
+    gzip_disable "msie6";
+
+    #SSL-START SSL related configuration, do NOT delete or modify the next line of commented-out 404 rules
+    #error_page 404/404.html;
+    #SSL-END
+
+    #ERROR-PAGE-START  Error page configuration, allowed to be commented, deleted or modified
+    #error_page 404 /404.html;
+    error_page 502 /502.html;
+    #ERROR-PAGE-END
+
+    #PHP-INFO-START  PHP reference configuration, allowed to be commented, deleted or modified
+    include enable-php-83-wpfastcgi.conf;
+    #PHP-INFO-END
+
+    #REWRITE-START URL rewrite rule reference, any modification will invalidate the rewrite rules set by the panel
+    include /www/server/panel/vhost/rewrite/xxx.patlis.com.conf;
+    #REWRITE-END
+
+    # Block xmlrpc.php
+    location = /xmlrpc.php {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # Forbidden files or directories
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md)
+    {
+        return 404;
+    }
+
+    # Directory verification related settings for one-click application for SSL certificate
+    location ~ \.well-known
+    {
+        allow all;
+    }
+
+    # Prohibit putting sensitive files in certificate verification directory
+    if ( $uri ~ "^/\.well-known/.*\.(php|jsp|py|js|css|lua|ts|go|zip|tar\.gz|rar|7z|sql|bak)$" ) {
+        return 403;
+    }
+
+    # Static files cache
+    location ~* \.(js|css)$
+    {
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000, immutable";
+        error_log /dev/null;
+        access_log /dev/null;
+    }
+
+    location ~* \.(png|jpg|jpeg|gif|bmp|swf|webp|avif|svg|ico)$
+    {
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000, immutable";
+        error_log /dev/null;
+        access_log /dev/null;
+    }
+
+    location ~* \.(woff|woff2|ttf|otf|eot)$
+    {
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000, immutable";
+        error_log /dev/null;
+        access_log /dev/null;
+    }
+
+    access_log  /www/wwwlogs/xxx.patlis.com.log;
+    error_log   /www/wwwlogs/xxx.patlis.com.error.log;
+}

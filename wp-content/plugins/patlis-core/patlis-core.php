@@ -43,6 +43,7 @@ if (is_admin()) {
     require_once PATLIS_CORE_PATH . 'includes/admin/pages/opening-times.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/translations.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/homepage.php';
+    require_once PATLIS_CORE_PATH . '/includes/admin/pages/instance-tools.php';
     
     require_once PATLIS_CORE_PATH . '/includes/editor-restrictions.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/admin-columns.php';

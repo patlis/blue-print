@@ -353,7 +353,6 @@ if (!function_exists('patlis_get_fallback_term_ids')) {
         $term_args = [
             'taxonomy'   => $taxonomy,
             'hide_empty' => false,
-            'fields'     => 'ids',
             'lang'       => $default_lang,
         ];
 
@@ -387,10 +386,33 @@ if (!function_exists('patlis_get_fallback_term_ids')) {
             return [];
         }
 
+        // Stabilize ordering when multiple terms share the same numeric sort value.
+        if (($term_args['orderby'] ?? '') === 'meta_value_num' && ($term_args['meta_key'] ?? '') === 'pmc_sort') {
+            usort($default_terms, static function ($a, $b): int {
+                if (!($a instanceof WP_Term) || !($b instanceof WP_Term)) {
+                    return 0;
+                }
+
+                $a_sort = (int) get_term_meta((int) $a->term_id, 'pmc_sort', true);
+                $b_sort = (int) get_term_meta((int) $b->term_id, 'pmc_sort', true);
+
+                if ($a_sort !== $b_sort) {
+                    return $a_sort <=> $b_sort;
+                }
+
+                $name_cmp = strnatcasecmp((string) $a->name, (string) $b->name);
+                if ($name_cmp !== 0) {
+                    return $name_cmp;
+                }
+
+                return (int) $a->term_id <=> (int) $b->term_id;
+            });
+        }
+
         $final_ids = [];
 
-        foreach ($default_terms as $term_id) {
-            $term_id = (int) $term_id;
+        foreach ($default_terms as $term) {
+            $term_id = $term instanceof WP_Term ? (int) $term->term_id : (int) $term;
 
             if ($term_id <= 0) {
                 continue;

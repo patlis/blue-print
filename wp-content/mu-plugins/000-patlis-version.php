@@ -141,6 +141,7 @@ function patlis_version_get_page_template_term_map(): array {
             'reviews',
             'services',
             'text-pages',
+            'slider-section',
         ],
         'gastro' => [
             'menu',
@@ -153,7 +154,7 @@ function patlis_version_get_page_template_term_map(): array {
             'reservation',
         ],
         'hotel' => [
-            'booking',
+            'room-booking',
             'rooms',
             'top-rooms-section',
             'offers-packages',
