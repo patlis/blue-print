@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Menu
  * Description: Menu module for gastro/dining sites.
- * Version: 0.1.2
+ * Version: 0.1.0
  * Author: Patlis Ioannis
  * Text Domain: patlis-menu
  * Update URI: https://updates.patlis.com/patlis-menu/
