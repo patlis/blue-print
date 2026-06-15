@@ -103,12 +103,20 @@ function patlis_core_maybe_install_translations_table(): void
 
 function patlis_core_translation_storage_ready(): bool
 {
+    static $storage_ready = null;
+
+    if (is_bool($storage_ready)) {
+        return $storage_ready;
+    }
+
     global $wpdb;
 
     $table_name = patlis_core_translations_table_name();
     $found      = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table_name));
 
-    return is_string($found) && $found === $table_name;
+    $storage_ready = is_string($found) && $found === $table_name;
+
+    return $storage_ready;
 }
 
 function patlis_core_get_translation_keys_from_db(): array
@@ -136,6 +144,12 @@ function patlis_core_get_translation_keys_from_db(): array
 
 function patlis_core_get_translations_from_db(): array
 {
+    static $translations_cache = null;
+
+    if (is_array($translations_cache)) {
+        return $translations_cache;
+    }
+
     global $wpdb;
 
     if (!patlis_core_translation_storage_ready()) {
@@ -163,7 +177,9 @@ function patlis_core_get_translations_from_db(): array
         $translations[$key][$lang] = $value;
     }
 
-    return $translations;
+    $translations_cache = $translations;
+
+    return $translations_cache;
 }
 
 function patlis_core_get_translation_value(string $key, string $lang): string

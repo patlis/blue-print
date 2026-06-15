@@ -75,8 +75,15 @@ function patlis_get_manual_translation_keys(): array
 
 function patlis_get_translations(): array
 {
+    static $translations_cache = null;
+
+    if (is_array($translations_cache)) {
+        return $translations_cache;
+    }
+
     if (function_exists('patlis_core_get_translations_from_db')) {
-        return patlis_core_get_translations_from_db();
+        $translations_cache = patlis_core_get_translations_from_db();
+        return is_array($translations_cache) ? $translations_cache : [];
     }
 
     return [];

@@ -42,6 +42,10 @@ final class Patlis_Admin_Page_Basic {
       $out['appearance_mode'] = 'light_dark';
     }
 
+    $out['show_legal_notice']   = !empty($in['show_legal_notice'])   ? 1 : 0;
+    $out['show_privacy_policy'] = !empty($in['show_privacy_policy']) ? 1 : 0;
+    $out['show_terms_of_use']   = !empty($in['show_terms_of_use'])   ? 1 : 0;
+
     return $out;
   }
 
@@ -85,6 +89,10 @@ final class Patlis_Admin_Page_Basic {
       'appearance_light_dark'    => __('Light & Dark mode', 'patlis-core'),
       'appearance_light_only'    => __('Light mode only', 'patlis-core'),
       'appearance_dark_only'     => __('Dark mode only', 'patlis-core'),
+      'legal_links'              => __('Legal Links', 'patlis-core'),
+      'show_legal_notice'        => __('Show Legal Notice page', 'patlis-core'),
+      'show_privacy_policy'      => __('Show Privacy Policy page', 'patlis-core'),
+      'show_terms_of_use'        => __('Show Terms of Use page', 'patlis-core'),
     ];
 
     ?>
@@ -117,6 +125,7 @@ final class Patlis_Admin_Page_Basic {
           <a href="#" class="nav-tab" data-tab="contact"><?php echo esc_html($labels['contact_form']); ?></a>
           <a href="#" class="nav-tab" data-tab="currency"><?php echo esc_html($labels['currency']); ?></a>
           <a href="#" class="nav-tab" data-tab="appearance"><?php echo esc_html($labels['appearance']); ?></a>
+          <a href="#" class="nav-tab" data-tab="legal"><?php echo esc_html($labels['legal_links']); ?></a>
         </nav>
 
         <div class="patlis-basic-tabs-panels">
@@ -332,6 +341,43 @@ final class Patlis_Admin_Page_Basic {
                     <option value="light_only" <?php selected($appearance_mode, 'light_only'); ?>><?php echo esc_html($labels['appearance_light_only']); ?></option>
                     <option value="dark_only" <?php selected($appearance_mode, 'dark_only'); ?>><?php echo esc_html($labels['appearance_dark_only']); ?></option>
                   </select>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="patlis-basic-tab-panel" data-panel="legal">
+            <table class="form-table" role="presentation">
+              <tr>
+                <th scope="row"><?php echo esc_html($labels['show_legal_notice']); ?></th>
+                <td>
+                  <label>
+                    <input type="checkbox"
+                      name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[show_legal_notice]"
+                      value="1" <?php checked(!array_key_exists('show_legal_notice', $opt) || !empty($opt['show_legal_notice'])); ?>
+                  </label>
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row"><?php echo esc_html($labels['show_privacy_policy']); ?></th>
+                <td>
+                  <label>
+                    <input type="checkbox"
+                      name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[show_privacy_policy]"
+                      value="1" <?php checked(!array_key_exists('show_privacy_policy', $opt) || !empty($opt['show_privacy_policy'])); ?>
+                  </label>
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row"><?php echo esc_html($labels['show_terms_of_use']); ?></th>
+                <td>
+                  <label>
+                    <input type="checkbox"
+                      name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[show_terms_of_use]"
+                      value="1" <?php checked(!empty($opt['show_terms_of_use'])); ?>>
+                  </label>
                 </td>
               </tr>
             </table>

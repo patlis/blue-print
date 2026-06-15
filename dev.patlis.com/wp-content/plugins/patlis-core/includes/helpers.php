@@ -68,6 +68,33 @@ function patlis_get_reseller_company_name(): string
 }
 
 /**
+ * Helper: show legal notice (default: true).
+ */
+function patlis_show_legal_notice(): bool
+{
+    $opt = patlis_get_basic_option();
+    return !isset($opt['show_legal_notice']) || !empty($opt['show_legal_notice']);
+}
+
+/**
+ * Helper: show privacy policy (default: true).
+ */
+function patlis_show_privacy_policy(): bool
+{
+    $opt = patlis_get_basic_option();
+    return !isset($opt['show_privacy_policy']) || !empty($opt['show_privacy_policy']);
+}
+
+/**
+ * Helper: show terms of use (default: false).
+ */
+function patlis_show_terms_of_use(): bool
+{
+    $opt = patlis_get_basic_option();
+    return !empty($opt['show_terms_of_use']);
+}
+
+/**
  * Read formatting settings from basic.php (your keys).
  */
 function patlis_get_format_settings(): array
@@ -243,6 +270,10 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
     $functions[] = 'patlis_bricks_appearance_mode';
 	$functions[] = 'patlis_get_reseller_domain';
 	$functions[] = 'patlis_get_reseller_company_name';
+	$functions[] = 'patlis_show_legal_notice';
+	$functions[] = 'patlis_show_privacy_policy';
+	$functions[] = 'patlis_show_terms_of_use';
+	$functions[] = 'patlis_cookies_is_banner_enabled';
 	
     return array_unique($functions);
 });
