@@ -878,9 +878,9 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
 });
 
 /**
- * Converts a YouTube or Vimeo watch URL to its embed URL. Local URLs unchanged.
- * YouTube: youtube.com/watch?v=ID or youtu.be/ID → youtube.com/embed/ID
- * Vimeo:   vimeo.com/ID                          → player.vimeo.com/video/ID
+ * Converts a video watch URL to its embeddable URL.
+ * Supports: YouTube, Vimeo. Other URLs are returned as-is.
+ * Local URLs are returned unchanged.
  * Usage: {echo:patlis_video_embed_url({patlis_acc_room_video_url})}
  */
 function patlis_video_embed_url(string $url): string
@@ -890,6 +890,7 @@ function patlis_video_embed_url(string $url): string
         return '';
     }
 
+    // YouTube
     if (preg_match('~(?:youtube\.com/watch\?.*v=|youtu\.be/)([a-zA-Z0-9_\-]{11})~', $url, $m)) {
         $parsed = wp_parse_url($url);
         $query  = [];
@@ -907,6 +908,7 @@ function patlis_video_embed_url(string $url): string
         return $embed;
     }
 
+    // Vimeo
     if (preg_match('~vimeo\.com/(\d+)~', $url, $m)) {
         return 'https://player.vimeo.com/video/' . $m[1];
     }

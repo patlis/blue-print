@@ -24,6 +24,8 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_company_name}',      'label' => esc_html__('Company name', 'patlis-core'),            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => esc_html__('Logo image URL', 'patlis-core'),          'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => esc_html__('CTA background image URL', 'patlis-core'), 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_home_video_url}',    'label' => esc_html__('Home welcome video URL', 'patlis-core'),   'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_icon_tag:leaf-solid}', 'label' => esc_html__('Icon URL by name (SVG)', 'patlis-core'), 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_address}',           'label' => esc_html__('Address', 'patlis-core'),                 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_city}',              'label' => esc_html__('City', 'patlis-core'),                    'group' => $group_basic];
   $tags[] = ['name' => '{patlis_zip}',               'label' => esc_html__('Zip', 'patlis-core'),                     'group' => $group_basic];
@@ -98,6 +100,34 @@ add_filter('bricks/frontend/render_data', function($content, $post) {
   return patlis_render_dynamic_tags_in_content($content, $post);
 }, 20, 2);
 
+function patlis_icon_tag_build_svg_html(string $icon_name): string {
+  $icon_name = sanitize_file_name($icon_name);
+  if ($icon_name === '') {
+    return '';
+  }
+
+  $file = PATLIS_CORE_PATH . 'assets/svg/' . $icon_name . '.svg';
+  if (!file_exists($file)) {
+    return '';
+  }
+
+  $svg_content = file_get_contents($file);
+  if (!$svg_content) {
+    return '';
+  }
+
+  $svg_content = preg_replace('/<\?xml.*?\?>/is', '', $svg_content);
+  $svg_content = preg_replace('/<!DOCTYPE.*?>/is', '', $svg_content);
+  $svg_content = preg_replace('/<!--(.*?)-->/s', '', $svg_content);
+  $svg_content = trim((string) $svg_content);
+
+  if (!preg_match('/<svg\b[^>]*>.*?<\/svg>/is', $svg_content)) {
+    return '';
+  }
+
+  return $svg_content;
+}
+
 
 function patlis_render_dynamic_tags_in_content($content, $post = null) {
   if (!is_string($content) || strpos($content, '{patlis_') === false) {
@@ -163,7 +193,7 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     'patlis_bar_end_date'   => 'end_date',
   ];
 
-  return preg_replace_callback('/{(patlis_[a-z0-9_]+(?::[a-z0-9_]+)?)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
+  return preg_replace_callback('/{(patlis_[a-z0-9_]+(?::[a-z0-9_-]+)?)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
 
     $tag = $m[1];
     $tag_parts = explode(':', $tag, 2);
@@ -257,6 +287,13 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       return wp_json_encode(patlis_gallery_get_home_items());
     }
 
+    if ($tag_base === 'patlis_icon_tag') {
+      if ($tag_arg === '') {
+        return '';
+      }
+      return patlis_icon_tag_build_svg_html($tag_arg);
+    }
+
     // BASIC
     if ($tag === 'patlis_logo_image_url') {
       $id = (int) Patlis_Core::get_basic('logo_image_id', 0);
@@ -269,6 +306,16 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       $id  = isset($opt['cta_bg_image_id']) ? (int)$opt['cta_bg_image_id'] : 0;
       $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : '';
       return is_string($url) ? $url : '';
+    }
+
+    if ($tag === 'patlis_home_video_url') {
+      if (function_exists('patlis_get_welcome_video_url')) {
+        return (string) patlis_get_welcome_video_url();
+      }
+
+      $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+      $url = isset($opt['welcome_video_url']) ? (string) $opt['welcome_video_url'] : '';
+      return esc_url_raw($url);
     }
 
     if ($tag === 'patlis_reviews_featured_count') {
@@ -593,6 +640,8 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (
     $base !== 'patlis_logo_image_url' &&
     $base !== 'patlis_cta_bg_image_url' &&
+    $base !== 'patlis_home_video_url' &&
+    $base !== 'patlis_icon_tag' &&
     $base !== 'patlis_events_gallery_json' &&
     $base !== 'patlis_services_gallery_json' &&
     $base !== 'patlis_gallery_json' &&
@@ -686,6 +735,31 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $ctaBgUrl = $ctaBgId > 0 ? wp_get_attachment_image_url($ctaBgId, 'full') : '';
     if ($context === 'image') return $ctaBgUrl ? [$ctaBgUrl] : [];
     return $ctaBgUrl ?: '';
+  }
+
+  // BASIC: Home welcome video URL
+  if ($base === 'patlis_home_video_url') {
+    $url = function_exists('patlis_get_welcome_video_url') ? (string) patlis_get_welcome_video_url() : '';
+    return $url;
+  }
+
+  // BASIC: Icon URL from icon name
+  if ($base === 'patlis_icon_tag') {
+    $icon_name = sanitize_file_name($arg);
+    if ($icon_name === '') {
+      return '';
+    }
+
+    $file = PATLIS_CORE_PATH . 'assets/svg/' . $icon_name . '.svg';
+    if (!file_exists($file)) {
+      return '';
+    }
+
+    if ($context === 'image') {
+      return [esc_url(PATLIS_CORE_URL . 'assets/svg/' . $icon_name . '.svg')];
+    }
+
+    return patlis_icon_tag_build_svg_html($icon_name);
   }
 
   // NOTIFICATION BAR

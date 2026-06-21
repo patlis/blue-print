@@ -96,15 +96,17 @@ final class Patlis_Admin_Settings {
         }
       }
 
-      $cta_bg_image_id = isset($_POST['patlis_cta_bg_image_id']) ? max(0, (int) $_POST['patlis_cta_bg_image_id']) : 0;
+      $cta_bg_image_id   = isset($_POST['patlis_cta_bg_image_id']) ? max(0, (int) $_POST['patlis_cta_bg_image_id']) : 0;
+      $welcome_video_url = isset($_POST['patlis_welcome_video_url']) ? esc_url_raw(wp_unslash((string) $_POST['patlis_welcome_video_url'])) : '';
 
       // Preserve existing option values, only update what we manage
       $existing = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
       if (!is_array($existing)) $existing = [];
 
       update_option(Patlis_Core::OPTION_HOMEPAGE, array_merge($existing, [
-        'sections_order'  => $clean,
-        'cta_bg_image_id' => $cta_bg_image_id,
+        'sections_order'    => $clean,
+        'cta_bg_image_id'   => $cta_bg_image_id,
+        'welcome_video_url' => $welcome_video_url,
       ]));
 
       wp_safe_redirect(admin_url('admin.php?page=patlis-homepage&patlis_saved=1'));

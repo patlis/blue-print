@@ -21,9 +21,17 @@ define('PATLIS_KIOSK_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PATLIS_KIOSK_ASSETS_URL', PATLIS_KIOSK_PLUGIN_URL . 'assets/');
 define('PATLIS_KIOSK_INCLUDES_DIR', PATLIS_KIOSK_PLUGIN_DIR . 'includes/');
 
-// Updater
+// Updater — πριν το gating ωστε να ελεγχει updates παντα
 if (function_exists('patlis_register_plugin_updater')) {
     patlis_register_plugin_updater(__FILE__, 'patlis-kiosk-mode', PATLIS_KIOSK_VERSION);
+}
+
+// Load only on kiosk version
+if (
+    !function_exists('patlis_version_has_kiosk') ||
+    !patlis_version_has_kiosk()
+) {
+    return;
 }
 
 // Include core functions

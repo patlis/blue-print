@@ -55,6 +55,8 @@ final class Patlis_Admin_Page_Homepage {
             ? wp_get_attachment_image($cta_bg_image_id, 'thumbnail', false, ['style' => 'max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;'])
             : '';
 
+        $welcome_video_url = isset($opt['welcome_video_url']) ? (string)$opt['welcome_video_url'] : '';
+
         wp_enqueue_media();
 
         $labels = self::labels();
@@ -82,6 +84,20 @@ final class Patlis_Admin_Page_Homepage {
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="patlis_save_homepage">
                 <?php wp_nonce_field('patlis_save_homepage'); ?>
+
+                <h2><?php esc_html_e('Welcome section video', 'patlis-core'); ?></h2>
+                <p class="description"><?php esc_html_e('If a video is set, it replaces the featured image in the Welcome section.', 'patlis-core'); ?></p>
+                <table class="form-table" role="presentation">
+                  <tr>
+                        <th scope="row"><label for="patlis_welcome_video_url"><?php esc_html_e('Video URL', 'patlis-core'); ?></label></th>
+                    <td>
+                        <div style="display:flex;gap:10px;align-items:center;">
+                            <input type="url" id="patlis_welcome_video_url" name="patlis_welcome_video_url" value="<?php echo esc_attr($welcome_video_url); ?>" class="regular-text" placeholder="https://example.com/video.mp4">
+                            <a href="#" class="button patlis-homepage-video-btn"><?php esc_html_e('Select Video', 'patlis-core'); ?></a>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
 
                 <h2><?php esc_html_e('CTA Background image', 'patlis-core'); ?></h2>
                 <table class="form-table" role="presentation">
@@ -220,6 +236,23 @@ final class Patlis_Admin_Page_Homepage {
                             setCtaBgImage(null);
                         });
                     }
+
+                    // Welcome video picker
+                    jQuery(document).on('click', '.patlis-homepage-video-btn', function(e) {
+                        e.preventDefault();
+                        var $input = jQuery('#patlis_welcome_video_url');
+                        var frame = wp.media({
+                            title: '<?php echo esc_js(__('Select welcome video', 'patlis-core')); ?>',
+                            button: { text: '<?php echo esc_js(__('Use this video', 'patlis-core')); ?>' },
+                            library: { type: 'video' },
+                            multiple: false
+                        });
+                        frame.on('select', function() {
+                            var att = frame.state().get('selection').first().toJSON();
+                            $input.val(att.url);
+                        });
+                        frame.open();
+                    });
                 })();
                 </script>
             </form>

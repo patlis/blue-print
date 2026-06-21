@@ -33,6 +33,73 @@ function patlis_get_appearance_mode(): string
 /**
  * Get white label settings array.
  */
+/**
+ * Get the welcome section video URL (media library takes priority over URL).
+ * Returns empty string if no video is set.
+ */
+function patlis_get_welcome_video_url(): string
+{
+    $opt = class_exists('Patlis_Core') ? get_option(Patlis_Core::OPTION_HOMEPAGE, []) : get_option('patlis_homepage', []);
+    if (!is_array($opt)) return '';
+    $url = isset($opt['welcome_video_url']) ? (string)$opt['welcome_video_url'] : '';
+    return esc_url_raw($url);
+}
+
+/**
+ * '1' if a welcome video URL is saved, '0' otherwise.
+ * Use: {echo:patlis_home_video_has_url()} == 1
+ */
+function patlis_home_video_has_url(): string
+{
+    return patlis_get_welcome_video_url() !== '' ? '1' : '0';
+}
+
+/**
+ * '1' if the welcome video is a local/uploaded file, '0' if external (YouTube, Vimeo…).
+ * Use: {echo:patlis_home_video_is_local()} == 1
+ */
+function patlis_home_video_is_local(): string
+{
+    $url = patlis_get_welcome_video_url();
+    if ($url === '') return '0';
+    return patlis_is_local_video_url($url);
+}
+
+/**
+ * Ready-to-render HTML for the welcome section video (no nesting needed).
+ * Use: {echo:patlis_home_video_html()}
+ */
+function patlis_home_video_html(): string
+{
+    $url = patlis_get_welcome_video_url();
+    if ($url === '' || !function_exists('patlis_video_html')) return '';
+    return patlis_video_html($url);
+}
+
+/**
+ * Version / active-plugin helpers — safe to use in Bricks echo conditions.
+ * Returns '1' (active) or '0' (inactive/not in version).
+ */
+function patlis_has_reservations(): string {
+    return function_exists('patlis_reservations_get_settings') ? '1' : '0';
+}
+
+function patlis_has_gastro(): string {
+    return (function_exists('patlis_version_has_gastro') && patlis_version_has_gastro()) ? '1' : '0';
+}
+
+function patlis_has_hotel(): string {
+    return (function_exists('patlis_version_has_hotel') && patlis_version_has_hotel()) ? '1' : '0';
+}
+
+function patlis_has_kiosk(): string {
+    return (function_exists('patlis_version_has_kiosk') && patlis_version_has_kiosk()) ? '1' : '0';
+}
+
+function patlis_has_dining(): string {
+    return (function_exists('patlis_version_has_dining') && patlis_version_has_dining()) ? '1' : '0';
+}
+
 function patlis_get_white_label_option(): array
 {
     $optionName = 'patlis_white_label';
@@ -267,6 +334,7 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
  	$functions[] = 'patlis_bricks_home_url';
 	$functions[] = 'patlis_transl';
 	$functions[] = 'patlis_is_local_video_url';
+    $functions[] = 'patlis_video_html';
     $functions[] = 'patlis_bricks_appearance_mode';
 	$functions[] = 'patlis_get_reseller_domain';
 	$functions[] = 'patlis_get_reseller_company_name';
@@ -274,6 +342,15 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
 	$functions[] = 'patlis_show_privacy_policy';
 	$functions[] = 'patlis_show_terms_of_use';
 	$functions[] = 'patlis_cookies_is_banner_enabled';
+	$functions[] = 'patlis_has_reservations';
+	$functions[] = 'patlis_get_welcome_video_url';
+	$functions[] = 'patlis_home_video_has_url';
+	$functions[] = 'patlis_home_video_is_local';
+	$functions[] = 'patlis_home_video_html';
+	$functions[] = 'patlis_has_gastro';
+	$functions[] = 'patlis_has_hotel';
+	$functions[] = 'patlis_has_kiosk';
+	$functions[] = 'patlis_has_dining';
 	
     return array_unique($functions);
 });
@@ -313,6 +390,66 @@ function patlis_is_local_video_url(string $url): string
     };
 
     return $normalize($url_host) === $normalize($site_host) ? '1' : '0';
+}
+
+if (!function_exists('patlis_video_embed_url')) {
+    /**
+     * Convert video URLs to embeddable URLs.
+     * Supports: YouTube, Vimeo. Other URLs are returned as-is.
+     */
+    function patlis_video_embed_url(string $url): string
+    {
+        $url = trim($url);
+        if ($url === '') {
+            return '';
+        }
+
+        // YouTube
+        if (preg_match('~(?:youtube\.com/watch\?.*v=|youtu\.be/)([A-Za-z0-9_-]{6,})~', $url, $m)) {
+            $embed = 'https://www.youtube.com/embed/' . $m[1];
+            $query = wp_parse_url($url, PHP_URL_QUERY);
+            parse_str(is_string($query) ? $query : '', $params);
+            if (!empty($params['t'])) {
+                $embed .= '?start=' . (int) $params['t'];
+            }
+            return $embed;
+        }
+
+        // Vimeo
+        if (preg_match('~vimeo\.com/(\d+)~', $url, $m)) {
+            return 'https://player.vimeo.com/video/' . $m[1];
+        }
+
+        return $url;
+    }
+}
+
+if (!function_exists('patlis_video_html')) {
+    /**
+     * Ready-to-render video HTML (local video tag or responsive iframe embed).
+     */
+    function patlis_video_html(string $url): string
+    {
+        $url = trim($url);
+        if ($url === '') {
+            return '';
+        }
+
+        if (patlis_is_local_video_url($url) === '1') {
+            return '<video controls style="width:100%;max-width:100%;" src="' . esc_attr($url) . '">'
+                . '<p>Your browser does not support the video tag.</p>'
+                . '</video>';
+        }
+
+        $embed = patlis_video_embed_url($url);
+
+        return '<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;" class="brxe-video">'
+            . '<iframe src="' . esc_attr($embed) . '" '
+            . 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" '
+            . 'allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin">'
+            . '</iframe>'
+            . '</div>';
+    }
 }
 
 /**

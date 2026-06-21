@@ -34,15 +34,19 @@ function get_marketing_cookie_value(): int
     $cookie_value = wp_unslash($_COOKIE['patlis-cookie']);
     $consent = json_decode($cookie_value, true);
 
-    if (!is_array($consent) || !array_key_exists('marketing', $consent)) {
+    if (!is_array($consent) || !array_key_exists('marketing', $consent) || !array_key_exists('statistics', $consent)) {
         return 0;
     }
 
-    if (is_bool($consent['marketing'])) {
-        return $consent['marketing'] ? 1 : 0;
-    }
+    $marketing = is_bool($consent['marketing'])
+        ? $consent['marketing']
+        : filter_var($consent['marketing'], FILTER_VALIDATE_BOOLEAN);
 
-    return filter_var($consent['marketing'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+    $statistics = is_bool($consent['statistics'])
+        ? $consent['statistics']
+        : filter_var($consent['statistics'], FILTER_VALIDATE_BOOLEAN);
+
+    return ($marketing && $statistics) ? 1 : 0;
 }
 
 add_action('init', function () {
@@ -64,7 +68,7 @@ function patlis_cookies_enqueue_assets() {
         PATLIS_COOKIES_URL . 'assets/cookies.js',
         [],
         filemtime(PATLIS_COOKIES_PATH . 'assets/cookies.js'),
-        false // load in head
+        true // load in footer
     );
 
     wp_enqueue_style(

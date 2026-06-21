@@ -249,3 +249,31 @@ main {min-height:50vh}
   }
 
   .tag {height: unset !important}
+
+ .pseudolink{
+  cursor: pointer;
+  color: var(--body-link);
+}
+.pseudolink:hover{
+  color: var(--body-hover);
+}
+
+.menu-centered-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: var(--space-s);
+}
+.bricks-link-wrapper:hover svg path {
+  fill: var(--body-hover) !important;
+}
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

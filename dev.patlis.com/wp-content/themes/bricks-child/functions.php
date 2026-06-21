@@ -46,17 +46,6 @@ add_action('init', function () {
 // Ensure multilingual fallback logic is loaded
 require_once get_theme_file_path('inc/multilingual.php');
 
-// Bricks local Font Awesome 6
-add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style(
-        'bricks-fa6-local',
-        get_template_directory_uri() . '/assets/css/libs/font-awesome-6.min.css',
-        [],
-        null
-    );
-
-}, 100);
-
 // date time picker 24 H 
 add_filter( 'bricks/element/form/datepicker_options', function( $options, $element ) {
     $options['time_24hr'] = true;
