@@ -306,6 +306,11 @@ function patlis_menu_bricks_get_value(string $tag, $post = null, $context = null
             return function_exists('patlis_format_number') ? patlis_format_number($raw) : $raw;
         }
 
+        if ($tag === 'patlis_menu_item_description') {
+            $raw = patlis_menu_post_meta($pid, 'pmi_description');
+            return nl2br($raw, false);
+        }
+
         $meta_map = [
             'itemnr' => 'pmi_itemnr', 'show' => 'pmi_show', 'sort' => 'pmi_sort',
             'price' => 'pmi_price', 'price2' => 'pmi_price2', 'price3' => 'pmi_price3',

@@ -15,7 +15,17 @@ $price1         = trim(bricks_render_dynamic_data('{patlis_menu_item_price_curre
 $price2         = trim(bricks_render_dynamic_data('{patlis_menu_item_price2_currency}'));
 $price3         = trim(bricks_render_dynamic_data('{patlis_menu_item_price3_currency}'));
 
-$desc           = trim(html_entity_decode(wp_strip_all_tags(bricks_render_dynamic_data('{patlis_menu_item_description}')), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+//$desc           = trim(html_entity_decode(wp_strip_all_tags(bricks_render_dynamic_data('{patlis_menu_item_description}')), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+  $desc = trim(wp_kses(
+    bricks_render_dynamic_data('{patlis_menu_item_description}'),
+    [
+        'br' => [],
+        'strong' => [],
+        'em' => [],
+        'b' => [],
+        'i' => [],
+    ]
+));
 $vegetarian     = trim(bricks_render_dynamic_data('{patlis_menu_item_vegetarian}'));
 $vegan          = trim(bricks_render_dynamic_data('{patlis_menu_item_vegan}'));
 $image_url      = trim(bricks_render_dynamic_data('{patlis_menu_item_image_url}'));
@@ -102,7 +112,7 @@ $show_line1 = ($itemnr !== '' || $title !== '' || $has_allergies);
 
   <?php if ($has_desc): ?>
     <div class="text-center">
-        <?php echo esc_html($desc); ?>
+        <span><?php echo $desc; ?></span>
     </div>
   <?php endif; ?>
 

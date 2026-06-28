@@ -319,7 +319,16 @@ final class Patlis_Menu_Admin_Import
 
     private static function sanitize_textarea(string $value): string
     {
-        return sanitize_textarea_field($value);
+        $allowed = [
+            'p' => [],
+            'b' => [],
+            'strong' => [],
+            'ul' => [],
+            'li' => [],
+            'br' => [],
+        ];
+
+        return wp_kses($value, $allowed);
     }
 
     private static function sanitize_price(string $value): string

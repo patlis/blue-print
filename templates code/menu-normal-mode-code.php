@@ -11,7 +11,17 @@
   $price1         = trim(bricks_render_dynamic_data('{patlis_menu_item_price_currency}'));
   $price2         = trim(bricks_render_dynamic_data('{patlis_menu_item_price2_currency}'));
   $price3         = trim(bricks_render_dynamic_data('{patlis_menu_item_price3_currency}'));
-  $desc           = trim(html_entity_decode(wp_strip_all_tags(bricks_render_dynamic_data('{patlis_menu_item_description}')), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+  //$desc           = trim(html_entity_decode(wp_strip_all_tags(bricks_render_dynamic_data('{patlis_menu_item_description}')), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+  $desc = trim(wp_kses(
+    bricks_render_dynamic_data('{patlis_menu_item_description}'),
+    [
+        'br' => [],
+        'strong' => [],
+        'em' => [],
+        'b' => [],
+        'i' => [],
+    ]
+));
   $vegetarian     = trim(bricks_render_dynamic_data('{patlis_menu_item_vegetarian}'));
   $vegan          = trim(bricks_render_dynamic_data('{patlis_menu_item_vegan}'));
   $image_url      = trim(bricks_render_dynamic_data('{patlis_menu_item_image_url}'));
@@ -133,7 +143,7 @@
             <?php endif; ?>
 
             <?php if ($has_desc): ?>
-              <span><?php echo esc_html($desc); ?></span>
+              <span><?php echo $desc; ?></span>
             <?php endif; ?>
 
           </div>

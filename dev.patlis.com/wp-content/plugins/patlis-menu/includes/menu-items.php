@@ -151,6 +151,20 @@ function patlis_menu_items_metabox_render(WP_Post $post): void
  * Save meta
  * ------------------------------------------------------------ */
 add_action('save_post_menu_item', 'patlis_menu_items_save', 10, 2);
+function patlis_menu_sanitize_basic_description_html(string $html): string
+{
+    $allowed = [
+        'p' => [],
+        'b' => [],
+        'strong' => [],
+        'ul' => [],
+        'li' => [],
+        'br' => [],
+    ];
+
+    return wp_kses($html, $allowed);
+}
+
 function patlis_menu_items_save(int $post_id, WP_Post $post): void
 {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
@@ -186,7 +200,11 @@ function patlis_menu_items_save(int $post_id, WP_Post $post): void
 
     update_post_meta($post_id, 'pmi_allergies', sanitize_text_field((string)($_POST['pmi_allergies'] ?? '')));
 
-    update_post_meta($post_id, 'pmi_description', sanitize_textarea_field((string)($_POST['pmi_description'] ?? '')));
+    update_post_meta(
+        $post_id,
+        'pmi_description',
+        patlis_menu_sanitize_basic_description_html((string)($_POST['pmi_description'] ?? ''))
+    );
 
     update_post_meta($post_id, 'pmi_vegetarian', isset($_POST['pmi_vegetarian']) ? '1' : '0');
     update_post_meta($post_id, 'pmi_vegan',      isset($_POST['pmi_vegan']) ? '1' : '0');

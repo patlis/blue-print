@@ -248,7 +248,7 @@ main {min-height:50vh}
     }
   }
 
-  .tag {height: unset !important}
+.tag {height: unset !important}
 
  .pseudolink{
   cursor: pointer;
@@ -264,7 +264,7 @@ main {min-height:50vh}
     justify-content: center;
     column-gap: var(--space-s);
 }
-.bricks-link-wrapper:hover svg path {
+main .bricks-link-wrapper:hover svg path {
   fill: var(--body-hover) !important;
 }
 .sr-only {
@@ -276,4 +276,7 @@ main {min-height:50vh}
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+footer a:hover svg path {
+  fill: var(--footer-hover) !important;
 }

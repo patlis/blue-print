@@ -1,15 +1,15 @@
-# Replace xxx.patlis.com with  new domain
+# Replace 0260.patlis.com with  new domain
 
 
 server
 {
     listen 80;
-    server_name xxx.patlis.com;
+    server_name 0260.patlis.com;
     index index.php index.html index.htm default.php default.htm default.html;
-    root /www/wwwroot/xxx.patlis.com;
+    root /www/wwwroot/0260.patlis.com;
 
     # Extra custom configs from aaPanel
-    include /www/server/panel/vhost/nginx/extension/xxx.patlis.com/*.conf;
+    include /www/server/panel/vhost/nginx/extension/0260.patlis.com/*.conf;
 
     # Gzip compression
     gzip on;
@@ -42,7 +42,7 @@ server
     #PHP-INFO-END
 
     #REWRITE-START URL rewrite rule reference, any modification will invalidate the rewrite rules set by the panel
-    include /www/server/panel/vhost/rewrite/xxx.patlis.com.conf;
+    include /www/server/panel/vhost/rewrite/0260.patlis.com.conf;
     #REWRITE-END
 
     # Block xmlrpc.php
@@ -94,6 +94,6 @@ server
         access_log /dev/null;
     }
 
-    access_log  /www/wwwlogs/xxx.patlis.com.log;
-    error_log   /www/wwwlogs/xxx.patlis.com.error.log;
+    access_log  /www/wwwlogs/0260.patlis.com.log;
+    error_log   /www/wwwlogs/0260.patlis.com.error.log;
 }
