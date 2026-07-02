@@ -19,7 +19,7 @@ add_action('init', function () {
             'new_item_name' => __('New service name', 'patlis-accommodation'),
             'menu_name'     => __('Services', 'patlis-accommodation'),
         ],
-        'public'            => true,
+        'public'            => false,
         'show_ui'           => true,
         'show_admin_column' => false,
         'show_in_rest'      => true,

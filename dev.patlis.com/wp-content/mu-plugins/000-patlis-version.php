@@ -142,6 +142,7 @@ function patlis_version_get_page_template_term_map(): array {
             'services',
             'text-pages',
             'slider-section',
+            'events',
         ],
         'gastro' => [
             'menu',

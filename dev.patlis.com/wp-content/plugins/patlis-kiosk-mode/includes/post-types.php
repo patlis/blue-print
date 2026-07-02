@@ -47,7 +47,8 @@ function patlis_register_kiosk_slide_cpt() {
 		'labels'                => $labels,
 		'supports'              => array( 'title', 'thumbnail', 'page-attributes' ),
 		'hierarchical'          => false,
-		'public'                => true,
+		'public'                => false,
+		'publicly_queryable'    => false,
 		'show_ui'               => true,
 		'show_in_menu'          => 'patlis-kiosk-mode',
 		'menu_position'         => 10,
@@ -56,7 +57,6 @@ function patlis_register_kiosk_slide_cpt() {
 		'can_export'            => true,
 		'has_archive'           => false,
 		'exclude_from_search'   => true,
-		'publicly_queryable'    => true,
 		'rewrite'               => false,
 		'capability_type'       => 'post',
 		'show_in_rest'          => true, // Needed for Gutenberg Editor if you want to use it, or ACF Blocks.
