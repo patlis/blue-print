@@ -28,7 +28,8 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_room_content}',    'label' => 'Room: Content (with fallback)', 'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_image_id}',   'label' => 'Room: Featured image ID',  'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_image_url}',  'label' => 'Room: Featured image URL', 'group' => $gRoom];
-    $tags[] = ['name' => '{patlis_acc_room_gallery_json}','label' => 'Room: Gallery JSON (ids + urls + meta)', 'group' => $gRoom];
+    $tags[] = ['name' => '{patlis_acc_room_gallery_json}',  'label' => 'Room: Gallery JSON (ids + urls + meta)', 'group' => $gRoom];
+    $tags[] = ['name' => '{patlis_acc_room_gallery_count}', 'label' => 'Room: Gallery image count',            'group' => $gRoom];
 
     $tags[] = ['name' => '{patlis_acc_room_sort}',       'label' => 'Room: Sort',           'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_item_nr}',    'label' => 'Room: Item Nr',        'group' => $gRoom];
@@ -53,6 +54,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_rooms_per_page}', 'label' => 'Options: Rooms per page (0=all)', 'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_show_prices}',    'label' => 'Options: Show prices (1/0)',     'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_prices_text}',    'label' => 'Options: Prices text',           'group' => $gOpt];
+    $tags[] = ['name' => '{patlis_acc_show_room_pager}', 'label' => 'Options: Show room pager (1/0) – reads rooms_per_page from settings', 'group' => $gOpt];
 
     $tags[] = ['name' => '{patlis_acc_rooms_options}',     'label' => 'Booking: Rooms options (Label|ID)',  'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_selected_room_meal_plans_options}', 'label' => 'Booking: Selected room meal plan options (Label|ID)', 'group' => $gOpt];
@@ -198,6 +200,10 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
             return implode("\n", $lines);
         }
 
+        if ($tag === 'patlis_acc_show_room_pager') {
+            return (string) (function_exists('patlis_acc_show_room_pager') ? patlis_acc_show_room_pager() : 0);
+        }
+
         return '';
     }
 
@@ -249,6 +255,11 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
         if ($tag === 'patlis_acc_room_gallery_json') {
             $gallery = patlis_acc_get_room_gallery_items($pid);
             return wp_json_encode($gallery);
+        }
+
+        if ($tag === 'patlis_acc_room_gallery_count') {
+            $gallery = patlis_acc_get_room_gallery_items($pid);
+            return (string) count($gallery);
         }
 
         // Meta keys (ΜΟΝΟ δικά μας — όχι cf_*)
@@ -694,7 +705,7 @@ function patlis_acc_bricks_replace_in_string($content, $post = null, $context = 
 {
     if (!is_string($content) || strpos($content, '{patlis_acc_') === false) return $content;
 
-    return preg_replace_callback('/{(patlis_acc_[a-z0-9_]+)}/i', function ($m) use ($post, $context) {
+    return preg_replace_callback('/{(patlis_acc_[a-z0-9_]+(?:[:(]\d+\)?)?)}/i', function ($m) use ($post, $context) {
         $resolved = patlis_acc_bricks_get_value(strtolower($m[1]), $post, $context);
 
         // IMPORTANT: keep unknown tags intact so others (or future) can still replace them
@@ -868,6 +879,13 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
         $functions = [];
     }
 
+    $functions[] = 'patlis_acc_show_room_pager';
+    $functions[] = 'patlis_acc_count_top_rooms';
+    $functions[] = 'patlis_acc_top_experience_count';
+    $functions[] = 'patlis_rates_count_for_current_room';
+    $functions[] = 'patlis_acc_rooms_count';
+    $functions[] = 'patlis_acc_top_packages_count';
+    $functions[] = 'patlis_acc_offer_applied_rooms';
     $functions[] = 'patlis_acc_room_rates_json';
     $functions[] = 'patlis_acc_room_rates_count';
     $functions[] = 'patlis_is_local_video_url'; // defined in patlis-core

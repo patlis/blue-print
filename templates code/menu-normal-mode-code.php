@@ -59,7 +59,7 @@
         <?php endif; ?>
 
         <?php if ($has_allergies): ?>
-          <sup class="allergies-link pseudolink js-allergy-trigger"><?php echo esc_html($allergies); ?></sup>
+          <sup class="allergies-link pseudolink js-allergy-trigger" data-gtm="menu-allergies-link"><?php echo esc_html($allergies); ?></sup>
         <?php endif; ?>
       </div>
 
@@ -97,6 +97,7 @@
           data-pswp-width="<?php echo esc_attr($full_w); ?>"
           data-pswp-height="<?php echo esc_attr($full_h); ?>"
           data-pswp-id="menu-images"
+          data-gtm="menu-img"
         >
           <img
             src="<?php echo esc_url($thumb_url); ?>"

@@ -100,6 +100,260 @@ function patlis_has_dining(): string {
     return (function_exists('patlis_version_has_dining') && patlis_version_has_dining()) ? '1' : '0';
 }
 
+function patlis_core_slides_count(): int {
+    $args = [
+        'post_type'      => 'slide',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_top_services_count(): int {
+    $args = [
+        'post_type'      => 'services',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'meta_query'     => [
+            [
+                'key'     => 'service_show',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'create_service_page',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_sticky_services_count(): int {
+    $args = [
+        'post_type'      => 'services',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'meta_query'     => [
+            [
+                'key'     => 'service_show',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'service_sticky',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_more_services_count(): int {
+    $args = [
+        'post_type'      => 'services',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'meta_query'     => [
+            'relation' => 'OR',
+            [
+                'key'     => 'create_service_page',
+                'compare' => 'NOT EXISTS',
+            ],
+            [
+                'key'     => 'create_service_page',
+                'value'   => '1',
+                'compare' => '!=',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_service_gallery_count(): int {
+    $post = get_post();
+    if (!$post || get_post_type($post) !== 'services') return 0;
+
+    if (!function_exists('patlis_core_resolve_gallery_ids_for_post')) return 0;
+
+    $ids = patlis_core_resolve_gallery_ids_for_post((int) $post->ID, 'services_gallery_ids');
+    return count($ids);
+}
+
+function patlis_event_gallery_count(): int {
+    $post = get_post();
+    if (!$post || get_post_type($post) !== 'events') return 0;
+
+    if (!function_exists('patlis_core_resolve_gallery_ids_for_post')) return 0;
+
+    $ids = patlis_core_resolve_gallery_ids_for_post((int) $post->ID, 'events_gallery_ids');
+    return count($ids);
+}
+
+function patlis_show_previous_events(): int {
+    $args = [
+        'post_type'      => 'events',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+        'meta_query'     => [
+            [
+                'key'     => 'events_date_start',
+                'value'   => date('Ymd'),
+                'compare' => '<',
+                'type'    => 'NUMERIC',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return $q->have_posts() ? 1 : 0;
+}
+
+function patlis_show_next_events(): int {
+    $args = [
+        'post_type'      => 'events',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+        'meta_query'     => [
+            [
+                'key'     => 'events_date_start',
+                'value'   => date('Ymd'),
+                'compare' => '>=',
+                'type'    => 'NUMERIC',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return $q->have_posts() ? 1 : 0;
+}
+
+function patlis_show_next_events_pager(): int {
+    $args = [
+        'post_type'      => 'events',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'meta_query'     => [
+            [
+                'key'     => 'events_date_start',
+                'value'   => date('Ymd'),
+                'compare' => '>=',
+                'type'    => 'NUMERIC',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_count_other_upcoming_events(): int {
+    $args = [
+        'post_type'      => 'events',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'exclude_current'=> true,
+        'meta_query'     => [
+            [
+                'key'     => 'events_date_start',
+                'value'   => date('Ymd'),
+                'compare' => '>=',
+                'type'    => 'NUMERIC',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_count_gallery_categories(): int {
+    $args = [
+        'post_type'      => function_exists('patlis_gallery_post_type') ? patlis_gallery_post_type() : 'patlis_gallery',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_home_gallery_count(): int {
+    if (!function_exists('patlis_gallery_get_home_id')
+        || !function_exists('patlis_gallery_parse_ids')
+        || !function_exists('patlis_gallery_meta_key')) {
+        return 0;
+    }
+
+    $home_id = patlis_gallery_get_home_id();
+    if ($home_id <= 0) return 0;
+
+    $ids = patlis_gallery_parse_ids(get_post_meta($home_id, patlis_gallery_meta_key(), true));
+    return count($ids);
+}
+
+function patlis_languages_count(): int {
+    if (!function_exists('pll_languages_list')) return 1;
+
+    $langs = pll_languages_list(['fields' => 'slug']);
+    return is_array($langs) ? count($langs) : 1;
+}
+
 function patlis_get_white_label_option(): array
 {
     $optionName = 'patlis_white_label';
@@ -351,6 +605,19 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
 	$functions[] = 'patlis_has_hotel';
 	$functions[] = 'patlis_has_kiosk';
 	$functions[] = 'patlis_has_dining';
+	$functions[] = 'patlis_core_slides_count';
+	$functions[] = 'patlis_top_services_count';
+	$functions[] = 'patlis_sticky_services_count';
+	$functions[] = 'patlis_more_services_count';
+	$functions[] = 'patlis_service_gallery_count';
+	$functions[] = 'patlis_event_gallery_count';
+	$functions[] = 'patlis_show_previous_events';
+	$functions[] = 'patlis_show_next_events';
+	$functions[] = 'patlis_show_next_events_pager';
+	$functions[] = 'patlis_count_other_upcoming_events';
+	$functions[] = 'patlis_count_gallery_categories';
+	$functions[] = 'patlis_home_gallery_count';
+	$functions[] = 'patlis_languages_count';
 	
     return array_unique($functions);
 });

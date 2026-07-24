@@ -470,6 +470,80 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
     }
 
     $functions[] = 'menu_carousel_count';
+    $functions[] = 'patlis_menu_count_carousel_items';
+    $functions[] = 'patlis_menu_categories_count';
+    $functions[] = 'patlis_menu_count_pdf';
 
     return array_values(array_unique($functions));
 });
+
+function patlis_menu_count_carousel_items(): int {
+    $args = [
+        'post_type'      => 'menu_item',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+        'meta_query'     => [
+            [
+                'key'     => 'pmi_carousel',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'pmi_show',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+            [
+                'key'     => '_thumbnail_id',
+                'compare' => 'EXISTS',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
+
+function patlis_menu_categories_count(): int {
+    $args = [
+        'taxonomy'   => 'menu_section',
+        'number'     => 0,
+        'fields'     => 'ids',
+        'hide_empty' => false,
+        'meta_query' => [
+            [
+                'key'     => 'pmc_show',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+        ],
+    ];
+
+    if (function_exists('patlis_fallback_terms_query')) {
+        $args = patlis_fallback_terms_query($args);
+    }
+
+    $terms = get_terms($args);
+    return is_array($terms) ? count($terms) : 0;
+}
+
+function patlis_menu_count_pdf(): int {
+    $args = [
+        'post_type'      => 'menu_pdf',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => false,
+    ];
+
+    if (function_exists('patlis_fallback_posts_query')) {
+        $args = patlis_fallback_posts_query($args);
+    }
+
+    $q = new WP_Query($args);
+    return (int) $q->found_posts;
+}
