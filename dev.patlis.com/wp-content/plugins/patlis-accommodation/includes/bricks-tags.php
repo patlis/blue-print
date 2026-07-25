@@ -901,6 +901,7 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
  * Local URLs are returned unchanged.
  * Usage: {echo:patlis_video_embed_url({patlis_acc_room_video_url})}
  */
+if (!function_exists('patlis_video_embed_url')) {
 function patlis_video_embed_url(string $url): string
 {
     $url = trim($url);
@@ -933,6 +934,7 @@ function patlis_video_embed_url(string $url): string
 
     return $url;
 }
+}
 
 /**
  * Returns ready-to-render video HTML:
@@ -941,6 +943,7 @@ function patlis_video_embed_url(string $url): string
  * - Empty URL      → ''
  * Usage: {echo:patlis_video_html({patlis_acc_room_video_url})}
  */
+if (!function_exists('patlis_video_html')) {
 function patlis_video_html(string $url): string
 {
     $url = trim($url);
@@ -961,4 +964,5 @@ function patlis_video_html(string $url): string
          . 'allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin">'
          . '</iframe>'
          . '</div>';
+}
 }

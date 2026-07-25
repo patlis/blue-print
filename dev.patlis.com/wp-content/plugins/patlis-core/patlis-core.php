@@ -16,6 +16,8 @@ define('PATLIS_CORE_VERSION', '0.1.0');
 
 require_once PATLIS_CORE_PATH . 'includes/core.php';
 require_once PATLIS_CORE_PATH . 'includes/helpers.php';
+require_once PATLIS_CORE_PATH . 'includes/database.php';
+require_once PATLIS_CORE_PATH . 'includes/form-handlers.php';
 require_once PATLIS_CORE_PATH . 'includes/translations-db.php';
 require_once PATLIS_CORE_PATH . 'includes/translations-helpers.php';
 require_once PATLIS_CORE_PATH . 'includes/bricks-tags.php';
@@ -55,5 +57,7 @@ if (is_admin()) {
 add_action('plugins_loaded', function () {
   load_plugin_textdomain('patlis-core', false, dirname(plugin_basename(__FILE__)) . '/languages');
 });
+
+register_activation_hook(__FILE__, 'patlis_core_create_or_update_tables');
 
 Patlis_Core::init();

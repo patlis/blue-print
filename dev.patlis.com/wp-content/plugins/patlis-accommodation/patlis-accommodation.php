@@ -80,7 +80,7 @@ require_once PATLIS_ACCOMMODATION_PATH . 'includes/meal-plans.php';
 /* ============================================================
  * DB
  * ============================================================ */
-define('PATLIS_ACCOMMODATION_DB_VERSION', 2);
+define('PATLIS_ACCOMMODATION_DB_VERSION', 3);
 
 register_activation_hook(__FILE__, 'patlis_accommodation_on_activate');
 
@@ -112,6 +112,7 @@ function patlis_accommodation_create_or_update_tables() {
         customer_name VARCHAR(255) NOT NULL,
         customer_email VARCHAR(255) NOT NULL,
         customer_phone VARCHAR(50) NOT NULL,
+        lead_uuid VARCHAR(36) NULL,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY  (id),
         KEY room_id (room_id),

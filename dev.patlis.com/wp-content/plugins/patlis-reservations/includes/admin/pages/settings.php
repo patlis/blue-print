@@ -36,8 +36,29 @@ function patlis_reservations_sanitize_settings($input): array
 
     $out['min_hours'] = isset($input['min_hours']) ? max(0, (int)$input['min_hours']) : (int)$out['min_hours'];
 
-    $out['notify_email'] = isset($input['notify_email']) ? sanitize_email((string)$input['notify_email']) : (string)($out['notify_email'] ?? '');
-    $out['email_subject'] = isset($input['email_subject']) ? sanitize_text_field((string)$input['email_subject']) : (string)($out['email_subject'] ?? '');
+    $out['notify_email']   = isset($input['notify_email'])   ? sanitize_email((string)$input['notify_email'])       : (string)($out['notify_email']  ?? '');
+    $out['email_subject']  = isset($input['email_subject'])  ? sanitize_text_field((string)$input['email_subject']) : (string)($out['email_subject'] ?? '');
+    // confirm_subject: multilingual text input array
+    $raw_subject = isset($input['confirm_subject']) && is_array($input['confirm_subject']) ? $input['confirm_subject'] : [];
+    $out['confirm_subject'] = [];
+    foreach ($raw_subject as $lang => $text) {
+        $lang = sanitize_key((string) $lang);
+        if ($lang !== '') {
+            $out['confirm_subject'][$lang] = sanitize_text_field((string) $text);
+        }
+    }
+
+    // confirm_body: multilingual textarea array
+    $raw_body = $input['confirm_body'] ?? [];
+    if (is_array($raw_body)) {
+        $out['confirm_body'] = [];
+        foreach ($raw_body as $lang => $text) {
+            $lang = sanitize_key((string) $lang);
+            if ($lang !== '') {
+                $out['confirm_body'][$lang] = wp_kses_post((string) $text);
+            }
+        }
+    }
 
     // Store raw string, sanitize on output (shortcode later)
     $out['embed_code'] = isset($input['embed_code']) ? (string)$input['embed_code'] : (string)$out['embed_code'];
@@ -109,6 +130,9 @@ function patlis_reservations_render_settings_page()
                                     <tr><th scope="row">Minimum time before reservation (hours)</th><td><?php patlis_reservations_field_min_hours(); ?></td></tr>
                                     <tr><th scope="row">Min. time</th><td><?php patlis_reservations_field_min_time(); ?></td></tr>
                                     <tr><th scope="row">Max. time</th><td><?php patlis_reservations_field_max_time(); ?></td></tr>
+                                    <tr><td colspan="2"><hr></td></tr>
+                                    <tr><th scope="row">Confirmation email subject</th><td><?php patlis_reservations_field_confirm_subject(); ?></td></tr>
+                                    <tr><th scope="row">Confirmation email body</th><td><?php patlis_reservations_field_confirm_body(); ?></td></tr>
                                 </table>
                             </div>
 
@@ -207,6 +231,64 @@ function patlis_reservations_field_email_subject()
            value="<?php echo esc_attr((string)($s['email_subject'] ?? '')); ?>"
            placeholder="New reservation">
     <?php
+}
+
+function patlis_reservations_field_confirm_subject()
+{
+    $s   = patlis_reservations_get_settings();
+    $key = patlis_reservations_option_key();
+    $raw = $s['confirm_subject'] ?? [];
+    if (!is_array($raw)) $raw = [];
+
+    $slugs = [];
+    if (function_exists('patlis_get_effective_language_slugs_for_current_user')) {
+        $slugs = patlis_get_effective_language_slugs_for_current_user();
+    } elseif (function_exists('pll_languages_list')) {
+        $slugs = pll_languages_list(['fields' => 'slug']);
+    }
+    if (empty($slugs)) $slugs = ['default'];
+
+    foreach ($slugs as $lang_slug) {
+        $lang_slug = (string) $lang_slug;
+        $value     = $raw[$lang_slug] ?? '';
+        ?>
+        <div style="margin-bottom:10px;">
+            <div style="font-weight:600;margin-bottom:4px;"><?php echo esc_html(strtoupper($lang_slug)); ?></div>
+            <input type="text" class="large-text"
+                name="<?php echo esc_attr($key); ?>[confirm_subject][<?php echo esc_attr($lang_slug); ?>]"
+                value="<?php echo esc_attr($value); ?>"
+                placeholder="Reservation request received">
+        </div>
+        <?php
+    }
+}
+
+function patlis_reservations_field_confirm_body()
+{
+    $s   = patlis_reservations_get_settings();
+    $key = patlis_reservations_option_key();
+    $raw = $s['confirm_body'] ?? [];
+    if (!is_array($raw)) $raw = [];
+
+    $slugs = [];
+    if (function_exists('patlis_get_effective_language_slugs_for_current_user')) {
+        $slugs = patlis_get_effective_language_slugs_for_current_user();
+    } elseif (function_exists('pll_languages_list')) {
+        $slugs = pll_languages_list(['fields' => 'slug']);
+    }
+    if (empty($slugs)) $slugs = ['default'];
+
+    foreach ($slugs as $lang_slug) {
+        $lang_slug = (string) $lang_slug;
+        $value     = $raw[$lang_slug] ?? '';
+        ?>
+        <div style="margin-bottom:16px;">
+            <div style="font-weight:600;margin-bottom:4px;"><?php echo esc_html(strtoupper($lang_slug)); ?></div>
+            <textarea class="large-text" rows="6"
+                name="<?php echo esc_attr($key); ?>[confirm_body][<?php echo esc_attr($lang_slug); ?>]"><?php echo wp_kses_post($value); ?></textarea>
+        </div>
+        <?php
+    }
 }
 
 function patlis_reservations_field_embed_code()

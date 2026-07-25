@@ -26,6 +26,18 @@ final class Patlis_Core {
     add_shortcode('patlis', [__CLASS__, 'shortcode_patlis']);
     add_filter('body_class', 'patlis_filter_body_classes', 20);
 
+    add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_frontend_scripts']);
+
+  }
+
+  public static function enqueue_frontend_scripts(): void {
+    wp_enqueue_script(
+        'patlis-tracking',
+        PATLIS_CORE_URL . 'assets/js/tracking.min.js',
+        [],
+        PATLIS_CORE_VERSION,
+        ['strategy' => 'defer', 'in_footer' => true]
+    );
   }
 
   private static function get_option_value(string $option_name, string $key, $default = '') {

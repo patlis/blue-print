@@ -29,6 +29,9 @@ if (
 
 require_once PATLIS_RESERVATIONS_PATH . 'includes/settings.php';
 require_once PATLIS_RESERVATIONS_PATH . 'includes/bricks-tags.php';
+require_once PATLIS_RESERVATIONS_PATH . 'includes/database.php';
+
+register_activation_hook(__FILE__, 'patlis_reservations_create_or_update_tables');
 if (is_admin()) {
     require_once PATLIS_RESERVATIONS_PATH . 'includes/admin/menu.php';
     require_once PATLIS_RESERVATIONS_PATH . 'includes/admin/settings.php';
