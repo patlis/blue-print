@@ -354,6 +354,32 @@ function patlis_languages_count(): int {
     return is_array($langs) ? count($langs) : 1;
 }
 
+/**
+ * Helpers: get contact confirmation subject/body in current language.
+ */
+function patlis_get_contact_confirm_subject(): string {
+    $opt = Patlis_Core::get_basic('contact_confirm_subject', []);
+    return patlis_core_get_multilang_value($opt);
+}
+
+function patlis_get_contact_confirm_body(): string {
+    $opt = Patlis_Core::get_basic('contact_confirm_body', []);
+    return patlis_core_get_multilang_value($opt);
+}
+
+function patlis_core_get_multilang_value($raw): string {
+    if (is_string($raw)) return $raw;
+    if (!is_array($raw) || empty($raw)) return '';
+
+    $current = function_exists('pll_current_language') ? (string) pll_current_language('slug') : '';
+    $default = function_exists('pll_default_language') ? (string) pll_default_language('slug') : '';
+
+    if ($current !== '' && !empty($raw[$current])) return (string) $raw[$current];
+    if ($default !== '' && !empty($raw[$default])) return (string) $raw[$default];
+    foreach ($raw as $v) { if (!empty($v)) return (string) $v; }
+    return '';
+}
+
 function patlis_get_white_label_option(): array
 {
     $optionName = 'patlis_white_label';

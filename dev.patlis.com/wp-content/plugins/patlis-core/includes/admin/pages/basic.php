@@ -26,6 +26,22 @@ final class Patlis_Admin_Page_Basic {
     $out['contact_form_recipient_email'] = isset($in['contact_form_recipient_email']) ? sanitize_email($in['contact_form_recipient_email']) : '';
     $out['contact_form_email_subject']   = isset($in['contact_form_email_subject']) ? sanitize_text_field($in['contact_form_email_subject']) : '';
 
+    // contact_confirm_subject: multilingual text input array
+    $out['contact_confirm_subject'] = [];
+    $raw_cs = isset($in['contact_confirm_subject']) && is_array($in['contact_confirm_subject']) ? $in['contact_confirm_subject'] : [];
+    foreach ($raw_cs as $lang => $text) {
+      $lang = sanitize_key((string) $lang);
+      if ($lang !== '') $out['contact_confirm_subject'][$lang] = sanitize_text_field((string) $text);
+    }
+
+    // contact_confirm_body: multilingual textarea array
+    $out['contact_confirm_body'] = [];
+    $raw_cb = isset($in['contact_confirm_body']) && is_array($in['contact_confirm_body']) ? $in['contact_confirm_body'] : [];
+    foreach ($raw_cb as $lang => $text) {
+      $lang = sanitize_key((string) $lang);
+      if ($lang !== '') $out['contact_confirm_body'][$lang] = wp_kses_post((string) $text);
+    }
+
     /* Currency settings */
     $out['currency_symbol']   = isset($in['currency_symbol']) ? sanitize_text_field($in['currency_symbol']) : '';
     $out['decimal_divider']   = isset($in['decimal_divider']) ? sanitize_text_field($in['decimal_divider']) : '';
@@ -278,6 +294,36 @@ final class Patlis_Admin_Page_Basic {
                     value="<?php echo esc_attr($opt['contact_form_email_subject'] ?? ''); ?>">
                 </td>
               </tr>
+
+              <?php
+              $slugs = [];
+              if (function_exists('patlis_get_effective_language_slugs_for_current_user')) {
+                $slugs = patlis_get_effective_language_slugs_for_current_user();
+              } elseif (function_exists('pll_languages_list')) {
+                $slugs = pll_languages_list(['fields' => 'slug']);
+              }
+              if (empty($slugs)) $slugs = ['default'];
+              $cc_subject = is_array($opt['contact_confirm_subject'] ?? null) ? $opt['contact_confirm_subject'] : [];
+              $cc_body    = is_array($opt['contact_confirm_body']    ?? null) ? $opt['contact_confirm_body']    : [];
+              ?>
+              <tr><td colspan="2"><hr></td></tr>
+              <?php foreach ($slugs as $ls): $ls = (string)$ls; ?>
+              <tr>
+                <th scope="row"><?php echo esc_html('Confirmation subject (' . strtoupper($ls) . ')'); ?></th>
+                <td>
+                  <input type="text" class="large-text"
+                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[contact_confirm_subject][<?php echo esc_attr($ls); ?>]"
+                    value="<?php echo esc_attr($cc_subject[$ls] ?? ''); ?>">
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><?php echo esc_html('Confirmation body (' . strtoupper($ls) . ')'); ?></th>
+                <td>
+                  <textarea class="large-text" rows="6"
+                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[contact_confirm_body][<?php echo esc_attr($ls); ?>]"><?php echo wp_kses_post($cc_body[$ls] ?? ''); ?></textarea>
+                </td>
+              </tr>
+              <?php endforeach; ?>
             </table>
           </div>
 

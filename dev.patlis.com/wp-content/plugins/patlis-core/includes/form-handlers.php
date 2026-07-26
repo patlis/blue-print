@@ -157,10 +157,10 @@ function patlis_core_send_contact_confirmation(string $name, string $email): voi
     $from_email   = trim((string) Patlis_Core::get_basic('contact_form_recipient_email', ''));
     $company_name = trim((string) Patlis_Core::get_basic('company_name', ''));
 
-    $subject = function_exists('patlis_transl') ? patlis_transl('patlis_contact_confirm_subject') : '';
-    $body    = function_exists('patlis_transl') ? nl2br(patlis_transl('patlis_contact_confirm_body')) : '';
+    $subject = function_exists('patlis_get_contact_confirm_subject') ? patlis_get_contact_confirm_subject() : '';
+    $body    = function_exists('patlis_get_contact_confirm_body')    ? nl2br(patlis_get_contact_confirm_body()) : '';
 
-    $body .= $body !== '' ? '<br><br>' . esc_html($company_name) : esc_html($company_name);
+    if (empty($subject) && empty($body)) return;
 
     $headers = [
         'Content-Type: text/html; charset=UTF-8',
