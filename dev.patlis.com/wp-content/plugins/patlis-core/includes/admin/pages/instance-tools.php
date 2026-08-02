@@ -76,12 +76,14 @@ final class Patlis_Admin_Page_Instance_Tools
         return [
             'Menu' => [
                 [
-                    'label' => 'Delete menu categories',
-                    'count' => self::count_taxonomy_terms('menu_section'),
+                    'label'  => 'Delete menu categories',
+                    'count'  => self::count_taxonomy_terms('menu_section'),
+                    'action' => 'delete_menu_categories',
                 ],
                 [
-                    'label' => 'Delete menu items',
-                    'count' => self::count_post_types(['menu_item']),
+                    'label'  => 'Delete menu items',
+                    'count'  => self::count_post_types(['menu_item']),
+                    'action' => 'delete_menu_items',
                 ],
                 [
                     'label'  => 'Delete menu Pdfs',
@@ -91,82 +93,110 @@ final class Patlis_Admin_Page_Instance_Tools
             ],
             'Leads' => [
                 [
-                    'label' => 'Delete Reservations (legacy placeholder)',
-                    'count' => self::count_post_types(['reservation', 'reservations', 'patlis_reservation']),
+                    'label'  => 'Delete Leads',
+                    'count'  => self::count_table_rows('patlis_leads'),
+                    'action' => 'delete_table_patlis_leads',
                 ],
                 [
-                    'label' => 'Delete Bookings',
-                    'count' => self::count_table_rows('patlis_bookings'),
+                    'label'  => 'Delete Contacts',
+                    'count'  => self::count_table_rows('patlis_contacts'),
+                    'action' => 'delete_table_patlis_contacts',
                 ],
                 [
-                    'label' => 'Delete Contact form leads (legacy placeholder)',
-                    'count' => self::count_post_types(['flamingo_inbound']),
+                    'label'  => 'Delete Reservations',
+                    'count'  => self::count_table_rows('patlis_reservations'),
+                    'action' => 'delete_table_patlis_reservations',
+                ],
+                [
+                    'label'  => 'Delete Bookings',
+                    'count'  => self::count_table_rows('patlis_bookings'),
+                    'action' => 'delete_table_patlis_bookings',
                 ],
             ],
             'Content' => [
                 [
-                    'label' => 'Delete Services',
-                    'count' => self::count_post_types(['services', 'service']),
+                    'label'  => 'Delete Slides',
+                    'count'  => self::count_post_types(['slide']),
+                    'action' => 'delete_slides',
                 ],
                 [
-                    'label' => 'Delete Events',
-                    'count' => self::count_post_types(['events', 'event']),
+                    'label'  => 'Delete Services',
+                    'count'  => self::count_post_types(['services', 'service']),
+                    'action' => 'delete_services',
                 ],
                 [
-                    'label' => 'Delete Galley',
-                    'count' => self::count_post_types(['patlis_gallery', 'gallery']),
+                    'label'  => 'Delete Events',
+                    'count'  => self::count_post_types(['events', 'event']),
+                    'action' => 'delete_events',
                 ],
                 [
-                    'label' => 'Delete Reviews',
-                    'count' => self::count_post_types(['reviews', 'review']),
+                    'label'  => 'Delete Galley',
+                    'count'  => self::count_post_types(['patlis_gallery', 'gallery']),
+                    'action' => 'delete_gallery',
                 ],
                 [
-                    'label' => 'Delete Timelines (for about us)',
-                    'count' => self::count_post_types(['timeline_item', 'timelines', 'timeline']),
+                    'label'  => 'Delete Reviews',
+                    'count'  => self::count_post_types(['reviews', 'review']),
+                    'action' => 'delete_reviews',
+                ],
+                [
+                    'label'  => 'Delete Timelines (for about us)',
+                    'count'  => self::count_post_types(['timeline_item', 'timelines', 'timeline']),
+                    'action' => 'delete_timelines',
                 ],
             ],
             'Kiosk Mode' => [
                 [
-                    'label' => 'Delete Kiosk slides',
-                    'count' => self::count_post_types(['kiosk_slide']),
+                    'label'  => 'Delete Kiosk slides',
+                    'count'  => self::count_post_types(['kiosk_slide']),
+                    'action' => 'delete_kiosk_slides',
                 ],
             ],
             'Accommodation' => [
                 [
-                    'label' => 'Delete rooms',
-                    'count' => self::count_post_types(['patlis_room', 'room']),
+                    'label'  => 'Delete rooms',
+                    'count'  => self::count_post_types(['patlis_room', 'room']),
+                    'action' => 'delete_rooms',
                 ],
                 [
-                    'label' => 'Delete offers & Packages',
-                    'count' => self::count_post_types(['rates']),
+                    'label'  => 'Delete offers & Packages',
+                    'count'  => self::count_post_types(['rates']),
+                    'action' => 'delete_offers_packages',
                 ],
                 [
-                    'label' => 'Delete Property Facilities',
-                    'count' => self::count_taxonomy_terms('property_facility'),
+                    'label'  => 'Delete Property Facilities',
+                    'count'  => self::count_taxonomy_terms('property_facility'),
+                    'action' => 'delete_property_facilities',
                 ],
                 [
-                    'label' => 'Delete Property Services',
-                    'count' => self::count_taxonomy_terms('property_service'),
+                    'label'  => 'Delete Property Services',
+                    'count'  => self::count_taxonomy_terms('property_service'),
+                    'action' => 'delete_property_services',
                 ],
                 [
-                    'label' => 'Delete Room Amenities',
-                    'count' => self::count_taxonomy_terms('room_amenity'),
+                    'label'  => 'Delete Room Amenities',
+                    'count'  => self::count_taxonomy_terms('room_amenity'),
+                    'action' => 'delete_room_amenities',
                 ],
                 [
-                    'label' => 'Delete Meal Plans',
-                    'count' => self::count_taxonomy_terms('room_meal_plan'),
+                    'label'  => 'Delete Meal Plans',
+                    'count'  => self::count_taxonomy_terms('room_meal_plan'),
+                    'action' => 'delete_meal_plans',
                 ],
                 [
-                    'label' => 'Delete Experiences',
-                    'count' => self::count_post_types(['experience']),
+                    'label'  => 'Delete Experiences',
+                    'count'  => self::count_post_types(['experience']),
+                    'action' => 'delete_experiences',
                 ],
                 [
-                    'label' => 'Delete Rate Periods',
-                    'count' => self::count_post_types(['hotel_rate_periods']),
+                    'label'  => 'Delete Rate Periods',
+                    'count'  => self::count_post_types(['hotel_rate_periods']),
+                    'action' => 'delete_rate_periods',
                 ],
                 [
-                    'label' => 'Delete Room Rates',
-                    'count' => self::count_post_types(['patlis_room_rate']),
+                    'label'  => 'Delete Room Rates',
+                    'count'  => self::count_post_types(['patlis_room_rate']),
+                    'action' => 'delete_room_rates',
                 ],
             ],
         ];
@@ -384,15 +414,90 @@ final class Patlis_Admin_Page_Instance_Tools
         $tool_action = isset($_POST['tool_action']) ? sanitize_key((string) $_POST['tool_action']) : '';
 
         switch ($tool_action) {
-            case 'delete_menu_pdfs':
-                $message = self::do_delete_post_type('menu_pdf');
-                break;
+            case 'delete_menu_categories':      $message = self::do_delete_taxonomy_terms('menu_section'); break;
+            case 'delete_menu_items':           $message = self::do_delete_post_types(['menu_item']); break;
+            case 'delete_menu_pdfs':            $message = self::do_delete_post_types(['menu_pdf']); break;
+            case 'delete_table_patlis_leads':   $message = self::do_truncate_table('patlis_leads'); break;
+            case 'delete_table_patlis_contacts':$message = self::do_truncate_table('patlis_contacts'); break;
+            case 'delete_table_patlis_reservations': $message = self::do_truncate_table('patlis_reservations'); break;
+            case 'delete_table_patlis_bookings':$message = self::do_truncate_table('patlis_bookings'); break;
+            case 'delete_services':             $message = self::do_delete_post_types(['services', 'service']); break;
+            case 'delete_slides':               $message = self::do_delete_post_types(['slide']); break;
+            case 'delete_events':               $message = self::do_delete_post_types(['events', 'event']); break;
+            case 'delete_gallery':              $message = self::do_delete_post_types(['patlis_gallery', 'gallery']); break;
+            case 'delete_reviews':              $message = self::do_delete_post_types(['reviews', 'review']); break;
+            case 'delete_timelines':            $message = self::do_delete_post_types(['timeline_item', 'timelines', 'timeline']); break;
+            case 'delete_kiosk_slides':         $message = self::do_delete_post_types(['kiosk_slide']); break;
+            case 'delete_rooms':                $message = self::do_delete_post_types(['patlis_room', 'room']); break;
+            case 'delete_offers_packages':      $message = self::do_delete_post_types(['rates']); break;
+            case 'delete_property_facilities':  $message = self::do_delete_taxonomy_terms('property_facility'); break;
+            case 'delete_property_services':    $message = self::do_delete_taxonomy_terms('property_service'); break;
+            case 'delete_room_amenities':       $message = self::do_delete_taxonomy_terms('room_amenity'); break;
+            case 'delete_meal_plans':           $message = self::do_delete_taxonomy_terms('room_meal_plan'); break;
+            case 'delete_experiences':          $message = self::do_delete_post_types(['experience']); break;
+            case 'delete_rate_periods':         $message = self::do_delete_post_types(['hotel_rate_periods']); break;
+            case 'delete_room_rates':           $message = self::do_delete_post_types(['patlis_room_rate']); break;
             default:
                 wp_send_json_error(['message' => 'Unknown action.'], 400);
                 return;
         }
 
         wp_send_json_success(['message' => $message]);
+    }
+
+    private static function do_truncate_table(string $table_suffix): string
+    {
+        global $wpdb;
+
+        $table_suffix = preg_replace('/[^a-z0-9_]/', '', strtolower($table_suffix));
+        $table_name   = $wpdb->prefix . $table_suffix;
+
+        if (!self::table_exists($table_name)) {
+            return 'Table not found: ' . $table_name;
+        }
+
+        $count  = (int) $wpdb->get_var("SELECT COUNT(1) FROM {$table_name}");
+        $wpdb->query("DELETE FROM {$table_name}");
+
+        return sprintf('Deleted %d row(s) from %s.', $count, $table_suffix);
+    }
+
+    private static function do_delete_post_types(array $post_types): string
+    {
+        $deleted = 0;
+        foreach ($post_types as $post_type) {
+            $post_type = sanitize_key($post_type);
+            $ids = get_posts([
+                'post_type'      => $post_type,
+                'post_status'    => 'any',
+                'posts_per_page' => -1,
+                'fields'         => 'ids',
+                'lang'           => '',
+            ]);
+            foreach ($ids as $id) {
+                if (wp_delete_post((int) $id, true)) $deleted++;
+            }
+        }
+        return sprintf('Deleted %d item(s).', $deleted);
+    }
+
+    private static function do_delete_taxonomy_terms(string $taxonomy): string
+    {
+        global $wpdb;
+
+        $taxonomy = sanitize_key($taxonomy);
+
+        // Direct SQL to bypass Polylang language filtering
+        $term_ids = $wpdb->get_col($wpdb->prepare(
+            "SELECT term_id FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s",
+            $taxonomy
+        ));
+
+        $deleted = 0;
+        foreach ($term_ids as $term_id) {
+            if (!is_wp_error(wp_delete_term((int) $term_id, $taxonomy))) $deleted++;
+        }
+        return sprintf('Deleted %d term(s) from %s.', $deleted, $taxonomy);
     }
 
     private static function do_delete_post_type(string $post_type): string

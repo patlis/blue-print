@@ -49,7 +49,7 @@ function patlis_core_handle_contact_form(array $fields): void {
 
     // Parse consent cookie
     $consent_json       = '';
-    $cookie_references  = 0;
+    $cookie_preferences  = 0;
     $cookie_statistics  = 0;
     $cookie_marketing   = 0;
 
@@ -58,7 +58,7 @@ function patlis_core_handle_contact_form(array $fields): void {
         $consent = json_decode(stripslashes($patlis_cookie), true);
         if (is_array($consent)) {
             $consent_json      = wp_json_encode($consent);
-            $cookie_references = !empty($consent['preferences']) ? 1 : 0;
+            $cookie_preferences = !empty($consent['preferences']) ? 1 : 0;
             $cookie_statistics = !empty($consent['statistics'])  ? 1 : 0;
             $cookie_marketing  = !empty($consent['marketing'])   ? 1 : 0;
         }
@@ -90,7 +90,7 @@ function patlis_core_handle_contact_form(array $fields): void {
             'msclkid'           => sanitize_text_field($traffic['msclkid']      ?? ''),
             'fbclid'            => sanitize_text_field($traffic['fbclid']       ?? ''),
             'consent_json'      => $consent_json,
-            'cookie_references' => $cookie_references,
+            'cookie_preferences' => $cookie_preferences,
             'cookie_statistics' => $cookie_statistics,
             'cookie_marketing'  => $cookie_marketing,
         ],
@@ -206,7 +206,7 @@ function patlis_core_handle_reservation_form(array $fields): void {
 
     // Parse consent cookie
     $consent_json       = '';
-    $cookie_references  = 0;
+    $cookie_preferences  = 0;
     $cookie_statistics  = 0;
     $cookie_marketing   = 0;
 
@@ -215,7 +215,7 @@ function patlis_core_handle_reservation_form(array $fields): void {
         $consent = json_decode(stripslashes($patlis_cookie), true);
         if (is_array($consent)) {
             $consent_json      = wp_json_encode($consent);
-            $cookie_references = !empty($consent['preferences']) ? 1 : 0;
+            $cookie_preferences = !empty($consent['preferences']) ? 1 : 0;
             $cookie_statistics = !empty($consent['statistics'])  ? 1 : 0;
             $cookie_marketing  = !empty($consent['marketing'])   ? 1 : 0;
         }
@@ -247,7 +247,7 @@ function patlis_core_handle_reservation_form(array $fields): void {
             'msclkid'           => sanitize_text_field($traffic['msclkid']      ?? ''),
             'fbclid'            => sanitize_text_field($traffic['fbclid']       ?? ''),
             'consent_json'      => $consent_json,
-            'cookie_references' => $cookie_references,
+            'cookie_preferences' => $cookie_preferences,
             'cookie_statistics' => $cookie_statistics,
             'cookie_marketing'  => $cookie_marketing,
         ],

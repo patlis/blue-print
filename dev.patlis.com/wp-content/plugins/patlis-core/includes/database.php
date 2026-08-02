@@ -32,7 +32,7 @@ function patlis_core_create_or_update_tables(): void {
         msclkid VARCHAR(255) NULL,
         fbclid VARCHAR(255) NULL,
         consent_json TEXT NULL,
-        cookie_references TINYINT NOT NULL DEFAULT 0,
+        cookie_preferences TINYINT NOT NULL DEFAULT 0,
         cookie_statistics TINYINT NOT NULL DEFAULT 0,
         cookie_marketing TINYINT NOT NULL DEFAULT 0,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
