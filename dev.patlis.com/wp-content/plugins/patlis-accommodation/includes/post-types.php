@@ -6,6 +6,7 @@ add_action('init', 'patlis_accommodation_register_cpt_experience');
 add_action('init', 'patlis_accommodation_register_cpt_rates');
 add_action('init', 'patlis_accommodation_register_cpt_hotel_rates');
 add_action('init', 'patlis_accommodation_register_cpt_room_rates');
+add_action('init', 'patlis_accommodation_register_cpt_meal_plans');
 
 function patlis_accommodation_register_cpt_rooms() {
     if (!function_exists('patlis_accommodation_is_enabled_for_version') || !patlis_accommodation_is_enabled_for_version()) {
@@ -205,3 +206,63 @@ function patlis_accommodation_register_cpt_room_rates() {
         'capability_type'      => 'post',
     ]);
 }
+
+function patlis_accommodation_register_cpt_meal_plans() {
+    if (!function_exists('patlis_accommodation_is_enabled_for_version') || !patlis_accommodation_is_enabled_for_version()) {
+        return;
+    }
+
+    $labels = [
+        'name'               => 'Meal Plans',
+        'singular_name'      => 'Meal Plan',
+        'menu_name'          => 'Meal Plans',
+        'name_admin_bar'     => 'Meal Plan',
+        'add_new'            => 'Add New',
+        'add_new_item'       => 'Add New Meal Plan',
+        'new_item'           => 'New Meal Plan',
+        'edit_item'          => 'Edit Meal Plan',
+        'view_item'          => 'View Meal Plan',
+        'all_items'          => 'All Meal Plans',
+        'search_items'       => 'Search Meal Plans',
+        'not_found'          => 'No meal plans found.',
+        'not_found_in_trash' => 'No meal plans found in Trash.',
+    ];
+
+    register_post_type('patlis_meal_plan', [
+        'labels'               => $labels,
+        'public'               => false,
+        'publicly_queryable'   => false,
+        'show_ui'              => true,
+        'show_in_nav_menus'    => false,
+        'delete_with_user'     => false,
+        'show_in_rest'         => true,
+        'has_archive'          => false,
+        'exclude_from_search'  => true,
+        'hierarchical'         => false,
+        'can_export'           => true,
+        'rewrite'              => false,
+        'query_var'            => false,
+        'show_in_menu'         => false,
+        'supports'             => ['title'],
+        'menu_position'        => 63,
+        'menu_icon'            => 'dashicons-food',
+        'capability_type'      => 'post',
+    ]);
+}
+
+add_filter('pll_get_post_types', function ($post_types, $is_settings) {
+    if (!is_array($post_types)) {
+        return $post_types;
+    }
+
+    $post_types['patlis_meal_plan'] = 'patlis_meal_plan';
+    return $post_types;
+}, 10, 2);
+
+add_filter('pll_is_translated_post_type', function ($is_translated, $post_type) {
+    if ($post_type === 'patlis_meal_plan') {
+        return true;
+    }
+
+    return $is_translated;
+}, 10, 2);

@@ -66,7 +66,7 @@ function patlis_accommodation_register_admin_menu() {
         'Meal Plans',
         'Meal Plans',
         $capability,
-        'edit-tags.php?taxonomy=room_meal_plan&post_type=patlis_room'
+        'edit.php?post_type=patlis_meal_plan'
     );
 
     // Experiences
@@ -153,7 +153,7 @@ add_filter('parent_file', function ($parent_file) {
     // CPT screens for patlis_room, experience, rates, hotel_rate_periods, and patlis_room_rate
     if (
         !empty($current_screen->post_type)
-        && in_array($current_screen->post_type, ['patlis_room', 'experience', 'rates', 'hotel_rate_periods', 'patlis_room_rate'], true)
+        && in_array($current_screen->post_type, ['patlis_room', 'experience', 'rates', 'hotel_rate_periods', 'patlis_room_rate', 'patlis_meal_plan'], true)
     ) {
         return 'patlis-accommodation';
     }
@@ -199,6 +199,15 @@ add_filter('submenu_file', function ($submenu_file) {
     if ($current_screen->post_type === 'patlis_room_rate') {
         if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
             return 'edit.php?post_type=patlis_room_rate';
+        }
+
+        return $submenu_file;
+    }
+
+    // Meal Plans list / edit meal plan
+    if ($current_screen->post_type === 'patlis_meal_plan') {
+        if ($current_screen->base === 'edit' || $current_screen->base === 'post') {
+            return 'edit.php?post_type=patlis_meal_plan';
         }
 
         return $submenu_file;

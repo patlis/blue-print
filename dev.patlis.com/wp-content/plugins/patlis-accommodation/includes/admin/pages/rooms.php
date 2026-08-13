@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) exit;
 add_filter('manage_patlis_room_posts_columns', function ($columns) {
     $new = [];
     foreach ($columns as $key => $label) {
-        if (in_array($key, ['taxonomy-room_amenity', 'taxonomy-room_meal_plan'], true)) continue;
+        if ($key === 'taxonomy-room_amenity') continue;
         $new[$key] = $label;
         if ($key === 'title') {
             $new['room_sort']   = 'Sort';

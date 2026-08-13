@@ -180,7 +180,7 @@ final class Patlis_Admin_Page_Instance_Tools
                 ],
                 [
                     'label'  => 'Delete Meal Plans',
-                    'count'  => self::count_taxonomy_terms('room_meal_plan'),
+                    'count'  => self::count_post_types(['patlis_meal_plan']),
                     'action' => 'delete_meal_plans',
                 ],
                 [
@@ -433,7 +433,7 @@ final class Patlis_Admin_Page_Instance_Tools
             case 'delete_property_facilities':  $message = self::do_delete_taxonomy_terms('property_facility'); break;
             case 'delete_property_services':    $message = self::do_delete_taxonomy_terms('property_service'); break;
             case 'delete_room_amenities':       $message = self::do_delete_taxonomy_terms('room_amenity'); break;
-            case 'delete_meal_plans':           $message = self::do_delete_taxonomy_terms('room_meal_plan'); break;
+            case 'delete_meal_plans':           $message = self::do_delete_post_types(['patlis_meal_plan']); break;
             case 'delete_experiences':          $message = self::do_delete_post_types(['experience']); break;
             case 'delete_rate_periods':         $message = self::do_delete_post_types(['hotel_rate_periods']); break;
             case 'delete_room_rates':           $message = self::do_delete_post_types(['patlis_room_rate']); break;

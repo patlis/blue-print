@@ -185,12 +185,12 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
 
         if ($tag === 'patlis_acc_selected_room_meal_plans_options') {
             $rid = isset($_GET['room_id']) ? (int) $_GET['room_id'] : 0;
-            if ($rid <= 0 || !function_exists('patlis_acc_get_room_meal_plans')) return '';
+            if (!function_exists('patlis_acc_get_room_meal_plans')) return '';
             $plans = patlis_acc_get_room_meal_plans($rid);
             if (empty($plans)) return '';
             $lines = [];
             foreach ($plans as $plan) {
-                $label = !empty($plan['label']) ? $plan['label'] : $plan['name'];
+                $label = (string) ($plan['name'] ?? '');
                 $price = isset($plan['price_adult']) ? (float) $plan['price_adult'] : 0.0;
                 if ($price > 0) {
                     $label .= ' (+' . number_format($price, 2, '.', '') . '€)';
@@ -888,6 +888,8 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
     $functions[] = 'patlis_acc_offer_applied_rooms';
     $functions[] = 'patlis_acc_room_rates_json';
     $functions[] = 'patlis_acc_room_rates_count';
+    $functions[] = 'patlis_acc_meal_plan_description';
+    $functions[] = 'patlis_acc_meal_plans_count';
     $functions[] = 'patlis_is_local_video_url'; // defined in patlis-core
     $functions[] = 'patlis_video_embed_url';
     $functions[] = 'patlis_video_html';

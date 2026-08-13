@@ -30,6 +30,7 @@ if (
 require_once PATLIS_RESERVATIONS_PATH . 'includes/settings.php';
 require_once PATLIS_RESERVATIONS_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_RESERVATIONS_PATH . 'includes/database.php';
+require_once PATLIS_RESERVATIONS_PATH . 'includes/form-handlers.php';
 
 register_activation_hook(__FILE__, 'patlis_reservations_create_or_update_tables');
 if (is_admin()) {
