@@ -155,7 +155,7 @@ function patlis_version_get_page_template_term_map(): array {
             'reservation',
         ],
         'hotel' => [
-            'room-booking',
+            'booking',
             'rooms',
             'top-rooms-section',
             'offers-packages',
