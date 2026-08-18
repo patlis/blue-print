@@ -103,14 +103,14 @@ function patlis_core_handle_contact_form(array $fields): void {
     );
 
     // ── Send notification email ───────────────────────────────────────────────
-    patlis_core_send_contact_notification($name, $phone, $email, $message);
+    patlis_core_send_contact_notification($name, $phone, $email, $message, $language);
     patlis_core_send_contact_confirmation($name, $email);
 }
 
 /**
  * Send contact form notification email to owner.
  */
-function patlis_core_send_contact_notification(string $name, string $phone, string $email, string $message): void {
+function patlis_core_send_contact_notification(string $name, string $phone, string $email, string $message, string $language): void {
     $to      = trim((string) Patlis_Core::get_basic('contact_form_recipient_email', ''));
     $subject = trim((string) Patlis_Core::get_basic('contact_form_email_subject', ''));
 
@@ -123,10 +123,18 @@ function patlis_core_send_contact_notification(string $name, string $phone, stri
         return $val !== '' ? $val : $key;
     };
 
-    $body  = '<strong>' . esc_html($t('patlis_form_your_name'))  . ':</strong> ' . esc_html($name)  . '<br>';
-    $body .= '<strong>' . esc_html($t('patlis_form_your_phone')) . ':</strong> ' . esc_html($phone) . '<br>';
-    $body .= '<strong>' . esc_html($t('patlis_form_email'))      . ':</strong> ' . esc_html($email) . '<br><br>';
-    $body .= nl2br(esc_html($message));
+    $phone_href = preg_replace('/[^0-9+]/', '', $phone);
+    $phone_value = $phone_href !== ''
+        ? '<a href="tel:' . esc_attr($phone_href) . '">' . esc_html($phone) . '</a>'
+        : esc_html($phone);
+
+    $body  = esc_html($t('patlis_form_your_name'))  . ': <strong>' . esc_html($name) . '</strong><br>';
+    $body .= esc_html($t('patlis_form_your_phone')) . ': <strong>' . $phone_value . '</strong><br>';
+    $body .= esc_html($t('patlis_form_email'))      . ': <strong>' . esc_html($email) . '</strong><br><br>';
+    $body .= esc_html($t('patlis_form_language'))   . ': <strong>' . esc_html($language !== '' ? strtoupper($language) : '-') . '</strong><br><br>';
+    if ($message !== '') {
+        $body .= nl2br(esc_html($message));
+    }
 
     $headers = [
         'Content-Type: text/html; charset=UTF-8',

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Reservations
  * Description: Reservation module for gastronomy sites (settings + integrations + pro features).
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Patlis Ioannis
  * Text Domain: patlis-reservations
  * Update URI: https://updates.patlis.com/patlis-reservations/
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_RESERVATIONS_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_RESERVATIONS_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_RESERVATIONS_VERSION', '0.1.0');
+define('PATLIS_RESERVATIONS_VERSION', '0.1.1');
 
 // Updater — πριν το gating ωστε να ελεγχει updates παντα
 if (function_exists('patlis_register_plugin_updater')) {
@@ -26,6 +26,33 @@ if (
 ) {
     return;
 }
+
+add_action('wp_enqueue_scripts', function (): void {
+    if (!is_page()) {
+        return;
+    }
+
+    $page_id = (int) get_queried_object_id();
+    if ($page_id <= 0) {
+        return;
+    }
+
+    $taxonomy = function_exists('patlis_version_get_page_template_taxonomy')
+        ? patlis_version_get_page_template_taxonomy()
+        : 'template';
+
+    if (!taxonomy_exists($taxonomy) || !has_term('reservation', $taxonomy, $page_id)) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'patlis-reservations-calendar',
+        PATLIS_RESERVATIONS_URL . 'assets/calendar.js',
+        [],
+        PATLIS_RESERVATIONS_VERSION,
+        true
+    );
+});
 
 require_once PATLIS_RESERVATIONS_PATH . 'includes/settings.php';
 require_once PATLIS_RESERVATIONS_PATH . 'includes/bricks-tags.php';

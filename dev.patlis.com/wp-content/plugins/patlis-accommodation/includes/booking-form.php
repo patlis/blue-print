@@ -28,15 +28,6 @@ function patlis_acc_get_rooms_options_string(): string
     return implode("\n", $lines);
 }
 
-function patlis_acc_is_booking_page(): bool
-{
-    $path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-    $path = rtrim($path, '/') . '/';
-
-    // /booking/ OR /{lang}/booking/
-    return (bool) preg_match('~^/(?:[a-zA-Z-]{2,10}/)?booking/~', $path);
-}
-
 /* ============================================================
  * Cache clear for rooms list (transient)
  * ============================================================ */
@@ -127,74 +118,3 @@ add_action('rest_api_init', function () {
     ]);
 });
 
-/* ============================================================
- * 2) Hide empty meal_plan field group
- * ============================================================ */
-add_action('wp_footer', function () {
-    if (is_admin()) return;
-    if (!patlis_acc_is_booking_page()) return;
-
-    ?>
-    <script>
-    (function () {
-        function hasMeaningfulOptions(select) {
-            if (!select || !select.options) return false;
-
-            for (var i = 0; i < select.options.length; i++) {
-                var opt = select.options[i];
-                var value = String(opt.value || '').trim();
-                var text = String(opt.textContent || '').trim();
-                if (value !== '' || text !== '') return true;
-            }
-
-            return false;
-        }
-
-        function applyMealPlanVisibility() {
-            var select = document.querySelector('select[name="meal_plan"]');
-            if (!select) return false;
-
-            var group = select.closest('.form-group') || select.parentElement;
-            var visible = hasMeaningfulOptions(select);
-
-            if (group) {
-                group.style.display = visible ? '' : 'none';
-            } else {
-                select.style.display = visible ? '' : 'none';
-            }
-
-            return true;
-        }
-
-        function init() {
-            applyMealPlanVisibility();
-
-            var observer = new MutationObserver(function () {
-                applyMealPlanVisibility();
-            });
-
-            observer.observe(document.documentElement || document.body, {
-                childList: true,
-                subtree: true,
-            });
-
-            var tries = 0;
-            var maxTries = 120;
-            var interval = setInterval(function () {
-                tries++;
-                applyMealPlanVisibility();
-                if (tries >= maxTries) {
-                    clearInterval(interval);
-                }
-            }, 250);
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-    })();
-    </script>
-    <?php
-}, 99);

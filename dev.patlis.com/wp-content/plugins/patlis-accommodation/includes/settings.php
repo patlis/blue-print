@@ -7,9 +7,12 @@ function patlis_accommodation_settings_defaults(): array {
     return [
         'booking_mode'         => 1,
         'booking_email'        => '',
+        'booking_email_subject' => '',
         'booking_days_before'  => 0,
         'booking_redirect_url' => '',
         'booking_3party_code'  => '',
+        'confirm_subject'      => [],
+        'confirm_body'         => [],
         'rooms_per_page'   => 0,            // 0 = all
         'show_prices'      => 0,            // 0/1
         'prices_text'      => '',
@@ -31,6 +34,28 @@ function patlis_acc_get_setting_value(string $key) {
     if (!function_exists('patlis_accommodation_get_settings')) return '';
     $s = patlis_accommodation_get_settings();
     return $s[$key] ?? '';
+}
+
+function patlis_acc_get_confirmation_text(string $key, string $language = ''): string {
+    $settings = patlis_accommodation_get_settings();
+    $texts = $settings[$key] ?? [];
+
+    if (is_string($texts)) return $texts;
+    if (!is_array($texts) || empty($texts)) return '';
+
+    $language = sanitize_key($language);
+    $default_language = function_exists('pll_default_language')
+        ? sanitize_key((string) pll_default_language('slug'))
+        : '';
+
+    if ($language !== '' && !empty($texts[$language])) return (string) $texts[$language];
+    if ($default_language !== '' && !empty($texts[$default_language])) return (string) $texts[$default_language];
+
+    foreach ($texts as $text) {
+        if (!empty($text)) return (string) $text;
+    }
+
+    return '';
 }
 
 add_shortcode('patlis_acc_booking_mode', function () {

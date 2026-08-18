@@ -9,6 +9,7 @@ add_action('bricks/form/custom_action', function ($form) {
     }
 });
 
+/* insert the lead into the database and send emails */
 function patlis_res_handle_reservation_form(array $fields): void {
     global $wpdb;
 
@@ -99,11 +100,12 @@ function patlis_res_handle_reservation_form(array $fields): void {
     );
 
     // ── Send emails ───────────────────────────────────────────────────────────
-    patlis_res_send_reservation_notification($name, $phone, $email, $message, $date, $guests);
+    patlis_res_send_reservation_notification($name, $phone, $email, $message, $date, $guests, $language);
     patlis_res_send_reservation_confirmation($name, $email);
 }
 
-function patlis_res_send_reservation_notification(string $name, string $phone, string $email, string $message, string $date, int $guests): void {
+/* Send notification email to the admin */
+function patlis_res_send_reservation_notification(string $name, string $phone, string $email, string $message, string $date, int $guests, string $language): void {
     $res_settings = function_exists('patlis_reservations_get_settings') ? patlis_reservations_get_settings() : [];
     $to      = trim((string) ($res_settings['notify_email']  ?? ''));
     $subject = trim((string) ($res_settings['email_subject'] ?? ''));
@@ -116,12 +118,22 @@ function patlis_res_send_reservation_notification(string $name, string $phone, s
         return $val !== '' ? $val : $key;
     };
 
+    $reservation_date = DateTimeImmutable::createFromFormat('!Y-m-d H:i', $date, wp_timezone());
+    $formatted_date = $reservation_date ? $reservation_date->format('d.m.Y H:i') : $date;
+    $phone_href = preg_replace('/[^0-9+]/', '', $phone);
+    $phone_value = $phone_href !== ''
+        ? '<a href="tel:' . esc_attr($phone_href) . '">' . esc_html($phone) . '</a>'
+        : esc_html($phone);
+
     $body  = esc_html($t('patlis_reservation_name'))    . ': <strong>' . esc_html($name)            . '</strong><br>';
-    $body .= esc_html($t('patlis_reservation_phone'))   . ': <strong>' . esc_html($phone)           . '</strong><br>';
+    $body .= esc_html($t('patlis_reservation_phone'))   . ': <strong>' . $phone_value                . '</strong><br>';
     $body .= esc_html($t('patlis_reservation_email'))   . ': <strong>' . esc_html($email)           . '</strong><br>';
-    $body .= esc_html($t('patlis_reservation_date'))    . ': <strong>' . esc_html($date)            . '</strong><br>';
+    $body .= esc_html($t('patlis_reservation_date'))    . ': <strong>' . esc_html($formatted_date)  . '</strong><br>';
     $body .= esc_html($t('patlis_reservation_persons')) . ': <strong>' . esc_html((string) $guests) . '</strong><br><br>';
-    $body .= nl2br(esc_html($message));
+    $body .= esc_html($t('patlis_form_language'))       . ': <strong>' . esc_html($language !== '' ? strtoupper($language) : '-') . '</strong><br><br>';
+    if ($message !== '') {
+        $body .= nl2br(esc_html($message));
+    }
 
     $headers = [
         'Content-Type: text/html; charset=UTF-8',
@@ -132,6 +144,7 @@ function patlis_res_send_reservation_notification(string $name, string $phone, s
     wp_mail($to, $subject, $body, $headers);
 }
 
+/*  Send confirmation email to the customer*/
 function patlis_res_send_reservation_confirmation(string $name, string $email): void {
     $res_settings = function_exists('patlis_reservations_get_settings') ? patlis_reservations_get_settings() : [];
     $from_email   = trim((string) ($res_settings['notify_email'] ?? ''));

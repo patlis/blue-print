@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Core
  * Description: Core settings & helpers for Patlis sites.
- * Version: 0.1.0
+ * Version: 1.0.1
  * Author: Patlis Ioannis
  * Text Domain: patlis-core
  * Domain Path: /languages
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_CORE_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_CORE_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_CORE_VERSION', '0.1.0');
+define('PATLIS_CORE_VERSION', '1.0.1');
 
 require_once PATLIS_CORE_PATH . 'includes/core.php';
 require_once PATLIS_CORE_PATH . 'includes/helpers.php';

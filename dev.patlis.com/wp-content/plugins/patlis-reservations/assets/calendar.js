@@ -4,6 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    const pageLang = (document.documentElement.lang || "en").toLowerCase().split(/[-_]/)[0];
+    const localeMap = {
+        el: "gr",
+        de: "de",
+        en: "default"
+    };
+    const locale = localeMap[pageLang] || pageLang;
+
     const form = calendarEl.closest("form");
     if (!form) {
         return;
@@ -18,20 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const baseMinTime = form.dataset.minTime || "11:00";
     const baseMaxTime = form.dataset.maxTime || "21:00";
     const minuteStep = 15;
-
-    function getFlatpickrLocale() {
-        const htmlLang = (document.documentElement.lang || "en").toLowerCase();
-        let shortLang = htmlLang.split(/[-_]/)[0];
-        if (shortLang === "el") shortLang = "gr";
-
-        // Επιστρέφουμε το OBJECT από το l10ns, όχι το string "de"
-        if (window.flatpickr && flatpickr.l10ns && flatpickr.l10ns[shortLang]) {
-            return flatpickr.l10ns[shortLang];
-        }
-
-        return "en"; 
-    }
-
 
     function cloneDate(date) {
         return new Date(date.getTime());
@@ -181,24 +175,49 @@ document.addEventListener("DOMContentLoaded", function () {
         updateInput(instance);
     }
 
-    flatpickr(calendarEl, {
-        locale: getFlatpickrLocale(),
-        inline: true,
-        enableTime: true,
-        time_24hr: true,
-        minuteIncrement: minuteStep,
-        dateFormat: "Y-m-d H:i",
-        minDate: firstAvailableDay,
-        defaultDate: firstAvailable,
-        minTime: getMinTimeForSelectedDate(firstAvailable),
-        maxTime: baseMaxTime,
+    function initializeCalendar() {
+        const flatpickrLocale = locale !== "default" && flatpickr.l10ns[locale]
+            ? flatpickr.l10ns[locale]
+            : "en";
 
-        onReady: function (selectedDates, dateStr, instance) {
-            applyRules(instance);
-        },
+        flatpickr(calendarEl, {
+            locale: flatpickrLocale,
+            inline: true,
+            enableTime: true,
+            time_24hr: true,
+            minuteIncrement: minuteStep,
+            dateFormat: "Y-m-d H:i",
+            minDate: firstAvailableDay,
+            defaultDate: firstAvailable,
+            minTime: getMinTimeForSelectedDate(firstAvailable),
+            maxTime: baseMaxTime,
 
-        onChange: function (selectedDates, dateStr, instance) {
-            applyRules(instance);
+            onReady: function (selectedDates, dateStr, instance) {
+                applyRules(instance);
+            },
+
+            onChange: function (selectedDates, dateStr, instance) {
+                applyRules(instance);
+            }
+        });
+    }
+
+    if (locale === "default" || flatpickr.l10ns[locale]) {
+        initializeCalendar();
+        return;
+    }
+
+    const localeScript = document.createElement("script");
+    localeScript.src = "/wp-content/themes/bricks/assets/js/libs/flatpickr-l10n/" + locale + ".min.js";
+    localeScript.onload = function () {
+        if (!flatpickr.l10ns[locale]) {
+            console.warn("Flatpickr locale was loaded but is unavailable:", locale);
         }
-    });
+        initializeCalendar();
+    };
+    localeScript.onerror = function () {
+        console.warn("Unable to load Flatpickr locale:", locale);
+        initializeCalendar();
+    };
+    document.head.appendChild(localeScript);
 });

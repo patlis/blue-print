@@ -2,7 +2,7 @@
 /*
 Plugin Name: Patlis Accommodation
 Description: Accommodation module (Hotel) + bookings table
-Version: 1.0.0
+Version: 1.1.0
 Author: Patlis
 Update URI: https://updates.patlis.com/patlis-accommodation/
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_ACCOMMODATION_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_ACCOMMODATION_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_ACCOMMODATION_VERSION', '1.0.0');
+define('PATLIS_ACCOMMODATION_VERSION', '1.1.0');
 
 // Updater
 if (function_exists('patlis_register_plugin_updater')) {
@@ -42,6 +42,33 @@ function patlis_accommodation_require_supported_version_or_die() {
     }
 }
 
+add_action('wp_enqueue_scripts', function (): void {
+    if (!patlis_accommodation_is_enabled_for_version() || !is_page()) {
+        return;
+    }
+
+    $page_id = (int) get_queried_object_id();
+    if ($page_id <= 0) {
+        return;
+    }
+
+    $taxonomy = function_exists('patlis_version_get_page_template_taxonomy')
+        ? patlis_version_get_page_template_taxonomy()
+        : 'template';
+
+    if (!taxonomy_exists($taxonomy) || !has_term('booking', $taxonomy, $page_id)) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'patlis-accommodation-booking',
+        PATLIS_ACCOMMODATION_URL . 'assets/js/booking.js',
+        [],
+        PATLIS_ACCOMMODATION_VERSION,
+        true
+    );
+});
+
 /* ============================================================
  * Includes (keep same structure as other Patlis plugins)
  * ============================================================ */
@@ -50,6 +77,7 @@ require_once PATLIS_ACCOMMODATION_PATH . 'includes/post-types.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/rooms-query.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/booking-form.php';
+require_once PATLIS_ACCOMMODATION_PATH . 'includes/form-handlers.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/multilingual.php';
 
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/term-sync.php';
@@ -80,7 +108,7 @@ require_once PATLIS_ACCOMMODATION_PATH . 'includes/meal-plans.php';
 /* ============================================================
  * DB
  * ============================================================ */
-define('PATLIS_ACCOMMODATION_DB_VERSION', 3);
+define('PATLIS_ACCOMMODATION_DB_VERSION', 4);
 
 register_activation_hook(__FILE__, 'patlis_accommodation_on_activate');
 
@@ -99,21 +127,24 @@ function patlis_accommodation_create_or_update_tables() {
 
     $sql = "CREATE TABLE $table (
         id INT NOT NULL AUTO_INCREMENT,
-        room_id INT NOT NULL,
-        check_in DATE NOT NULL,
-        check_out DATE NOT NULL,
-        nights INT NOT NULL,
-        adults INT NOT NULL,
-        children INT NOT NULL,
-        infants INT NOT NULL,
-        diet_type_id INT NULL,
-        transaction_id VARCHAR(100) NULL,
-        status TINYINT NOT NULL DEFAULT 0,
-        customer_name VARCHAR(255) NOT NULL,
-        customer_email VARCHAR(255) NOT NULL,
-        customer_phone VARCHAR(50) NOT NULL,
-        lead_uuid VARCHAR(36) NULL,
-        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        room_id INT NOT NULL,   /*ok*/
+        check_in DATE NOT NULL,   /*ok*/
+        check_out DATE NOT NULL,   /*ok*/
+        nights INT NOT NULL,   /*ok*/
+
+        adults INT NOT NULL,   /*ok*/
+        children INT NOT NULL,   /*ok*/
+        infants INT NOT NULL,   /*ok*/
+        meal_plan_id INT NULL,
+        offer_package_id INT NULL,
+        offer_package_title VARCHAR(255) NULL,
+        status TINYINT NOT NULL DEFAULT 0,   /*ok*/
+        customer_name VARCHAR(255) NOT NULL,   /*ok*/
+        customer_email VARCHAR(255) NOT NULL,   /*ok*/
+        customer_phone VARCHAR(50) NOT NULL,   /*ok*/
+        customer_notes TEXT NULL,
+        lead_uuid VARCHAR(36) NULL,   /*ok*/
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,   /*ok*/
         PRIMARY KEY  (id),
         KEY room_id (room_id),
         KEY check_in (check_in),
@@ -123,6 +154,13 @@ function patlis_accommodation_create_or_update_tables() {
     ) $charset_collate;";
 
     dbDelta($sql);
+
+    foreach (['diet_type_id', 'transaction_id'] as $column) {
+        $exists = $wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$table} LIKE %s", $column));
+        if ($exists) {
+            $wpdb->query("ALTER TABLE {$table} DROP COLUMN {$column}");
+        }
+    }
 
     update_option('patlis_accommodation_db_version', PATLIS_ACCOMMODATION_DB_VERSION);
 }

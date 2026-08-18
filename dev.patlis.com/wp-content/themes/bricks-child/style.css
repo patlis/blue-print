@@ -118,41 +118,65 @@ main {min-height:50vh}
 }
 
 /*---------------flatpickr Calendar---------------------*/
+.flatpickr-calendar.arrowTop:before {border-bottom-color: var(--body-text);}
+.flatpickr-monthDropdown-months{margin-right: 16px;}
+
 .flatpickr-calendar {
   	width: 100%;
-	max-width: 400px;
+	  max-width: 400px;
   	box-shadow: none;
   	border: 1px solid var(--body-text);
 	background: var(--body);
 }
 
+.flatpickr-months{margin-bottom: 10px;}
+
 .dayContainer{
-	gap: 10px;
+    gap:0px !important;
+	    padding: 0;
+    border-right: 0;
 }
 
 /* days */
 .flatpickr-day {
-  border-radius: var(--round-sm)!important;
-	font-weight: 500;
+  border-radius: 0 !important;
 	color:var(--body-text);
-	border-color:var(--border);
+	border: 1px solid var(--border);
 	margin:0px !important;
-	max-width: unset;
-	width:  calc((100% - 6 * 10px) / 7) !important;
+	max-width: none !important;
+  height: unset !important;
+  aspect-ratio: 1/1 !important;
+  font-size: 16px !important;
+      display: flex;
+    align-items: center;
 }
-.flatpickr-day.flatpickr-disabled {color:var(--muted);border-color:var(--muted);}
+.flatpickr-day.flatpickr-disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+.flatpickr-months .flatpickr-next-month svg, .flatpickr-months .flatpickr-prev-month svg {
+    height: 20px;
+    width: 20px;
+}
+
 .flatpickr-day:hover {background: var(--body-link); color: var(--body);}
 .flatpickr-day.selected {background: var(--body-link); color: var(--body);}
 .flatpickr-day.today {border-color: var(--body-link);}
 .flatpickr-time {margin-top:8px;border-top: 1px solid var(--border);}
-.flatpickr-weekday, .flatpickr-time-separator{color: var(--body-text)}
+.flatpickr-weekday, .flatpickr-time-separator{color: var(--body-text); font-size: 14px !important;}
 
 /* arrows */
-.flatpickr-prev-month,.flatpickr-next-month {fill: var(--body-link) !important;}
+.flatpickr-prev-month,.flatpickr-next-month {fill: var(--body-link) !important; }
 .flatpickr-prev-month:hover,.flatpickr-next-month:hover {
   	fill: var(--body-hover) !important;
 	color:var(--body-hover) !important;
 }
+
+.flatpickr-current-month {color: var(--body-text) !important; 
+  font-size: 18px !important; color: var(--body-text) !important; 
+}
+
+/*------------------kiosk------------------*/
 
 /*kiosk positioning 9 positions*/
 .kiosk-pos-top-left {
@@ -279,4 +303,8 @@ main .bricks-link-wrapper:hover svg path {
 }
 footer a:hover svg path {
   fill: var(--footer-hover) !important;
+}
+
+form .message.success {
+  column-span: all;
 }

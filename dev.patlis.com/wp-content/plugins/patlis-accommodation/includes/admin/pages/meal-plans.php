@@ -5,6 +5,20 @@ const PATLIS_MEAL_PLAN_META_PRICE_ADULT = 'patlis_meal_plan_price_adult';
 const PATLIS_MEAL_PLAN_META_IS_DEFAULT  = 'patlis_meal_plan_is_default';
 const PATLIS_MEAL_PLAN_META_DESCRIPTION = 'patlis_meal_plan_description';
 
+function patlis_acc_meal_plan_is_default_language_post(int $post_id): bool
+{
+    if (!function_exists('pll_default_language') || !function_exists('pll_get_post')) {
+        return true;
+    }
+
+    $default_lang = pll_default_language('slug');
+    $default_post_id = is_string($default_lang) && $default_lang !== ''
+        ? (int) pll_get_post($post_id, $default_lang)
+        : 0;
+
+    return $default_post_id <= 0 || $default_post_id === $post_id;
+}
+
 add_action('add_meta_boxes', function () {
     if (!function_exists('patlis_accommodation_is_enabled_for_version') || !patlis_accommodation_is_enabled_for_version()) {
         return;
@@ -27,17 +41,19 @@ function patlis_acc_meal_plans_render_metabox($post): void
     $price_a = get_post_meta((int) $post->ID, PATLIS_MEAL_PLAN_META_PRICE_ADULT, true);
     $is_default = (int) get_post_meta((int) $post->ID, PATLIS_MEAL_PLAN_META_IS_DEFAULT, true);
     $desc = (string) get_post_meta((int) $post->ID, PATLIS_MEAL_PLAN_META_DESCRIPTION, true);
+    $is_default_language = patlis_acc_meal_plan_is_default_language_post((int) $post->ID);
+    $default_lang = function_exists('pll_default_language') ? (string) pll_default_language('slug') : '';
 
     echo '<table class="form-table" role="presentation">';
 
-    echo '<tr><th scope="row"><label for="patlis_meal_plan_price_adult">Extra price / adult / night (€)</label></th><td>';
-    echo '<input type="number" id="patlis_meal_plan_price_adult" name="patlis_meal_plan_price_adult" value="' . esc_attr($price_a !== '' ? $price_a : '0') . '" min="0" step="0.01">';
-    echo '<p class="description">0 = included in room rate.</p>';
-    echo '</td></tr>';
+    echo '<tr class="patlis-meal-plan-shared-field"' . ($is_default_language ? '' : ' style="display:none"') . '><th scope="row"><label for="patlis_meal_plan_price_adult">Extra price / adult / night (€)</label></th><td>';
+        echo '<input type="number" id="patlis_meal_plan_price_adult" name="patlis_meal_plan_price_adult" value="' . esc_attr($price_a !== '' ? $price_a : '0') . '" min="0" step="0.01">';
+        echo '<p class="description">0 = included in room rate.</p>';
+        echo '</td></tr>';
 
-    echo '<tr><th scope="row">Default</th><td>';
-    echo '<label><input type="checkbox" id="patlis_meal_plan_is_default" name="patlis_meal_plan_is_default" value="1" ' . checked($is_default, 1, false) . '> Pre-selected in the booking form.</label>';
-    echo '</td></tr>';
+    echo '<tr class="patlis-meal-plan-shared-field"' . ($is_default_language ? '' : ' style="display:none"') . '><th scope="row">Default</th><td>';
+        echo '<label><input type="checkbox" id="patlis_meal_plan_is_default" name="patlis_meal_plan_is_default" value="1" ' . checked($is_default, 1, false) . '> Pre-selected in the booking form.</label>';
+        echo '</td></tr>';
 
     echo '<tr><th scope="row"><label for="patlis_meal_plan_description">Description</label></th><td>';
     echo '<textarea id="patlis_meal_plan_description" name="patlis_meal_plan_description" rows="4" class="large-text">' . esc_textarea($desc) . '</textarea>';
@@ -45,6 +61,28 @@ function patlis_acc_meal_plans_render_metabox($post): void
     echo '</td></tr>';
 
     echo '</table>';
+
+    if ($default_lang !== '') {
+        ?>
+        <script>
+        (function () {
+            var defaultLanguage = <?php echo wp_json_encode($default_lang); ?>;
+            var languageSelect = document.getElementById('post_lang_choice');
+            if (!languageSelect) return;
+
+            function refreshSharedFields() {
+                var isDefaultLanguage = languageSelect.value === defaultLanguage;
+                document.querySelectorAll('#patlis_meal_plan_fields .patlis-meal-plan-shared-field').forEach(function (field) {
+                    field.style.display = isDefaultLanguage ? '' : 'none';
+                });
+            }
+
+            languageSelect.addEventListener('change', refreshSharedFields);
+            refreshSharedFields();
+        })();
+        </script>
+        <?php
+    }
 }
 
 add_action('save_post_patlis_meal_plan', function ($post_id) {
@@ -55,9 +93,19 @@ add_action('save_post_patlis_meal_plan', function ($post_id) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
+    $description = sanitize_textarea_field((string) ($_POST['patlis_meal_plan_description'] ?? ''));
+
+    if (!patlis_acc_meal_plan_is_default_language_post((int) $post_id)) {
+        update_post_meta((int) $post_id, PATLIS_MEAL_PLAN_META_DESCRIPTION, $description);
+
+        if (function_exists('patlis_acc_rooms_list_cache_clear')) {
+            patlis_acc_rooms_list_cache_clear();
+        }
+        return;
+    }
+
     $price_a = max(0.0, (float) ($_POST['patlis_meal_plan_price_adult'] ?? 0));
     $is_default = !empty($_POST['patlis_meal_plan_is_default']) ? 1 : 0;
-    $description = sanitize_textarea_field((string) ($_POST['patlis_meal_plan_description'] ?? ''));
 
     if ($is_default) {
         $ids_args = [

@@ -58,6 +58,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
 
     $tags[] = ['name' => '{patlis_acc_rooms_options}',     'label' => 'Booking: Rooms options (Label|ID)',  'group' => $gOpt];
     $tags[] = ['name' => '{patlis_acc_selected_room_meal_plans_options}', 'label' => 'Booking: Selected room meal plan options (Label|ID)', 'group' => $gOpt];
+    $tags[] = ['name' => '{patlis_acc_offers_options}', 'label' => 'Booking: Room offers options (Label|ID) – filtered by room_id', 'group' => $gOpt];
 
     $tags[] = ['name' => '{patlis_acc_room_short_desc}', 'label' => 'Room: Short description', 'group' => $gRoom];
     $tags[] = ['name' => '{patlis_acc_room_size_m2}',    'label' => 'Room: Size (m²)',         'group' => $gRoom];
@@ -74,6 +75,8 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_acc_property_facilities_all}',   'label' => 'Property: Facilities ALL (grouped HTML)','group' => $gProp];
 
     $tags[] = ['name' => '{patlis_acc_room_meal_plans_json}', 'label' => 'Room: Meal Plans JSON (assigned plans)', 'group' => $gRoom];
+
+    $tags[] = ['name' => '{patlis_acc_queried_post_id}', 'label' => 'Page: Queried post ID (stable outside loops)', 'group' => $gRoom];
 
     return $tags;
 });
@@ -104,6 +107,11 @@ add_filter('bricks/dynamic_data/render_content', function ($content, $post, $con
  * ============================================================ */
 function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null): string
 {
+    // Returns the main queried object ID — unaffected by loop context.
+    if ($tag === 'patlis_acc_queried_post_id') {
+        return (string) (int) get_queried_object_id();
+    }
+
     // Room rates payload for Query Array loops inside room pages/templates.
     if ($tag === 'patlis_acc_room_rates_json' || $tag === 'patlis_acc_room_rates_count') {
         $room_id = 0;
@@ -193,10 +201,52 @@ function patlis_acc_bricks_get_value(string $tag, $post = null, $context = null)
                 $label = (string) ($plan['name'] ?? '');
                 $price = isset($plan['price_adult']) ? (float) $plan['price_adult'] : 0.0;
                 if ($price > 0) {
-                    $label .= ' (+' . number_format($price, 2, '.', '') . '€)';
+                    $formatted_price = function_exists('patlis_format_currency')
+                        ? patlis_format_currency($price)
+                        : number_format($price, 2, '.', '') . '€';
+                    $label .= ' (+' . $formatted_price . ')';
                 }
-                $lines[] = $plan['name'] . ':' . $label;
+                $lines[] = (int) ($plan['id'] ?? 0) . ':' . $label;
             }
+            return implode("\n", $lines);
+        }
+
+        if ($tag === 'patlis_acc_offers_options') {
+            $room_id = isset($_GET['room_id']) ? (int) $_GET['room_id'] : 0;
+            if ($room_id <= 0) return '';
+
+            $room_ids = function_exists('patlis_get_post_translation_ids')
+                ? patlis_get_post_translation_ids($room_id)
+                : [$room_id];
+            if (empty($room_ids)) $room_ids = [$room_id];
+
+            $candidates = get_posts([
+                'post_type'      => 'rates',
+                'post_status'    => 'publish',
+                'posts_per_page' => -1,
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+                'fields'         => 'ids',
+                'no_found_rows'  => true,
+            ]);
+
+            if (empty($candidates)) return '';
+
+            $lines = [];
+            foreach ($candidates as $offer_id) {
+                $offer_id = (int) $offer_id;
+                $linked_rooms = get_post_meta($offer_id, 'package_linked_rooms', true);
+                $linked_room_ids = function_exists('patlis_parse_linked_rooms_ids')
+                    ? patlis_parse_linked_rooms_ids($linked_rooms)
+                    : [];
+
+                if (!empty($linked_room_ids) && empty(array_intersect($linked_room_ids, $room_ids))) {
+                    continue;
+                }
+
+                $lines[] = $offer_id . ':' . get_the_title($offer_id);
+            }
+
             return implode("\n", $lines);
         }
 
