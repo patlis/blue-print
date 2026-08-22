@@ -1,8 +1,8 @@
 {
   "name": "Patlis Core",
   "slug": "patlis-core",
-  "version": "1.1.0",
-  "download_url": "https://updates.patlis.com/downloads/patlis-core-1.1.0.zip",
+  "version": "2.0.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-core-2.0.0.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "6.0",

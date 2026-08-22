@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Reservations
  * Description: Reservation module for gastronomy sites (settings + integrations + pro features).
- * Version: 0.1.1
+ * Version: 0.2.0
  * Author: Patlis Ioannis
  * Text Domain: patlis-reservations
  * Update URI: https://updates.patlis.com/patlis-reservations/
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_RESERVATIONS_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_RESERVATIONS_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_RESERVATIONS_VERSION', '0.1.1');
+define('PATLIS_RESERVATIONS_VERSION', '0.2.0');
 
 add_action('plugins_loaded', function (): void {
     load_plugin_textdomain('patlis-reservations', false, dirname(plugin_basename(__FILE__)) . '/languages');
