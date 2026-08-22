@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-28 21:17+0000\n"
-"PO-Revision-Date: 2026-06-09 01:14+0200\n"
+"POT-Creation-Date: 2026-08-22 16:14+0200\n"
+"PO-Revision-Date: 2026-08-22 16:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: de_DE <LL@li.org>\n"
 "Language: de_DE\n"
@@ -19,176 +19,746 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 "X-Generator: Poedit 3.8\n"
 
-msgid "Contact form"
-msgstr "Kontaktformular"
+#: includes/acf-field-labels.php:9 includes/cpt-labels.php:25
+msgid "Events"
+msgstr "Veranstaltungen"
 
-msgid "Currency"
-msgstr "Währung"
+#: includes/acf-field-labels.php:10 includes/admin/pages/homepage.php:38
+msgid "Experience"
+msgstr "Aktivitäten"
 
-msgid "Recipient email"
-msgstr "E-Mail-Adresse des Empfängers"
-
-msgid "Email subject"
-msgstr "E-Mail-Betreff"
-
-msgid "Currency symbol"
-msgstr "Währungssymbol"
-
-msgid "Currency position"
-msgstr "Währungsposition"
-
-msgid "Decimal divider"
-msgstr "Dezimaltrennzeichen"
-
-msgid "After the amount"
-msgstr "Nach dem Betrag"
-
-msgid "Before the amount"
-msgstr "Vor dem Betrag"
-
-msgid "Decimals"
-msgstr "Dezimalstellen"
-
-msgid "Address"
-msgstr "Adresse"
-
-msgid "Basic settings"
-msgstr "Grundeinstellungen"
-
-msgid "City"
-msgstr "Stadt"
-
-msgid "Company name"
-msgstr "Firmenname"
-
-msgid "Display the contact form"
-msgstr "Kontaktformular anzeigen"
-
-msgid "E-mail"
-msgstr "E-Mail"
-
-msgid "Mobile"
-msgstr "Mobil"
-
-msgid "Mobile phone"
-msgstr "Mobiltelefon"
-
-msgid "Opening times"
-msgstr "Öffnungszeiten"
-
-msgid "Patlis.com"
-msgstr "Patlis.com"
-
-msgid "Phone"
-msgstr "Telefon"
-
-msgid "Phone-2"
-msgstr "Telefon 2"
-
-msgid "Show contact form (1/0)"
-msgstr "Kontaktformular anzeigen (1/0)"
-
-msgid "Social Media"
-msgstr "Soziale Medien"
-
-msgid "Time zone"
-msgstr "Zeitzone"
-
-msgid "Zip"
-msgstr "PLZ"
-
-msgid "Zip code"
-msgstr "Postleitzahl"
-
-msgid "Action banner (CTA)"
-msgstr "Aktionsbanner (CTA)"
-
-msgid "CTA Background"
-msgstr "CTA-Hintergrund"
-
-msgid "CTA Background image"
-msgstr "CTA-Hintergrundbild"
-
-msgid "Drag to reorder."
-msgstr "Ziehen zum Neuordnen. Der CSS-Flex-Reihenfolgewert folgt dieser Liste (1 = oben)."
-
-msgid "Home Gallery"
-msgstr "Startseiten-Galerie"
-
-msgid "Home page settings"
-msgstr "Startseiten-Einstellungen"
-
-msgid "Last Reviews"
-msgstr "Neueste Bewertungen"
-
-msgid "Offers and Packages"
+#: includes/acf-field-labels.php:11 includes/admin/pages/homepage.php:37
+msgid "Offers and packages"
 msgstr "Angebote und Pakete"
 
-msgid "Remove"
-msgstr "Entfernen"
+#: includes/acf-field-labels.php:12 includes/cpt-labels.php:33
+msgid "Reviews"
+msgstr "Bewertungen"
 
-msgid "Sections order"
-msgstr "Reihenfolge der Bereiche"
+#: includes/acf-field-labels.php:13 includes/cpt-labels.php:29
+msgid "Services"
+msgstr "Leistungen"
 
-msgid "Select CTA background image"
-msgstr "CTA-Hintergrundbild auswählen"
+#: includes/acf-field-labels.php:14 includes/cpt-labels.php:41
+msgid "Slides"
+msgstr "Slides"
 
-msgid "Select image"
-msgstr "Bild auswählen"
+#: includes/acf-field-labels.php:15 includes/cpt-labels.php:38
+msgid "Timeline"
+msgstr "Zeitleiste"
 
-msgid "Top Dishes"
-msgstr "Top-Gerichte"
+#: includes/acf-field-labels.php:29 includes/acf-field-labels.php:40
+#: includes/acf-field-labels.php:57
+msgid "Short description"
+msgstr "Kurzbeschreibung"
 
-msgid "Top Rooms"
-msgstr "Top-Zimmer"
-
-msgid "Top Services"
-msgstr "Top-Leistungen"
-
-msgid "Upcoming Events"
-msgstr "Bevorstehende Veranstaltungen"
-
-msgid "Use this image"
-msgstr "Dieses Bild verwenden"
-
-msgid "Welcome Section"
-msgstr "Willkommensbereich"
-
-msgid "Center Pop up"
-msgstr "Zentriertes Pop-up"
-
-msgid "Home page"
-msgstr "Start Seite"
-
-msgid "Notification Bar"
-msgstr "Benachrichtigungsleiste"
-
-msgid "Translations"
-msgstr "Übersetzungen"
-
-msgid "Coordinates"
-msgstr "Koordinaten"
-
-msgid "Logo image"
-msgstr "Logo-Bild"
-
-msgid "Social Media URLs"
-msgstr "Social-Media-URLs"
-
-msgid "Show opening hours"
-msgstr "Öffnungszeiten anzeigen"
-
-msgid "Text"
-msgstr "Text"
-
-msgid "Site Settings"
-msgstr "Website-Einstellungen"
-
-msgid "Active"
-msgstr "Aktiv"
-
+#: includes/acf-field-labels.php:30 includes/admin/pages/center-popup.php:410
+#: includes/admin/pages/notification-bar.php:223
 msgid "Start date"
 msgstr "Startdatum"
 
+#: includes/acf-field-labels.php:31
+msgid "Start time"
+msgstr "Startzeit"
+
+#: includes/acf-field-labels.php:32 includes/admin/pages/center-popup.php:417
+msgid "End date"
+msgstr "Enddatum"
+
+#: includes/acf-field-labels.php:33
+msgid "End time"
+msgstr "Endzeit"
+
+#: includes/acf-field-labels.php:34 includes/acf-field-labels.php:62
+#: includes/admin/pages/homepage.php:93
+msgid "Video URL"
+msgstr "Video-URL"
+
+#: includes/acf-field-labels.php:36 includes/acf-field-labels.php:45
+#: includes/acf-field-labels.php:61 includes/acf-field-labels.php:64
+#: includes/acf-field-labels.php:68 includes/admin/pages/homepage.php:118
+msgid "Display order"
+msgstr "Anzeigereihenfolge"
+
+#: includes/acf-field-labels.php:37
+msgid "Link text"
+msgstr "Linktext"
+
+#: includes/acf-field-labels.php:38 includes/admin/pages/center-popup.php:438
+msgid "Link URL"
+msgstr "Link-URL"
+
+#: includes/acf-field-labels.php:41
+msgid "Valid from"
+msgstr "Gültig ab"
+
+#: includes/acf-field-labels.php:42
+msgid "Valid until"
+msgstr "Gültig bis"
+
+#: includes/acf-field-labels.php:43
+msgid "Price text"
+msgstr "Preistext"
+
+#: includes/acf-field-labels.php:44
+msgid "Discount (%)"
+msgstr "Rabatt (%)"
+
+#: includes/acf-field-labels.php:46 includes/acf-field-labels.php:54
+#: includes/acf-field-labels.php:60 includes/admin/pages/center-popup.php:361
+msgid "Enable"
+msgstr "Aktivieren"
+
+#: includes/acf-field-labels.php:47
+msgid "Linked rooms"
+msgstr "Verbundene Zimmer"
+
+#: includes/acf-field-labels.php:48
+msgid "Booking URL (redirect mode)"
+msgstr "Buchungs-URL (Weiterleitungsmodus)"
+
+#: includes/acf-field-labels.php:50
+msgid "Stars"
+msgstr "Sterne"
+
+#: includes/acf-field-labels.php:51
+msgid "Date"
+msgstr "Datum"
+
+#: includes/acf-field-labels.php:52
+msgid "Review text"
+msgstr "Bewertungstext"
+
+#: includes/acf-field-labels.php:53
+msgid "Source"
+msgstr "Quelle"
+
+#: includes/acf-field-labels.php:55 includes/acf-field-labels.php:59
+msgid "Show on the home page"
+msgstr "Auf der Startseite anzeigen"
+
+#: includes/acf-field-labels.php:58
+msgid "Create service page"
+msgstr "Service-Seite erstellen"
+
+#: includes/acf-field-labels.php:66
+msgid "Date (optional)"
+msgstr "Datum (optional)"
+
+#: includes/acf-field-labels.php:67
+msgid "Image (optional)"
+msgstr "Bild (optional)"
+
+#: includes/admin/menu.php:10 includes/admin/menu.php:11
+msgid "Site settings"
+msgstr "Website-Einstellungen"
+
+#: includes/admin/menu.php:21 includes/admin/menu.php:22
+#: includes/admin/pages/basic.php:120 includes/admin/pages/center-popup.php:393
+msgid "Basic settings"
+msgstr "Grundeinstellungen"
+
+#: includes/admin/menu.php:30 includes/admin/menu.php:31
+msgid "Social media"
+msgstr "Soziale Medien"
+
+#: includes/admin/menu.php:39 includes/admin/menu.php:40
+#: includes/admin/pages/opening-times.php:153
+msgid "Opening times"
+msgstr "Öffnungszeiten"
+
+#: includes/admin/menu.php:48 includes/admin/menu.php:49
+#: includes/admin/pages/center-popup.php:347
+msgid "Center Popup"
+msgstr "Zentriertes Pop-up"
+
+#: includes/admin/menu.php:57 includes/admin/menu.php:58
+#: includes/admin/pages/notification-bar.php:179
+msgid "Notification Bar"
+msgstr "Benachrichtigungsleiste"
+
+#: includes/admin/menu.php:66 includes/admin/menu.php:67
+#: includes/admin/pages/translations.php:48
+msgid "Translations"
+msgstr "Übersetzungen"
+
+#: includes/admin/menu.php:75 includes/admin/menu.php:76
+msgid "Home page"
+msgstr "Start Seite"
+
+#: includes/admin/pages/basic.php:91
+msgid "Basic"
+msgstr "Grundlegend"
+
+#: includes/admin/pages/basic.php:92
+msgid "Contact form"
+msgstr "Kontaktformular"
+
+#: includes/admin/pages/basic.php:93
+msgid "Currency"
+msgstr "Währung"
+
+#: includes/admin/pages/basic.php:94
+msgid "Display the contact form"
+msgstr "Kontaktformular anzeigen"
+
+#: includes/admin/pages/basic.php:95
+msgid "Recipient email"
+msgstr "E-Mail-Adresse des Empfängers"
+
+#: includes/admin/pages/basic.php:96
+msgid "Email subject"
+msgstr "E-Mail-Betreff"
+
+#: includes/admin/pages/basic.php:97
+msgid "Currency symbol"
+msgstr "Währungssymbol"
+
+#: includes/admin/pages/basic.php:98
+msgid "Decimal divider"
+msgstr "Dezimaltrennzeichen"
+
+#: includes/admin/pages/basic.php:99
+msgid "Currency position"
+msgstr "Währungsposition"
+
+#: includes/admin/pages/basic.php:100
+msgid "After the amount"
+msgstr "Nach dem Betrag"
+
+#: includes/admin/pages/basic.php:101
+msgid "Before the amount"
+msgstr "Vor dem Betrag"
+
+#: includes/admin/pages/basic.php:102
+msgid "Decimals"
+msgstr "Dezimalstellen"
+
+#: includes/admin/pages/basic.php:103
+msgid "Appearance"
+msgstr "Aussehen"
+
+#: includes/admin/pages/basic.php:104
+msgid "Display mode"
+msgstr "Anzeigemodus"
+
+#: includes/admin/pages/basic.php:105
+msgid "Light and dark mode"
+msgstr "Hell- und Dunkelmodus"
+
+#: includes/admin/pages/basic.php:106
+msgid "Light mode only"
+msgstr "Nur Lichtmodus"
+
+#: includes/admin/pages/basic.php:107
+msgid "Dark mode only"
+msgstr "Nur im Dunkelmodus"
+
+#: includes/admin/pages/basic.php:108
+msgid "Legal links"
+msgstr "Rechtliche Links"
+
+#: includes/admin/pages/basic.php:109
+msgid "Show legal notice page"
+msgstr "Impressumsseite anzeigen"
+
+#: includes/admin/pages/basic.php:110
+msgid "Show privacy policy page"
+msgstr "Datenschutzerklärung anzeigen"
+
+#: includes/admin/pages/basic.php:111
+msgid "Show terms of use page"
+msgstr "Nutzungsbedingungen anzeigen"
+
+#: includes/admin/pages/basic.php:112
+msgid "Confirmation email to client"
+msgstr "Bestätigungs-E-Mail an den Kunden"
+
+#: includes/admin/pages/basic.php:113
+#, php-format
+msgid "Subject (%s)"
+msgstr "Thema (%s)"
+
+#: includes/admin/pages/basic.php:114
+#, php-format
+msgid "Body (%s)"
+msgstr "Text (%s)"
+
+#: includes/admin/pages/basic.php:115 includes/admin/pages/center-popup.php:297
+#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/notification-bar.php:150
+#: includes/admin/pages/opening-times.php:126
+#: includes/admin/pages/social.php:27
+msgid "Save"
+msgstr "Speichern"
+
+#: includes/admin/pages/basic.php:156
+msgid "Logo image"
+msgstr "Logo-Bild"
+
+#: includes/admin/pages/basic.php:164 includes/admin/pages/center-popup.php:463
+#: includes/admin/pages/homepage.php:111
+msgid "Select image"
+msgstr "Bild auswählen"
+
+#: includes/admin/pages/basic.php:165 includes/admin/pages/center-popup.php:464
+#: includes/admin/pages/center-popup.php:483
+#: includes/admin/pages/homepage.php:112
+msgid "Remove"
+msgstr "Entfernen"
+
+#: includes/admin/pages/basic.php:171
+msgid "Company name"
+msgstr "Firmenname"
+
+#: includes/admin/pages/basic.php:180
+msgid "Address"
+msgstr "Adresse"
+
+#: includes/admin/pages/basic.php:189
+msgid "City"
+msgstr "Stadt"
+
+#: includes/admin/pages/basic.php:198
+msgid "Zip code"
+msgstr "Postleitzahl"
+
+#: includes/admin/pages/basic.php:216
+msgid "Phone"
+msgstr "Telefon"
+
+#: includes/admin/pages/basic.php:225
+msgid "Phone-2"
+msgstr "Telefon 2"
+
+#: includes/admin/pages/basic.php:234
+msgid "Mobile phone"
+msgstr "Mobiltelefon"
+
+#: includes/admin/pages/basic.php:252
+msgid "Coordinates"
+msgstr "Koordinaten"
+
+#: includes/admin/pages/basic.php:261
+msgid "Time zone"
+msgstr "Zeitzone"
+
+#: includes/admin/pages/basic.php:493
+msgid "Select logo image"
+msgstr "Logotyp auswählen"
+
+#: includes/admin/pages/basic.php:494 includes/admin/pages/homepage.php:223
+msgid "Use this image"
+msgstr "Dieses Bild verwenden"
+
+#: includes/admin/pages/center-popup.php:372
+msgid "Display source"
+msgstr "Anzeigequelle"
+
+#: includes/admin/pages/center-popup.php:378
+#: includes/admin/pages/center-popup.php:396
+msgid "Formatted Text"
+msgstr "Formatierter Text"
+
+#: includes/admin/pages/center-popup.php:379
+#: includes/admin/pages/center-popup.php:397
+msgid "Html Code"
+msgstr "HTML-Code"
+
+#: includes/admin/pages/center-popup.php:380
+#: includes/admin/pages/center-popup.php:394
+msgid "Image"
+msgstr "Bild"
+
+#: includes/admin/pages/center-popup.php:381
+#: includes/admin/pages/center-popup.php:395
+msgid "Video"
+msgstr "Video"
+
+#: includes/admin/pages/center-popup.php:387
+msgid "Content"
+msgstr "Inhalt"
+
+#: includes/admin/pages/center-popup.php:403
+msgid "Delay (seconds)"
+msgstr "Verzögerung (Sekunden)"
+
+#: includes/admin/pages/center-popup.php:424
+msgid "Title"
+msgstr "Titel"
+
+#: includes/admin/pages/center-popup.php:482
+#: includes/admin/pages/homepage.php:97
+msgid "Select video"
+msgstr "Video auswählen"
+
+#: includes/admin/pages/center-popup.php:621
+msgid ""
+"This popup is shown only after the cookie banner has been completed and the "
+"consent flag has been stored in the browser. If you change or replace your "
+"cookie banner, please let us know so we can adjust the popup condition "
+"accordingly."
+msgstr ""
+"Dieses Popup wird erst angezeigt, nachdem das Cookie-Banner abgeschlossen "
+"wurde und der Zustimmungsstatus im Browser gespeichert ist. Wenn Sie das "
+"Cookie-Banner ändern oder ersetzen, informieren Sie uns bitte, damit wir die "
+"Bedingung für die Anzeige des Popups entsprechend anpassen können."
+
+#: includes/admin/pages/homepage.php:34
+msgid "Welcome section"
+msgstr "Willkommensbereich"
+
+#: includes/admin/pages/homepage.php:35
+msgid "Top dishes"
+msgstr "Top-Gerichte"
+
+#: includes/admin/pages/homepage.php:36
+msgid "Top rooms"
+msgstr "Top-Zimmer"
+
+#: includes/admin/pages/homepage.php:39
+msgid "Top services"
+msgstr "Top-Leistungen"
+
+#: includes/admin/pages/homepage.php:40
+msgid "Upcoming events"
+msgstr "Bevorstehende Veranstaltungen"
+
+#: includes/admin/pages/homepage.php:41
+msgid "Home gallery"
+msgstr "Startseiten-Galerie"
+
+#: includes/admin/pages/homepage.php:42
+msgid "Latest reviews"
+msgstr "Neueste Bewertungen"
+
+#: includes/admin/pages/homepage.php:43
+msgid "Action banner (CTA)"
+msgstr "Aktionsbanner (CTA)"
+
+#: includes/admin/pages/homepage.php:79
+msgid "Home page settings"
+msgstr "Startseiten-Einstellungen"
+
+#: includes/admin/pages/homepage.php:89
+msgid "Welcome section video"
+msgstr "Begrüßungsabschnitt Video"
+
+#: includes/admin/pages/homepage.php:90
+msgid ""
+"If a video is set, it replaces the featured image in the Welcome section."
+msgstr ""
+"Wenn ein Video gesetzt ist, ersetzt es das Feature-Bild im Begrüßungsbereich."
+
+#: includes/admin/pages/homepage.php:103
+msgid "CTA background image"
+msgstr "CTA-Hintergrundbild"
+
+#: includes/admin/pages/homepage.php:106
+msgid "CTA background"
+msgstr "CTA-Hintergrund"
+
+#: includes/admin/pages/homepage.php:119
+msgid "Drag to reorder."
+msgstr ""
+"Ziehen zum Neuordnen. Der CSS-Flex-Reihenfolgewert folgt dieser Liste (1 = "
+"oben)."
+
+#: includes/admin/pages/homepage.php:222
+msgid "Select CTA background image"
+msgstr "CTA-Hintergrundbild auswählen"
+
+#: includes/admin/pages/homepage.php:246
+msgid "Select welcome video"
+msgstr "Willkommensvideo auswählen"
+
+#: includes/admin/pages/homepage.php:247
+msgid "Use this video"
+msgstr "Nutze dieses Video"
+
+#: includes/admin/pages/notification-bar.php:151
+#: includes/admin/pages/opening-times.php:127
+msgid "Saved."
+msgstr "Gespeichert."
+
+#: includes/admin/pages/notification-bar.php:193
+msgid "Active"
+msgstr "Aktiv"
+
+#: includes/admin/pages/notification-bar.php:203
+#: includes/admin/pages/opening-times.php:171
+msgid "Text"
+msgstr "Text"
+
+#: includes/admin/pages/notification-bar.php:204
+msgid "Recommended: max. 50 characters"
+msgstr "Empfohlen: Maximal 50 Zeichen"
+
+#: includes/admin/pages/notification-bar.php:233
 msgid "Expiry date"
 msgstr "Verfallsdatum"
+
+#: includes/admin/pages/opening-times.php:164
+msgid "Show opening hours"
+msgstr "Öffnungszeiten anzeigen"
+
+#: includes/admin/pages/social.php:31
+msgid "Social media URLs"
+msgstr "Social-Media-URLs"
+
+#: includes/admin/pages/translations.php:44
+msgid "Not allowed."
+msgstr "Nicht erlaubt."
+
+#: includes/admin/pages/translations.php:49
+msgid "Polylang is required."
+msgstr "Polylang ist erforderlich."
+
+#: includes/admin/pages/translations.php:50 includes/cpt-labels.php:11
+#: includes/cpt-labels.php:12 includes/gallery-manager.php:52
+#: includes/gallery-manager.php:53 includes/gallery-manager.php:132
+#: includes/gallery-manager.php:133
+msgid "Add new"
+msgstr "Neu hinzufügen"
+
+#: includes/admin/pages/translations.php:51
+msgid "Delete key"
+msgstr "Schlüssel löschen"
+
+#: includes/admin/pages/translations.php:52
+msgid "Translations saved."
+msgstr "Übersetzungen gespeichert."
+
+#: includes/admin/pages/translations.php:53
+msgid "New key:"
+msgstr "Neuer Schlüssel:"
+
+#: includes/admin/pages/translations.php:54
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: includes/admin/pages/translations.php:55
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: includes/admin/pages/translations.php:56
+msgid "Delete"
+msgstr "Löschen"
+
+#: includes/admin/pages/translations.php:57
+msgid "Filter keys..."
+msgstr "Schlüsselfilterung..."
+
+#: includes/admin/pages/translations.php:58
+msgid "Filter"
+msgstr "Filter"
+
+#: includes/admin/pages/translations.php:59
+msgid "Clear filter"
+msgstr "Filter löschen"
+
+#: includes/admin/pages/translations.php:60
+msgid "Key"
+msgstr "Schlüssel"
+
+#: includes/admin/pages/translations.php:61
+msgid "Language"
+msgstr "Sprache"
+
+#: includes/admin/pages/translations.php:62
+msgid "Translation"
+msgstr "Übersetzung"
+
+#: includes/admin/pages/translations.php:63
+msgid "No keys found."
+msgstr "Keine Schlüssel gefunden."
+
+#: includes/admin/pages/translations.php:64
+msgid "Default"
+msgstr "Standard"
+
+#: includes/admin/pages/translations.php:65
+msgid "Save translations"
+msgstr "Übersetzungen speichern"
+
+#: includes/admin/pages/translations.php:66
+#, php-format
+msgid "%d key"
+msgstr "%d Schlüssel"
+
+#: includes/admin/pages/translations.php:67
+#, php-format
+msgid "%d keys"
+msgstr "%d Schlüssel"
+
+#: includes/admin/pages/translations.php:68
+#, php-format
+msgid "matching %s"
+msgstr "passend zu %s"
+
+#: includes/admin/pages/translations.php:69
+#, php-format
+msgid "Page %1$d of %2$d"
+msgstr "Seite %1$d von %2$d"
+
+#: includes/cpt-labels.php:10
+msgid "All"
+msgstr "Alle"
+
+#: includes/cpt-labels.php:13
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: includes/cpt-labels.php:14
+msgid "New"
+msgstr "Neu"
+
+#: includes/cpt-labels.php:15
+msgid "View"
+msgstr "Ansehen"
+
+#: includes/cpt-labels.php:16
+msgid "Search"
+msgstr "Suchen"
+
+#: includes/cpt-labels.php:17
+msgid "Not found."
+msgstr "Nicht gefunden"
+
+#: includes/cpt-labels.php:18
+msgid "Not found in Trash."
+msgstr "Nicht im Papierkorb gefunden."
+
+#: includes/cpt-labels.php:26
+msgid "Event"
+msgstr "Veranstaltung"
+
+#: includes/cpt-labels.php:30
+msgid "Service"
+msgstr "Leistung"
+
+#: includes/cpt-labels.php:34
+msgid "Review"
+msgstr "Bewertung"
+
+#: includes/cpt-labels.php:37
+msgid "Timelines"
+msgstr "Zeitleisten"
+
+#: includes/cpt-labels.php:42
+msgid "Slide"
+msgstr "Slide"
+
+#: includes/events-gallery.php:153 includes/events-gallery.php:391
+#: includes/gallery-manager.php:463
+msgid "Add Images"
+msgstr "Bilder hinzufügen"
+
+#: includes/events-gallery.php:154 includes/events-gallery.php:392
+#: includes/gallery-manager.php:464
+msgid "Delete all"
+msgstr "Alle löschen"
+
+#: includes/events-gallery.php:156 includes/events-gallery.php:394
+#: includes/gallery-manager.php:466
+msgid "Select multiple images, drag to reorder, then save."
+msgstr ""
+"Wählen Sie mehrere Bilder aus, ziehen Sie sie an die gewünschte Position, um "
+"die Reihenfolge zu ändern, und speichern Sie sie anschließend."
+
+#: includes/events-gallery.php:241 includes/events-gallery.php:479
+#: includes/gallery-manager.php:553
+msgid "Select gallery images"
+msgstr "Galeriebilder auswählen"
+
+#: includes/events-gallery.php:243 includes/events-gallery.php:481
+msgid "Use selected images"
+msgstr "Ausgewählte Bilder verwenden"
+
+#: includes/gallery-manager.php:47 includes/gallery-manager.php:85
+#: includes/gallery-manager.php:128 includes/gallery-manager.php:178
+msgid "Galleries"
+msgstr "Galerien"
+
+#: includes/gallery-manager.php:48 includes/gallery-manager.php:49
+#: includes/gallery-manager.php:50 includes/gallery-manager.php:77
+#: includes/gallery-manager.php:89 includes/gallery-manager.php:93
+#: includes/gallery-manager.php:126 includes/gallery-manager.php:129
+#: includes/gallery-manager.php:130 includes/gallery-manager.php:170
+#: includes/gallery-manager.php:182 includes/gallery-manager.php:186
+msgid "Gallery"
+msgstr "Galerie"
+
+#: includes/gallery-manager.php:51 includes/gallery-manager.php:131
+msgid "All galleries"
+msgstr "Alle Galerien"
+
+#: includes/gallery-manager.php:54 includes/gallery-manager.php:134
+msgid "Edit gallery"
+msgstr "Galerie bearbeiten"
+
+#: includes/gallery-manager.php:55 includes/gallery-manager.php:135
+msgid "New gallery"
+msgstr "Neue Galerie"
+
+#: includes/gallery-manager.php:56 includes/gallery-manager.php:136
+msgid "View gallery"
+msgstr "Galerie ansehen"
+
+#: includes/gallery-manager.php:57 includes/gallery-manager.php:137
+msgid "Search galleries"
+msgstr "Galerien durchsuchen"
+
+#: includes/gallery-manager.php:58 includes/gallery-manager.php:138
+msgid "No galleries found."
+msgstr "Keine Galerien gefunden."
+
+#: includes/gallery-manager.php:59 includes/gallery-manager.php:139
+msgid "No galleries found in Trash."
+msgstr "Keine Galerien in Trash zu finden."
+
+#: includes/gallery-manager.php:445 includes/gallery-manager.php:594
+msgid "Gallery images"
+msgstr "Galeriebilder"
+
+#~ msgid "Offers & Packages"
+#~ msgstr "Angebote und Pakete"
+
+#~ msgid "Show from"
+#~ msgstr "Anzeigen aus"
+
+#~ msgid "Date end"
+#~ msgstr "Ende des Datums"
+
+#~ msgid "Sections order"
+#~ msgstr "Reihenfolge der Bereiche"
+
+#~ msgid "Add new gallery"
+#~ msgstr "Neue Galerie hinzufügen"
+
+#~ msgid "Rating"
+#~ msgstr "Bewertungswert"
+
+#, fuzzy
+#~| msgid "Show from"
+#~ msgid "Show"
+#~ msgstr "Anzeigen aus"
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "Frei"
+
+#~ msgid "E-mail"
+#~ msgstr "E-Mail"
+
+#~ msgid "Mobile"
+#~ msgstr "Mobil"
+
+#~ msgid "Patlis.com"
+#~ msgstr "Patlis.com"
+
+#~ msgid "Show contact form (1/0)"
+#~ msgstr "Kontaktformular anzeigen (1/0)"
+
+#~ msgid "Zip"
+#~ msgstr "PLZ"

@@ -49,8 +49,8 @@ function patlis_gallery_force_labels_runtime(): void
         'menu_name' => __('Gallery', 'patlis-core'),
         'name_admin_bar' => __('Gallery', 'patlis-core'),
         'all_items' => __('All galleries', 'patlis-core'),
-        'add_new' => __('Add new gallery', 'patlis-core'),
-        'add_new_item' => __('Add new gallery', 'patlis-core'),
+        'add_new' => __('Add new', 'patlis-core'),
+        'add_new_item' => __('Add new', 'patlis-core'),
         'edit_item' => __('Edit gallery', 'patlis-core'),
         'new_item' => __('New gallery', 'patlis-core'),
         'view_item' => __('View gallery', 'patlis-core'),
@@ -129,8 +129,8 @@ add_action('init', function (): void {
             'singular_name' => __('Gallery', 'patlis-core'),
             'menu_name' => __('Gallery', 'patlis-core'),
             'all_items' => __('All galleries', 'patlis-core'),
-            'add_new' => __('Add new gallery', 'patlis-core'),
-            'add_new_item' => __('Add new gallery', 'patlis-core'),
+            'add_new' => __('Add new', 'patlis-core'),
+            'add_new_item' => __('Add new', 'patlis-core'),
             'edit_item' => __('Edit gallery', 'patlis-core'),
             'new_item' => __('New gallery', 'patlis-core'),
             'view_item' => __('View gallery', 'patlis-core'),
@@ -442,7 +442,7 @@ function patlis_gallery_render_metabox($post): void
     $gallery_ids_csv = esc_attr(implode(',', $gallery_ids));
 
     echo '<table class="form-table" role="presentation">';
-    echo '<tr><th scope="row"><label for="' . esc_attr(patlis_gallery_meta_key()) . '">Gallery images</label></th><td>';
+    echo '<tr><th scope="row"><label for="' . esc_attr(patlis_gallery_meta_key()) . '">' . esc_html__('Gallery images', 'patlis-core') . '</label></th><td>';
     echo '<input type="hidden" id="' . esc_attr(patlis_gallery_meta_key()) . '" name="' . esc_attr(patlis_gallery_meta_key()) . '" value="' . $gallery_ids_csv . '">';
     echo '<div id="patlis-gallery-images" class="patlis-gallery-images">';
 
@@ -460,10 +460,10 @@ function patlis_gallery_render_metabox($post): void
 
     echo '</div>';
     echo '<p>';
-    echo '<button type="button" class="button" id="patlis-gallery-images-add">Add Images</button> ';
-    echo '<button type="button" class="button" id="patlis-gallery-images-clear">Clear</button>';
+    echo '<button type="button" class="button" id="patlis-gallery-images-add">' . esc_html__('Add Images', 'patlis-core') . '</button> ';
+    echo '<button type="button" class="button" id="patlis-gallery-images-clear">' . esc_html__('Delete all', 'patlis-core') . '</button>';
     echo '</p>';
-    echo '<p class="description">Select multiple images, drag to reorder, then save.</p>';
+    echo '<p class="description">' . esc_html__('Select multiple images, drag to reorder, then save.', 'patlis-core') . '</p>';
     echo '</td></tr>';
     echo '</table>';
 
@@ -550,7 +550,7 @@ function patlis_gallery_render_metabox($post): void
 
             if (!frame) {
                 frame = wp.media({
-                    title: 'Select Gallery Images',
+                    title: '<?php echo esc_js(__('Select gallery images', 'patlis-core')); ?>',
                     library: { type: 'image' },
                     button: { text: 'Use selected images' },
                     multiple: true

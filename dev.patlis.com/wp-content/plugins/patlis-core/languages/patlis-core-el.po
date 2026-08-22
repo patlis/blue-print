@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-28 21:17+0000\n"
-"PO-Revision-Date: 2026-06-09 01:16+0200\n"
+"POT-Creation-Date: 2026-08-22 16:14+0200\n"
+"PO-Revision-Date: 2026-08-22 16:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: el_GR <LL@li.org>\n"
 "Language: el_GR\n"
@@ -19,176 +19,873 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 "X-Generator: Poedit 3.8\n"
 
-msgid "Contact form"
-msgstr "Φόρμα επικοινωνίας"
+#: includes/acf-field-labels.php:9 includes/cpt-labels.php:25
+msgid "Events"
+msgstr "Εκδηλώσεις"
 
-msgid "Currency"
-msgstr "Νόμισμα"
+#: includes/acf-field-labels.php:10 includes/admin/pages/homepage.php:38
+msgid "Experience"
+msgstr "Εμπειρία"
 
-msgid "Recipient email"
-msgstr "Email παραλήπτη"
-
-msgid "Email subject"
-msgstr "Θέμα του Email"
-
-msgid "Currency symbol"
-msgstr "Σύμβολο νομίσματος"
-
-msgid "Currency position"
-msgstr "Θέση νομίσματος"
-
-msgid "Decimal divider"
-msgstr "Διαχωριστικό δεκαδικών"
-
-msgid "After the amount"
-msgstr "Μετά το ποσό"
-
-msgid "Before the amount"
-msgstr "Πριν από το ποσό"
-
-msgid "Decimals"
-msgstr "Δεκαδικά"
-
-msgid "Address"
-msgstr "Διεύθυνση"
-
-msgid "Basic settings"
-msgstr "Βασικές ρυθμίσεις"
-
-msgid "City"
-msgstr "Πόλη"
-
-msgid "Company name"
-msgstr "Επωνυμία"
-
-msgid "Display the contact form"
-msgstr "Εμφάνιση φόρμας επικοινωνίας"
-
-msgid "E-mail"
-msgstr "E-mail"
-
-msgid "Mobile"
-msgstr "Κινητό"
-
-msgid "Mobile phone"
-msgstr "Κινητό τηλέφωνο"
-
-msgid "Opening times"
-msgstr "Ώρες λειτουργίας"
-
-msgid "Patlis.com"
-msgstr "Patlis.com"
-
-msgid "Phone"
-msgstr "Τηλέφωνο"
-
-msgid "Phone-2"
-msgstr "Τηλέφωνο 2"
-
-msgid "Show contact form (1/0)"
-msgstr "Εμφάνιση φόρμας επικοινωνίας (1/0)"
-
-msgid "Social Media"
-msgstr "Κοινωνικά δίκτυα"
-
-msgid "Time zone"
-msgstr "Ζώνη ώρας"
-
-msgid "Zip"
-msgstr "ΤΚ"
-
-msgid "Zip code"
-msgstr "ΤΚ"
-
-msgid "Action banner (CTA)"
-msgstr "Banner δράσης (CTA)"
-
-msgid "CTA Background"
-msgstr "Φόντο CTA"
-
-msgid "CTA Background image"
-msgstr "Εικόνα φόντου CTA"
-
-msgid "Drag to reorder."
-msgstr "Σύρετε για αναδιάταξη."
-
-msgid "Home Gallery"
-msgstr "Γκαλερί αρχικής σελίδας"
-
-msgid "Home page settings"
-msgstr "Ρυθμίσεις αρχικής σελίδας"
-
-msgid "Last Reviews"
-msgstr "Τελευταίες κριτικές"
-
-msgid "Offers and Packages"
+#: includes/acf-field-labels.php:11 includes/admin/pages/homepage.php:37
+msgid "Offers and packages"
 msgstr "Προσφορές και πακέτα"
 
-msgid "Remove"
-msgstr "Αφαίρεση"
+#: includes/acf-field-labels.php:12 includes/cpt-labels.php:33
+msgid "Reviews"
+msgstr "Κριτικές"
 
-msgid "Sections order"
-msgstr "Σειρά ενοτήτων"
+#: includes/acf-field-labels.php:13 includes/cpt-labels.php:29
+msgid "Services"
+msgstr "Υπηρεσίες"
 
-msgid "Select CTA background image"
-msgstr "Επιλογή εικόνας φόντου CTA"
+#: includes/acf-field-labels.php:14 includes/cpt-labels.php:41
+msgid "Slides"
+msgstr "Διαφάνειες"
 
-msgid "Select image"
-msgstr "Επιλογή εικόνας"
+#: includes/acf-field-labels.php:15 includes/cpt-labels.php:38
+msgid "Timeline"
+msgstr "Χρονολόγιο"
 
-msgid "Top Dishes"
-msgstr "Κορυφαία πιάτα"
+#: includes/acf-field-labels.php:29 includes/acf-field-labels.php:40
+#: includes/acf-field-labels.php:57
+msgid "Short description"
+msgstr "Σύντομη περιγραφή"
 
-msgid "Top Rooms"
-msgstr "Κορυφαία δωμάτια"
-
-msgid "Top Services"
-msgstr "Κορυφαίες υπηρεσίες"
-
-msgid "Upcoming Events"
-msgstr "Επερχόμενες εκδηλώσεις"
-
-msgid "Use this image"
-msgstr "Χρήση αυτής της εικόνας"
-
-msgid "Welcome Section"
-msgstr "Ενότητα καλωσορίσματος"
-
-msgid "Center Pop up"
-msgstr "Κεντρικό Pop up"
-
-msgid "Home page"
-msgstr "Αρχική σελίδα"
-
-msgid "Notification Bar"
-msgstr "Γραμμή ειδοποιήσεων"
-
-msgid "Translations"
-msgstr "Μεταφράσεις"
-
-msgid "Coordinates"
-msgstr "Συντεταγμένες"
-
-msgid "Logo image"
-msgstr "Εικόνα λογότυπου"
-
-msgid "Social Media URLs"
-msgstr "URL κοινωνικών μέσων"
-
-msgid "Show Opening hours"
-msgstr "Εμφάνιση ωρών λειτουργίας"
-
-msgid "Text"
-msgstr "Κείμενο"
-
-msgid "Site Settings"
-msgstr "Ρυθμίσεις ιστότοπου"
-
-msgid "Active"
-msgstr "Ενεργό"
-
+#: includes/acf-field-labels.php:30 includes/admin/pages/center-popup.php:410
+#: includes/admin/pages/notification-bar.php:223
 msgid "Start date"
 msgstr "Ημερομηνία έναρξης"
 
+#: includes/acf-field-labels.php:31
+msgid "Start time"
+msgstr "Ώρα έναρξης"
+
+#: includes/acf-field-labels.php:32 includes/admin/pages/center-popup.php:417
+msgid "End date"
+msgstr "Ημερομηνία λήξης"
+
+#: includes/acf-field-labels.php:33
+msgid "End time"
+msgstr "Ώρα λήξης"
+
+#: includes/acf-field-labels.php:34 includes/acf-field-labels.php:62
+#: includes/admin/pages/homepage.php:93
+msgid "Video URL"
+msgstr "URL βίντεο"
+
+#: includes/acf-field-labels.php:36 includes/acf-field-labels.php:45
+#: includes/acf-field-labels.php:61 includes/acf-field-labels.php:64
+#: includes/acf-field-labels.php:68 includes/admin/pages/homepage.php:118
+msgid "Display order"
+msgstr "Σειρά εμφάνισης"
+
+#: includes/acf-field-labels.php:37
+msgid "Link text"
+msgstr "Κείμενο συνδέσμου"
+
+#: includes/acf-field-labels.php:38 includes/admin/pages/center-popup.php:438
+msgid "Link URL"
+msgstr "URL συνδέσμου"
+
+#: includes/acf-field-labels.php:41
+msgid "Valid from"
+msgstr "Ισχύει από"
+
+#: includes/acf-field-labels.php:42
+msgid "Valid until"
+msgstr "Ισχύει μέχρι"
+
+#: includes/acf-field-labels.php:43
+msgid "Price text"
+msgstr "Κείμενο τιμής"
+
+#: includes/acf-field-labels.php:44
+msgid "Discount (%)"
+msgstr "Έκπτωση (%)"
+
+#: includes/acf-field-labels.php:46 includes/acf-field-labels.php:54
+#: includes/acf-field-labels.php:60 includes/admin/pages/center-popup.php:361
+msgid "Enable"
+msgstr "Ενεργοποίηση"
+
+#: includes/acf-field-labels.php:47
+msgid "Linked rooms"
+msgstr "Συνδεδεμένα δωμάτια"
+
+#: includes/acf-field-labels.php:48
+msgid "Booking URL (redirect mode)"
+msgstr "URL κράτησης (λειτουργία ανακατεύθυνσης)"
+
+#: includes/acf-field-labels.php:50
+msgid "Stars"
+msgstr "Αστέρια"
+
+#: includes/acf-field-labels.php:51
+msgid "Date"
+msgstr "Ημερομηνία"
+
+#: includes/acf-field-labels.php:52
+msgid "Review text"
+msgstr "Κείμενο αξιολόγησης"
+
+#: includes/acf-field-labels.php:53
+msgid "Source"
+msgstr "Πηγή"
+
+#: includes/acf-field-labels.php:55 includes/acf-field-labels.php:59
+msgid "Show on the home page"
+msgstr "Εμφάνιση στην αρχική σελίδα"
+
+#: includes/acf-field-labels.php:58
+msgid "Create service page"
+msgstr "Δημιουργία σελίδας υπηρεσίας"
+
+#: includes/acf-field-labels.php:66
+msgid "Date (optional)"
+msgstr "Ημερομηνία (προαιρετικό)"
+
+#: includes/acf-field-labels.php:67
+msgid "Image (optional)"
+msgstr "Εικόνα (προαιρετικά)"
+
+#: includes/admin/menu.php:10 includes/admin/menu.php:11
+msgid "Site settings"
+msgstr "Ρυθμίσεις ιστότοπου"
+
+#: includes/admin/menu.php:21 includes/admin/menu.php:22
+#: includes/admin/pages/basic.php:120 includes/admin/pages/center-popup.php:393
+msgid "Basic settings"
+msgstr "Βασικές ρυθμίσεις"
+
+#: includes/admin/menu.php:30 includes/admin/menu.php:31
+msgid "Social media"
+msgstr "Κοινωνικά δίκτυα"
+
+#: includes/admin/menu.php:39 includes/admin/menu.php:40
+#: includes/admin/pages/opening-times.php:153
+msgid "Opening times"
+msgstr "Ώρες λειτουργίας"
+
+#: includes/admin/menu.php:48 includes/admin/menu.php:49
+#: includes/admin/pages/center-popup.php:347
+msgid "Center Popup"
+msgstr "Κεντρικό Popup"
+
+#: includes/admin/menu.php:57 includes/admin/menu.php:58
+#: includes/admin/pages/notification-bar.php:179
+msgid "Notification Bar"
+msgstr "Γραμμή ειδοποιήσεων"
+
+#: includes/admin/menu.php:66 includes/admin/menu.php:67
+#: includes/admin/pages/translations.php:48
+msgid "Translations"
+msgstr "Μεταφράσεις"
+
+#: includes/admin/menu.php:75 includes/admin/menu.php:76
+msgid "Home page"
+msgstr "Αρχική σελίδα"
+
+#: includes/admin/pages/basic.php:91
+msgid "Basic"
+msgstr "Βασικό"
+
+#: includes/admin/pages/basic.php:92
+msgid "Contact form"
+msgstr "Φόρμα επικοινωνίας"
+
+#: includes/admin/pages/basic.php:93
+msgid "Currency"
+msgstr "Νόμισμα"
+
+#: includes/admin/pages/basic.php:94
+msgid "Display the contact form"
+msgstr "Εμφάνιση φόρμας επικοινωνίας"
+
+#: includes/admin/pages/basic.php:95
+msgid "Recipient email"
+msgstr "Email παραλήπτη"
+
+#: includes/admin/pages/basic.php:96
+msgid "Email subject"
+msgstr "Θέμα του Email"
+
+#: includes/admin/pages/basic.php:97
+msgid "Currency symbol"
+msgstr "Σύμβολο νομίσματος"
+
+#: includes/admin/pages/basic.php:98
+msgid "Decimal divider"
+msgstr "Διαχωριστικό δεκαδικών"
+
+#: includes/admin/pages/basic.php:99
+msgid "Currency position"
+msgstr "Θέση νομίσματος"
+
+#: includes/admin/pages/basic.php:100
+msgid "After the amount"
+msgstr "Μετά το ποσό"
+
+#: includes/admin/pages/basic.php:101
+msgid "Before the amount"
+msgstr "Πριν από το ποσό"
+
+#: includes/admin/pages/basic.php:102
+msgid "Decimals"
+msgstr "Δεκαδικά"
+
+#: includes/admin/pages/basic.php:103
+msgid "Appearance"
+msgstr "Εμφάνιση"
+
+#: includes/admin/pages/basic.php:104
+msgid "Display mode"
+msgstr "Λειτουργία εμφάνισης"
+
+#: includes/admin/pages/basic.php:105
+msgid "Light and dark mode"
+msgstr "Φωτεινό & σκοτεινό θέμα"
+
+#: includes/admin/pages/basic.php:106
+msgid "Light mode only"
+msgstr "Μόνο φωτεινό θέμα"
+
+#: includes/admin/pages/basic.php:107
+msgid "Dark mode only"
+msgstr "Μόνο σκοτεινό θέμα"
+
+#: includes/admin/pages/basic.php:108
+msgid "Legal links"
+msgstr "Νομικοί σύνδεσμοι"
+
+#: includes/admin/pages/basic.php:109
+msgid "Show legal notice page"
+msgstr "Εμφάνιση σελίδας νομικής ειδοποίησης"
+
+#: includes/admin/pages/basic.php:110
+msgid "Show privacy policy page"
+msgstr "Εμφάνιση σελίδας Πολιτικής Απορρήτου"
+
+#: includes/admin/pages/basic.php:111
+msgid "Show terms of use page"
+msgstr "Εμφάνιση σελίδας Όρων Χρήσης"
+
+#: includes/admin/pages/basic.php:112
+msgid "Confirmation email to client"
+msgstr "Επιβεβαιωτικό email προς τον Πελάτη"
+
+#: includes/admin/pages/basic.php:113
+#, php-format
+msgid "Subject (%s)"
+msgstr "Θέμα (%s)"
+
+#: includes/admin/pages/basic.php:114
+#, php-format
+msgid "Body (%s)"
+msgstr "Σώμα (%s)"
+
+#: includes/admin/pages/basic.php:115 includes/admin/pages/center-popup.php:297
+#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/notification-bar.php:150
+#: includes/admin/pages/opening-times.php:126
+#: includes/admin/pages/social.php:27
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: includes/admin/pages/basic.php:156
+msgid "Logo image"
+msgstr "Εικόνα λογότυπου"
+
+#: includes/admin/pages/basic.php:164 includes/admin/pages/center-popup.php:463
+#: includes/admin/pages/homepage.php:111
+msgid "Select image"
+msgstr "Επιλογή εικόνας"
+
+#: includes/admin/pages/basic.php:165 includes/admin/pages/center-popup.php:464
+#: includes/admin/pages/center-popup.php:483
+#: includes/admin/pages/homepage.php:112
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: includes/admin/pages/basic.php:171
+msgid "Company name"
+msgstr "Όνομα εταιρείας"
+
+#: includes/admin/pages/basic.php:180
+msgid "Address"
+msgstr "Διεύθυνση"
+
+#: includes/admin/pages/basic.php:189
+msgid "City"
+msgstr "Πόλη"
+
+#: includes/admin/pages/basic.php:198
+msgid "Zip code"
+msgstr "ΤΚ"
+
+#: includes/admin/pages/basic.php:216
+msgid "Phone"
+msgstr "Τηλέφωνο"
+
+#: includes/admin/pages/basic.php:225
+msgid "Phone-2"
+msgstr "Τηλέφωνο 2"
+
+#: includes/admin/pages/basic.php:234
+msgid "Mobile phone"
+msgstr "Κινητό τηλέφωνο"
+
+#: includes/admin/pages/basic.php:252
+msgid "Coordinates"
+msgstr "Συντεταγμένες"
+
+#: includes/admin/pages/basic.php:261
+msgid "Time zone"
+msgstr "Ζώνη ώρας"
+
+#: includes/admin/pages/basic.php:493
+msgid "Select logo image"
+msgstr "Επιλογή εικόνας λογότυπου"
+
+#: includes/admin/pages/basic.php:494 includes/admin/pages/homepage.php:223
+msgid "Use this image"
+msgstr "Χρήση αυτής της εικόνας"
+
+#: includes/admin/pages/center-popup.php:372
+msgid "Display source"
+msgstr "Πηγή εμφάνισης"
+
+#: includes/admin/pages/center-popup.php:378
+#: includes/admin/pages/center-popup.php:396
+msgid "Formatted Text"
+msgstr "Μορφοποιημένο κείμενο"
+
+#: includes/admin/pages/center-popup.php:379
+#: includes/admin/pages/center-popup.php:397
+msgid "Html Code"
+msgstr "Κώδικας HTML"
+
+#: includes/admin/pages/center-popup.php:380
+#: includes/admin/pages/center-popup.php:394
+msgid "Image"
+msgstr "Εικόνα"
+
+#: includes/admin/pages/center-popup.php:381
+#: includes/admin/pages/center-popup.php:395
+msgid "Video"
+msgstr "Βίντεο"
+
+#: includes/admin/pages/center-popup.php:387
+msgid "Content"
+msgstr "περιεχόμενο"
+
+#: includes/admin/pages/center-popup.php:403
+msgid "Delay (seconds)"
+msgstr "Καθυστέρηση (δευτερόλεπτα)"
+
+#: includes/admin/pages/center-popup.php:424
+msgid "Title"
+msgstr "Τίτλος"
+
+#: includes/admin/pages/center-popup.php:482
+#: includes/admin/pages/homepage.php:97
+msgid "Select video"
+msgstr "Επιλέξτε βίντεο"
+
+#: includes/admin/pages/center-popup.php:621
+msgid ""
+"This popup is shown only after the cookie banner has been completed and the "
+"consent flag has been stored in the browser. If you change or replace your "
+"cookie banner, please let us know so we can adjust the popup condition "
+"accordingly."
+msgstr ""
+"Αυτό το αναδυόμενο παράθυρο εμφανίζεται μόνο αφού ολοκληρωθεί το cookie "
+"banner και αποθηκευτεί η ένδειξη συγκατάθεσης στον browser. Αν αλλάξετε ή "
+"αντικαταστήσετε το cookie banner, παρακαλούμε ενημερώστε μας ώστε να "
+"προσαρμόσουμε ανάλογα τη συνθήκη εμφάνισης του popup."
+
+#: includes/admin/pages/homepage.php:34
+msgid "Welcome section"
+msgstr "Ενότητα καλωσορίσματος"
+
+#: includes/admin/pages/homepage.php:35
+msgid "Top dishes"
+msgstr "Κορυφαία πιάτα"
+
+#: includes/admin/pages/homepage.php:36
+msgid "Top rooms"
+msgstr "Κορυφαία δωμάτια"
+
+#: includes/admin/pages/homepage.php:39
+msgid "Top services"
+msgstr "Κορυφαίες υπηρεσίες"
+
+#: includes/admin/pages/homepage.php:40
+msgid "Upcoming events"
+msgstr "Επερχόμενες εκδηλώσεις"
+
+#: includes/admin/pages/homepage.php:41
+msgid "Home gallery"
+msgstr "Γκαλερί αρχικής σελίδας"
+
+#: includes/admin/pages/homepage.php:42
+msgid "Latest reviews"
+msgstr "Τελευταίες κριτικές"
+
+#: includes/admin/pages/homepage.php:43
+msgid "Action banner (CTA)"
+msgstr "Banner δράσης (CTA)"
+
+#: includes/admin/pages/homepage.php:79
+msgid "Home page settings"
+msgstr "Ρυθμίσεις αρχικής σελίδας"
+
+#: includes/admin/pages/homepage.php:89
+msgid "Welcome section video"
+msgstr "Βίντεο ενότητας καλωσορίσματος"
+
+#: includes/admin/pages/homepage.php:90
+msgid ""
+"If a video is set, it replaces the featured image in the Welcome section."
+msgstr ""
+"Εάν έχει οριστεί ένα βίντεο, αντικαθιστά την επιλεγμένη εικόνα στην ενότητα "
+"Καλώς ορίσατε."
+
+#: includes/admin/pages/homepage.php:103
+msgid "CTA background image"
+msgstr "Εικόνα φόντου CTA"
+
+#: includes/admin/pages/homepage.php:106
+msgid "CTA background"
+msgstr "Φόντο CTA"
+
+#: includes/admin/pages/homepage.php:119
+msgid "Drag to reorder."
+msgstr "Σύρετε για αναδιάταξη."
+
+#: includes/admin/pages/homepage.php:222
+msgid "Select CTA background image"
+msgstr "Επιλογή εικόνας φόντου CTA"
+
+#: includes/admin/pages/homepage.php:246
+msgid "Select welcome video"
+msgstr "Επιλέξτε βίντεο καλωσορίσματος"
+
+#: includes/admin/pages/homepage.php:247
+msgid "Use this video"
+msgstr "Χρησιμοποιήστε αυτό το βίντεο"
+
+#: includes/admin/pages/notification-bar.php:151
+#: includes/admin/pages/opening-times.php:127
+msgid "Saved."
+msgstr "Αποθηκεύτηκε."
+
+#: includes/admin/pages/notification-bar.php:193
+msgid "Active"
+msgstr "Ενεργό"
+
+#: includes/admin/pages/notification-bar.php:203
+#: includes/admin/pages/opening-times.php:171
+msgid "Text"
+msgstr "Κείμενο"
+
+#: includes/admin/pages/notification-bar.php:204
+msgid "Recommended: max. 50 characters"
+msgstr "Συνιστάται: Μέγιστο 50 χαρακτήρες"
+
+#: includes/admin/pages/notification-bar.php:233
 msgid "Expiry date"
 msgstr "Ημερομηνία έναρξης"
+
+#: includes/admin/pages/opening-times.php:164
+msgid "Show opening hours"
+msgstr "Εμφάνιση ωρών λειτουργίας"
+
+#: includes/admin/pages/social.php:31
+msgid "Social media URLs"
+msgstr "URL κοινωνικών μέσων"
+
+#: includes/admin/pages/translations.php:44
+msgid "Not allowed."
+msgstr "Δεν επιτρέπεται."
+
+#: includes/admin/pages/translations.php:49
+msgid "Polylang is required."
+msgstr "Το Polylang απαιτείται"
+
+#: includes/admin/pages/translations.php:50 includes/cpt-labels.php:11
+#: includes/cpt-labels.php:12 includes/gallery-manager.php:52
+#: includes/gallery-manager.php:53 includes/gallery-manager.php:132
+#: includes/gallery-manager.php:133
+msgid "Add new"
+msgstr "Προσθήκη νέου"
+
+#: includes/admin/pages/translations.php:51
+msgid "Delete key"
+msgstr "Διαγραφή Κλειδιού"
+
+#: includes/admin/pages/translations.php:52
+msgid "Translations saved."
+msgstr "Οι μεταφράσεις αποθηκεύτηκαν."
+
+#: includes/admin/pages/translations.php:53
+msgid "New key:"
+msgstr "Νέο Κλειδί:"
+
+#: includes/admin/pages/translations.php:54
+msgid "Add"
+msgstr "Προσθήκη"
+
+#: includes/admin/pages/translations.php:55
+msgid "Cancel"
+msgstr "Ματαίωση"
+
+#: includes/admin/pages/translations.php:56
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: includes/admin/pages/translations.php:57
+msgid "Filter keys..."
+msgstr "Φιλτράρισμα κλειδιών..."
+
+#: includes/admin/pages/translations.php:58
+msgid "Filter"
+msgstr "Φίλτρο"
+
+#: includes/admin/pages/translations.php:59
+msgid "Clear filter"
+msgstr "Καθαρισμός φίλτρου"
+
+#: includes/admin/pages/translations.php:60
+msgid "Key"
+msgstr "Κλειδί"
+
+#: includes/admin/pages/translations.php:61
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: includes/admin/pages/translations.php:62
+msgid "Translation"
+msgstr "Μετάφραση"
+
+#: includes/admin/pages/translations.php:63
+msgid "No keys found."
+msgstr "Δεν βρέθηκαν κλειδιά."
+
+#: includes/admin/pages/translations.php:64
+msgid "Default"
+msgstr "Προεπιλογή "
+
+#: includes/admin/pages/translations.php:65
+msgid "Save translations"
+msgstr "Αποθήκευση μεταφράσεων"
+
+#: includes/admin/pages/translations.php:66
+#, php-format
+msgid "%d key"
+msgstr "%d κλειδί"
+
+#: includes/admin/pages/translations.php:67
+#, php-format
+msgid "%d keys"
+msgstr "%d κλειδιά"
+
+#: includes/admin/pages/translations.php:68
+#, php-format
+msgid "matching %s"
+msgstr "ταιριάζουν %s"
+
+#: includes/admin/pages/translations.php:69
+#, php-format
+msgid "Page %1$d of %2$d"
+msgstr "Σελίδα %1$d από %2$d"
+
+#: includes/cpt-labels.php:10
+msgid "All"
+msgstr "Όλα"
+
+#: includes/cpt-labels.php:13
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: includes/cpt-labels.php:14
+msgid "New"
+msgstr "Νέο"
+
+#: includes/cpt-labels.php:15
+msgid "View"
+msgstr "Προβολή"
+
+#: includes/cpt-labels.php:16
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: includes/cpt-labels.php:17
+msgid "Not found."
+msgstr "Δεν βρέθηκε"
+
+#: includes/cpt-labels.php:18
+msgid "Not found in Trash."
+msgstr "Δεν βρέθηκε στον Κάδο Απορριμμάτων."
+
+#: includes/cpt-labels.php:26
+msgid "Event"
+msgstr "Εκδήλωση"
+
+#: includes/cpt-labels.php:30
+msgid "Service"
+msgstr "Υπηρεσία"
+
+#: includes/cpt-labels.php:34
+msgid "Review"
+msgstr "Κριτική"
+
+#: includes/cpt-labels.php:37
+msgid "Timelines"
+msgstr "Χρονολόγια"
+
+#: includes/cpt-labels.php:42
+msgid "Slide"
+msgstr "Διαφάνεια"
+
+#: includes/events-gallery.php:153 includes/events-gallery.php:391
+#: includes/gallery-manager.php:463
+msgid "Add Images"
+msgstr "Προσθήκη εικόνων"
+
+#: includes/events-gallery.php:154 includes/events-gallery.php:392
+#: includes/gallery-manager.php:464
+msgid "Delete all"
+msgstr "Διαγραφή όλων"
+
+#: includes/events-gallery.php:156 includes/events-gallery.php:394
+#: includes/gallery-manager.php:466
+msgid "Select multiple images, drag to reorder, then save."
+msgstr ""
+"Επιλέξτε πολλές εικόνες, σύρετε για αναδιάταξη και, στη συνέχεια, "
+"αποθηκεύστε."
+
+#: includes/events-gallery.php:241 includes/events-gallery.php:479
+#: includes/gallery-manager.php:553
+msgid "Select gallery images"
+msgstr "Επιλογή εικόνων γκαλερι"
+
+#: includes/events-gallery.php:243 includes/events-gallery.php:481
+msgid "Use selected images"
+msgstr "Χρήση επιλεγμένων εικόνων"
+
+#: includes/gallery-manager.php:47 includes/gallery-manager.php:85
+#: includes/gallery-manager.php:128 includes/gallery-manager.php:178
+msgid "Galleries"
+msgstr "Γκαλερί εικόνων"
+
+#: includes/gallery-manager.php:48 includes/gallery-manager.php:49
+#: includes/gallery-manager.php:50 includes/gallery-manager.php:77
+#: includes/gallery-manager.php:89 includes/gallery-manager.php:93
+#: includes/gallery-manager.php:126 includes/gallery-manager.php:129
+#: includes/gallery-manager.php:130 includes/gallery-manager.php:170
+#: includes/gallery-manager.php:182 includes/gallery-manager.php:186
+msgid "Gallery"
+msgstr "Γκαλερί"
+
+#: includes/gallery-manager.php:51 includes/gallery-manager.php:131
+msgid "All galleries"
+msgstr "Όλες οι γκαλερί"
+
+#: includes/gallery-manager.php:54 includes/gallery-manager.php:134
+msgid "Edit gallery"
+msgstr "Επεξεργασία συλλογής"
+
+#: includes/gallery-manager.php:55 includes/gallery-manager.php:135
+msgid "New gallery"
+msgstr "Νέα γκαλερί"
+
+#: includes/gallery-manager.php:56 includes/gallery-manager.php:136
+msgid "View gallery"
+msgstr "Προβολή γκαλερί"
+
+#: includes/gallery-manager.php:57 includes/gallery-manager.php:137
+msgid "Search galleries"
+msgstr "Αναζήτηση σε Γκαλερί"
+
+#: includes/gallery-manager.php:58 includes/gallery-manager.php:138
+msgid "No galleries found."
+msgstr "Δεν βρέθηκαν γκαλερί."
+
+#: includes/gallery-manager.php:59 includes/gallery-manager.php:139
+msgid "No galleries found in Trash."
+msgstr "Δεν βρέθηκαν γκαλερί στα σκουπίδια."
+
+#: includes/gallery-manager.php:445 includes/gallery-manager.php:594
+msgid "Gallery images"
+msgstr "Εικόνες Γκαλερί"
+
+#~ msgid "Offers & Packages"
+#~ msgstr "Προσφορές και πακέτα"
+
+#~ msgid "Show from"
+#~ msgstr "Εμφάνιση από"
+
+#~ msgid "Delay (Seconds)"
+#~ msgstr "Καθυστέρηση (δευτερόλεπτα)"
+
+#~ msgid "Date end"
+#~ msgstr "Ημερομηνία λήξης"
+
+#~ msgid "Select Video"
+#~ msgstr "Επιλέξτε Βίντεο"
+
+#~ msgid "Sections order"
+#~ msgstr "Σειρά ενοτήτων"
+
+#~ msgid "Add new gallery"
+#~ msgstr "Προσθήκη νέας Γκαλερί"
+
+#~ msgid "Show"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid "Clear"
+#~ msgstr "Καθαρισμός"
+
+#, fuzzy
+#~| msgid "Basic settings"
+#~ msgid "Basic Settings"
+#~ msgstr "Βασικές ρυθμίσεις"
+
+#, fuzzy
+#~ msgid "Instance Tools"
+#~ msgstr "Εργαλεία παρουσίας"
+
+#, fuzzy
+#~| msgid "Home page settings"
+#~ msgid "White label settings"
+#~ msgstr "Ρυθμίσεις λευκής ετικέτας"
+
+#, fuzzy
+#~ msgid "Reseller domain"
+#~ msgstr "Domain μεταπωλητή"
+
+#, fuzzy
+#~| msgid "Company name"
+#~ msgid "Reseller company name"
+#~ msgstr "Όνομα εταιρείας μεταπωλητή"
+
+#, fuzzy
+#~| msgid "Site Settings"
+#~ msgid "Save settings"
+#~ msgstr "Αποθήκευση ρυθμίσεων"
+
+#, fuzzy
+#~ msgid "Languages Visibility"
+#~ msgstr "Ορατότητα γλωσσών"
+
+#, fuzzy
+#~ msgid "Languages saved."
+#~ msgstr "Γλώσσες που αποθηκεύτηκαν."
+
+#, fuzzy
+#~ msgid "Visible on site"
+#~ msgstr "Ορατό επί τόπου"
+
+#, fuzzy
+#~ msgid "Save Languages"
+#~ msgstr "Αποθήκευση γλωσσών"
+
+#~ msgid "Show contact form (1/0)"
+#~ msgstr "Εμφάνιση φόρμας επικοινωνίας (1/0)"
+
+#, fuzzy
+#~| msgid "Show contact form (1/0)"
+#~ msgid "Opening: Show on footer (1/0)"
+#~ msgstr "Έναρξη: Εμφάνιση στο υποσέλιδο (1/0)"
+
+#, fuzzy
+#~ msgid "Opening: Text (HTML)"
+#~ msgstr "Άνοιγμα: Κείμενο (HTML)"
+
+#, fuzzy
+#~| msgid "Recipient email"
+#~ msgid "Contact form: Recipient email"
+#~ msgstr "Φόρμα επικοινωνίας: Email παραλήπτη"
+
+#, fuzzy
+#~| msgid "Email subject"
+#~ msgid "Contact form: Email subject"
+#~ msgstr "Φόρμα επικοινωνίας: Θέμα email"
+
+#, fuzzy
+#~ msgid "Reviews: Featured count"
+#~ msgstr "Κριτικές: Επιλεγμένος αριθμός"
+
+#, fuzzy
+#~| msgid "Logo image"
+#~ msgid "Logo image URL"
+#~ msgstr "URL εικόνας λογότυπου"
+
+#, fuzzy
+#~| msgid "CTA Background image"
+#~ msgid "CTA background image URL"
+#~ msgstr "URL εικόνας φόντου CTA"
+
+#, fuzzy
+#~ msgid "Home welcome video URL"
+#~ msgstr "Αρχική σελίδα URL βίντεο καλωσορίσματος"
+
+#, fuzzy
+#~ msgid "Icon URL by name (SVG)"
+#~ msgstr "URL εικονιδίου κατά όνομα (SVG)"
+
+#~ msgid "Zip"
+#~ msgstr "ΤΚ"
+
+#~ msgid "Mobile"
+#~ msgstr "Κινητό"
+
+#~ msgid "Enabled (1/0)"
+#~ msgstr "Ενεργοποιημένο (1/0)"
+
+#, fuzzy
+#~ msgid "Show from (html/image/video/code)"
+#~ msgstr "Εμφάνιση από (html/εικόνα/βίντεο/κώδικας)"
+
+#, fuzzy
+#~ msgid "Image URL"
+#~ msgstr "URL εικόνας"
+
+#, fuzzy
+#~ msgid "Html"
+#~ msgstr "Html"
+
+#, fuzzy
+#~ msgid "Events: Gallery JSON (ids + urls + meta)"
+#~ msgstr "Εκδηλώσεις: Gallery JSON (ids + urls + meta)"
+
+#, fuzzy
+#~ msgid "Services: Gallery JSON (ids + urls + meta)"
+#~ msgstr "Υπηρεσίες: Gallery JSON (ids + urls + meta)"
+
+#, fuzzy
+#~ msgid "Gallery: Images JSON (ids + urls + meta)"
+#~ msgstr "Συλλογή: Εικόνες JSON (ids + urls + meta)"
+
+#, fuzzy
+#~ msgid "Gallery: All images JSON (except Home)"
+#~ msgstr "Συλλογή: Όλες οι εικόνες JSON (εκτός από την Αρχική σελίδα)"
+
+#, fuzzy
+#~ msgid "Gallery: Home images JSON"
+#~ msgstr "Γκαλερί: Αρχικές εικόνες JSON"
+
+#, fuzzy
+#~ msgid "Gallery: Home gallery JSON"
+#~ msgstr "Γκαλερί: Αρχική γκαλερί JSON"
+
+#, fuzzy, php-format
+#~ msgid "Confirmation body (%s)"
+#~ msgstr "Φορέας επιβεβαίωσης (%s)"
+
+#~ msgid "E-mail"
+#~ msgstr "E-mail"
+
+#~ msgid "Patlis.com"
+#~ msgstr "Patlis.com"

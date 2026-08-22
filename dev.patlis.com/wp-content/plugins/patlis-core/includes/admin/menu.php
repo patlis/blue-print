@@ -7,8 +7,8 @@ final class Patlis_Admin_Menu {
       $capability  = 'patlis_manage';
 
     add_menu_page(
-      __('Site Settings', 'patlis-core'),
-      __('Site Settings', 'patlis-core'),
+      __('Site settings', 'patlis-core'),
+      __('Site settings', 'patlis-core'),
       $capability,
       'patlis-basic',
       ['Patlis_Admin_Page_Basic', 'render'],
@@ -27,8 +27,8 @@ final class Patlis_Admin_Menu {
     
     add_submenu_page(
       'patlis-basic',
-      __('Social Media', 'patlis-core'),
-      __('Social Media', 'patlis-core'),
+      __('Social media', 'patlis-core'),
+      __('Social media', 'patlis-core'),
       $capability,
       'patlis-social',
       ['Patlis_Admin_Page_Social', 'render']
@@ -45,8 +45,8 @@ final class Patlis_Admin_Menu {
     
     add_submenu_page(
       'patlis-basic',
-      __('Center Pop up', 'patlis-core'),
-      __('Center Pop up', 'patlis-core'),
+      __('Center Popup', 'patlis-core'),
+      __('Center Popup', 'patlis-core'),
       $capability,
       'patlis-center-popup',
       ['Patlis_Admin_Page_Center_Popup', 'render']
@@ -79,10 +79,11 @@ final class Patlis_Admin_Menu {
       ['Patlis_Admin_Page_Homepage', 'render']
     );
 
+    /* ------------- Administrator only ------------------ */
     add_submenu_page(
       'patlis-basic',
-      __('Instance Tools', 'patlis-core'),
-      __('Instance Tools', 'patlis-core'),
+      'Instance Tools',
+      'Instance Tools',
       'manage_options',
       'patlis-instance-tools',
       ['Patlis_Admin_Page_Instance_Tools', 'render']
@@ -90,11 +91,20 @@ final class Patlis_Admin_Menu {
 
     add_submenu_page(
       'patlis-basic',
-      __('White label settings', 'patlis-core'),
-      __('White label settings', 'patlis-core'),
+      'White label settings',
+      'White label settings',
       'manage_options',
       'patlis-white-label',
       ['Patlis_Admin_Page_White_Label', 'render']
+    );
+
+    add_submenu_page(
+      'patlis-basic',
+      'Languages Visibility',
+      'Languages',
+      'manage_options',
+      'patlis-languages-visibility',
+      'patlis_render_languages_visibility_page'
     );
 
     

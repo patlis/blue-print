@@ -294,6 +294,7 @@ final class Patlis_Admin_Page_Center_Popup {
 
     $opt = get_option(Patlis_Core::OPTION_CENTER_POPUP, []);
     if (!is_array($opt)) $opt = [];
+    $save_label = __('Save', 'patlis-core');
     $languages = self::get_languages();
     $title_all = self::title_all();
     $code_all = self::code_all();
@@ -343,7 +344,7 @@ final class Patlis_Admin_Page_Center_Popup {
   
   
     <div class="wrap patlis-center-popup-page">
-        <h1><?php esc_html_e('Center Pop up', 'patlis-core'); ?></h1>
+        <h1><?php esc_html_e('Center Popup', 'patlis-core'); ?></h1>
         
         <?php if (!empty($_GET['patlis_saved'])): ?>
           <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
@@ -368,16 +369,16 @@ final class Patlis_Admin_Page_Center_Popup {
           </tr>
 
           <tr>
-            <th scope="row"><?php esc_html_e('Show from', 'patlis-core'); ?></th>
+            <th scope="row"><?php esc_html_e('Display source', 'patlis-core'); ?></th>
             <td>
               <?php $show_from = $opt['show_from'] ?? 'html'; ?>
               <?php if (!in_array($show_from, ['html', 'image', 'video', 'code'], true)) $show_from = 'html'; ?>
               <select id="patlis_cp_show_from"
                 name="<?php echo esc_attr(Patlis_Core::OPTION_CENTER_POPUP); ?>[show_from]">
-                <option value="html" <?php selected($show_from, 'html'); ?>>Formatted Text</option>
-                <option value="code" <?php selected($show_from, 'code'); ?>>Html Code</option>
-                <option value="image" <?php selected($show_from, 'image'); ?>>Image</option>
-                <option value="video" <?php selected($show_from, 'video'); ?>>Video</option>
+                <option value="html" <?php selected($show_from, 'html'); ?>><?php esc_html_e('Formatted Text', 'patlis-core'); ?></option>
+                <option value="code" <?php selected($show_from, 'code'); ?>><?php esc_html_e('Html Code', 'patlis-core'); ?></option>
+                <option value="image" <?php selected($show_from, 'image'); ?>><?php esc_html_e('Image', 'patlis-core'); ?></option>
+                <option value="video" <?php selected($show_from, 'video'); ?>><?php esc_html_e('Video', 'patlis-core'); ?></option>
               </select>
             </td>
           </tr>
@@ -389,17 +390,17 @@ final class Patlis_Admin_Page_Center_Popup {
 
               <div class="patlis-tabs-wrap" id="patlis-cp-tabs">
                 <div class="patlis-tabs-nav nav-tab-wrapper">
-                  <a href="#" class="nav-tab nav-tab-active" data-tab="basic">Basic Settings</a>
-                  <a href="#" class="nav-tab" data-tab="image">Image</a>
-                  <a href="#" class="nav-tab" data-tab="video">Video</a>
-                  <a href="#" class="nav-tab" data-tab="html">Formatted Text</a>
-                  <a href="#" class="nav-tab" data-tab="code">Html Code</a>
+                  <a href="#" class="nav-tab nav-tab-active" data-tab="basic"><?php esc_html_e('Basic settings', 'patlis-core'); ?></a>
+                  <a href="#" class="nav-tab" data-tab="image"><?php esc_html_e('Image', 'patlis-core'); ?></a>
+                  <a href="#" class="nav-tab" data-tab="video"><?php esc_html_e('Video', 'patlis-core'); ?></a>
+                  <a href="#" class="nav-tab" data-tab="html"><?php esc_html_e('Formatted Text', 'patlis-core'); ?></a>
+                  <a href="#" class="nav-tab" data-tab="code"><?php esc_html_e('Html Code', 'patlis-core'); ?></a>
                 </div>
 
                 <div class="patlis-tabs-panels">
               <div class="patlis-tab-panel patlis-panel-basic active" data-panel="basic">
                 <p>
-                  <label for="patlis_cp_delay"><?php esc_html_e('Delay (Seconds)', 'patlis-core'); ?></label><br>
+                  <label for="patlis_cp_delay"><?php esc_html_e('Delay (seconds)', 'patlis-core'); ?></label><br>
                   <input id="patlis_cp_delay" type="number" min="0" class="small-text"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_CENTER_POPUP); ?>[delay_seconds]"
                     value="<?php echo esc_attr((string)($opt['delay_seconds'] ?? 0)); ?>">
@@ -413,7 +414,7 @@ final class Patlis_Admin_Page_Center_Popup {
                 </p>
 
                 <p>
-                  <label for="patlis_cp_end"><?php esc_html_e('Date end', 'patlis-core'); ?></label><br>
+                  <label for="patlis_cp_end"><?php esc_html_e('End date', 'patlis-core'); ?></label><br>
                   <input id="patlis_cp_end" type="date"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_CENTER_POPUP); ?>[end_date]"
                     value="<?php echo esc_attr($opt['end_date'] ?? ''); ?>">
@@ -434,7 +435,7 @@ final class Patlis_Admin_Page_Center_Popup {
                 <hr>
 
                 <div class="patlis-center-lang-block">
-                  <h3 class="patlis-center-lang-label" ><?php esc_html_e('Link url', 'patlis-core'); ?></h3>
+                  <h3 class="patlis-center-lang-label" ><?php esc_html_e('Link URL', 'patlis-core'); ?></h3>
                   <?php foreach ($languages as $lang_slug => $lang_label): ?>
                     <?php $value = $link_all[$lang_slug] ?? ''; ?>
                     <div class="patlis-center-lang-block">
@@ -614,10 +615,10 @@ final class Patlis_Admin_Page_Center_Popup {
 
         </table>
 
-        <?php submit_button('Save'); ?>
+        <?php submit_button($save_label); ?>
       </form>
       
-      <p style="color:red">This popup is shown only after the cookie banner has been completed (consent flag stored in browser storage). If you change/replace your cookie banner, please let us know so we can adjust the popup condition accordingly.</p>
+      <p style="color:red"><?php echo esc_html__('This popup is shown only after the cookie banner has been completed and the consent flag has been stored in the browser. If you change or replace your cookie banner, please let us know so we can adjust the popup condition accordingly.', 'patlis-core'); ?></p>
     </div>
     <?php
   }

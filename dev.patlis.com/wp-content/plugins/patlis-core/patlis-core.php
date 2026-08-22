@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Core
  * Description: Core settings & helpers for Patlis sites.
- * Version: 1.0.1
+ * Version: 1.1.0
  * Author: Patlis Ioannis
  * Text Domain: patlis-core
  * Domain Path: /languages
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_CORE_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_CORE_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_CORE_VERSION', '1.0.1');
+define('PATLIS_CORE_VERSION', '1.1.0');
 
 require_once PATLIS_CORE_PATH . 'includes/core.php';
 require_once PATLIS_CORE_PATH . 'includes/helpers.php';
@@ -23,6 +23,8 @@ require_once PATLIS_CORE_PATH . 'includes/translations-helpers.php';
 require_once PATLIS_CORE_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_CORE_PATH . 'includes/languages-visibility.php';
 require_once PATLIS_CORE_PATH . 'includes/field-sync.php';
+require_once PATLIS_CORE_PATH . 'includes/acf-field-labels.php';
+require_once PATLIS_CORE_PATH . 'includes/cpt-labels.php';
 require_once PATLIS_CORE_PATH . 'includes/events-gallery.php';
 require_once PATLIS_CORE_PATH . 'includes/gallery-manager.php';
 

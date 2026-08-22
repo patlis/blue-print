@@ -109,6 +109,27 @@
         }
     }
 
+    // ── device_type / source_url / language: no consent needed ──────────────
+    const ua = navigator.userAgent;
+    const deviceType = /Mobi|Android|iPhone|iPod/.test(ua) && !/iPad/.test(ua)
+        ? 'mobile'
+        : /iPad|Tablet|PlayBook|Silk/.test(ua) || (/Android/.test(ua) && !/Mobile/.test(ua))
+            ? 'tablet'
+            : 'desktop';
+    document.querySelectorAll('[name="device_type"]').forEach(f => {
+        f.value = deviceType;
+    });
+
+    document.querySelectorAll('[name="source_url"]').forEach(f => {
+        f.value = window.location.pathname + window.location.search;
+    });
+
+    const pllCookie = document.cookie.split('; ').find(r => r.startsWith('pll_language='));
+    const language  = pllCookie ? pllCookie.split('=')[1] : '';
+    document.querySelectorAll('[name="language"]').forEach(f => {
+        f.value = language;
+    });
+
     // ── Populate form fields (always — reads existing consented data) ──────────
     const trafficRaw = localStorage.getItem(storageKey);
     if (!trafficRaw) return;
@@ -133,29 +154,6 @@
     if (!fields.length) return;
     fields.forEach(field => {
         field.value = JSON.stringify(trafficData);
-    });
-
-    // ── source_url: always current page (path only), no consent needed ───────
-    document.querySelectorAll('[name="source_url"]').forEach(f => {
-        f.value = window.location.pathname + window.location.search;
-    });
-
-    // ── language: from Polylang cookie ────────────────────────────────────────
-    const pllCookie = document.cookie.split('; ').find(r => r.startsWith('pll_language='));
-    const language  = pllCookie ? pllCookie.split('=')[1] : '';
-    document.querySelectorAll('[name="language"]').forEach(f => {
-        f.value = language;
-    });
-
-    // ── device_type: desktop / tablet / mobile ────────────────────────────────
-    const ua = navigator.userAgent;
-    const deviceType = /Mobi|Android|iPhone|iPod/.test(ua) && !/iPad/.test(ua)
-        ? 'mobile'
-        : /iPad|Tablet|PlayBook|Silk/.test(ua) || (/Android/.test(ua) && !/Mobile/.test(ua))
-            ? 'tablet'
-            : 'desktop';
-    document.querySelectorAll('[name="device_type"]').forEach(f => {
-        f.value = deviceType;
     });
 
 })();

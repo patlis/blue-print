@@ -53,11 +53,21 @@ function patlis_user_can_manage_languages_visibility(): bool
 }
 
 /**
+ * Administrators retain unrestricted language access in the backend.
+ */
+function patlis_current_user_is_administrator(): bool
+{
+    $user = wp_get_current_user();
+
+    return $user instanceof WP_User && in_array('administrator', (array) $user->roles, true);
+}
+
+/**
  * Only true admins can see all languages.
  */
 function patlis_user_can_see_all_languages(): bool
 {
-    return current_user_can('manage_options');
+    return patlis_current_user_is_administrator();
 }
 
 /**
@@ -88,8 +98,91 @@ function patlis_should_restrict_backend_languages(): bool
         return false;
     }
 
+    $page = isset($_GET['page']) ? sanitize_key((string) $_GET['page']) : '';
+    if ($page === 'patlis-languages-visibility') {
+        return false;
+    }
+
     return true;
 }
+
+add_action('admin_footer', function (): void {
+    if (!patlis_should_restrict_backend_languages()) {
+        return;
+    }
+
+    $allowed = patlis_get_effective_language_slugs_for_current_user();
+    if (empty($allowed)) {
+        return;
+    }
+    ?>
+    <script>
+    (function() {
+        var allowed = <?php echo wp_json_encode(array_values($allowed)); ?>;
+
+        function languageFromElement(element) {
+            var match = (element.getAttribute('name') || '').match(/\[([a-z0-9_-]+)\]/i);
+            if (match) {
+                return match[1].toLowerCase().split('-')[0];
+            }
+
+            return (element.getAttribute('data-language') || element.getAttribute('lang') || '')
+                .toLowerCase()
+                .split('-')[0];
+        }
+
+        function filterTranslations() {
+            document.querySelectorAll('[name^="post_tr_lang["], [data-language], [lang]').forEach(function(element) {
+                if (element.closest('#wpadminbar')) {
+                    return;
+                }
+
+                var language = languageFromElement(element);
+                if (!language || allowed.indexOf(language) !== -1) {
+                    return;
+                }
+
+                var row = element.closest('tr, li, .bricks-panel-control, .components-panel__row');
+                if (row) {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('select[name="post_lang_choice"] option').forEach(function(option) {
+                if (allowed.indexOf(option.value.toLowerCase()) === -1) {
+                    option.remove();
+                }
+            });
+        }
+
+        function filterAdminBarLanguages() {
+            document.querySelectorAll('#wpadminbar .ab-submenu li').forEach(function(item) {
+                var link = item.querySelector('a');
+                var source = [
+                    item.id || '',
+                    item.getAttribute('data-language') || '',
+                    link ? (link.getAttribute('hreflang') || '') : '',
+                    link ? (link.getAttribute('lang') || '') : '',
+                    link ? (link.getAttribute('href') || '') : ''
+                ].join(' ').toLowerCase();
+                var match = source.match(/(?:pll[-_]|lang(?:uage)?=|hreflang=["']?)([a-z]{2})(?:[-_&"']|$)/);
+
+                if (match && allowed.indexOf(match[1]) === -1) {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        filterTranslations();
+        filterAdminBarLanguages();
+        new MutationObserver(function() {
+            filterTranslations();
+            filterAdminBarLanguages();
+        }).observe(document.body, { childList: true, subtree: true });
+    })();
+    </script>
+    <?php
+});
 
 /**
  * Return frontend languages allowed for this site.
@@ -180,28 +273,6 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
 
 
 /**
- * Register Languages Visibility admin page under Patlis.com
- * Admin only.
- *
- * Priority 99 so it is added AFTER the existing Patlis submenu items.
- * This keeps "Basic settings" as the first submenu and prevents parent menu hijack.
- */
-add_action('admin_menu', function () {
-    if (!patlis_user_can_manage_languages_visibility()) {
-        return;
-    }
-
-    add_submenu_page(
-        'patlis-basic',
-        __('Languages Visibility', 'patlis-core'),
-        __('Languages', 'patlis-core'),
-        'manage_options',
-        'patlis-languages-visibility',
-        'patlis_render_languages_visibility_page'
-    );
-}, 99);
-
-/**
  * Save Languages Visibility settings
  */
 add_action('admin_post_patlis_save_languages_visibility', function () {
@@ -241,11 +312,11 @@ function patlis_render_languages_visibility_page(): void
     $visible_languages = patlis_get_site_visible_language_slugs();
     ?>
     <div class="wrap">
-        <h1><?php esc_html_e('Languages Visibility', 'patlis-core'); ?></h1>
+        <h1>Languages Visibility</h1>
 
         <?php if (!empty($_GET['updated'])) : ?>
             <div class="notice notice-success is-dismissible">
-                <p><?php esc_html_e('Languages saved.', 'patlis-core'); ?></p>
+                <p>Languages saved.</p>
             </div>
         <?php endif; ?>
 
@@ -266,7 +337,7 @@ function patlis_render_languages_visibility_page(): void
                                         value="<?php echo esc_attr($slug); ?>"
                                         <?php checked(in_array($slug, $visible_languages, true)); ?>
                                     >
-                                    <?php esc_html_e('Visible on site', 'patlis-core'); ?>
+                                    Visible on site
                                 </label>
                             </td>
                         </tr>
@@ -274,7 +345,7 @@ function patlis_render_languages_visibility_page(): void
                 </tbody>
             </table>
 
-            <?php submit_button(__('Save Languages', 'patlis-core')); ?>
+            <?php submit_button('Save Languages'); ?>
         </form>
     </div>
     <?php

@@ -14,6 +14,10 @@ define('PATLIS_RESERVATIONS_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_RESERVATIONS_URL',  plugin_dir_url(__FILE__));
 define('PATLIS_RESERVATIONS_VERSION', '0.1.1');
 
+add_action('plugins_loaded', function (): void {
+    load_plugin_textdomain('patlis-reservations', false, dirname(plugin_basename(__FILE__)) . '/languages');
+});
+
 // Updater — πριν το gating ωστε να ελεγχει updates παντα
 if (function_exists('patlis_register_plugin_updater')) {
     patlis_register_plugin_updater(__FILE__, 'patlis-reservations', PATLIS_RESERVATIONS_VERSION);

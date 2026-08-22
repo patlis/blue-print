@@ -1,0 +1,155 @@
+# Translations template for Patlis Core.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the Patlis Core project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Patlis Reservation 0.1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-22 19:32+0200\n"
+"PO-Revision-Date: 2026-08-22 19:35+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;esc_html_e;esc_html__;esc_attr__;esc_attr_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/admin/menu.php:13
+msgid "Patlis Reservations"
+msgstr "Patlis σύστημα κρατήσεων"
+
+#: includes/admin/menu.php:14
+msgid "Reservations"
+msgstr "Κρατήσεις"
+
+#: includes/admin/pages/settings.php:36
+msgid "Reservation settings"
+msgstr "Ρυθμίσεις κράτησης"
+
+#: includes/admin/pages/settings.php:37
+msgid "Saved."
+msgstr "Αποθηκεύτηκε."
+
+#: includes/admin/pages/settings.php:38
+msgid "Reservation mode"
+msgstr "Λειτουργία κράτησης"
+
+#: includes/admin/pages/settings.php:39 includes/admin/pages/settings.php:51
+msgid "Patlis system"
+msgstr "Σύστημα Patlis"
+
+#: includes/admin/pages/settings.php:40
+msgid "Redirect"
+msgstr "Ανακατεύθυνση"
+
+#: includes/admin/pages/settings.php:41
+msgid "Send reservation notifications to"
+msgstr "Αποστολή ειδοποιήσεων κράτησης σε"
+
+#: includes/admin/pages/settings.php:42
+msgid "Email subject"
+msgstr "Θέμα email"
+
+#: includes/admin/pages/settings.php:43
+msgid "Minimum time before reservation (hours)"
+msgstr "Ελάχιστος χρόνος πριν από την κράτηση (ώρες)"
+
+#: includes/admin/pages/settings.php:44
+msgid "Earliest reservation time"
+msgstr "Νωρίτερη ώρα κράτησης"
+
+#: includes/admin/pages/settings.php:45
+msgid "Latest reservation time"
+msgstr "Αργότερη ώρα κράτησης"
+
+#: includes/admin/pages/settings.php:46
+msgid "Subject"
+msgstr "Θέμα email"
+
+#: includes/admin/pages/settings.php:47
+msgid "Text"
+msgstr "Κείμενο"
+
+#: includes/admin/pages/settings.php:48
+msgid "Redirect URL"
+msgstr "URL ανακατεύθυνσης"
+
+#: includes/admin/pages/settings.php:49
+msgid "Save"
+msgstr "Αποθήκευσε"
+
+#: includes/admin/pages/settings.php:50
+msgid "Switched off"
+msgstr "Απενεργοποιημένο"
+
+#: includes/admin/pages/settings.php:52
+msgid "New reservation"
+msgstr "Νέα κράτηση"
+
+#: includes/admin/pages/settings.php:53
+msgid "Reservation request received"
+msgstr "Ελήφθη αίτημα κράτησης"
+
+#: includes/admin/pages/settings.php:54
+msgid "Third-party code"
+msgstr "Κώδικας τρίτου παρόχου"
+
+#: includes/admin/pages/settings.php:55
+msgid "Code"
+msgstr "Κώδικας"
+
+#: includes/admin/pages/settings.php:56
+msgid ""
+"Paste the embed code (iframe or script) from the third-party provider here."
+msgstr ""
+"Επικολλήστε εδώ τον κώδικα ενσωμάτωσης (iframe ή script) από τον πάροχο."
+
+#: includes/admin/pages/settings.php:57
+msgid "E.g. 09:00"
+msgstr "Π.χ. 09:00"
+
+#: includes/admin/pages/settings.php:58
+msgid "E.g. 20:00"
+msgstr "Π.χ. 20:00"
+
+#: includes/admin/pages/settings.php:59
+msgid "In Redirect mode, users will be directed to this URL"
+msgstr ""
+"Στη λειτουργία ανακατεύθυνσης, οι χρήστες θα κατευθύνονται σε αυτή τη "
+"διεύθυνση URL"
+
+#: includes/admin/pages/settings.php:60
+msgid "Automatic customer response email"
+msgstr "Αυτόματο email απάντησης προς τον πελάτη"
+
+#~ msgid "Code to embed"
+#~ msgstr "Κώδικας για ενσωμάτωση"
+
+#~ msgid "Redirect to other site"
+#~ msgstr "Ανακατεύθυνση σε άλλον ιστότοπο"
+
+#~ msgid "Code from the other company"
+#~ msgstr "Κώδικας από την άλλη εταιρεία"
+
+#~ msgid "Email recipient"
+#~ msgstr "Παραλήπτης email"
+
+#~ msgid "Min. time"
+#~ msgstr "Ελάχιστη ώρα"
+
+#~ msgid "Max. time"
+#~ msgstr "Μέγιστη ώρα"
+
+#~ msgid "Confirmation email subject"
+#~ msgstr "Θέμα email επιβεβαίωσης"
+
+#~ msgid "Confirmation email body"
+#~ msgstr "Κείμενο email επιβεβαίωσης"

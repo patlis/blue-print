@@ -123,6 +123,8 @@ final class Patlis_Admin_Page_Opening {
     if (!current_user_can('patlis_manage')) return;
 
     $opt       = self::get_options();
+    $save_label = __('Save', 'patlis-core');
+    $saved_label = __('Saved.', 'patlis-core');
     $languages = self::get_languages();
     $text_all  = self::text_all();
     ?>
@@ -151,14 +153,14 @@ final class Patlis_Admin_Page_Opening {
       <h1><?php esc_html_e('Opening times', 'patlis-core'); ?></h1>
 
       <?php if (!empty($_GET['patlis_saved'])): ?>
-        <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
+        <div class="notice notice-success is-dismissible"><p><?php echo esc_html($saved_label); ?></p></div>
       <?php endif; ?>
 
       <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <input type="hidden" name="action" value="patlis_save_opening">
         <?php wp_nonce_field('patlis_save_opening'); ?>
 
-        <div class="patlis-opening-field" style="margin-top: 1rem;">
+        <div class="patlis-opening-field" style="margin-top: 1rem; display:inline-flex; align-items:center; gap: 8px;">
           <label><?php esc_html_e('Show opening hours', 'patlis-core'); ?></label>
           <input type="checkbox"
             name="<?php echo esc_attr(Patlis_Core::OPTION_OPENING); ?>[show_on_footer]"
@@ -179,7 +181,7 @@ final class Patlis_Admin_Page_Opening {
           <?php endforeach; ?>
         </div>
 
-        <?php submit_button('Save'); ?>
+        <?php submit_button($save_label); ?>
       </form>
     </div>
     <?php

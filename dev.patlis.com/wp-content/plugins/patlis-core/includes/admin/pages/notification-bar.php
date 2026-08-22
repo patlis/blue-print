@@ -147,6 +147,8 @@ final class Patlis_Admin_Page_Notification_Bar {
     if (!current_user_can('patlis_manage')) return;
 
     $opt = self::get_options();
+    $save_label = __('Save', 'patlis-core');
+    $saved_label = __('Saved.', 'patlis-core');
     $languages = self::get_languages();
     $text_all = self::text_all();
     ?>
@@ -177,7 +179,7 @@ final class Patlis_Admin_Page_Notification_Bar {
       <h1><?php esc_html_e('Notification Bar', 'patlis-core'); ?></h1>
 
       <?php if (!empty($_GET['patlis_saved'])): ?>
-        <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
+        <div class="notice notice-success is-dismissible"><p><?php echo esc_html($saved_label); ?></p></div>
       <?php endif; ?>
 
       <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -187,7 +189,7 @@ final class Patlis_Admin_Page_Notification_Bar {
         <table class="form-table">
 
           <tr>
-            <td>
+            <td style="display:inline-flex; align-items:center; gap: 8px;">
               <label class="patlis-notification-field-label" for="patlis_nb_enabled"><?php esc_html_e('Active', 'patlis-core'); ?></label>
               <input type="checkbox"
                 id="patlis_nb_enabled"
@@ -198,8 +200,8 @@ final class Patlis_Admin_Page_Notification_Bar {
 
           <tr>
             <td>
-              <span style="font-weight: 600; font-size: 24px;"><?php esc_html_e('Text', 'patlis-core'); ?></span>
-              <small> (Recommended: Maximum 50 characters)</small>
+              <h2><?php esc_html_e('Text', 'patlis-core'); ?></h2>
+              <p style="margin-bottom: 24px;"><small><?php echo esc_html__('Recommended: max. 50 characters', 'patlis-core'); ?></small></p>
               <?php foreach ($languages as $lang_slug => $lang_label): ?>
                 <?php
                 $value = $text_all[$lang_slug] ?? '';
@@ -238,7 +240,7 @@ final class Patlis_Admin_Page_Notification_Bar {
 
         </table>
 
-        <?php submit_button('Save'); ?>
+        <?php submit_button($save_label); ?>
       </form>
     </div>
     <?php

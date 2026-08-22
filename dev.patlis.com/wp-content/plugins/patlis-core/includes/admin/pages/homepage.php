@@ -31,16 +31,17 @@ final class Patlis_Admin_Page_Homepage {
 
     private static function labels(): array {
         return [
-            'welcome'    => __('Welcome Section',        'patlis-core'),
-            'dishes'     => __('Top Dishes',             'patlis-core'),
-            'rooms'      => __('Top Rooms',              'patlis-core'),
-            'offers'     => __('Offers and Packages',    'patlis-core'),
+            'welcome'    => __('Welcome section',        'patlis-core'),
+            'dishes'     => __('Top dishes',             'patlis-core'),
+            'rooms'      => __('Top rooms',              'patlis-core'),
+            'offers'     => __('Offers and packages',    'patlis-core'),
             'experience' => __('Experience',             'patlis-core'),
-            'services'   => __('Top Services',           'patlis-core'),
-            'events'     => __('Upcoming Events',        'patlis-core'),
-            'gallery'    => __('Home Gallery',           'patlis-core'),
-            'reviews'    => __('Last Reviews',           'patlis-core'),
+            'services'   => __('Top services',           'patlis-core'),
+            'events'     => __('Upcoming events',        'patlis-core'),
+            'gallery'    => __('Home gallery',           'patlis-core'),
+            'reviews'    => __('Latest reviews',           'patlis-core'),
             'cta'        => __('Action banner (CTA)',    'patlis-core'),
+            'save'       => __('Save',                   'patlis-core'),
         ];
     }
 
@@ -93,16 +94,16 @@ final class Patlis_Admin_Page_Homepage {
                     <td>
                         <div style="display:flex;gap:10px;align-items:center;">
                             <input type="url" id="patlis_welcome_video_url" name="patlis_welcome_video_url" value="<?php echo esc_attr($welcome_video_url); ?>" class="regular-text" placeholder="https://example.com/video.mp4">
-                            <a href="#" class="button patlis-homepage-video-btn"><?php esc_html_e('Select Video', 'patlis-core'); ?></a>
+                            <a href="#" class="button patlis-homepage-video-btn"><?php esc_html_e('Select video', 'patlis-core'); ?></a>
                         </div>
                     </td>
                   </tr>
                 </table>
 
-                <h2><?php esc_html_e('CTA Background image', 'patlis-core'); ?></h2>
+                <h2><?php esc_html_e('CTA background image', 'patlis-core'); ?></h2>
                 <table class="form-table" role="presentation">
                   <tr>
-                    <th scope="row"><label><?php esc_html_e('CTA Background', 'patlis-core'); ?></label></th>
+                    <th scope="row"><label><?php esc_html_e('CTA background', 'patlis-core'); ?></label></th>
                     <td>
                       <div id="patlis_cta_bg_preview"><?php echo $cta_bg_preview; ?></div>
                       <input type="hidden" id="patlis_cta_bg_image_id" name="patlis_cta_bg_image_id" value="<?php echo esc_attr($cta_bg_image_id); ?>">
@@ -114,7 +115,7 @@ final class Patlis_Admin_Page_Homepage {
                   </tr>
                 </table>
 
-                <h2><?php esc_html_e('Sections order', 'patlis-core'); ?></h2>
+                <h2><?php esc_html_e('Display order', 'patlis-core'); ?></h2>
                 <p class="description"><?php esc_html_e('Drag to reorder.', 'patlis-core'); ?></p>
 
                 <style>
@@ -189,7 +190,7 @@ final class Patlis_Admin_Page_Homepage {
                 });
                 </script>
 
-                <?php submit_button('Save'); ?>
+                <?php submit_button($labels['save']); ?>
 
                 <script>
                 (function(){

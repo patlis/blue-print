@@ -1,18 +1,18 @@
 {
   "name": "Patlis Core",
   "slug": "patlis-core",
-  "version": "1.0.1",
-  "download_url": "https://updates.patlis.com/downloads/patlis-core-1.0.1.zip",
+  "version": "1.1.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-core-1.1.0.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "6.0",
-  "tested": "6.9.4",
+  "tested": "7.1",
   "requires_php": "8.1",
   "last_updated": "2026-08-16",
   "sections": {
     "description": "Core settings & helpers for Patlis sites.",
     "installation": "<p>Upload and activate.</p>",
-    "changelog": "<ul><li>Improved form notification emails with communication language and clickable phone links.</li><li>Updated shared form tracking and translation support.</li></ul>",
+    "changelog": "<ul><li>Improved form notification emails with communication language and clickable phone links.</li><li>Updated shared form tracking and translation support.</li><li>Added translated admin labels for core settings</li></ul>",
     "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>What does this plugin do?</h4><p>It provides core settings and shared functionality used by other Patlis plugins.</p><h4>Is this plugin required?</h4><p>Yes, this plugin is required for other Patlis modules to function correctly.</p><h4>Can I deactivate this plugin?</h4><p>No, deactivating this plugin may cause other Patlis plugins to stop working properly.</p><h4>Where can I find the settings?</h4><p>You can manage all core settings from the Patlis menu in the WordPress admin panel.</p>",  
     "screenshots": "<p>No screenshots yet.</p>"
   },

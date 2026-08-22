@@ -150,10 +150,10 @@ function patlis_core_render_events_gallery_metabox($post): void
 
     echo '</div>';
     echo '<p>';
-    echo '<button type="button" class="button" id="patlis-events-gallery-add">Add Images</button> ';
-    echo '<button type="button" class="button" id="patlis-events-gallery-clear">Clear</button>';
+    echo '<button type="button" class="button" id="patlis-events-gallery-add">' . esc_html__('Add Images', 'patlis-core') . '</button> ';
+    echo '<button type="button" class="button" id="patlis-events-gallery-clear">' . esc_html__('Delete all', 'patlis-core') . '</button>';
     echo '</p>';
-    echo '<p class="description">Select multiple images, drag to reorder, remove what you do not need.</p>';
+    echo '<p class="description">' . esc_html__('Select multiple images, drag to reorder, then save.', 'patlis-core') . '</p>';
     echo '</td></tr>';
     echo '</table>';
 
@@ -238,9 +238,9 @@ function patlis_core_render_events_gallery_metabox($post): void
 
             if (!frame) {
                 frame = wp.media({
-                    title: 'Select Event Gallery Images',
+                    title: '<?php echo esc_js(__('Select gallery images', 'patlis-core')); ?>',
                     library: { type: 'image' },
-                    button: { text: 'Use selected images' },
+                    button: { text: '<?php echo esc_js(__('Use selected images', 'patlis-core')); ?>' },
                     multiple: true
                 });
 
@@ -315,14 +315,14 @@ function patlis_core_save_events_gallery_metabox(int $post_id): void
 add_action('save_post_events', 'patlis_core_save_events_gallery_metabox');
 
 /**
- * ACF: add "Select Video" button next to the events_video_url text field.
+ * ACF: add "Select video" button next to the events_video_url text field.
  */
 add_action('acf/render_field/name=events_video_url', function ($field) {
-    echo '<a href="#" class="button patlis-acf-video-upload-btn" style="margin-top:6px;" data-target="events_video_url">Select Video</a>';
+    echo '<a href="#" class="button patlis-acf-video-upload-btn" style="margin-top:6px;" data-target="events_video_url">Select video</a>';
 });
 
 add_action('acf/render_field/name=service_video_url', function ($field) {
-    echo '<a href="#" class="button patlis-acf-video-upload-btn" style="margin-top:6px;" data-target="service_video_url">Select Video</a>';
+    echo '<a href="#" class="button patlis-acf-video-upload-btn" style="margin-top:6px;" data-target="service_video_url">Select video</a>';
 });
 
 add_action('acf/input/admin_head', function () {
@@ -339,7 +339,7 @@ add_action('acf/input/admin_head', function () {
             var $input  = $btn.closest('.acf-input').find('input[type="url"], input[type="text"]').first();
 
             var videoFrame = wp.media({
-                title: 'Select Video',
+                title: 'Select video',
                 button: { text: 'Use this video' },
                 library: { type: 'video' },
                 multiple: false
@@ -370,7 +370,7 @@ function patlis_core_render_services_gallery_metabox($post): void
     $gallery_ids_csv = esc_attr(implode(',', $gallery_ids));
 
     echo '<table class="form-table" role="presentation">';
-    echo '<tr><th scope="row"><label for="services_gallery_ids">Service Gallery</label></th><td>';
+    echo '<tr><th scope="row"><label for="services_gallery_ids">Gallery</label></th><td>';
     echo '<input type="hidden" id="services_gallery_ids" name="services_gallery_ids" value="' . $gallery_ids_csv . '">';
     echo '<div id="patlis-services-gallery" class="patlis-services-gallery">';
 
@@ -388,10 +388,10 @@ function patlis_core_render_services_gallery_metabox($post): void
 
     echo '</div>';
     echo '<p>';
-    echo '<button type="button" class="button" id="patlis-services-gallery-add">Add Images</button> ';
-    echo '<button type="button" class="button" id="patlis-services-gallery-clear">Clear</button>';
+    echo '<button type="button" class="button" id="patlis-services-gallery-add">' . esc_html__('Add Images', 'patlis-core') . '</button> ';
+    echo '<button type="button" class="button" id="patlis-services-gallery-clear">' . esc_html__('Delete all', 'patlis-core') . '</button>';
     echo '</p>';
-    echo '<p class="description">Select multiple images, drag to reorder, remove what you do not need.</p>';
+    echo '<p class="description">' . esc_html__('Select multiple images, drag to reorder, then save.', 'patlis-core') . '</p>';
     echo '</td></tr>';
     echo '</table>';
 
@@ -476,9 +476,9 @@ function patlis_core_render_services_gallery_metabox($post): void
 
             if (!frame) {
                 frame = wp.media({
-                    title: 'Select Service Gallery Images',
+                    title: '<?php echo esc_js(__('Select gallery images', 'patlis-core')); ?>',
                     library: { type: 'image' },
-                    button: { text: 'Use selected images' },
+                    button: { text: '<?php echo esc_js(__('Use selected images', 'patlis-core')); ?>' },
                     multiple: true
                 });
 

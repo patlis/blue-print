@@ -277,7 +277,7 @@ final class Patlis_Admin_Page_Instance_Tools
                 }
             </style>
         <div class="wrap">
-            <h1><?php esc_html_e('Instance Tools', 'patlis-core'); ?></h1>
+            <h1>Instance Tools</h1>
 
             <h2>Steps for Installation: </h2>
             <h3>aapanel</h3>

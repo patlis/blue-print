@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) exit;
 
 /**
  * Bricks Dynamic Tags for Patlis
- * - Groups: Patlis – Basic, Patlis – Social, Patlis – Center Pop up, Patlis – Notification Bar
+ * - Groups: Patlis – Basic, Patlis – Social, Patlis – Center Popup, Patlis – Notification bar
  * - Renders {patlis_*} inside Text/Heading/etc
  */
 
@@ -14,33 +14,33 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
 
   $group_basic  = 'Patlis – Basic';
   $group_social = 'Patlis – Social';
-  $group_center = 'Patlis – Center Pop up';
-  $group_bar    = 'Patlis – Notification Bar';
+  $group_center = 'Patlis – Center Popup';
+  $group_bar    = 'Patlis – Notification bar';
   $group_events = 'Patlis – Events';
   $group_services = 'Patlis – Services';
   $group_gallery = 'Patlis – Gallery';
 
   // BASIC
-  $tags[] = ['name' => '{patlis_company_name}',      'label' => esc_html__('Company name', 'patlis-core'),            'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => esc_html__('Logo image URL', 'patlis-core'),          'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => esc_html__('CTA background image URL', 'patlis-core'), 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_home_video_url}',    'label' => esc_html__('Home welcome video URL', 'patlis-core'),   'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_icon_tag:leaf-solid}', 'label' => esc_html__('Icon URL by name (SVG)', 'patlis-core'), 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_address}',           'label' => esc_html__('Address', 'patlis-core'),                 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_city}',              'label' => esc_html__('City', 'patlis-core'),                    'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_zip}',               'label' => esc_html__('Zip', 'patlis-core'),                     'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_company_name}',      'label' => 'Company name', 'patlis-core',            'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => 'Logo image URL', 'patlis-core',          'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => 'CTA background image URL', 'patlis-core', 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_home_video_url}',    'label' => 'Home welcome video URL', 'patlis-core',   'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_icon_tag:leaf-solid}', 'label' => 'Icon URL by name (SVG)', 'patlis-core', 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_address}',           'label' => 'Address', 'patlis-core',                 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_city}',              'label' => 'City', 'patlis-core',                    'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_zip}',               'label' => 'Zip', 'patlis-core',                     'group' => $group_basic];
   $tags[] = ['name' => '{patlis_email}',             'label' => 'E-mail',                                              'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_phone}',             'label' => esc_html__('Phone', 'patlis-core'),                   'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_phone2}',            'label' => esc_html__('Phone-2', 'patlis-core'),                 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_mobile}',            'label' => esc_html__('Mobile', 'patlis-core'),                  'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_phone}',             'label' => 'Phone', 'patlis-core',                   'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_phone2}',            'label' => 'Phone-2', 'patlis-core',                 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_mobile}',            'label' => 'Mobile', 'patlis-core',                  'group' => $group_basic];
   $tags[] = ['name' => '{patlis_whatsapp}',          'label' => 'WhatsApp',                                            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cordinates}',        'label' => 'Cordinates',                                          'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_show_contact_form}',        'label' => esc_html__('Show contact form (1/0)', 'patlis-core'),  'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_opening_show_on_footer}', 'label' => esc_html__('Opening: Show on footer (1/0)', 'patlis-core'), 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_opening_text}',          'label' => esc_html__('Opening: Text (HTML)', 'patlis-core'),          'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_contact_form_recipient_email}', 'label' => esc_html__('Contact form: Recipient email', 'patlis-core'), 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_contact_form_email_subject}',   'label' => esc_html__('Contact form: Email subject', 'patlis-core'),   'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_reviews_featured_count}',       'label' => esc_html__('Reviews: Featured count', 'patlis-core'),       'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_show_contact_form}',        'label' => 'Show contact form (1/0)', 'patlis-core',  'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_opening_show_on_footer}', 'label' => 'Opening: Show on footer (1/0)', 'patlis-core', 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_opening_text}',          'label' => 'Opening: Text (HTML)', 'patlis-core',          'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_contact_form_recipient_email}', 'label' => 'Contact form: Recipient email', 'patlis-core', 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_contact_form_email_subject}',   'label' => 'Contact form: Email subject', 'patlis-core',   'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_reviews_featured_count}',       'label' => 'Reviews: Featured count', 'patlis-core',       'group' => $group_basic];
 
   // HOME PAGE sections order
   $hp_sections = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
@@ -59,31 +59,31 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_x_com}',           'label' => 'X (Twitter) URL',     'group' => $group_social];
 
   // CENTER POP UP
-  $tags[] = ['name' => '{patlis_center_enabled}',       'label' => esc_html__('Enabled (1/0)', 'patlis-core'),                    'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_show_from}',     'label' => esc_html__('Show from (html/image/video/code)', 'patlis-core'), 'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_title}',         'label' => esc_html__('Title', 'patlis-core'),                            'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_delay_seconds}', 'label' => esc_html__('Delay (seconds)', 'patlis-core'),                  'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_start_date}',    'label' => esc_html__('Start date', 'patlis-core'),                       'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_end_date}',      'label' => esc_html__('End date', 'patlis-core'),                         'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_link_url}',      'label' => esc_html__('Link URL', 'patlis-core'),                         'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_video}',         'label' => esc_html__('Video URL', 'patlis-core'),                        'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_image_id}',      'label' => esc_html__('Image ID', 'patlis-core'),                         'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_image_url}',     'label' => esc_html__('Image URL', 'patlis-core'),                        'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_code}',          'label' => esc_html__('Code', 'patlis-core'),                             'group' => $group_center];
-  $tags[] = ['name' => '{patlis_center_html}',          'label' => esc_html__('Html', 'patlis-core'),                             'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_enabled}',       'label' => 'Enabled (1/0)', 'patlis-core',                    'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_show_from}',     'label' => 'Display source (html/image/video/code)', 'patlis-core', 'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_title}',         'label' => 'Title', 'patlis-core',                            'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_delay_seconds}', 'label' => 'Delay (seconds)', 'patlis-core',                  'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_start_date}',    'label' => 'Start date', 'patlis-core',                       'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_end_date}',      'label' => 'End date', 'patlis-core',                         'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_link_url}',      'label' => 'Link URL', 'patlis-core',                         'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_video}',         'label' => 'Video URL', 'patlis-core',                        'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_image_id}',      'label' => 'Image ID', 'patlis-core',                         'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_image_url}',     'label' => 'Image URL', 'patlis-core',                        'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_code}',          'label' => 'Code', 'patlis-core',                             'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_html}',          'label' => 'Html', 'patlis-core',                             'group' => $group_center];
 
   // NOTIFICATION BAR
-  $tags[] = ['name' => '{patlis_bar_enabled}',    'label' => esc_html__('Enabled (1/0)', 'patlis-core'),  'group' => $group_bar];
-  $tags[] = ['name' => '{patlis_bar_text}',       'label' => esc_html__('Text', 'patlis-core'),          'group' => $group_bar];
-  $tags[] = ['name' => '{patlis_bar_start_date}', 'label' => esc_html__('Start date', 'patlis-core'),    'group' => $group_bar];
-  $tags[] = ['name' => '{patlis_bar_end_date}',   'label' => esc_html__('End date', 'patlis-core'),      'group' => $group_bar];
+  $tags[] = ['name' => '{patlis_bar_enabled}',    'label' => 'Enabled (1/0)', 'patlis-core',  'group' => $group_bar];
+  $tags[] = ['name' => '{patlis_bar_text}',       'label' => 'Text', 'patlis-core',          'group' => $group_bar];
+  $tags[] = ['name' => '{patlis_bar_start_date}', 'label' => 'Start date', 'patlis-core',    'group' => $group_bar];
+  $tags[] = ['name' => '{patlis_bar_end_date}',   'label' => 'End date', 'patlis-core',      'group' => $group_bar];
 
-  $tags[] = ['name' => '{patlis_events_gallery_json}', 'label' => esc_html__('Events: Gallery JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_events];
-  $tags[] = ['name' => '{patlis_services_gallery_json}', 'label' => esc_html__('Services: Gallery JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_services];
-  $tags[] = ['name' => '{patlis_gallery_json}', 'label' => esc_html__('Gallery: Images JSON (ids + urls + meta)', 'patlis-core'), 'group' => $group_gallery];
-  $tags[] = ['name' => '{patlis_gallery_all_images_json:gallery}', 'label' => esc_html__('Gallery: All images JSON (except Home)', 'patlis-core'), 'group' => $group_gallery];
-  $tags[] = ['name' => '{patlis_gallery_all_images_json:home}', 'label' => esc_html__('Gallery: Home images JSON', 'patlis-core'), 'group' => $group_gallery];
-  $tags[] = ['name' => '{patlis_home_gallery_json}', 'label' => esc_html__('Gallery: Home gallery JSON', 'patlis-core'), 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_events_gallery_json}', 'label' => 'Events: Gallery JSON (ids + urls + meta)', 'group' => $group_events];
+  $tags[] = ['name' => '{patlis_services_gallery_json}', 'label' => 'Services: Gallery JSON (ids + urls + meta)', 'patlis-core', 'group' => $group_services];
+  $tags[] = ['name' => '{patlis_gallery_json}', 'label' => 'Gallery: Images JSON (ids + urls + meta)', 'patlis-core', 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_gallery_all_images_json:gallery}', 'label' => 'Gallery: All images JSON (except Home)', 'patlis-core', 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_gallery_all_images_json:home}', 'label' => 'Gallery: Home images JSON', 'patlis-core', 'group' => $group_gallery];
+  $tags[] = ['name' => '{patlis_home_gallery_json}', 'label' => 'Gallery: Home gallery JSON', 'patlis-core', 'group' => $group_gallery];
 
   return $tags;
 });

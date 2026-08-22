@@ -41,11 +41,36 @@ final class Patlis_Admin_Page_Translations
         }
 
         if (!current_user_can('patlis_manage')) {
-            wp_die('Not allowed.');
+            wp_die(__('Not allowed.', 'patlis-core'));
         }
 
+        $labels = [
+            'translations'        => __('Translations', 'patlis-core'),
+            'polylang_required'   => __('Polylang is required.', 'patlis-core'),
+            'add_new'             => __('Add new', 'patlis-core'),
+            'delete_key'          => __('Delete key', 'patlis-core'),
+            'translations_saved'  => __('Translations saved.', 'patlis-core'),
+            'new_key'             => __('New key:', 'patlis-core'),
+            'add'                 => __('Add', 'patlis-core'),
+            'cancel'              => __('Cancel', 'patlis-core'),
+            'delete'              => __('Delete', 'patlis-core'),
+            'filter_keys'         => __('Filter keys...', 'patlis-core'),
+            'filter'              => __('Filter', 'patlis-core'),
+            'clear'               => __('Clear filter', 'patlis-core'),
+            'key'                 => __('Key', 'patlis-core'),
+            'language'            => __('Language', 'patlis-core'),
+            'translation'         => __('Translation', 'patlis-core'),
+            'no_keys_found'       => __('No keys found.', 'patlis-core'),
+            'default'             => __('Default', 'patlis-core'),
+            'save_translations'   => __('Save translations', 'patlis-core'),
+            'key_singular'        => __('%d key', 'patlis-core'),
+            'key_plural'          => __('%d keys', 'patlis-core'),
+            'matching'            => __('matching %s', 'patlis-core'),
+            'page_of'             => __('Page %1$d of %2$d', 'patlis-core'),
+        ];
+
         if (!function_exists('pll_languages_list')) {
-            echo '<div class="wrap"><h1>Translations</h1><div class="notice notice-error"><p>Polylang is required.</p></div></div>';
+            echo '<div class="wrap"><h1>' . esc_html($labels['translations']) . '</h1><div class="notice notice-error"><p>' . esc_html($labels['polylang_required']) . '</p></div></div>';
             return;
         }
 
@@ -154,34 +179,34 @@ final class Patlis_Admin_Page_Translations
         ?>
         <div class="wrap">
             <h1 style="display:flex;align-items:center;justify-content:space-between;">
-                <span><?php esc_html_e('Translations', 'patlis-core'); ?></span>
+                <span><?php echo esc_html($labels['translations']); ?></span>
                 <?php if (current_user_can('manage_options')) : ?>
                     <span>
-                        <button id="patlis-add-translation-key" type="button" class="button button-secondary">Add New</button>
-                        <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;">Delete Key</button>
+                        <button id="patlis-add-translation-key" type="button" class="button button-secondary"><?php echo esc_html($labels['add_new']); ?></button>
+                        <button id="patlis-delete-translation-key" type="button" class="button button-danger" style="margin-left:8px;"><?php echo esc_html($labels['delete_key']); ?></button>
                     </span>
                 <?php endif; ?>
             </h1>
 
             <?php if (isset($_GET['patlis_saved'])) : ?>
-                <div class="notice notice-success is-dismissible"><p>Translations saved.</p></div>
+                <div class="notice notice-success is-dismissible"><p><?php echo esc_html($labels['translations_saved']); ?></p></div>
             <?php endif; ?>
 
             <?php if (current_user_can('manage_options')) : ?>
                 <form method="post" id="patlis-add-key-form" style="display:none; margin-bottom:18px; max-width:600px;">
                     <?php wp_nonce_field('patlis_add_translation_key', 'patlis_add_translation_key_nonce'); ?>
-                    <label for="patlis_new_key"><strong>New Key:</strong></label>
+                    <label for="patlis_new_key"><strong><?php echo esc_html($labels['new_key']); ?></strong></label>
                     <input type="text" id="patlis_new_key" name="patlis_new_key" style="width:300px;" required />
-                    <button type="submit" class="button button-primary">Add</button>
-                    <button type="button" class="button" id="patlis-cancel-add-key">Cancel</button>
+                    <button type="submit" class="button button-primary"><?php echo esc_html($labels['add']); ?></button>
+                    <button type="button" class="button" id="patlis-cancel-add-key"><?php echo esc_html($labels['cancel']); ?></button>
                 </form>
 
                 <form method="post" id="patlis-delete-key-form" style="display:none; margin-bottom:18px; max-width:600px;">
                     <?php wp_nonce_field('patlis_delete_translation_key', 'patlis_delete_translation_key_nonce'); ?>
-                    <label for="patlis_delete_key"><strong>Delete Key:</strong></label>
+                    <label for="patlis_delete_key"><strong><?php echo esc_html($labels['delete_key']); ?></strong></label>
                     <input type="text" id="patlis_delete_key" name="patlis_delete_key" style="width:300px;" required />
-                    <button type="submit" class="button button-danger">Delete</button>
-                    <button type="button" class="button" id="patlis-cancel-delete-key">Cancel</button>
+                    <button type="submit" class="button button-danger"><?php echo esc_html($labels['delete']); ?></button>
+                    <button type="button" class="button" id="patlis-cancel-delete-key"><?php echo esc_html($labels['cancel']); ?></button>
                 </form>
 
                 <script>
@@ -228,14 +253,14 @@ final class Patlis_Admin_Page_Translations
             <!-- Search filter -->
             <form method="get" style="margin-bottom:16px;">
                 <input type="hidden" name="page" value="patlis-translations">
-                <input type="search" name="s" value="<?php echo esc_attr($search); ?>" placeholder="Filter keys..." style="width:280px;">
-                <button type="submit" class="button">Filter</button>
+                <input type="search" name="s" value="<?php echo esc_attr($search); ?>" placeholder="<?php echo esc_attr($labels['filter_keys']); ?>" style="width:280px;">
+                <button type="submit" class="button"><?php echo esc_html($labels['filter']); ?></button>
                 <?php if ($search !== '') : ?>
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=patlis-translations')); ?>" class="button">Clear</a>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=patlis-translations')); ?>" class="button"><?php echo esc_html($labels['clear']); ?></a>
                 <?php endif; ?>
                 <span style="margin-left:12px; color:#666;">
-                    <?php echo esc_html($total_keys); ?> key<?php echo $total_keys !== 1 ? 's' : ''; ?>
-                    <?php if ($search !== '') echo ' matching <em>' . esc_html($search) . '</em>'; ?>
+                    <?php echo esc_html(sprintf($total_keys === 1 ? $labels['key_singular'] : $labels['key_plural'], $total_keys)); ?>
+                    <?php if ($search !== '') echo ' ' . esc_html(sprintf($labels['matching'], $search)); ?>
                 </span>
             </form>
 
@@ -247,15 +272,15 @@ final class Patlis_Admin_Page_Translations
                 <table class="widefat striped" style="max-width:1100px;">
                     <thead>
                         <tr>
-                            <th style="width:260px;">Key</th>
-                            <th style="width:120px;">Language</th>
-                            <th>Translation</th>
+                            <th style="width:260px;"><?php echo esc_html($labels['key']); ?></th>
+                            <th style="width:120px;"><?php echo esc_html($labels['language']); ?></th>
+                            <th><?php echo esc_html($labels['translation']); ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($page_keys)) : ?>
                             <tr>
-                                <td colspan="3">No keys found.</td>
+                                <td colspan="3"><?php echo esc_html($labels['no_keys_found']); ?></td>
                             </tr>
                         <?php else : ?>
                             <?php foreach ($page_keys as $key) : ?>
@@ -270,7 +295,7 @@ final class Patlis_Admin_Page_Translations
                                         <td style="vertical-align:top; white-space:nowrap;">
                                             <strong><?php echo esc_html(strtoupper($lang)); ?></strong>
                                             <?php if ($lang === $default) : ?>
-                                                <div style="font-size:12px; opacity:.7;">Default</div>
+                                                <div style="font-size:12px; opacity:.7;"><?php echo esc_html($labels['default']); ?></div>
                                             <?php endif; ?>
                                         </td>
 
@@ -289,10 +314,10 @@ final class Patlis_Admin_Page_Translations
                 </table>
 
                 <div style="display:flex;align-items:center;gap:16px;margin-top:16px;">
-                    <button type="submit" class="button button-primary">Save translations</button>
+                    <button type="submit" class="button button-primary"><?php echo esc_html($labels['save_translations']); ?></button>
 
                     <?php if ($total_pages > 1) : ?>
-                        <span style="color:#666;">Page <?php echo $paged; ?> of <?php echo $total_pages; ?></span>
+                        <span style="color:#666;"><?php echo esc_html(sprintf($labels['page_of'], $paged, $total_pages)); ?></span>
                         <div>
                             <?php for ($p = 1; $p <= $total_pages; $p++) : ?>
                                 <?php $page_url = add_query_arg('paged', $p, $base_url); ?>

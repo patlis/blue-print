@@ -29,6 +29,7 @@ function patlis_menu_section_admin_assets(string $hook): void
     if (!$screen || ($screen->taxonomy ?? '') !== 'menu_section') return;
 
     wp_enqueue_media();
+    wp_enqueue_script('jquery-ui-sortable');
 
     // Use a tiny inline script; jQuery is available in WP admin.
     $js = <<<JS
@@ -79,6 +80,26 @@ jQuery(function($){
 JS;
 
     wp_add_inline_script('jquery', $js);
+
+    if ($hook === 'edit-tags.php') {
+        $nonce    = wp_create_nonce('patlis_menu_section_sort_nonce');
+        $ajax_url = esc_url(admin_url('admin-ajax.php'));
+        $sort_js  = 'var patlisMcSort={nonce:"' . esc_js($nonce) . '",ajaxurl:"' . esc_js($ajax_url) . '"};' . "\n";
+        $sort_js .= 'jQuery(function($){' . "\n";
+        $sort_js .= '    var $list=$("#the-list");' . "\n";
+        $sort_js .= '    if(!$list.length)return;' . "\n";
+        $sort_js .= '    $("<style>#the-list .patlis-sort-ph{background:#f0f6fc;height:44px;}</style>").appendTo("head");' . "\n";
+        $sort_js .= '    $list.find("tr").each(function(){$(this).find("td.column-pmc_sort").prepend("<span class=\'patlis-drag-handle dashicons dashicons-menu\' style=\'cursor:move;margin-right:8px;color:#aaa;vertical-align:middle;font-size:24px;padding:8px;display:inline-block;\' title=\'Drag to reorder\'></span>");});' . "\n";
+        $sort_js .= '    $list.sortable({items:"tr",handle:".patlis-drag-handle",axis:"y",opacity:.7,placeholder:"patlis-sort-ph",update:function(){' . "\n";
+        $sort_js .= '        var ids=[];$list.find("tr").each(function(){var m=$(this).attr("id");if(m&&m.indexOf("tag-")===0)ids.push(m.replace("tag-",""));});' . "\n";
+        $sort_js .= '        $.post(patlisMcSort.ajaxurl,{action:"patlis_menu_section_sort",nonce:patlisMcSort.nonce,ids:ids});' . "\n";
+        $sort_js .= '    }});' . "\n";
+        $sort_js .= '});';
+        // Touch Punch: maps touch events to mouse events for jQuery UI Sortable on mobile.
+        $touch_punch = '(function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,g=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(b._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),b._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind("touchstart",a.proxy(b._touchStart,b)).bind("touchmove",a.proxy(b._touchMove,b)).bind("touchend",a.proxy(b._touchEnd,b)),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind("touchstart",b._touchStart).unbind("touchmove",b._touchMove).unbind("touchend",b._touchEnd),g.call(b)}}}(jQuery));';
+        wp_add_inline_script('jquery-ui-sortable', $touch_punch);
+        wp_add_inline_script('jquery', $sort_js);
+    }
 }
 
 /* ------------------------------------------------------------
@@ -96,12 +117,6 @@ function patlis_menu_section_add_fields(): void
         <label for="pmc_show">Show</label>
         <input type="checkbox" name="pmc_show" id="pmc_show" value="1" checked>
         <p class="description">If unchecked, this category will be hidden.</p>
-    </div>
-
-    <div class="form-field">
-        <label for="pmc_sort">Display order</label>
-        <input type="number" name="pmc_sort" id="pmc_sort" value="0" step="1">
-        <p class="description">Lower number shows first.</p>
     </div>
 
     <div class="form-field">
@@ -149,9 +164,6 @@ function patlis_menu_section_edit_fields($term): void
     $show = get_term_meta($term->term_id, 'pmc_show', true);
     $show = ($show === '' ? '1' : (string)$show);
 
-    $sort = get_term_meta($term->term_id, 'pmc_sort', true);
-    $sort = ($sort === '' ? '0' : (string)$sort);
-
     $image_id = (int) get_term_meta($term->term_id, 'pmc_image_id', true);
     $preview  = $image_id ? wp_get_attachment_image($image_id, 'thumbnail', false, [
         'style' => 'max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;'
@@ -165,14 +177,6 @@ function patlis_menu_section_edit_fields($term): void
                 <input type="checkbox" name="pmc_show" id="pmc_show" value="1" <?php checked($show, '1'); ?>>
                 Visible
             </label>
-        </td>
-    </tr>
-
-    <tr class="form-field">
-        <th scope="row"><label for="pmc_sort">Display order</label></th>
-        <td>
-            <input type="number" name="pmc_sort" id="pmc_sort" value="<?php echo esc_attr($sort); ?>" step="1">
-            <p class="description">Lower number shows first.</p>
         </td>
     </tr>
 
@@ -248,9 +252,6 @@ function patlis_menu_section_save_fields(int $term_id): void
     $show = isset($_POST['pmc_show']) ? '1' : '0';
     update_term_meta($term_id, 'pmc_show', $show);
 
-    $sort = isset($_POST['pmc_sort']) ? (string)intval($_POST['pmc_sort']) : '0';
-    update_term_meta($term_id, 'pmc_sort', $sort);
-
     $image_id = isset($_POST['pmc_image_id']) ? (int)$_POST['pmc_image_id'] : 0;
     if ($image_id > 0) {
         update_term_meta($term_id, 'pmc_image_id', (string)$image_id);
@@ -269,6 +270,30 @@ function patlis_menu_section_save_fields(int $term_id): void
         if ($b === '') delete_term_meta($term_id, "pmc_day{$i}b"); else update_term_meta($term_id, "pmc_day{$i}b", $b);
     }
 }
+
+// Auto-assign the last sort position when a new category is created.
+add_action('created_menu_section', function (int $term_id): void {
+    if (!current_user_can('edit_term', $term_id)) {
+        return;
+    }
+
+    $all_ids = get_terms([
+        'taxonomy'   => 'menu_section',
+        'hide_empty' => false,
+        'fields'     => 'ids',
+        'exclude'    => [$term_id],
+    ]);
+
+    $max = 0;
+    foreach ((array) $all_ids as $tid) {
+        $s = (int) get_term_meta((int) $tid, 'pmc_sort', true);
+        if ($s > $max) {
+            $max = $s;
+        }
+    }
+
+    update_term_meta($term_id, 'pmc_sort', (string) ($max + 1));
+}, 20);
 
 function patlis_menu_sanitize_time(string $t): string
 {
@@ -319,13 +344,13 @@ add_filter('manage_edit-menu_section_columns', function (array $columns): array 
     foreach ($columns as $key => $label) {
         // Place pmc_sort right before Name.
         if ($key === 'name') {
-            $new['pmc_sort'] = 'Sort';
+            $new['pmc_sort'] = '';
         }
         $new[$key] = $label;
     }
 
     if (!isset($new['pmc_sort'])) {
-        $new = ['pmc_sort' => 'Sort'] + $new;
+        $new = ['pmc_sort' => ''] + $new;
     }
 
     return $new;
@@ -334,8 +359,7 @@ add_filter('manage_edit-menu_section_columns', function (array $columns): array 
 add_filter('manage_menu_section_custom_column', function ($content, string $column_name, int $term_id) {
     if ($column_name !== 'pmc_sort') return $content;
 
-    $sort = get_term_meta($term_id, 'pmc_sort', true);
-    return esc_html((string)($sort === '' ? '0' : $sort));
+    return '';
 }, 10, 3);
 
 add_filter('manage_edit-menu_section_sortable_columns', function (array $sortable): array {
@@ -353,8 +377,12 @@ add_action('pre_get_terms', function (WP_Term_Query $query): void {
         return;
     }
 
-    $orderby = (string)($query->query_vars['orderby'] ?? '');
-    if ($orderby !== 'pmc_sort') return;
+    $orderby      = (string)($query->query_vars['orderby'] ?? '');
+    $user_orderby = isset($_GET['orderby']) ? sanitize_key((string)$_GET['orderby']) : '';
+    // Return early only when the user explicitly clicked a different column header.
+    if ($user_orderby !== '' && $user_orderby !== 'pmc_sort') {
+        return;
+    }
 
     // Rebuild meta_query here because pre_get_terms fires after the initial parse.
     $query->query_vars['meta_key'] = 'pmc_sort';
@@ -365,4 +393,24 @@ add_action('pre_get_terms', function (WP_Term_Query $query): void {
         $query->meta_query = new WP_Meta_Query();
         $query->meta_query->parse_query_vars($query->query_vars);
     }
+});
+
+add_action('wp_ajax_patlis_menu_section_sort', function (): void {
+    check_ajax_referer('patlis_menu_section_sort_nonce', 'nonce');
+
+    if (!current_user_can('manage_categories')) {
+        wp_send_json_error('Unauthorized', 403);
+    }
+
+    $ids = isset($_POST['ids']) ? (array) $_POST['ids'] : [];
+
+    foreach ($ids as $index => $term_id) {
+        $term_id = absint($term_id);
+        if ($term_id <= 0) {
+            continue;
+        }
+        update_term_meta($term_id, 'pmc_sort', (string) ($index + 1));
+    }
+
+    wp_send_json_success();
 });

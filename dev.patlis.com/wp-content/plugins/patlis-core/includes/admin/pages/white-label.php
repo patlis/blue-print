@@ -53,7 +53,7 @@ final class Patlis_Admin_Page_White_Label
         }
         ?>
         <div class="wrap">
-            <h1><?php esc_html_e('White label settings', 'patlis-core'); ?></h1>
+            <h1>White label settings</h1>
 
             <?php if (!empty($_GET['patlis_saved'])): ?>
                 <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
@@ -65,7 +65,7 @@ final class Patlis_Admin_Page_White_Label
 
                 <table class="form-table" role="presentation">
                     <tr>
-                        <th scope="row"><label for="patlis_reseller_domain"><?php esc_html_e('Reseller domain', 'patlis-core'); ?></label></th>
+                        <th scope="row"><label for="patlis_reseller_domain">Reseller domain</label></th>
                         <td>
                             <input
                                 id="patlis_reseller_domain"
@@ -79,7 +79,7 @@ final class Patlis_Admin_Page_White_Label
                     </tr>
 
                     <tr>
-                        <th scope="row"><label for="patlis_reseller_company_name"><?php esc_html_e('Reseller company name', 'patlis-core'); ?></label></th>
+                        <th scope="row"><label for="patlis_reseller_company_name">Reseller company name</label></th>
                         <td>
                             <input
                                 id="patlis_reseller_company_name"
@@ -92,7 +92,7 @@ final class Patlis_Admin_Page_White_Label
                     </tr>
                 </table>
 
-                <?php submit_button(__('Save settings', 'patlis-core')); ?>
+                <?php submit_button('Save settings'); ?>
             </form>
         </div>
         <?php

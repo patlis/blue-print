@@ -8,63 +8,703 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Patlis Core 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-28 21:17+0000\n"
+"POT-Creation-Date: 2026-08-22 16:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;esc_html_e;esc_html__;esc_attr__;esc_attr_e\n"
+"X-Poedit-SearchPath-0: .\n"
 
-msgid "Address"
+#: includes/acf-field-labels.php:9 includes/cpt-labels.php:25
+msgid "Events"
 msgstr ""
 
+#: includes/acf-field-labels.php:10 includes/admin/pages/homepage.php:38
+msgid "Experience"
+msgstr ""
+
+#: includes/acf-field-labels.php:11 includes/admin/pages/homepage.php:37
+msgid "Offers and packages"
+msgstr ""
+
+#: includes/acf-field-labels.php:12 includes/cpt-labels.php:33
+msgid "Reviews"
+msgstr ""
+
+#: includes/acf-field-labels.php:13 includes/cpt-labels.php:29
+msgid "Services"
+msgstr ""
+
+#: includes/acf-field-labels.php:14 includes/cpt-labels.php:41
+msgid "Slides"
+msgstr ""
+
+#: includes/acf-field-labels.php:15 includes/cpt-labels.php:38
+msgid "Timeline"
+msgstr ""
+
+#: includes/acf-field-labels.php:29 includes/acf-field-labels.php:40
+#: includes/acf-field-labels.php:57
+msgid "Short description"
+msgstr ""
+
+#: includes/acf-field-labels.php:30 includes/admin/pages/center-popup.php:410
+#: includes/admin/pages/notification-bar.php:223
+msgid "Start date"
+msgstr ""
+
+#: includes/acf-field-labels.php:31
+msgid "Start time"
+msgstr ""
+
+#: includes/acf-field-labels.php:32 includes/admin/pages/center-popup.php:417
+msgid "End date"
+msgstr ""
+
+#: includes/acf-field-labels.php:33
+msgid "End time"
+msgstr ""
+
+#: includes/acf-field-labels.php:34 includes/acf-field-labels.php:62
+#: includes/admin/pages/homepage.php:93
+msgid "Video URL"
+msgstr ""
+
+#: includes/acf-field-labels.php:36 includes/acf-field-labels.php:45
+#: includes/acf-field-labels.php:61 includes/acf-field-labels.php:64
+#: includes/acf-field-labels.php:68 includes/admin/pages/homepage.php:118
+msgid "Display order"
+msgstr ""
+
+#: includes/acf-field-labels.php:37
+msgid "Link text"
+msgstr ""
+
+#: includes/acf-field-labels.php:38 includes/admin/pages/center-popup.php:438
+msgid "Link URL"
+msgstr ""
+
+#: includes/acf-field-labels.php:41
+msgid "Valid from"
+msgstr ""
+
+#: includes/acf-field-labels.php:42
+msgid "Valid until"
+msgstr ""
+
+#: includes/acf-field-labels.php:43
+msgid "Price text"
+msgstr ""
+
+#: includes/acf-field-labels.php:44
+msgid "Discount (%)"
+msgstr ""
+
+#: includes/acf-field-labels.php:46 includes/acf-field-labels.php:54
+#: includes/acf-field-labels.php:60 includes/admin/pages/center-popup.php:361
+msgid "Enable"
+msgstr ""
+
+#: includes/acf-field-labels.php:47
+msgid "Linked rooms"
+msgstr ""
+
+#: includes/acf-field-labels.php:48
+msgid "Booking URL (redirect mode)"
+msgstr ""
+
+#: includes/acf-field-labels.php:50
+msgid "Stars"
+msgstr ""
+
+#: includes/acf-field-labels.php:51
+msgid "Date"
+msgstr ""
+
+#: includes/acf-field-labels.php:52
+msgid "Review text"
+msgstr ""
+
+#: includes/acf-field-labels.php:53
+msgid "Source"
+msgstr ""
+
+#: includes/acf-field-labels.php:55 includes/acf-field-labels.php:59
+msgid "Show on the home page"
+msgstr ""
+
+#: includes/acf-field-labels.php:58
+msgid "Create service page"
+msgstr ""
+
+#: includes/acf-field-labels.php:66
+msgid "Date (optional)"
+msgstr ""
+
+#: includes/acf-field-labels.php:67
+msgid "Image (optional)"
+msgstr ""
+
+#: includes/admin/menu.php:10 includes/admin/menu.php:11
+msgid "Site settings"
+msgstr ""
+
+#: includes/admin/menu.php:21 includes/admin/menu.php:22
+#: includes/admin/pages/basic.php:120 includes/admin/pages/center-popup.php:393
 msgid "Basic settings"
 msgstr ""
 
-msgid "City"
+#: includes/admin/menu.php:30 includes/admin/menu.php:31
+msgid "Social media"
 msgstr ""
 
-msgid "Company name"
-msgstr ""
-
-msgid "Display the contact form"
-msgstr ""
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Mobile"
-msgstr ""
-
-msgid "Mobile phone"
-msgstr ""
-
+#: includes/admin/menu.php:39 includes/admin/menu.php:40
+#: includes/admin/pages/opening-times.php:153
 msgid "Opening times"
 msgstr ""
 
-msgid "Patlis.com"
+#: includes/admin/menu.php:48 includes/admin/menu.php:49
+#: includes/admin/pages/center-popup.php:347
+msgid "Center Popup"
 msgstr ""
 
-msgid "Phone"
+#: includes/admin/menu.php:57 includes/admin/menu.php:58
+#: includes/admin/pages/notification-bar.php:179
+msgid "Notification Bar"
 msgstr ""
 
-msgid "Phone-2"
+#: includes/admin/menu.php:66 includes/admin/menu.php:67
+#: includes/admin/pages/translations.php:48
+msgid "Translations"
 msgstr ""
 
-msgid "Show contact form (1/0)"
+#: includes/admin/menu.php:75 includes/admin/menu.php:76
+msgid "Home page"
 msgstr ""
 
-msgid "Social Media"
+#: includes/admin/pages/basic.php:91
+msgid "Basic"
 msgstr ""
 
-msgid "Time zone"
+#: includes/admin/pages/basic.php:92
+msgid "Contact form"
 msgstr ""
 
-msgid "Zip"
+#: includes/admin/pages/basic.php:93
+msgid "Currency"
 msgstr ""
 
+#: includes/admin/pages/basic.php:94
+msgid "Display the contact form"
+msgstr ""
+
+#: includes/admin/pages/basic.php:95
+msgid "Recipient email"
+msgstr ""
+
+#: includes/admin/pages/basic.php:96
+msgid "Email subject"
+msgstr ""
+
+#: includes/admin/pages/basic.php:97
+msgid "Currency symbol"
+msgstr ""
+
+#: includes/admin/pages/basic.php:98
+msgid "Decimal divider"
+msgstr ""
+
+#: includes/admin/pages/basic.php:99
+msgid "Currency position"
+msgstr ""
+
+#: includes/admin/pages/basic.php:100
+msgid "After the amount"
+msgstr ""
+
+#: includes/admin/pages/basic.php:101
+msgid "Before the amount"
+msgstr ""
+
+#: includes/admin/pages/basic.php:102
+msgid "Decimals"
+msgstr ""
+
+#: includes/admin/pages/basic.php:103
+msgid "Appearance"
+msgstr ""
+
+#: includes/admin/pages/basic.php:104
+msgid "Display mode"
+msgstr ""
+
+#: includes/admin/pages/basic.php:105
+msgid "Light and dark mode"
+msgstr ""
+
+#: includes/admin/pages/basic.php:106
+msgid "Light mode only"
+msgstr ""
+
+#: includes/admin/pages/basic.php:107
+msgid "Dark mode only"
+msgstr ""
+
+#: includes/admin/pages/basic.php:108
+msgid "Legal links"
+msgstr ""
+
+#: includes/admin/pages/basic.php:109
+msgid "Show legal notice page"
+msgstr ""
+
+#: includes/admin/pages/basic.php:110
+msgid "Show privacy policy page"
+msgstr ""
+
+#: includes/admin/pages/basic.php:111
+msgid "Show terms of use page"
+msgstr ""
+
+#: includes/admin/pages/basic.php:112
+msgid "Confirmation email to client"
+msgstr ""
+
+#: includes/admin/pages/basic.php:113
+#, php-format
+msgid "Subject (%s)"
+msgstr ""
+
+#: includes/admin/pages/basic.php:114
+#, php-format
+msgid "Body (%s)"
+msgstr ""
+
+#: includes/admin/pages/basic.php:115 includes/admin/pages/center-popup.php:297
+#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/notification-bar.php:150
+#: includes/admin/pages/opening-times.php:126
+#: includes/admin/pages/social.php:27
+msgid "Save"
+msgstr ""
+
+#: includes/admin/pages/basic.php:156
+msgid "Logo image"
+msgstr ""
+
+#: includes/admin/pages/basic.php:164 includes/admin/pages/center-popup.php:463
+#: includes/admin/pages/homepage.php:111
+msgid "Select image"
+msgstr ""
+
+#: includes/admin/pages/basic.php:165 includes/admin/pages/center-popup.php:464
+#: includes/admin/pages/center-popup.php:483
+#: includes/admin/pages/homepage.php:112
+msgid "Remove"
+msgstr ""
+
+#: includes/admin/pages/basic.php:171
+msgid "Company name"
+msgstr ""
+
+#: includes/admin/pages/basic.php:180
+msgid "Address"
+msgstr ""
+
+#: includes/admin/pages/basic.php:189
+msgid "City"
+msgstr ""
+
+#: includes/admin/pages/basic.php:198
 msgid "Zip code"
 msgstr ""
 
+#: includes/admin/pages/basic.php:216
+msgid "Phone"
+msgstr ""
+
+#: includes/admin/pages/basic.php:225
+msgid "Phone-2"
+msgstr ""
+
+#: includes/admin/pages/basic.php:234
+msgid "Mobile phone"
+msgstr ""
+
+#: includes/admin/pages/basic.php:252
+msgid "Coordinates"
+msgstr ""
+
+#: includes/admin/pages/basic.php:261
+msgid "Time zone"
+msgstr ""
+
+#: includes/admin/pages/basic.php:493
+msgid "Select logo image"
+msgstr ""
+
+#: includes/admin/pages/basic.php:494 includes/admin/pages/homepage.php:223
+msgid "Use this image"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:372
+msgid "Display source"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:378
+#: includes/admin/pages/center-popup.php:396
+msgid "Formatted Text"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:379
+#: includes/admin/pages/center-popup.php:397
+msgid "Html Code"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:380
+#: includes/admin/pages/center-popup.php:394
+msgid "Image"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:381
+#: includes/admin/pages/center-popup.php:395
+msgid "Video"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:387
+msgid "Content"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:403
+msgid "Delay (seconds)"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:424
+msgid "Title"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:482
+#: includes/admin/pages/homepage.php:97
+msgid "Select video"
+msgstr ""
+
+#: includes/admin/pages/center-popup.php:621
+msgid "This popup is shown only after the cookie banner has been completed and the consent flag has been stored in the browser. If you change or replace your cookie banner, please let us know so we can adjust the popup condition accordingly."
+msgstr ""
+
+#: includes/admin/pages/homepage.php:34
+msgid "Welcome section"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:35
+msgid "Top dishes"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:36
+msgid "Top rooms"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:39
+msgid "Top services"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:40
+msgid "Upcoming events"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:41
+msgid "Home gallery"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:42
+msgid "Latest reviews"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:43
+msgid "Action banner (CTA)"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:79
+msgid "Home page settings"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:89
+msgid "Welcome section video"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:90
+msgid "If a video is set, it replaces the featured image in the Welcome section."
+msgstr ""
+
+#: includes/admin/pages/homepage.php:103
+msgid "CTA background image"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:106
+msgid "CTA background"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:119
+msgid "Drag to reorder."
+msgstr ""
+
+#: includes/admin/pages/homepage.php:222
+msgid "Select CTA background image"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:246
+msgid "Select welcome video"
+msgstr ""
+
+#: includes/admin/pages/homepage.php:247
+msgid "Use this video"
+msgstr ""
+
+#: includes/admin/pages/notification-bar.php:151
+#: includes/admin/pages/opening-times.php:127
+msgid "Saved."
+msgstr ""
+
+#: includes/admin/pages/notification-bar.php:193
+msgid "Active"
+msgstr ""
+
+#: includes/admin/pages/notification-bar.php:203
+#: includes/admin/pages/opening-times.php:171
+msgid "Text"
+msgstr ""
+
+#: includes/admin/pages/notification-bar.php:204
+msgid "Recommended: max. 50 characters"
+msgstr ""
+
+#: includes/admin/pages/notification-bar.php:233
+msgid "Expiry date"
+msgstr ""
+
+#: includes/admin/pages/opening-times.php:164
+msgid "Show opening hours"
+msgstr ""
+
+#: includes/admin/pages/social.php:31
+msgid "Social media URLs"
+msgstr ""
+
+#: includes/admin/pages/translations.php:44
+msgid "Not allowed."
+msgstr ""
+
+#: includes/admin/pages/translations.php:49
+msgid "Polylang is required."
+msgstr ""
+
+#: includes/admin/pages/translations.php:50 includes/cpt-labels.php:11
+#: includes/cpt-labels.php:12 includes/gallery-manager.php:52
+#: includes/gallery-manager.php:53 includes/gallery-manager.php:132
+#: includes/gallery-manager.php:133
+msgid "Add new"
+msgstr ""
+
+#: includes/admin/pages/translations.php:51
+msgid "Delete key"
+msgstr ""
+
+#: includes/admin/pages/translations.php:52
+msgid "Translations saved."
+msgstr ""
+
+#: includes/admin/pages/translations.php:53
+msgid "New key:"
+msgstr ""
+
+#: includes/admin/pages/translations.php:54
+msgid "Add"
+msgstr ""
+
+#: includes/admin/pages/translations.php:55
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/pages/translations.php:56
+msgid "Delete"
+msgstr ""
+
+#: includes/admin/pages/translations.php:57
+msgid "Filter keys..."
+msgstr ""
+
+#: includes/admin/pages/translations.php:58
+msgid "Filter"
+msgstr ""
+
+#: includes/admin/pages/translations.php:59
+msgid "Clear filter"
+msgstr ""
+
+#: includes/admin/pages/translations.php:60
+msgid "Key"
+msgstr ""
+
+#: includes/admin/pages/translations.php:61
+msgid "Language"
+msgstr ""
+
+#: includes/admin/pages/translations.php:62
+msgid "Translation"
+msgstr ""
+
+#: includes/admin/pages/translations.php:63
+msgid "No keys found."
+msgstr ""
+
+#: includes/admin/pages/translations.php:64
+msgid "Default"
+msgstr ""
+
+#: includes/admin/pages/translations.php:65
+msgid "Save translations"
+msgstr ""
+
+#: includes/admin/pages/translations.php:66
+#, php-format
+msgid "%d key"
+msgstr ""
+
+#: includes/admin/pages/translations.php:67
+#, php-format
+msgid "%d keys"
+msgstr ""
+
+#: includes/admin/pages/translations.php:68
+#, php-format
+msgid "matching %s"
+msgstr ""
+
+#: includes/admin/pages/translations.php:69
+#, php-format
+msgid "Page %1$d of %2$d"
+msgstr ""
+
+#: includes/cpt-labels.php:10
+msgid "All"
+msgstr ""
+
+#: includes/cpt-labels.php:13
+msgid "Edit"
+msgstr ""
+
+#: includes/cpt-labels.php:14
+msgid "New"
+msgstr ""
+
+#: includes/cpt-labels.php:15
+msgid "View"
+msgstr ""
+
+#: includes/cpt-labels.php:16
+msgid "Search"
+msgstr ""
+
+#: includes/cpt-labels.php:17
+msgid "Not found."
+msgstr ""
+
+#: includes/cpt-labels.php:18
+msgid "Not found in Trash."
+msgstr ""
+
+#: includes/cpt-labels.php:26
+msgid "Event"
+msgstr ""
+
+#: includes/cpt-labels.php:30
+msgid "Service"
+msgstr ""
+
+#: includes/cpt-labels.php:34
+msgid "Review"
+msgstr ""
+
+#: includes/cpt-labels.php:37
+msgid "Timelines"
+msgstr ""
+
+#: includes/cpt-labels.php:42
+msgid "Slide"
+msgstr ""
+
+#: includes/events-gallery.php:153 includes/events-gallery.php:391
+#: includes/gallery-manager.php:463
+msgid "Add Images"
+msgstr ""
+
+#: includes/events-gallery.php:154 includes/events-gallery.php:392
+#: includes/gallery-manager.php:464
+msgid "Delete all"
+msgstr ""
+
+#: includes/events-gallery.php:156 includes/events-gallery.php:394
+#: includes/gallery-manager.php:466
+msgid "Select multiple images, drag to reorder, then save."
+msgstr ""
+
+#: includes/events-gallery.php:241 includes/events-gallery.php:479
+#: includes/gallery-manager.php:553
+msgid "Select gallery images"
+msgstr ""
+
+#: includes/events-gallery.php:243 includes/events-gallery.php:481
+msgid "Use selected images"
+msgstr ""
+
+#: includes/gallery-manager.php:47 includes/gallery-manager.php:85
+#: includes/gallery-manager.php:128 includes/gallery-manager.php:178
+msgid "Galleries"
+msgstr ""
+
+#: includes/gallery-manager.php:48 includes/gallery-manager.php:49
+#: includes/gallery-manager.php:50 includes/gallery-manager.php:77
+#: includes/gallery-manager.php:89 includes/gallery-manager.php:93
+#: includes/gallery-manager.php:126 includes/gallery-manager.php:129
+#: includes/gallery-manager.php:130 includes/gallery-manager.php:170
+#: includes/gallery-manager.php:182 includes/gallery-manager.php:186
+msgid "Gallery"
+msgstr ""
+
+#: includes/gallery-manager.php:51 includes/gallery-manager.php:131
+msgid "All galleries"
+msgstr ""
+
+#: includes/gallery-manager.php:54 includes/gallery-manager.php:134
+msgid "Edit gallery"
+msgstr ""
+
+#: includes/gallery-manager.php:55 includes/gallery-manager.php:135
+msgid "New gallery"
+msgstr ""
+
+#: includes/gallery-manager.php:56 includes/gallery-manager.php:136
+msgid "View gallery"
+msgstr ""
+
+#: includes/gallery-manager.php:57 includes/gallery-manager.php:137
+msgid "Search galleries"
+msgstr ""
+
+#: includes/gallery-manager.php:58 includes/gallery-manager.php:138
+msgid "No galleries found."
+msgstr ""
+
+#: includes/gallery-manager.php:59 includes/gallery-manager.php:139
+msgid "No galleries found in Trash."
+msgstr ""
+
+#: includes/gallery-manager.php:445 includes/gallery-manager.php:594
+msgid "Gallery images"
+msgstr ""

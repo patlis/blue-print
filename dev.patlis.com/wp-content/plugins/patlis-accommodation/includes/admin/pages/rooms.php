@@ -185,7 +185,7 @@ function patlis_acc_rooms_render_metabox($post) {
     echo '<button type="button" class="button" id="patlis-room-gallery-add">Add Images</button> ';
     echo '<button type="button" class="button" id="patlis-room-gallery-clear">Clear</button>';
     echo '</p>';
-    echo '<p class="description">Select multiple images, drag to reorder, remove what you do not need.</p>';
+    echo '<p class="description">Select multiple images, drag to reorder, then save.</p>';
     echo '</td></tr>';
 
     echo '</table>';

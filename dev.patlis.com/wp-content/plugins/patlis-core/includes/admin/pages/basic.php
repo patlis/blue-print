@@ -102,13 +102,17 @@ final class Patlis_Admin_Page_Basic {
       'decimals'                 => __('Decimals', 'patlis-core'),
       'appearance'               => __('Appearance', 'patlis-core'),
       'display_mode'             => __('Display mode', 'patlis-core'),
-      'appearance_light_dark'    => __('Light & Dark mode', 'patlis-core'),
+      'appearance_light_dark'    => __('Light and dark mode', 'patlis-core'),
       'appearance_light_only'    => __('Light mode only', 'patlis-core'),
       'appearance_dark_only'     => __('Dark mode only', 'patlis-core'),
-      'legal_links'              => __('Legal Links', 'patlis-core'),
-      'show_legal_notice'        => __('Show Legal Notice page', 'patlis-core'),
-      'show_privacy_policy'      => __('Show Privacy Policy page', 'patlis-core'),
-      'show_terms_of_use'        => __('Show Terms of Use page', 'patlis-core'),
+      'legal_links'              => __('Legal links', 'patlis-core'),
+      'show_legal_notice'        => __('Show legal notice page', 'patlis-core'),
+      'show_privacy_policy'      => __('Show privacy policy page', 'patlis-core'),
+      'show_terms_of_use'        => __('Show terms of use page', 'patlis-core'),
+      'confirmation_email'       => __('Confirmation email to client', 'patlis-core'),
+      'confirmation_subject'     => __('Subject (%s)', 'patlis-core'),
+      'confirmation_body'        => __('Body (%s)', 'patlis-core'),
+      'save'                     => __('Save', 'patlis-core'),
     ];
 
     ?>
@@ -306,10 +310,10 @@ final class Patlis_Admin_Page_Basic {
               $cc_subject = is_array($opt['contact_confirm_subject'] ?? null) ? $opt['contact_confirm_subject'] : [];
               $cc_body    = is_array($opt['contact_confirm_body']    ?? null) ? $opt['contact_confirm_body']    : [];
               ?>
-              <tr><td colspan="2"><hr></td></tr>
+              <tr><td colspan="2"><h3 style="text-align: center;"><?php echo esc_html($labels['confirmation_email']); ?></h3></td></tr>
               <?php foreach ($slugs as $ls): $ls = (string)$ls; ?>
               <tr>
-                <th scope="row"><?php echo esc_html('Confirmation subject (' . strtoupper($ls) . ')'); ?></th>
+                <th scope="row"><?php echo esc_html(sprintf($labels['confirmation_subject'], strtoupper($ls))); ?></th>
                 <td>
                   <input type="text" class="large-text"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[contact_confirm_subject][<?php echo esc_attr($ls); ?>]"
@@ -317,7 +321,7 @@ final class Patlis_Admin_Page_Basic {
                 </td>
               </tr>
               <tr>
-                <th scope="row"><?php echo esc_html('Confirmation body (' . strtoupper($ls) . ')'); ?></th>
+                <th scope="row"><?php echo esc_html(sprintf($labels['confirmation_body'], strtoupper($ls))); ?></th>
                 <td>
                   <textarea class="large-text" rows="6"
                     name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[contact_confirm_body][<?php echo esc_attr($ls); ?>]"><?php echo wp_kses_post($cc_body[$ls] ?? ''); ?></textarea>
@@ -510,7 +514,7 @@ final class Patlis_Admin_Page_Basic {
           });
         </script>
 
-        <?php submit_button('Save'); ?>
+        <?php submit_button($labels['save']); ?>
       </form>
     </div>
     <?php
