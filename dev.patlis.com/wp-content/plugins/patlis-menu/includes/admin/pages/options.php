@@ -204,7 +204,7 @@ final class Patlis_Menu_Admin_Page_Options
             }
         }
     
-        return ['default' => 'Default'];
+        return ['default' => __('Default', 'patlis-menu')];
     }
 
     protected static function get_current_language(): string
@@ -253,7 +253,7 @@ final class Patlis_Menu_Admin_Page_Options
             <h1><?php esc_html_e('Menu – Options', 'patlis-menu'); ?></h1>
 
             <?php if (!empty($_GET['patlis_saved'])): ?>
-                <div class="notice notice-success is-dismissible"><p>Saved.</p></div>
+                <div class="notice notice-success is-dismissible"><p><?php esc_html_e('Saved.', 'patlis-menu'); ?></p></div>
             <?php endif; ?>
 
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
@@ -262,67 +262,76 @@ final class Patlis_Menu_Admin_Page_Options
 
                 <table class="form-table" role="presentation">
                     <tr>
-                        <th scope="row"><?php esc_html_e('Show prices in the product catalog', 'patlis-menu'); ?></th>
                         <td>
-                            <label>
-                                <input type="checkbox" name="<?php echo esc_attr(self::OPTION_NAME); ?>[show_catalog_prices]"
-                                       value="1" <?php checked(!empty($opt['show_catalog_prices']) || !isset($opt['show_catalog_prices'])); ?>>
-                                <?php esc_html_e('Yes', 'patlis-menu'); ?>
-                            </label>
-                            <p class="description">
-                                <?php esc_html_e('If disabled, price tags will output empty values.', 'patlis-menu'); ?>
-                            </p>
+                            <div style="display: flex; align-items: center; gap: 24px;">
+                                <strong><?php esc_html_e('Show prices in the menu', 'patlis-menu'); ?></strong>
+                                <label>
+                                    <input type="checkbox"
+                                        name="<?php echo esc_attr(self::OPTION_NAME); ?>[show_catalog_prices]"
+                                        value="1"
+                                        <?php checked(!empty($opt['show_catalog_prices']) || !isset($opt['show_catalog_prices'])); ?>>
+                                    <?php esc_html_e('Yes', 'patlis-menu'); ?>
+                                </label>
+                            </div>
+
+                            <small>
+                                <?php esc_html_e('If disabled, prices will not be displayed in the menu.', 'patlis-menu'); ?>
+                            </small>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php esc_html_e('Display mode', 'patlis-menu'); ?></th>
-                        <td>
-                            <select name="<?php echo esc_attr(self::OPTION_NAME); ?>[display_mode]">
-                                <?php foreach ($modes as $key => $label): ?>
-                                    <option value="<?php echo esc_attr($key); ?>" <?php selected($mode, $key); ?>>
-                                        <?php echo esc_html($label); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <td >
+                             <div style="display: flex; align-items: center; gap: 24px;">
+                                <strong><?php esc_html_e('Display mode', 'patlis-menu'); ?></strong>
+                                <select name="<?php echo esc_attr(self::OPTION_NAME); ?>[display_mode]">
+                                    <?php foreach ($modes as $key => $label): ?>
+                                        <option value="<?php echo esc_attr($key); ?>" <?php selected($mode, $key); ?>>
+                                            <?php echo esc_html($label); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
-                            <p class="description">
-                                <?php esc_html_e('Choose how the catalog layout is displayed.', 'patlis-menu'); ?>
-                            </p>
+                            <small>
+                                <?php esc_html_e('Choose how the menu layout is displayed.', 'patlis-menu'); ?>
+                            </small>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php esc_html_e('Show Vegetarian & Vegan filter', 'patlis-menu'); ?></th>
-                        <td>
+                        <td >
+                            <div style="display: flex; align-items: center; gap: 24px;"><strong><?php esc_html_e('Show vegetarian and vegan filter', 'patlis-menu'); ?></strong>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(self::OPTION_NAME); ?>[show_veg_filters]"
                                        value="1" <?php checked(!empty($opt['show_veg_filters'])); ?>>
                                 <?php esc_html_e('Yes', 'patlis-menu'); ?>
                             </label>
-                            <p class="description">
-                                <?php esc_html_e('If enabled, vegetarian/vegan filter buttons can be shown in the catalog.', 'patlis-menu'); ?>
-                            </p>
+                            </div>
+                            <small>
+                                <?php esc_html_e('If enabled, vegetarian and vegan filter buttons can be displayed in the menu.', 'patlis-menu'); ?>
+                            </small>
                         </td>
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php esc_html_e('Show allergies', 'patlis-menu'); ?></th>
-                        <td>
+                        <td >
+                            <div style="display: flex; align-items: center; gap: 24px;"><strong><?php esc_html_e('Show allergen information', 'patlis-menu'); ?></strong></div>
                             <label>
                                 <input type="checkbox" name="<?php echo esc_attr(self::OPTION_NAME); ?>[show_allergies]"
                                        value="1" <?php checked(!empty($opt['show_allergies']) || !isset($opt['show_allergies'])); ?>>
                                 <?php esc_html_e('Yes', 'patlis-menu'); ?>
                             </label>
-                            <p class="description">
-                                <?php esc_html_e('If disabled, allergies output will be empty.', 'patlis-menu'); ?>
-                            </p>
+                            </div>
+                            <small>
+                                <?php esc_html_e('If disabled, allergen information will not be displayed.', 'patlis-menu'); ?>
+                            </small>
                         </td>
                     </tr>
+                    <tr><td ><h3 style="text-align: center;"><?php esc_html_e('Allergen description', 'patlis-menu'); ?></h3></td></tr>
 
                     <tr>
-                        <th scope="row"><?php esc_html_e('Allergies description (HTML)', 'patlis-menu'); ?></th>
-                        <td>
+                        <td >
                             <?php foreach ($languages as $lang_slug => $lang_label): ?>
                                 <?php
                                 $content = isset($allergies_all[$lang_slug]) && is_string($allergies_all[$lang_slug])
@@ -348,10 +357,6 @@ final class Patlis_Menu_Admin_Page_Options
                                     ?>
                                 </div>
                             <?php endforeach; ?>
-
-                            <p class="description">
-                                <?php esc_html_e('Shown inside the allergies popup. Add one version per language. Allowed HTML is sanitized.', 'patlis-menu'); ?>
-                            </p>
                         </td>
                     </tr>
                 </table>

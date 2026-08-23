@@ -1,0 +1,1029 @@
+# Greek (Greece) translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-23 12:52+0200\n"
+"PO-Revision-Date: 2026-08-23 12:52+0200\n"
+"Last-Translator: \n"
+"Language-Team: el_GR <LL@li.org>\n"
+"Language: el_GR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/admin/menu.php:13 includes/admin/menu.php:14
+msgid "Menu"
+msgstr "Μενού"
+
+#: includes/admin/menu.php:25 includes/admin/menu.php:26
+msgid "Options"
+msgstr "Ρυθμίσεις"
+
+#: includes/admin/menu.php:35 includes/admin/menu.php:36
+#: includes/post-types.php:11
+msgid "Food & drinks"
+msgstr "Φαγητά & ποτά"
+
+#: includes/admin/menu.php:44 includes/admin/menu.php:45
+msgid "Categories"
+msgstr "Κατηγορίες"
+
+#: includes/admin/menu.php:53 includes/admin/menu.php:54
+msgid "PDF files"
+msgstr "PDF αρχεία"
+
+#: includes/admin/pages/options.php:11 includes/admin/pages/options.php:27
+msgid "Normal"
+msgstr "Κανονικό"
+
+#: includes/admin/pages/options.php:12
+msgid "Centered"
+msgstr "Κεντραρισμένο"
+
+#: includes/admin/pages/options.php:207
+msgid "Default"
+msgstr "Προεπιλογή "
+
+#: includes/admin/pages/options.php:253
+msgid "Menu – Options"
+msgstr "Ρυθμίσεις Μενού"
+
+#: includes/admin/pages/options.php:256
+msgid "Saved."
+msgstr "Αποθηκεύτηκε."
+
+#: includes/admin/pages/options.php:267
+msgid "Show prices in the menu"
+msgstr "Εμφάνιση τιμών στο μενού"
+
+#: includes/admin/pages/options.php:273 includes/admin/pages/options.php:308
+#: includes/admin/pages/options.php:323 includes/menu-items.php:246
+#: includes/menu-items.php:251
+msgid "Yes"
+msgstr "Ναι"
+
+#: includes/admin/pages/options.php:278
+msgid "If disabled, prices will not be displayed in the menu."
+msgstr "Αν απενεργοποιηθεί, οι τιμές δεν θα εμφανίζονται στο μενού"
+
+#: includes/admin/pages/options.php:286
+msgid "Display mode"
+msgstr "Τρόπος εμφάνισης"
+
+#: includes/admin/pages/options.php:297
+msgid "Choose how the menu layout is displayed."
+msgstr "Επιλέξτε τον τρόπο εμφάνισης του μενού."
+
+#: includes/admin/pages/options.php:304
+msgid "Show vegetarian and vegan filter"
+msgstr "Εμφάνιση φίλτρου για χορτοφαγικά και vegan"
+
+#: includes/admin/pages/options.php:312
+msgid ""
+"If enabled, vegetarian and vegan filter buttons can be displayed in the menu."
+msgstr ""
+"Αν ενεργοποιηθεί, μπορούν να εμφανίζονται στο μενού φίλτρα για χορτοφαγικά "
+"και vegan προϊόντα."
+
+#: includes/admin/pages/options.php:319
+msgid "Show allergen information"
+msgstr "Εμφάνιση πληροφοριών αλλεργιογόνων"
+
+#: includes/admin/pages/options.php:327
+msgid "If disabled, allergen information will not be displayed."
+msgstr "Αν απενεργοποιηθεί, οι πληροφορίες αλλεργιογόνων δεν θα εμφανίζονται."
+
+#: includes/admin/pages/options.php:331
+msgid "Allergen description"
+msgstr "Περιγραφή αλλεργιογόνων"
+
+#: includes/admin/pages/options.php:364
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: includes/categories.php:34
+msgid "Select category image"
+msgstr "Επιλογή εικόνας κατηγορίας"
+
+#: includes/categories.php:35
+msgid "Use this image"
+msgstr "Χρησιμοποιήστε αυτή την εικόνα"
+
+#: includes/categories.php:90
+msgid "Drag to reorder"
+msgstr "Σύρετε για αναδιάταξη."
+
+#: includes/categories.php:121 includes/categories.php:181
+#: includes/menu-items.php:94 includes/menu-items.php:245
+msgid "Enabled"
+msgstr "Ενεργό"
+
+#: includes/categories.php:126 includes/categories.php:187
+msgid "Image"
+msgstr "Εικόνα"
+
+#: includes/categories.php:130 includes/categories.php:192
+msgid "Select image"
+msgstr "Επιλογή εικόνας"
+
+#: includes/categories.php:131 includes/categories.php:193
+#: includes/menu-pdfs.php:108
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: includes/categories.php:136 includes/categories.php:199
+msgid "Category visibility schedule"
+msgstr "Πρόγραμμα ορατότητας κατηγορίας"
+
+#: includes/categories.php:137 includes/categories.php:213
+msgid "If both fields are empty, the category is visible all day."
+msgstr ""
+"Εάν και τα δύο πεδία είναι κενά για μια ημέρα, η κατηγορία είναι ορατή όλη "
+"την ημέρα"
+
+#: includes/categories.php:141 includes/categories.php:204
+msgid "Day"
+msgstr "Ημέρα"
+
+#: includes/categories.php:142 includes/categories.php:205
+msgid "From"
+msgstr "Από"
+
+#: includes/categories.php:143 includes/categories.php:206
+msgid "To"
+msgstr "Ως"
+
+#: includes/categories.php:177 includes/menu-items.php:91
+msgid "Show"
+msgstr "Εμφάνιση"
+
+#: includes/categories.php:222
+msgid "Sunday"
+msgstr "Κυριακή"
+
+#: includes/categories.php:223
+msgid "Monday"
+msgstr "Δευτέρα"
+
+#: includes/categories.php:224
+msgid "Tuesday"
+msgstr "Τρίτη"
+
+#: includes/categories.php:225
+msgid "Wednesday"
+msgstr "Τετάρτη"
+
+#: includes/categories.php:226
+msgid "Thursday"
+msgstr "Πέμπτη"
+
+#: includes/categories.php:227
+msgid "Friday"
+msgstr "Παρασκευή"
+
+#: includes/categories.php:228
+msgid "Saturday"
+msgstr "Σάββατο"
+
+#: includes/menu-items.php:31
+msgid "Menu item details"
+msgstr "Πρηροφορίες φαγητού-ποτού"
+
+#: includes/menu-items.php:80 includes/menu-items.php:349
+msgid "Item No"
+msgstr "Αρ. είδους"
+
+#: includes/menu-items.php:85
+msgid "Display order (optional)"
+msgstr "Σειρά εμφ. (προαιρετικό)"
+
+#: includes/menu-items.php:87
+msgid "If empty, items are sorted by item number, then by name."
+msgstr ""
+"Εάν είναι κενό, τα στοιχεία ταξινομούνται κατά Αρ. είδους και, στη συνέχεια, "
+"κατά Όνομα."
+
+#: includes/menu-items.php:99 includes/menu-items.php:350
+msgid "Price 1"
+msgstr "Τιμή 1"
+
+#: includes/menu-items.php:104
+msgid "Price 2"
+msgstr "Τιμή 2"
+
+#: includes/menu-items.php:109
+msgid "Price 3"
+msgstr "Τιμή 3"
+
+#: includes/menu-items.php:114
+msgid "Size 1"
+msgstr "Μέγεθος 1"
+
+#: includes/menu-items.php:119
+msgid "Size 2"
+msgstr "Μέγεθος 2"
+
+#: includes/menu-items.php:124
+msgid "Size 3"
+msgstr "Μέγεθος 3"
+
+#: includes/menu-items.php:131
+msgid "Allergens"
+msgstr "Αλεργιογόνα"
+
+#: includes/menu-items.php:136
+msgid "Description"
+msgstr "Περιγραφή"
+
+#: includes/menu-items.php:141
+msgid "Vegetarian"
+msgstr "Χορτοφαγικό"
+
+#: includes/menu-items.php:142
+msgid "Vegan"
+msgstr "Βίγκαν"
+
+#: includes/menu-items.php:143
+msgid "Add to carousel"
+msgstr "Προσθήκη στο καρουζέλ"
+
+#: includes/menu-items.php:232 includes/post-types.php:80
+msgid "All categories"
+msgstr "Όλες οι κατηγορίες"
+
+#: includes/menu-items.php:247 includes/menu-items.php:252
+msgid "No"
+msgstr "Όχι"
+
+#: includes/menu-items.php:250
+msgid "Carousel"
+msgstr "Καρουζέλ"
+
+#: includes/menu-items.php:348
+msgid "Display order"
+msgstr "Σειρά εμφ."
+
+#: includes/menu-items.php:516
+msgid "← Back to Menu Items"
+msgstr "← Επιστροφή στα Φαγητά & ποτά"
+
+#: includes/menu-pdfs.php:21 includes/menu-pdfs.php:107
+msgid "Select PDF"
+msgstr "Επιλέξτε PDF"
+
+#: includes/menu-pdfs.php:22
+msgid "Use this PDF"
+msgstr "Χρήση αυτού του PDF"
+
+#: includes/menu-pdfs.php:78
+msgid "PDF details"
+msgstr "Πληροφορίες του PDF"
+
+#: includes/menu-pdfs.php:94
+msgid "PDF file"
+msgstr "PDF αρχείο"
+
+#: includes/menu-pdfs.php:151
+msgid "← Back to PDFs"
+msgstr "← Επιστροφή στα PDF"
+
+#: includes/post-types.php:12
+msgid "Food or drink"
+msgstr "Φαγητά ή ποτά"
+
+#: includes/post-types.php:13
+msgid "Add new food or drink"
+msgstr "Προσθήκη νέου Φαγητού ή ποτού"
+
+#: includes/post-types.php:14
+msgid "Edit food or drink"
+msgstr "Επεξεργασία Φαγητού ή ποτού"
+
+#: includes/post-types.php:15
+msgid "New food or drink"
+msgstr "Νέο Φαγητό ή ποτό"
+
+#: includes/post-types.php:16
+msgid "View food or drink"
+msgstr "Προβολή του Φαγητού ή ποτού"
+
+#: includes/post-types.php:17
+msgid "Search food or drinks"
+msgstr "Αναζήτηση για Φαγητά ή ποτά"
+
+#: includes/post-types.php:18
+msgid "No food or drinks found"
+msgstr "Δεν βρέθηκαν Φαγητά ή ποτά"
+
+#: includes/post-types.php:19
+msgid "No food or drinks found in trash"
+msgstr "Δεν βρέθηκαν Φαγητά ή ποτά στον Κάδο Απορριμμάτων"
+
+#: includes/post-types.php:20
+msgid "All food or drinks"
+msgstr "Όλα τα Φαγητά & ποτά"
+
+#: includes/post-types.php:49
+msgid "Add New PDF"
+msgstr "Προσθήκη νέου PDF"
+
+#: includes/post-types.php:50
+msgid "Edit PDF"
+msgstr "Επεξεργασία PDF"
+
+#: includes/post-types.php:51
+msgid "New PDF"
+msgstr "Νέο PDF"
+
+#: includes/post-types.php:52
+msgid "View PDF"
+msgstr "Προβολή PDF"
+
+#: includes/post-types.php:53
+msgid "Search PDFs"
+msgstr "Αναζήτηση PDF"
+
+#: includes/post-types.php:54
+msgid "No PDFs found"
+msgstr "Δεν βρέθηκαν PDF"
+
+#: includes/post-types.php:55
+msgid "No PDFs found in trash"
+msgstr "Δεν βρέθηκαν PDF στον Κάδο Απορριμμάτων"
+
+#: includes/post-types.php:56
+msgid "All PDFs"
+msgstr "Όλα τα PDF"
+
+#: includes/post-types.php:77 includes/post-types.php:85
+msgid "Menu categories"
+msgstr "Κατηγορίες μενού"
+
+#: includes/post-types.php:78
+msgid "Menu category"
+msgstr "Κατηγορία μενού"
+
+#: includes/post-types.php:79
+msgid "Search categories"
+msgstr "Αναζήτηση κατηγορίας"
+
+#: includes/post-types.php:81
+msgid "Edit category"
+msgstr "Επεξεργασία κατηγορίας"
+
+#: includes/post-types.php:82
+msgid "Update category"
+msgstr "Ενημέρωση κατηγορίας"
+
+#: includes/post-types.php:83
+msgid "Add new category"
+msgstr "Προσθήκη νέας κατηγορίας"
+
+#: includes/post-types.php:84
+msgid "New category"
+msgstr "Νέα κατηγορία"
+
+#~ msgid "Item Nr"
+#~ msgstr "Αρ. είδους"
+
+#~ msgid "Food/drink"
+#~ msgstr "Φαγητό/ποτό"
+
+#~ msgid "Visible"
+#~ msgstr "Ενεργό"
+
+#~ msgid "Enable"
+#~ msgstr "Ενεργό"
+
+#~ msgid "If unchecked, this category will be hidden."
+#~ msgstr "Εάν δεν επιλεγεί, αυτή η κατηγορία θα αποκρυφθεί."
+
+#~ msgid "Limit appearance for hours/days"
+#~ msgstr "Περιορισμός εμφάνισης για ώρες/ημέρες"
+
+#, fuzzy
+#~| msgid "Menu Item Details"
+#~ msgid "Menu Items"
+#~ msgstr "Πρηροφορίες Φαγητού-ποτού"
+
+#, fuzzy
+#~| msgid "← Back to Menu Items"
+#~ msgid "Edit Menu Item"
+#~ msgstr "← Επιστροφή στα Φαγητά & ποτά"
+
+#, fuzzy
+#~| msgid "Menu Item Details"
+#~ msgid "New Menu Item"
+#~ msgstr "Πρηροφορίες Φαγητού-ποτού"
+
+#, fuzzy
+#~| msgid "← Back to Menu Items"
+#~ msgid "Search Menu Items"
+#~ msgstr "← Επιστροφή στα Φαγητά & ποτά"
+
+#, fuzzy
+#~| msgid "No galleries found."
+#~ msgid "No menu items found"
+#~ msgstr "Δεν βρέθηκαν γκαλερί."
+
+#, fuzzy
+#~| msgid "No PDFs found in trash"
+#~ msgid "No menu items found in trash"
+#~ msgstr "Δεν βρέθηκαν PDF στον Κάδο Απορριμμάτων"
+
+#~ msgid "All Menu Items"
+#~ msgstr "Όλα τα Φαγητά-ποτά"
+
+#~ msgid "Price"
+#~ msgstr "Τιμή"
+
+#~ msgid "May also contain letters (e.g. 12a)."
+#~ msgstr "Μπορεί επίσης να περιέχει γράμματα (π.χ. 12a)."
+
+#~ msgid "PDF"
+#~ msgstr "PDF"
+
+#~ msgid "Events"
+#~ msgstr "Εκδηλώσεις"
+
+#~ msgid "Experience"
+#~ msgstr "Εμπειρία"
+
+#~ msgid "Offers and packages"
+#~ msgstr "Προσφορές και πακέτα"
+
+#~ msgid "Reviews"
+#~ msgstr "Κριτικές"
+
+#~ msgid "Services"
+#~ msgstr "Υπηρεσίες"
+
+#~ msgid "Slides"
+#~ msgstr "Διαφάνειες"
+
+#~ msgid "Timeline"
+#~ msgstr "Χρονολόγιο"
+
+#~ msgid "Start date"
+#~ msgstr "Ημερομηνία έναρξης"
+
+#~ msgid "Start time"
+#~ msgstr "Ώρα έναρξης"
+
+#~ msgid "End date"
+#~ msgstr "Ημερομηνία λήξης"
+
+#~ msgid "End time"
+#~ msgstr "Ώρα λήξης"
+
+#~ msgid "Video URL"
+#~ msgstr "URL βίντεο"
+
+#~ msgid "Link text"
+#~ msgstr "Κείμενο συνδέσμου"
+
+#~ msgid "Link URL"
+#~ msgstr "URL συνδέσμου"
+
+#~ msgid "Valid from"
+#~ msgstr "Ισχύει από"
+
+#~ msgid "Valid until"
+#~ msgstr "Ισχύει μέχρι"
+
+#~ msgid "Discount (%)"
+#~ msgstr "Έκπτωση (%)"
+
+#~ msgid "Linked rooms"
+#~ msgstr "Συνδεδεμένα δωμάτια"
+
+#~ msgid "Booking URL (redirect mode)"
+#~ msgstr "URL κράτησης (λειτουργία ανακατεύθυνσης)"
+
+#~ msgid "Stars"
+#~ msgstr "Αστέρια"
+
+#~ msgid "Date"
+#~ msgstr "Ημερομηνία"
+
+#~ msgid "Review text"
+#~ msgstr "Κείμενο αξιολόγησης"
+
+#~ msgid "Source"
+#~ msgstr "Πηγή"
+
+#~ msgid "Show on the home page"
+#~ msgstr "Εμφάνιση στην αρχική σελίδα"
+
+#~ msgid "Create service page"
+#~ msgstr "Δημιουργία σελίδας υπηρεσίας"
+
+#~ msgid "Image (optional)"
+#~ msgstr "Εικόνα (προαιρετικά)"
+
+#~ msgid "Site settings"
+#~ msgstr "Ρυθμίσεις ιστότοπου"
+
+#~ msgid "Basic settings"
+#~ msgstr "Βασικές ρυθμίσεις"
+
+#~ msgid "Social media"
+#~ msgstr "Κοινωνικά δίκτυα"
+
+#~ msgid "Opening times"
+#~ msgstr "Ώρες λειτουργίας"
+
+#~ msgid "Notification Bar"
+#~ msgstr "Γραμμή ειδοποιήσεων"
+
+#~ msgid "Translations"
+#~ msgstr "Μεταφράσεις"
+
+#~ msgid "Home page"
+#~ msgstr "Αρχική σελίδα"
+
+#~ msgid "Basic"
+#~ msgstr "Βασικό"
+
+#~ msgid "Contact form"
+#~ msgstr "Φόρμα επικοινωνίας"
+
+#~ msgid "Currency"
+#~ msgstr "Νόμισμα"
+
+#~ msgid "Display the contact form"
+#~ msgstr "Εμφάνιση φόρμας επικοινωνίας"
+
+#~ msgid "Recipient email"
+#~ msgstr "Email παραλήπτη"
+
+#~ msgid "Email subject"
+#~ msgstr "Θέμα του Email"
+
+#~ msgid "Currency symbol"
+#~ msgstr "Σύμβολο νομίσματος"
+
+#~ msgid "Decimal divider"
+#~ msgstr "Διαχωριστικό δεκαδικών"
+
+#~ msgid "Currency position"
+#~ msgstr "Θέση νομίσματος"
+
+#~ msgid "After the amount"
+#~ msgstr "Μετά το ποσό"
+
+#~ msgid "Before the amount"
+#~ msgstr "Πριν από το ποσό"
+
+#~ msgid "Decimals"
+#~ msgstr "Δεκαδικά"
+
+#~ msgid "Appearance"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid "Light and dark mode"
+#~ msgstr "Φωτεινό & σκοτεινό θέμα"
+
+#~ msgid "Light mode only"
+#~ msgstr "Μόνο φωτεινό θέμα"
+
+#~ msgid "Dark mode only"
+#~ msgstr "Μόνο σκοτεινό θέμα"
+
+#~ msgid "Legal links"
+#~ msgstr "Νομικοί σύνδεσμοι"
+
+#~ msgid "Show legal notice page"
+#~ msgstr "Εμφάνιση σελίδας νομικής ειδοποίησης"
+
+#~ msgid "Show privacy policy page"
+#~ msgstr "Εμφάνιση σελίδας Πολιτικής Απορρήτου"
+
+#~ msgid "Show terms of use page"
+#~ msgstr "Εμφάνιση σελίδας Όρων Χρήσης"
+
+#~ msgid "Confirmation email to client"
+#~ msgstr "Επιβεβαιωτικό email προς τον Πελάτη"
+
+#, php-format
+#~ msgid "Subject (%s)"
+#~ msgstr "Θέμα (%s)"
+
+#, php-format
+#~ msgid "Body (%s)"
+#~ msgstr "Σώμα (%s)"
+
+#~ msgid "Logo image"
+#~ msgstr "Εικόνα λογότυπου"
+
+#~ msgid "Company name"
+#~ msgstr "Όνομα εταιρείας"
+
+#~ msgid "Address"
+#~ msgstr "Διεύθυνση"
+
+#~ msgid "City"
+#~ msgstr "Πόλη"
+
+#~ msgid "Zip code"
+#~ msgstr "ΤΚ"
+
+#~ msgid "Phone"
+#~ msgstr "Τηλέφωνο"
+
+#~ msgid "Phone-2"
+#~ msgstr "Τηλέφωνο 2"
+
+#~ msgid "Mobile phone"
+#~ msgstr "Κινητό τηλέφωνο"
+
+#~ msgid "Coordinates"
+#~ msgstr "Συντεταγμένες"
+
+#~ msgid "Time zone"
+#~ msgstr "Ζώνη ώρας"
+
+#~ msgid "Display source"
+#~ msgstr "Πηγή εμφάνισης"
+
+#~ msgid "Formatted Text"
+#~ msgstr "Μορφοποιημένο κείμενο"
+
+#~ msgid "Html Code"
+#~ msgstr "Κώδικας HTML"
+
+#~ msgid "Video"
+#~ msgstr "Βίντεο"
+
+#~ msgid "Content"
+#~ msgstr "περιεχόμενο"
+
+#~ msgid "Delay (seconds)"
+#~ msgstr "Καθυστέρηση (δευτερόλεπτα)"
+
+#~ msgid "Title"
+#~ msgstr "Τίτλος"
+
+#~ msgid "Select video"
+#~ msgstr "Επιλέξτε βίντεο"
+
+#~ msgid ""
+#~ "This popup is shown only after the cookie banner has been completed and "
+#~ "the consent flag has been stored in the browser. If you change or replace "
+#~ "your cookie banner, please let us know so we can adjust the popup "
+#~ "condition accordingly."
+#~ msgstr ""
+#~ "Αυτό το αναδυόμενο παράθυρο εμφανίζεται μόνο αφού ολοκληρωθεί το cookie "
+#~ "banner και αποθηκευτεί η ένδειξη συγκατάθεσης στον browser. Αν αλλάξετε ή "
+#~ "αντικαταστήσετε το cookie banner, παρακαλούμε ενημερώστε μας ώστε να "
+#~ "προσαρμόσουμε ανάλογα τη συνθήκη εμφάνισης του popup."
+
+#~ msgid "Welcome section"
+#~ msgstr "Ενότητα καλωσορίσματος"
+
+#~ msgid "Top dishes"
+#~ msgstr "Κορυφαία πιάτα"
+
+#~ msgid "Top rooms"
+#~ msgstr "Κορυφαία δωμάτια"
+
+#~ msgid "Top services"
+#~ msgstr "Κορυφαίες υπηρεσίες"
+
+#~ msgid "Upcoming events"
+#~ msgstr "Επερχόμενες εκδηλώσεις"
+
+#~ msgid "Home gallery"
+#~ msgstr "Γκαλερί αρχικής σελίδας"
+
+#~ msgid "Latest reviews"
+#~ msgstr "Τελευταίες κριτικές"
+
+#~ msgid "Action banner (CTA)"
+#~ msgstr "Banner δράσης (CTA)"
+
+#~ msgid "Home page settings"
+#~ msgstr "Ρυθμίσεις αρχικής σελίδας"
+
+#~ msgid "Welcome section video"
+#~ msgstr "Βίντεο ενότητας καλωσορίσματος"
+
+#~ msgid ""
+#~ "If a video is set, it replaces the featured image in the Welcome section."
+#~ msgstr ""
+#~ "Εάν έχει οριστεί ένα βίντεο, αντικαθιστά την επιλεγμένη εικόνα στην "
+#~ "ενότητα Καλώς ορίσατε."
+
+#~ msgid "CTA background image"
+#~ msgstr "Εικόνα φόντου CTA"
+
+#~ msgid "CTA background"
+#~ msgstr "Φόντο CTA"
+
+#~ msgid "Select CTA background image"
+#~ msgstr "Επιλογή εικόνας φόντου CTA"
+
+#~ msgid "Select welcome video"
+#~ msgstr "Επιλέξτε βίντεο καλωσορίσματος"
+
+#~ msgid "Active"
+#~ msgstr "Ενεργό"
+
+#~ msgid "Text"
+#~ msgstr "Κείμενο"
+
+#~ msgid "Recommended: max. 50 characters"
+#~ msgstr "Συνιστάται: Μέγιστο 50 χαρακτήρες"
+
+#~ msgid "Expiry date"
+#~ msgstr "Ημερομηνία έναρξης"
+
+#~ msgid "Show opening hours"
+#~ msgstr "Εμφάνιση ωρών λειτουργίας"
+
+#~ msgid "Social media URLs"
+#~ msgstr "URL κοινωνικών μέσων"
+
+#~ msgid "Not allowed."
+#~ msgstr "Δεν επιτρέπεται."
+
+#~ msgid "Polylang is required."
+#~ msgstr "Το Polylang απαιτείται"
+
+#~ msgid "Delete key"
+#~ msgstr "Διαγραφή Κλειδιού"
+
+#~ msgid "Translations saved."
+#~ msgstr "Οι μεταφράσεις αποθηκεύτηκαν."
+
+#~ msgid "New key:"
+#~ msgstr "Νέο Κλειδί:"
+
+#~ msgid "Add"
+#~ msgstr "Προσθήκη"
+
+#~ msgid "Cancel"
+#~ msgstr "Ματαίωση"
+
+#~ msgid "Delete"
+#~ msgstr "Διαγραφή"
+
+#~ msgid "Filter keys..."
+#~ msgstr "Φιλτράρισμα κλειδιών..."
+
+#~ msgid "Filter"
+#~ msgstr "Φίλτρο"
+
+#~ msgid "Clear filter"
+#~ msgstr "Καθαρισμός φίλτρου"
+
+#~ msgid "Key"
+#~ msgstr "Κλειδί"
+
+#~ msgid "Language"
+#~ msgstr "Γλώσσα"
+
+#~ msgid "Translation"
+#~ msgstr "Μετάφραση"
+
+#~ msgid "Save translations"
+#~ msgstr "Αποθήκευση μεταφράσεων"
+
+#, php-format
+#~ msgid "%d key"
+#~ msgstr "%d κλειδί"
+
+#, php-format
+#~ msgid "%d keys"
+#~ msgstr "%d κλειδιά"
+
+#, php-format
+#~ msgid "matching %s"
+#~ msgstr "ταιριάζουν %s"
+
+#, php-format
+#~ msgid "Page %1$d of %2$d"
+#~ msgstr "Σελίδα %1$d από %2$d"
+
+#~ msgid "All"
+#~ msgstr "Όλα"
+
+#~ msgid "New"
+#~ msgstr "Νέο"
+
+#~ msgid "Not found."
+#~ msgstr "Δεν βρέθηκε"
+
+#~ msgid "Event"
+#~ msgstr "Εκδήλωση"
+
+#~ msgid "Service"
+#~ msgstr "Υπηρεσία"
+
+#~ msgid "Review"
+#~ msgstr "Κριτική"
+
+#~ msgid "Timelines"
+#~ msgstr "Χρονολόγια"
+
+#~ msgid "Slide"
+#~ msgstr "Διαφάνεια"
+
+#~ msgid "Add Images"
+#~ msgstr "Προσθήκη εικόνων"
+
+#~ msgid "Delete all"
+#~ msgstr "Διαγραφή όλων"
+
+#~ msgid "Select multiple images, drag to reorder, then save."
+#~ msgstr ""
+#~ "Επιλέξτε πολλές εικόνες, σύρετε για αναδιάταξη και, στη συνέχεια, "
+#~ "αποθηκεύστε."
+
+#~ msgid "Use selected images"
+#~ msgstr "Χρήση επιλεγμένων εικόνων"
+
+#~ msgid "Gallery"
+#~ msgstr "Γκαλερί"
+
+#~ msgid "New gallery"
+#~ msgstr "Νέα γκαλερί"
+
+#~ msgid "View gallery"
+#~ msgstr "Προβολή γκαλερί"
+
+#~ msgid "No galleries found in Trash."
+#~ msgstr "Δεν βρέθηκαν γκαλερί στα σκουπίδια."
+
+#~ msgid "Gallery images"
+#~ msgstr "Εικόνες Γκαλερί"
+
+#~ msgid "Offers & Packages"
+#~ msgstr "Προσφορές και πακέτα"
+
+#~ msgid "Show from"
+#~ msgstr "Εμφάνιση από"
+
+#~ msgid "Delay (Seconds)"
+#~ msgstr "Καθυστέρηση (δευτερόλεπτα)"
+
+#~ msgid "Date end"
+#~ msgstr "Ημερομηνία λήξης"
+
+#~ msgid "Select Video"
+#~ msgstr "Επιλέξτε Βίντεο"
+
+#~ msgid "Sections order"
+#~ msgstr "Σειρά ενοτήτων"
+
+#~ msgid "Clear"
+#~ msgstr "Καθαρισμός"
+
+#, fuzzy
+#~| msgid "Basic settings"
+#~ msgid "Basic Settings"
+#~ msgstr "Βασικές ρυθμίσεις"
+
+#, fuzzy
+#~ msgid "Instance Tools"
+#~ msgstr "Εργαλεία παρουσίας"
+
+#, fuzzy
+#~| msgid "Home page settings"
+#~ msgid "White label settings"
+#~ msgstr "Ρυθμίσεις λευκής ετικέτας"
+
+#, fuzzy
+#~ msgid "Reseller domain"
+#~ msgstr "Domain μεταπωλητή"
+
+#, fuzzy
+#~| msgid "Company name"
+#~ msgid "Reseller company name"
+#~ msgstr "Όνομα εταιρείας μεταπωλητή"
+
+#, fuzzy
+#~| msgid "Site Settings"
+#~ msgid "Save settings"
+#~ msgstr "Αποθήκευση ρυθμίσεων"
+
+#, fuzzy
+#~ msgid "Languages Visibility"
+#~ msgstr "Ορατότητα γλωσσών"
+
+#, fuzzy
+#~ msgid "Languages saved."
+#~ msgstr "Γλώσσες που αποθηκεύτηκαν."
+
+#, fuzzy
+#~ msgid "Save Languages"
+#~ msgstr "Αποθήκευση γλωσσών"
+
+#~ msgid "Show contact form (1/0)"
+#~ msgstr "Εμφάνιση φόρμας επικοινωνίας (1/0)"
+
+#, fuzzy
+#~| msgid "Show contact form (1/0)"
+#~ msgid "Opening: Show on footer (1/0)"
+#~ msgstr "Έναρξη: Εμφάνιση στο υποσέλιδο (1/0)"
+
+#, fuzzy
+#~ msgid "Opening: Text (HTML)"
+#~ msgstr "Άνοιγμα: Κείμενο (HTML)"
+
+#, fuzzy
+#~| msgid "Recipient email"
+#~ msgid "Contact form: Recipient email"
+#~ msgstr "Φόρμα επικοινωνίας: Email παραλήπτη"
+
+#, fuzzy
+#~| msgid "Email subject"
+#~ msgid "Contact form: Email subject"
+#~ msgstr "Φόρμα επικοινωνίας: Θέμα email"
+
+#, fuzzy
+#~ msgid "Reviews: Featured count"
+#~ msgstr "Κριτικές: Επιλεγμένος αριθμός"
+
+#, fuzzy
+#~| msgid "Logo image"
+#~ msgid "Logo image URL"
+#~ msgstr "URL εικόνας λογότυπου"
+
+#, fuzzy
+#~| msgid "CTA Background image"
+#~ msgid "CTA background image URL"
+#~ msgstr "URL εικόνας φόντου CTA"
+
+#, fuzzy
+#~ msgid "Home welcome video URL"
+#~ msgstr "Αρχική σελίδα URL βίντεο καλωσορίσματος"
+
+#, fuzzy
+#~ msgid "Icon URL by name (SVG)"
+#~ msgstr "URL εικονιδίου κατά όνομα (SVG)"
+
+#~ msgid "Zip"
+#~ msgstr "ΤΚ"
+
+#~ msgid "Mobile"
+#~ msgstr "Κινητό"
+
+#~ msgid "Enabled (1/0)"
+#~ msgstr "Ενεργοποιημένο (1/0)"
+
+#, fuzzy
+#~ msgid "Show from (html/image/video/code)"
+#~ msgstr "Εμφάνιση από (html/εικόνα/βίντεο/κώδικας)"
+
+#, fuzzy
+#~ msgid "Image URL"
+#~ msgstr "URL εικόνας"
+
+#, fuzzy
+#~ msgid "Html"
+#~ msgstr "Html"
+
+#, fuzzy
+#~ msgid "Events: Gallery JSON (ids + urls + meta)"
+#~ msgstr "Εκδηλώσεις: Gallery JSON (ids + urls + meta)"
+
+#, fuzzy
+#~ msgid "Services: Gallery JSON (ids + urls + meta)"
+#~ msgstr "Υπηρεσίες: Gallery JSON (ids + urls + meta)"
+
+#, fuzzy
+#~ msgid "Gallery: Images JSON (ids + urls + meta)"
+#~ msgstr "Συλλογή: Εικόνες JSON (ids + urls + meta)"
+
+#, fuzzy
+#~ msgid "Gallery: All images JSON (except Home)"
+#~ msgstr "Συλλογή: Όλες οι εικόνες JSON (εκτός από την Αρχική σελίδα)"
+
+#, fuzzy
+#~ msgid "Gallery: Home images JSON"
+#~ msgstr "Γκαλερί: Αρχικές εικόνες JSON"
+
+#, fuzzy
+#~ msgid "Gallery: Home gallery JSON"
+#~ msgstr "Γκαλερί: Αρχική γκαλερί JSON"
+
+#, fuzzy, php-format
+#~ msgid "Confirmation body (%s)"
+#~ msgstr "Φορέας επιβεβαίωσης (%s)"
+
+#~ msgid "E-mail"
+#~ msgstr "E-mail"
+
+#~ msgid "Patlis.com"
+#~ msgstr "Patlis.com"

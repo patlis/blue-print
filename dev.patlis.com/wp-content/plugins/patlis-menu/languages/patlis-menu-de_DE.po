@@ -1,0 +1,848 @@
+# German (Germany) translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-23 12:52+0200\n"
+"PO-Revision-Date: 2026-08-23 12:58+0200\n"
+"Last-Translator: \n"
+"Language-Team: de_DE <LL@li.org>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+
+#: includes/admin/menu.php:13 includes/admin/menu.php:14
+msgid "Menu"
+msgstr "Menü"
+
+#: includes/admin/menu.php:25 includes/admin/menu.php:26
+msgid "Options"
+msgstr "Einstellungen"
+
+#: includes/admin/menu.php:35 includes/admin/menu.php:36
+#: includes/post-types.php:11
+msgid "Food & drinks"
+msgstr "Speisen & Getränke"
+
+#: includes/admin/menu.php:44 includes/admin/menu.php:45
+msgid "Categories"
+msgstr "Kategorien"
+
+#: includes/admin/menu.php:53 includes/admin/menu.php:54
+msgid "PDF files"
+msgstr "PDF-Dateien"
+
+#: includes/admin/pages/options.php:11 includes/admin/pages/options.php:27
+msgid "Normal"
+msgstr "Normal"
+
+#: includes/admin/pages/options.php:12
+msgid "Centered"
+msgstr "Zentriert"
+
+#: includes/admin/pages/options.php:207
+msgid "Default"
+msgstr "Standard"
+
+#: includes/admin/pages/options.php:253
+msgid "Menu – Options"
+msgstr "Menü – Einstellungen"
+
+#: includes/admin/pages/options.php:256
+msgid "Saved."
+msgstr "Gespeichert."
+
+#: includes/admin/pages/options.php:267
+msgid "Show prices in the menu"
+msgstr "Preise im Menü anzeigen"
+
+#: includes/admin/pages/options.php:273 includes/admin/pages/options.php:308
+#: includes/admin/pages/options.php:323 includes/menu-items.php:246
+#: includes/menu-items.php:251
+msgid "Yes"
+msgstr "Ja"
+
+#: includes/admin/pages/options.php:278
+msgid "If disabled, prices will not be displayed in the menu."
+msgstr "Wenn deaktiviert, werden keine Preise im Menü angezeigt."
+
+#: includes/admin/pages/options.php:286
+msgid "Display mode"
+msgstr "Anzeigemodus"
+
+#: includes/admin/pages/options.php:297
+msgid "Choose how the menu layout is displayed."
+msgstr "Wählen Sie aus, wie das Menü dargestellt wird."
+
+#: includes/admin/pages/options.php:304
+msgid "Show vegetarian and vegan filter"
+msgstr "Filter für vegetarische und vegane Speisen anzeigen"
+
+#: includes/admin/pages/options.php:312
+msgid ""
+"If enabled, vegetarian and vegan filter buttons can be displayed in the menu."
+msgstr ""
+"Wenn aktiviert, können im Menü Filter für vegetarische und vegane Speisen "
+"angezeigt werden."
+
+#: includes/admin/pages/options.php:319
+msgid "Show allergen information"
+msgstr "Allergeninformationen anzeigen"
+
+#: includes/admin/pages/options.php:327
+msgid "If disabled, allergen information will not be displayed."
+msgstr "Wenn deaktiviert, werden keine Allergeninformationen angezeigt."
+
+#: includes/admin/pages/options.php:331
+msgid "Allergen description"
+msgstr "Allergenbeschreibung"
+
+#: includes/admin/pages/options.php:364
+msgid "Save"
+msgstr "Speichern"
+
+#: includes/categories.php:34
+msgid "Select category image"
+msgstr "Kategoriebild auswählen"
+
+#: includes/categories.php:35
+msgid "Use this image"
+msgstr "Dieses Bild verwenden"
+
+#: includes/categories.php:90
+msgid "Drag to reorder"
+msgstr "Zum Sortieren ziehen"
+
+#: includes/categories.php:121 includes/categories.php:181
+#: includes/menu-items.php:94 includes/menu-items.php:245
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: includes/categories.php:126 includes/categories.php:187
+msgid "Image"
+msgstr "Bild"
+
+#: includes/categories.php:130 includes/categories.php:192
+msgid "Select image"
+msgstr "Bild auswählen"
+
+#: includes/categories.php:131 includes/categories.php:193
+#: includes/menu-pdfs.php:108
+msgid "Remove"
+msgstr "Entfernen"
+
+#: includes/categories.php:136 includes/categories.php:199
+msgid "Category visibility schedule"
+msgstr "Sichtbarkeitszeitplan der Kategorie"
+
+#: includes/categories.php:137 includes/categories.php:213
+msgid "If both fields are empty, the category is visible all day."
+msgstr ""
+"Wenn beide Felder leer sind, ist die Kategorie den ganzen Tag sichtbar."
+
+#: includes/categories.php:141 includes/categories.php:204
+msgid "Day"
+msgstr "Tag"
+
+#: includes/categories.php:142 includes/categories.php:205
+msgid "From"
+msgstr "Von"
+
+#: includes/categories.php:143 includes/categories.php:206
+msgid "To"
+msgstr "Bis"
+
+#: includes/categories.php:177 includes/menu-items.php:91
+msgid "Show"
+msgstr "Anzeigen"
+
+#: includes/categories.php:222
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: includes/categories.php:223
+msgid "Monday"
+msgstr "Montag"
+
+#: includes/categories.php:224
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: includes/categories.php:225
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: includes/categories.php:226
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: includes/categories.php:227
+msgid "Friday"
+msgstr "Freitag"
+
+#: includes/categories.php:228
+msgid "Saturday"
+msgstr "Samstag"
+
+#: includes/menu-items.php:31
+msgid "Menu item details"
+msgstr "Details zu Speisen & Getränken"
+
+#: includes/menu-items.php:80 includes/menu-items.php:349
+msgid "Item No"
+msgstr "Art.-Nr."
+
+#: includes/menu-items.php:85
+msgid "Display order (optional)"
+msgstr "Anzeigereihenfolge (optional)"
+
+#: includes/menu-items.php:87
+msgid "If empty, items are sorted by item number, then by name."
+msgstr ""
+"Wenn leer, werden die Einträge zuerst nach der Artikelnummer und "
+"anschließend nach dem Namen sortiert."
+
+#: includes/menu-items.php:99 includes/menu-items.php:350
+msgid "Price 1"
+msgstr "Preis 1"
+
+#: includes/menu-items.php:104
+msgid "Price 2"
+msgstr "Preis 2"
+
+#: includes/menu-items.php:109
+msgid "Price 3"
+msgstr "Preis 3"
+
+#: includes/menu-items.php:114
+msgid "Size 1"
+msgstr "Größe 1"
+
+#: includes/menu-items.php:119
+msgid "Size 2"
+msgstr "Größe 2"
+
+#: includes/menu-items.php:124
+msgid "Size 3"
+msgstr "Größe 3"
+
+#: includes/menu-items.php:131
+msgid "Allergens"
+msgstr "Allergene"
+
+#: includes/menu-items.php:136
+msgid "Description"
+msgstr "Beschreibung"
+
+#: includes/menu-items.php:141
+msgid "Vegetarian"
+msgstr "Vegetarisch"
+
+#: includes/menu-items.php:142
+msgid "Vegan"
+msgstr "Vegan"
+
+#: includes/menu-items.php:143
+msgid "Add to carousel"
+msgstr "Zum Karussell hinzufügen"
+
+#: includes/menu-items.php:232 includes/post-types.php:80
+msgid "All categories"
+msgstr "Alle Kategorien"
+
+#: includes/menu-items.php:247 includes/menu-items.php:252
+msgid "No"
+msgstr "Nein"
+
+#: includes/menu-items.php:250
+msgid "Carousel"
+msgstr "Karussell"
+
+#: includes/menu-items.php:348
+msgid "Display order"
+msgstr "Anzeigereihenfolge"
+
+#: includes/menu-items.php:516
+msgid "← Back to Menu Items"
+msgstr "← Zurück zu Speisen & Getränken"
+
+#: includes/menu-pdfs.php:21 includes/menu-pdfs.php:107
+msgid "Select PDF"
+msgstr "PDF auswählen"
+
+#: includes/menu-pdfs.php:22
+msgid "Use this PDF"
+msgstr "Diese PDF verwenden"
+
+#: includes/menu-pdfs.php:78
+msgid "PDF details"
+msgstr "PDF-Details"
+
+#: includes/menu-pdfs.php:94
+msgid "PDF file"
+msgstr "PDF-Datei"
+
+#: includes/menu-pdfs.php:151
+msgid "← Back to PDFs"
+msgstr "← Zurück zu PDFs"
+
+#: includes/post-types.php:12
+msgid "Food or drink"
+msgstr "Gericht oder Getränk"
+
+#: includes/post-types.php:13
+msgid "Add new food or drink"
+msgstr "Neues Gericht oder Getränk hinzufügen"
+
+#: includes/post-types.php:14
+msgid "Edit food or drink"
+msgstr "Gericht oder Getränk bearbeiten"
+
+#: includes/post-types.php:15
+msgid "New food or drink"
+msgstr "Neues Gericht oder Getränk"
+
+#: includes/post-types.php:16
+msgid "View food or drink"
+msgstr "Gericht oder Getränk anzeigen"
+
+#: includes/post-types.php:17
+msgid "Search food or drinks"
+msgstr "Speisen & Getränke suchen"
+
+#: includes/post-types.php:18
+msgid "No food or drinks found"
+msgstr "Keine Speisen oder Getränke gefunden"
+
+#: includes/post-types.php:19
+msgid "No food or drinks found in trash"
+msgstr "Keine Speisen oder Getränke im Papierkorb gefunden"
+
+#: includes/post-types.php:20
+msgid "All food or drinks"
+msgstr "Alle Speisen & Getränke"
+
+#: includes/post-types.php:49
+msgid "Add New PDF"
+msgstr "Neu PDF hinzufügen"
+
+#: includes/post-types.php:50
+msgid "Edit PDF"
+msgstr "PDF Bearbeiten"
+
+#: includes/post-types.php:51
+msgid "New PDF"
+msgstr "Neue PDF"
+
+#: includes/post-types.php:52
+msgid "View PDF"
+msgstr "PDF anzeigen"
+
+#: includes/post-types.php:53
+msgid "Search PDFs"
+msgstr "PDFs suchen"
+
+#: includes/post-types.php:54
+msgid "No PDFs found"
+msgstr "Keine PDFs gefunden"
+
+#: includes/post-types.php:55
+msgid "No PDFs found in trash"
+msgstr "Keine PDFs im Papierkorb gefunden"
+
+#: includes/post-types.php:56
+msgid "All PDFs"
+msgstr "Alle PDFs"
+
+#: includes/post-types.php:77 includes/post-types.php:85
+msgid "Menu categories"
+msgstr "Menükategorien"
+
+#: includes/post-types.php:78
+msgid "Menu category"
+msgstr "Menükategorie"
+
+#: includes/post-types.php:79
+msgid "Search categories"
+msgstr "Kategorien suchen"
+
+#: includes/post-types.php:81
+msgid "Edit category"
+msgstr "Kategorie bearbeiten"
+
+#: includes/post-types.php:82
+msgid "Update category"
+msgstr "Kategorie aktualisieren"
+
+#: includes/post-types.php:83
+msgid "Add new category"
+msgstr "Neue Kategorie hinzufügen"
+
+#: includes/post-types.php:84
+msgid "New category"
+msgstr "Neue Kategorie"
+
+#, fuzzy
+#~| msgid "Price text"
+#~ msgid "Price"
+#~ msgstr "Preistext"
+
+#~ msgid "PDF"
+#~ msgstr "PDF"
+
+#~ msgid "Events"
+#~ msgstr "Veranstaltungen"
+
+#~ msgid "Experience"
+#~ msgstr "Aktivitäten"
+
+#~ msgid "Offers and packages"
+#~ msgstr "Angebote und Pakete"
+
+#~ msgid "Reviews"
+#~ msgstr "Bewertungen"
+
+#~ msgid "Services"
+#~ msgstr "Leistungen"
+
+#~ msgid "Slides"
+#~ msgstr "Slides"
+
+#~ msgid "Timeline"
+#~ msgstr "Zeitleiste"
+
+#~ msgid "Start date"
+#~ msgstr "Startdatum"
+
+#~ msgid "Start time"
+#~ msgstr "Startzeit"
+
+#~ msgid "End date"
+#~ msgstr "Enddatum"
+
+#~ msgid "End time"
+#~ msgstr "Endzeit"
+
+#~ msgid "Video URL"
+#~ msgstr "Video-URL"
+
+#~ msgid "Link text"
+#~ msgstr "Linktext"
+
+#~ msgid "Link URL"
+#~ msgstr "Link-URL"
+
+#~ msgid "Valid from"
+#~ msgstr "Gültig ab"
+
+#~ msgid "Valid until"
+#~ msgstr "Gültig bis"
+
+#~ msgid "Discount (%)"
+#~ msgstr "Rabatt (%)"
+
+#~ msgid "Linked rooms"
+#~ msgstr "Verbundene Zimmer"
+
+#~ msgid "Booking URL (redirect mode)"
+#~ msgstr "Buchungs-URL (Weiterleitungsmodus)"
+
+#~ msgid "Stars"
+#~ msgstr "Sterne"
+
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+#~ msgid "Review text"
+#~ msgstr "Bewertungstext"
+
+#~ msgid "Source"
+#~ msgstr "Quelle"
+
+#~ msgid "Show on the home page"
+#~ msgstr "Auf der Startseite anzeigen"
+
+#~ msgid "Create service page"
+#~ msgstr "Service-Seite erstellen"
+
+#~ msgid "Image (optional)"
+#~ msgstr "Bild (optional)"
+
+#~ msgid "Site settings"
+#~ msgstr "Website-Einstellungen"
+
+#~ msgid "Basic settings"
+#~ msgstr "Grundeinstellungen"
+
+#~ msgid "Social media"
+#~ msgstr "Soziale Medien"
+
+#~ msgid "Opening times"
+#~ msgstr "Öffnungszeiten"
+
+#~ msgid "Notification Bar"
+#~ msgstr "Benachrichtigungsleiste"
+
+#~ msgid "Translations"
+#~ msgstr "Übersetzungen"
+
+#~ msgid "Home page"
+#~ msgstr "Start Seite"
+
+#~ msgid "Basic"
+#~ msgstr "Grundlegend"
+
+#~ msgid "Contact form"
+#~ msgstr "Kontaktformular"
+
+#~ msgid "Currency"
+#~ msgstr "Währung"
+
+#~ msgid "Display the contact form"
+#~ msgstr "Kontaktformular anzeigen"
+
+#~ msgid "Recipient email"
+#~ msgstr "E-Mail-Adresse des Empfängers"
+
+#~ msgid "Email subject"
+#~ msgstr "E-Mail-Betreff"
+
+#~ msgid "Currency symbol"
+#~ msgstr "Währungssymbol"
+
+#~ msgid "Decimal divider"
+#~ msgstr "Dezimaltrennzeichen"
+
+#~ msgid "Currency position"
+#~ msgstr "Währungsposition"
+
+#~ msgid "After the amount"
+#~ msgstr "Nach dem Betrag"
+
+#~ msgid "Before the amount"
+#~ msgstr "Vor dem Betrag"
+
+#~ msgid "Decimals"
+#~ msgstr "Dezimalstellen"
+
+#~ msgid "Appearance"
+#~ msgstr "Aussehen"
+
+#~ msgid "Light and dark mode"
+#~ msgstr "Hell- und Dunkelmodus"
+
+#~ msgid "Light mode only"
+#~ msgstr "Nur Lichtmodus"
+
+#~ msgid "Dark mode only"
+#~ msgstr "Nur im Dunkelmodus"
+
+#~ msgid "Legal links"
+#~ msgstr "Rechtliche Links"
+
+#~ msgid "Show legal notice page"
+#~ msgstr "Impressumsseite anzeigen"
+
+#~ msgid "Show privacy policy page"
+#~ msgstr "Datenschutzerklärung anzeigen"
+
+#~ msgid "Show terms of use page"
+#~ msgstr "Nutzungsbedingungen anzeigen"
+
+#~ msgid "Confirmation email to client"
+#~ msgstr "Bestätigungs-E-Mail an den Kunden"
+
+#, php-format
+#~ msgid "Subject (%s)"
+#~ msgstr "Thema (%s)"
+
+#, php-format
+#~ msgid "Body (%s)"
+#~ msgstr "Text (%s)"
+
+#~ msgid "Logo image"
+#~ msgstr "Logo-Bild"
+
+#~ msgid "Company name"
+#~ msgstr "Firmenname"
+
+#~ msgid "Address"
+#~ msgstr "Adresse"
+
+#~ msgid "City"
+#~ msgstr "Stadt"
+
+#~ msgid "Zip code"
+#~ msgstr "Postleitzahl"
+
+#~ msgid "Phone"
+#~ msgstr "Telefon"
+
+#~ msgid "Phone-2"
+#~ msgstr "Telefon 2"
+
+#~ msgid "Mobile phone"
+#~ msgstr "Mobiltelefon"
+
+#~ msgid "Coordinates"
+#~ msgstr "Koordinaten"
+
+#~ msgid "Time zone"
+#~ msgstr "Zeitzone"
+
+#~ msgid "Display source"
+#~ msgstr "Anzeigequelle"
+
+#~ msgid "Formatted Text"
+#~ msgstr "Formatierter Text"
+
+#~ msgid "Html Code"
+#~ msgstr "HTML-Code"
+
+#~ msgid "Video"
+#~ msgstr "Video"
+
+#~ msgid "Content"
+#~ msgstr "Inhalt"
+
+#~ msgid "Delay (seconds)"
+#~ msgstr "Verzögerung (Sekunden)"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Select video"
+#~ msgstr "Video auswählen"
+
+#~ msgid ""
+#~ "This popup is shown only after the cookie banner has been completed and "
+#~ "the consent flag has been stored in the browser. If you change or replace "
+#~ "your cookie banner, please let us know so we can adjust the popup "
+#~ "condition accordingly."
+#~ msgstr ""
+#~ "Dieses Popup wird erst angezeigt, nachdem das Cookie-Banner abgeschlossen "
+#~ "wurde und der Zustimmungsstatus im Browser gespeichert ist. Wenn Sie das "
+#~ "Cookie-Banner ändern oder ersetzen, informieren Sie uns bitte, damit wir "
+#~ "die Bedingung für die Anzeige des Popups entsprechend anpassen können."
+
+#~ msgid "Welcome section"
+#~ msgstr "Willkommensbereich"
+
+#~ msgid "Top dishes"
+#~ msgstr "Top-Gerichte"
+
+#~ msgid "Top rooms"
+#~ msgstr "Top-Zimmer"
+
+#~ msgid "Top services"
+#~ msgstr "Top-Leistungen"
+
+#~ msgid "Upcoming events"
+#~ msgstr "Bevorstehende Veranstaltungen"
+
+#~ msgid "Home gallery"
+#~ msgstr "Startseiten-Galerie"
+
+#~ msgid "Latest reviews"
+#~ msgstr "Neueste Bewertungen"
+
+#~ msgid "Action banner (CTA)"
+#~ msgstr "Aktionsbanner (CTA)"
+
+#~ msgid "Home page settings"
+#~ msgstr "Startseiten-Einstellungen"
+
+#~ msgid "Welcome section video"
+#~ msgstr "Begrüßungsabschnitt Video"
+
+#~ msgid ""
+#~ "If a video is set, it replaces the featured image in the Welcome section."
+#~ msgstr ""
+#~ "Wenn ein Video gesetzt ist, ersetzt es das Feature-Bild im "
+#~ "Begrüßungsbereich."
+
+#~ msgid "CTA background image"
+#~ msgstr "CTA-Hintergrundbild"
+
+#~ msgid "CTA background"
+#~ msgstr "CTA-Hintergrund"
+
+#~ msgid "Select CTA background image"
+#~ msgstr "CTA-Hintergrundbild auswählen"
+
+#~ msgid "Select welcome video"
+#~ msgstr "Willkommensvideo auswählen"
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Recommended: max. 50 characters"
+#~ msgstr "Empfohlen: Maximal 50 Zeichen"
+
+#~ msgid "Expiry date"
+#~ msgstr "Verfallsdatum"
+
+#~ msgid "Show opening hours"
+#~ msgstr "Öffnungszeiten anzeigen"
+
+#~ msgid "Social media URLs"
+#~ msgstr "Social-Media-URLs"
+
+#~ msgid "Not allowed."
+#~ msgstr "Nicht erlaubt."
+
+#~ msgid "Polylang is required."
+#~ msgstr "Polylang ist erforderlich."
+
+#~ msgid "Delete key"
+#~ msgstr "Schlüssel löschen"
+
+#~ msgid "Translations saved."
+#~ msgstr "Übersetzungen gespeichert."
+
+#~ msgid "New key:"
+#~ msgstr "Neuer Schlüssel:"
+
+#~ msgid "Add"
+#~ msgstr "Hinzufügen"
+
+#~ msgid "Cancel"
+#~ msgstr "Abbrechen"
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#~ msgid "Filter keys..."
+#~ msgstr "Schlüsselfilterung..."
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Clear filter"
+#~ msgstr "Filter löschen"
+
+#~ msgid "Key"
+#~ msgstr "Schlüssel"
+
+#~ msgid "Language"
+#~ msgstr "Sprache"
+
+#~ msgid "Translation"
+#~ msgstr "Übersetzung"
+
+#~ msgid "Save translations"
+#~ msgstr "Übersetzungen speichern"
+
+#, php-format
+#~ msgid "%d key"
+#~ msgstr "%d Schlüssel"
+
+#, php-format
+#~ msgid "%d keys"
+#~ msgstr "%d Schlüssel"
+
+#, php-format
+#~ msgid "matching %s"
+#~ msgstr "passend zu %s"
+
+#, php-format
+#~ msgid "Page %1$d of %2$d"
+#~ msgstr "Seite %1$d von %2$d"
+
+#~ msgid "All"
+#~ msgstr "Alle"
+
+#~ msgid "New"
+#~ msgstr "Neu"
+
+#~ msgid "Not found."
+#~ msgstr "Nicht gefunden"
+
+#~ msgid "Event"
+#~ msgstr "Veranstaltung"
+
+#~ msgid "Service"
+#~ msgstr "Leistung"
+
+#~ msgid "Review"
+#~ msgstr "Bewertung"
+
+#~ msgid "Timelines"
+#~ msgstr "Zeitleisten"
+
+#~ msgid "Slide"
+#~ msgstr "Slide"
+
+#~ msgid "Add Images"
+#~ msgstr "Bilder hinzufügen"
+
+#~ msgid "Delete all"
+#~ msgstr "Alle löschen"
+
+#~ msgid "Select multiple images, drag to reorder, then save."
+#~ msgstr ""
+#~ "Wählen Sie mehrere Bilder aus, ziehen Sie sie an die gewünschte Position, "
+#~ "um die Reihenfolge zu ändern, und speichern Sie sie anschließend."
+
+#~ msgid "Use selected images"
+#~ msgstr "Ausgewählte Bilder verwenden"
+
+#~ msgid "Gallery"
+#~ msgstr "Galerie"
+
+#~ msgid "View gallery"
+#~ msgstr "Galerie ansehen"
+
+#~ msgid "No galleries found."
+#~ msgstr "Keine Galerien gefunden."
+
+#~ msgid "No galleries found in Trash."
+#~ msgstr "Keine Galerien in Trash zu finden."
+
+#~ msgid "Gallery images"
+#~ msgstr "Galeriebilder"
+
+#~ msgid "Offers & Packages"
+#~ msgstr "Angebote und Pakete"
+
+#~ msgid "Show from"
+#~ msgstr "Anzeigen aus"
+
+#~ msgid "Date end"
+#~ msgstr "Ende des Datums"
+
+#~ msgid "Sections order"
+#~ msgstr "Reihenfolge der Bereiche"
+
+#~ msgid "Rating"
+#~ msgstr "Bewertungswert"
+
+#, fuzzy
+#~ msgid "Clear"
+#~ msgstr "Frei"
+
+#~ msgid "E-mail"
+#~ msgstr "E-Mail"
+
+#~ msgid "Mobile"
+#~ msgstr "Mobil"
+
+#~ msgid "Patlis.com"
+#~ msgstr "Patlis.com"
+
+#~ msgid "Show contact form (1/0)"
+#~ msgstr "Kontaktformular anzeigen (1/0)"
+
+#~ msgid "Zip"
+#~ msgstr "PLZ"

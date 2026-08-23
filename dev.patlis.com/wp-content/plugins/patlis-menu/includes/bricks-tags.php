@@ -36,7 +36,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_menu_item_title}',        'label' => 'Item: Title',              'group' => $gItem];
     $tags[] = ['name' => '{patlis_menu_item_image_id}',     'label' => 'Item: Featured image ID',  'group' => $gItem];
     $tags[] = ['name' => '{patlis_menu_item_image_url}',    'label' => 'Item: Featured image URL', 'group' => $gItem];
-    $tags[] = ['name' => '{patlis_menu_item_itemnr}',       'label' => 'Item: Item Nr',            'group' => $gItem];
+    $tags[] = ['name' => '{patlis_menu_item_itemnr}',       'label' => 'Item: Item No',            'group' => $gItem];
     $tags[] = ['name' => '{patlis_menu_item_sort}',         'label' => 'Item: Sort',               'group' => $gItem];
     $tags[] = ['name' => '{patlis_menu_item_show}',         'label' => 'Item: Show',               'group' => $gItem];
 

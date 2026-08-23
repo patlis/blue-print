@@ -31,6 +31,9 @@ function patlis_menu_section_admin_assets(string $hook): void
     wp_enqueue_media();
     wp_enqueue_script('jquery-ui-sortable');
 
+    $select_category_image = wp_json_encode(__('Select category image', 'patlis-menu'));
+    $use_this_image = wp_json_encode(__('Use this image', 'patlis-menu'));
+
     // Use a tiny inline script; jQuery is available in WP admin.
     $js = <<<JS
 jQuery(function($){
@@ -56,8 +59,8 @@ jQuery(function($){
     if (frame) { frame.open(); return; }
 
     frame = wp.media({
-      title: 'Select category image',
-      button: { text: 'Use this image' },
+            title: {$select_category_image},
+            button: { text: {$use_this_image} },
       multiple: false
     });
 
@@ -84,12 +87,13 @@ JS;
     if ($hook === 'edit-tags.php') {
         $nonce    = wp_create_nonce('patlis_menu_section_sort_nonce');
         $ajax_url = esc_url(admin_url('admin-ajax.php'));
+        $drag_to_reorder = esc_js(__('Drag to reorder', 'patlis-menu'));
         $sort_js  = 'var patlisMcSort={nonce:"' . esc_js($nonce) . '",ajaxurl:"' . esc_js($ajax_url) . '"};' . "\n";
         $sort_js .= 'jQuery(function($){' . "\n";
         $sort_js .= '    var $list=$("#the-list");' . "\n";
         $sort_js .= '    if(!$list.length)return;' . "\n";
-        $sort_js .= '    $("<style>#the-list .patlis-sort-ph{background:#f0f6fc;height:44px;}</style>").appendTo("head");' . "\n";
-        $sort_js .= '    $list.find("tr").each(function(){$(this).find("td.column-pmc_sort").prepend("<span class=\'patlis-drag-handle dashicons dashicons-menu\' style=\'cursor:move;margin-right:8px;color:#aaa;vertical-align:middle;font-size:24px;padding:8px;display:inline-block;\' title=\'Drag to reorder\'></span>");});' . "\n";
+        $sort_js .= '    $("<style>.column-pmc_sort{width:48px}#the-list .patlis-sort-ph{background:#f0f6fc;height:44px;}</style>").appendTo("head");' . "\n";
+        $sort_js .= '    $list.find("tr").each(function(){$(this).find("td.column-pmc_sort").prepend("<span class=\'patlis-drag-handle dashicons dashicons-menu\' style=\'cursor:move;margin-right:8px;color:#aaa;vertical-align:middle;font-size:24px;padding:8px;display:inline-block;\' title=\'' . $drag_to_reorder . '\'></span>");});' . "\n";
         $sort_js .= '    $list.sortable({items:"tr",handle:".patlis-drag-handle",axis:"y",opacity:.7,placeholder:"patlis-sort-ph",update:function(){' . "\n";
         $sort_js .= '        var ids=[];$list.find("tr").each(function(){var m=$(this).attr("id");if(m&&m.indexOf("tag-")===0)ids.push(m.replace("tag-",""));});' . "\n";
         $sort_js .= '        $.post(patlisMcSort.ajaxurl,{action:"patlis_menu_section_sort",nonce:patlisMcSort.nonce,ids:ids});' . "\n";
@@ -113,37 +117,36 @@ function patlis_menu_section_add_fields(): void
      echo '<style>.term-slug-wrap, .column-slug{display:none !important;}</style>';
 
     ?>
-    <div class="form-field">
-        <label for="pmc_show">Show</label>
+    <div class="form-field" style="display:flex;align-items:center;gap:16px;">
+        <label for="pmc_show"><?php esc_html_e('Enabled', 'patlis-menu'); ?></label>
         <input type="checkbox" name="pmc_show" id="pmc_show" value="1" checked>
-        <p class="description">If unchecked, this category will be hidden.</p>
     </div>
 
-    <div class="form-field">
-        <label>Image</label>
+    <div class="form-field" style="margin-top:24px; margin-bottom:24px;">
+        <h3><?php esc_html_e('Image', 'patlis-menu'); ?></h3>
         <div id="pmc_image_preview"></div>
         <input type="hidden" name="pmc_image_id" id="pmc_image_id" value="">
         <p>
-            <button type="button" class="button" id="pmc_image_select">Select image</button>
-            <button type="button" class="button" id="pmc_image_remove" style="display:none;">Remove</button>
+            <button type="button" class="button" id="pmc_image_select"><?php esc_html_e('Select image', 'patlis-menu'); ?></button>
+            <button type="button" class="button" id="pmc_image_remove" style="display:none;"><?php esc_html_e('Remove', 'patlis-menu'); ?></button>
         </p>
     </div>
 
-    <div class="form-field">
-        <label>Limit appearance for hours/days (empty = all day)</label>
-        <table class="widefat striped" style="max-width:720px">
+    <div class="form-field" style="margin-top:36px; margin-bottom:36px;margin-right:24px;">
+        <h3><?php esc_html_e('Category visibility schedule', 'patlis-menu'); ?></h3>
+        <p class="description"><?php esc_html_e('If both fields are empty, the category is visible all day.', 'patlis-menu'); ?></p>
+        <table class="widefat striped">
             <thead>
                 <tr>
-                    <th style="width:140px;">Day</th>
-                    <th style="width:200px;">From</th>
-                    <th style="width:200px;">To</th>
+                    <th><?php esc_html_e('Day', 'patlis-menu'); ?></th>
+                    <th><?php esc_html_e('From', 'patlis-menu'); ?></th>
+                    <th><?php esc_html_e('To', 'patlis-menu'); ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php echo patlis_menu_section_schedule_rows(); ?>
             </tbody>
         </table>
-        <p class="description">If both empty for a day, category is visible all day.</p>
     </div>
     <?php
 }
@@ -171,43 +174,43 @@ function patlis_menu_section_edit_fields($term): void
 
     ?>
     <tr class="form-field">
-        <th scope="row"><label for="pmc_show">Show</label></th>
+        <th scope="row"><label for="pmc_show"><?php esc_html_e('Show', 'patlis-menu'); ?></label></th>
         <td>
             <label>
                 <input type="checkbox" name="pmc_show" id="pmc_show" value="1" <?php checked($show, '1'); ?>>
-                Visible
+                <?php esc_html_e('Enabled', 'patlis-menu'); ?>
             </label>
         </td>
     </tr>
 
     <tr class="form-field">
-        <th scope="row"><label>Image</label></th>
+        <th scope="row"><label><?php esc_html_e('Image', 'patlis-menu'); ?></label></th>
         <td>
             <div id="pmc_image_preview"><?php echo $preview; ?></div>
             <input type="hidden" name="pmc_image_id" id="pmc_image_id" value="<?php echo esc_attr($image_id); ?>">
             <p>
-                <button type="button" class="button" id="pmc_image_select">Select image</button>
-                <button type="button" class="button" id="pmc_image_remove" style="<?php echo $image_id ? '' : 'display:none;'; ?>">Remove</button>
+                <button type="button" class="button" id="pmc_image_select"><?php esc_html_e('Select image', 'patlis-menu'); ?></button>
+                <button type="button" class="button" id="pmc_image_remove" style="<?php echo $image_id ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove', 'patlis-menu'); ?></button>
             </p>
         </td>
     </tr>
 
     <tr class="form-field">
-        <th scope="row"><label>Limit appearance for hours/days (empty = all day)</label></th>
+        <th scope="row"><label><?php esc_html_e('Category visibility schedule', 'patlis-menu'); ?></label></th>
         <td>
             <table class="widefat striped" style="max-width:720px">
                 <thead>
                     <tr>
-                        <th style="width:140px;">Day</th>
-                        <th style="width:200px;">From</th>
-                        <th style="width:200px;">To</th>
+                        <th style="width:140px;"><?php esc_html_e('Day', 'patlis-menu'); ?></th>
+                        <th style="width:200px;"><?php esc_html_e('From', 'patlis-menu'); ?></th>
+                        <th style="width:200px;"><?php esc_html_e('To', 'patlis-menu'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php echo patlis_menu_section_schedule_rows((int)$term->term_id); ?>
                 </tbody>
             </table>
-            <p class="description">If both empty for a day, category is visible all day.</p>
+            <p class="description"><?php esc_html_e('If both fields are empty, the category is visible all day.', 'patlis-menu'); ?></p>
         </td>
     </tr>
     <?php
@@ -215,7 +218,15 @@ function patlis_menu_section_edit_fields($term): void
 
 function patlis_menu_section_schedule_rows(int $term_id = 0): string
 {
-    $days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    $days = [
+        __('Sunday', 'patlis-menu'),
+        __('Monday', 'patlis-menu'),
+        __('Tuesday', 'patlis-menu'),
+        __('Wednesday', 'patlis-menu'),
+        __('Thursday', 'patlis-menu'),
+        __('Friday', 'patlis-menu'),
+        __('Saturday', 'patlis-menu'),
+    ];
     $html = '';
 
     for ($i = 0; $i <= 6; $i++) {
@@ -224,8 +235,8 @@ function patlis_menu_section_schedule_rows(int $term_id = 0): string
 
         $html .= '<tr>';
         $html .= '<td>' . esc_html($days[$i]) . '</td>';
-        $html .= '<td><input type="time" name="pmc_day' . $i . 'a" value="' . esc_attr($a) . '" step="60" style="width:160px"></td>';
-        $html .= '<td><input type="time" name="pmc_day' . $i . 'b" value="' . esc_attr($b) . '" step="60" style="width:160px"></td>';
+        $html .= '<td><input type="time" name="pmc_day' . $i . 'a" value="' . esc_attr($a) . '" step="60"></td>';
+        $html .= '<td><input type="time" name="pmc_day' . $i . 'b" value="' . esc_attr($b) . '" step="60"></td>';
         $html .= '</tr>';
     }
 

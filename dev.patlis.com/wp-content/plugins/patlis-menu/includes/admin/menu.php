@@ -10,8 +10,8 @@ function patlis_menu_admin_menu(): void
 
     // Parent menu opens Options page
     add_menu_page(
-        'Menu',
-        'Menu',
+        __('Menu', 'patlis-menu'),
+        __('Menu', 'patlis-menu'),
         $capability,
         $parent_slug,
         'patlis_menu_render_options_page',
@@ -22,8 +22,8 @@ function patlis_menu_admin_menu(): void
     // Options (so it appears as first submenu)
     add_submenu_page(
         $parent_slug,
-        'Options',
-        'Options',
+        __('Options', 'patlis-menu'),
+        __('Options', 'patlis-menu'),
         $capability,
         $parent_slug,
         'patlis_menu_render_options_page'
@@ -32,8 +32,8 @@ function patlis_menu_admin_menu(): void
     // CPT / taxonomy screens
     add_submenu_page(
         $parent_slug,
-        'Menu Items',
-        'Menu Items',
+        __('Food & drinks', 'patlis-menu'),
+        __('Food & drinks', 'patlis-menu'),
         $capability,
         'edit.php?post_type=menu_item',
         null
@@ -41,8 +41,8 @@ function patlis_menu_admin_menu(): void
 
     add_submenu_page(
         $parent_slug,
-        'Categories',
-        'Categories',
+        __('Categories', 'patlis-menu'),
+        __('Categories', 'patlis-menu'),
         $capability,
         'edit-tags.php?taxonomy=menu_section&post_type=menu_item',
         null
@@ -50,12 +50,23 @@ function patlis_menu_admin_menu(): void
 
     add_submenu_page(
         $parent_slug,
-        'PDF',
-        'PDF',
+        __('PDF files', 'patlis-menu'),
+        __('PDF files', 'patlis-menu'),
         $capability,
         'edit.php?post_type=menu_pdf',
         null
     );
+    
+    /* administrator only */
+    add_submenu_page(
+        $parent_slug,
+        'Import Menu Items',
+        'Import',
+        'manage_options',
+        Patlis_Menu_Admin_Import::SLUG,
+        ['Patlis_Menu_Admin_Import', 'render_page']
+    );
+
 
     add_submenu_page(
         $parent_slug,

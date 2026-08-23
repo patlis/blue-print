@@ -28,7 +28,7 @@ function patlis_menu_items_add_metaboxes(): void
 {
     add_meta_box(
         'patlis_menu_item_details',
-        'Menu Item Details',
+        __('Menu item details', 'patlis-menu'),
         'patlis_menu_items_metabox_render',
         'menu_item',
         'normal',
@@ -77,71 +77,70 @@ function patlis_menu_items_metabox_render(WP_Post $post): void
 
     <div class="pm-grid">
         <div class="pm-field">
-            <label for="pmi_itemnr">Item Nr</label>
+            <label for="pmi_itemnr"><?php esc_html_e('Item No', 'patlis-menu'); ?></label>
             <input type="text" id="pmi_itemnr" name="pmi_itemnr" value="<?php echo esc_attr($itemnr); ?>">
-            <div class="pm-note">Μπορεί να έχει και γράμματα (π.χ. 12a).</div>
         </div>
 
         <div class="pm-field">
-            <label for="pmi_sort">Display order (optional)</label>
+            <label for="pmi_sort"><?php esc_html_e('Display order (optional)', 'patlis-menu'); ?></label>
             <input type="number" step="1" id="pmi_sort" name="pmi_sort" value="<?php echo esc_attr($sort); ?>">
-            <div class="pm-note">Αν είναι κενό, θα γίνει sort με Item Nr → Name.</div>
+            <div class="pm-note"><?php esc_html_e('If empty, items are sorted by item number, then by name.', 'patlis-menu'); ?></div>
         </div>
 
         <div class="pm-field">
-            <label for="pmi_show">Show</label>
+            <label for="pmi_show"><?php esc_html_e('Show', 'patlis-menu'); ?></label>
             <label style="font-weight:normal;">
                 <input type="checkbox" id="pmi_show" name="pmi_show" value="1" <?php checked($show, '1'); ?>>
-                Visible
+                <?php esc_html_e('Enabled', 'patlis-menu'); ?>
             </label>
         </div>
 
         <div class="pm-field">
-            <label for="pmi_price">Price</label>
+            <label for="pmi_price"><?php esc_html_e('Price 1', 'patlis-menu'); ?></label>
             <input type="number" step="0.01" id="pmi_price" name="pmi_price" value="<?php echo esc_attr($price); ?>">
         </div>
 
         <div class="pm-field">
-            <label for="pmi_price2">Price 2</label>
+            <label for="pmi_price2"><?php esc_html_e('Price 2', 'patlis-menu'); ?></label>
             <input type="number" step="0.01" id="pmi_price2" name="pmi_price2" value="<?php echo esc_attr($price2); ?>">
         </div>
 
         <div class="pm-field">
-            <label for="pmi_price3">Price 3</label>
+            <label for="pmi_price3"><?php esc_html_e('Price 3', 'patlis-menu'); ?></label>
             <input type="number" step="0.01" id="pmi_price3" name="pmi_price3" value="<?php echo esc_attr($price3); ?>">
         </div>
 
         <div class="pm-field">
-            <label for="pmi_size1">Size 1</label>
+            <label for="pmi_size1"><?php esc_html_e('Size 1', 'patlis-menu'); ?></label>
             <input type="text" id="pmi_size1" name="pmi_size1" value="<?php echo esc_attr($size1); ?>">
         </div>
 
         <div class="pm-field">
-            <label for="pmi_size2">Size 2</label>
+            <label for="pmi_size2"><?php esc_html_e('Size 2', 'patlis-menu'); ?></label>
             <input type="text" id="pmi_size2" name="pmi_size2" value="<?php echo esc_attr($size2); ?>">
         </div>
 
         <div class="pm-field">
-            <label for="pmi_size3">Size 3</label>
+            <label for="pmi_size3"><?php esc_html_e('Size 3', 'patlis-menu'); ?></label>
             <input type="text" id="pmi_size3" name="pmi_size3" value="<?php echo esc_attr($size3); ?>">
         </div>
     </div>
 
     <div class="pm-row">
         <div class="pm-field">
-            <label for="pmi_allergies">Allergies</label>
+            <label for="pmi_allergies"><?php esc_html_e('Allergens', 'patlis-menu'); ?></label>
             <input type="text" id="pmi_allergies" name="pmi_allergies" value="<?php echo esc_attr($allergies); ?>">
         </div>
 
         <div class="pm-field" style="margin-top:14px;">
-            <label for="pmi_description">Description</label>
+            <label for="pmi_description"><?php esc_html_e('Description', 'patlis-menu'); ?></label>
             <textarea id="pmi_description" name="pmi_description" rows="4"><?php echo esc_textarea($desc); ?></textarea>
         </div>
 
         <div class="pm-checks">
-            <label><input type="checkbox" name="pmi_vegetarian" value="1" <?php checked($vegetarian); ?>> Vegetarian</label>
-            <label><input type="checkbox" name="pmi_vegan" value="1" <?php checked($vegan); ?>> Vegan</label>
-            <label><input type="checkbox" name="pmi_carousel" value="1" <?php checked($carousel); ?>> Add to carousel</label>
+            <label><input type="checkbox" name="pmi_vegetarian" value="1" <?php checked($vegetarian); ?>> <?php esc_html_e('Vegetarian', 'patlis-menu'); ?></label>
+            <label><input type="checkbox" name="pmi_vegan" value="1" <?php checked($vegan); ?>> <?php esc_html_e('Vegan', 'patlis-menu'); ?></label>
+            <label><input type="checkbox" name="pmi_carousel" value="1" <?php checked($carousel); ?>> <?php esc_html_e('Add to carousel', 'patlis-menu'); ?></label>
         </div>
     </div>
     <?php
@@ -239,6 +238,20 @@ add_action('restrict_manage_posts', function (): void {
         'selected'        => $selected,
         'value_field'     => 'term_id',
     ]);
+    $show_filter = isset($_GET['pmi_show_filter']) ? sanitize_key((string) $_GET['pmi_show_filter']) : '';
+    $carousel_filter = isset($_GET['pmi_carousel_filter']) ? sanitize_key((string) $_GET['pmi_carousel_filter']) : '';
+    ?>
+    <select name="pmi_show_filter">
+        <option value=""><?php esc_html_e('Enabled', 'patlis-menu'); ?></option>
+        <option value="enabled" <?php selected($show_filter, 'enabled'); ?>><?php esc_html_e('Yes', 'patlis-menu'); ?></option>
+        <option value="disabled" <?php selected($show_filter, 'disabled'); ?>><?php esc_html_e('No', 'patlis-menu'); ?></option>
+    </select>
+    <select name="pmi_carousel_filter">
+        <option value=""><?php esc_html_e('Carousel', 'patlis-menu'); ?></option>
+        <option value="included" <?php selected($carousel_filter, 'included'); ?>><?php esc_html_e('Yes', 'patlis-menu'); ?></option>
+        <option value="excluded" <?php selected($carousel_filter, 'excluded'); ?>><?php esc_html_e('No', 'patlis-menu'); ?></option>
+    </select>
+    <?php
 }, 10, 0);
 
 add_action('pre_get_posts', function (WP_Query $q): void {
@@ -252,17 +265,64 @@ add_action('pre_get_posts', function (WP_Query $q): void {
     }
 
     $term_id = isset($_GET['menu_section']) ? absint($_GET['menu_section']) : 0;
-    if ($term_id <= 0) {
-        return;
+    if ($term_id > 0) {
+        $q->set('tax_query', [
+            [
+                'taxonomy' => 'menu_section',
+                'field'    => 'term_id',
+                'terms'    => [$term_id],
+            ],
+        ]);
+    }
+    $show_filter = isset($_GET['pmi_show_filter']) ? sanitize_key((string) $_GET['pmi_show_filter']) : '';
+    $carousel_filter = isset($_GET['pmi_carousel_filter']) ? sanitize_key((string) $_GET['pmi_carousel_filter']) : '';
+    $meta_query = [];
+
+    if ($show_filter === 'enabled') {
+        $meta_query[] = [
+            'relation' => 'OR',
+            [
+                'key'     => 'pmi_show',
+                'value'   => '1',
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'pmi_show',
+                'compare' => 'NOT EXISTS',
+            ],
+        ];
+    } elseif ($show_filter === 'disabled') {
+        $meta_query[] = [
+            'key'     => 'pmi_show',
+            'value'   => '0',
+            'compare' => '=',
+        ];
     }
 
-    $q->set('tax_query', [
-        [
-            'taxonomy' => 'menu_section',
-            'field'    => 'term_id',
-            'terms'    => [$term_id],
-        ],
-    ]);
+    if ($carousel_filter === 'included') {
+        $meta_query[] = [
+            'key'     => 'pmi_carousel',
+            'value'   => '1',
+            'compare' => '=',
+        ];
+    } elseif ($carousel_filter === 'excluded') {
+        $meta_query[] = [
+            'relation' => 'OR',
+            [
+                'key'     => 'pmi_carousel',
+                'value'   => '0',
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'pmi_carousel',
+                'compare' => 'NOT EXISTS',
+            ],
+        ];
+    }
+
+    if ($meta_query) {
+        $q->set('meta_query', $meta_query);
+    }
 });
 
 function patlis_menu_sanitize_price($v): string
@@ -279,18 +339,15 @@ function patlis_menu_sanitize_price($v): string
  * Admin columns for Menu Items list
  * ------------------------------------------------------------ */
 add_filter('manage_menu_item_posts_columns', function ($cols) {
+    unset($cols['date']);
+
     $new = [];
     foreach ($cols as $k => $v) {
         $new[$k] = $v;
         if ($k === 'title') {
-            $new['pmi_sort']     = 'Sort';
-            $new['pmi_itemnr']   = 'Item Nr';
-            $new['pmi_size1']      = 'Size 1';
-            $new['pmi_price']    = 'Price';
-            $new['pmi_carousel'] = 'Carousel';
-            $new['pmi_vegetarian'] = 'Vegetarian';
-            $new['pmi_vegan']      = 'Vegan';
-            $new['pmi_show']     = 'Show';
+            $new['pmi_sort']       = __('Display order', 'patlis-menu');
+            $new['pmi_itemnr']     = __('Item No', 'patlis-menu');
+            $new['pmi_price']      = __('Price 1', 'patlis-menu');
         }
     }
     return $new;
@@ -303,11 +360,6 @@ add_filter('manage_edit-menu_item_sortable_columns', function ($cols) {
     $cols['pmi_sort']     = 'pmi_sort';
     $cols['pmi_itemnr']   = 'pmi_itemnr';
     $cols['pmi_price']    = 'pmi_price';
-    $cols['pmi_size1']    = 'pmi_size1';
-    $cols['pmi_show']     = 'pmi_show';
-    $cols['pmi_carousel'] = 'pmi_carousel';
-    $cols['pmi_vegan']    = 'pmi_vegan';
-    $cols['pmi_vegetarian']= 'pmi_vegetarian';
 
     return $cols;
 });
@@ -358,14 +410,6 @@ add_action('manage_menu_item_posts_custom_column', function ($col, $post_id) {
     }
     if ($col === 'pmi_price') {
         echo esc_html((string)get_post_meta($post_id, 'pmi_price', true));
-        return;
-    }
-    if ($col === 'pmi_carousel') {
-        echo get_post_meta($post_id, 'pmi_carousel', true) === '1' ? 'Yes' : 'No';
-        return;
-    }
-    if ($col === 'pmi_show') {
-        echo get_post_meta($post_id, 'pmi_show', true) === '0' ? 'No' : 'Yes';
         return;
     }
 }, 10, 2);
@@ -459,12 +503,17 @@ add_action('admin_head', function () {
     $screen = function_exists('get_current_screen') ? get_current_screen() : null;
     if (!$screen) return;
 
+    if ($screen->id === 'edit-menu_item') {
+        echo '<style>#posts-filter select[name="m"] { display: none; }</style>';
+        return;
+    }
+
     // Edit screen για το CPT menu_item: τόσο edit όσο και add-new
     if (!in_array($screen->base, ['post', 'post-new'], true)) return;
     if ($screen->post_type !== 'menu_item') return;
 
     $back_url = admin_url('edit.php?post_type=menu_item');
-    $label = '← Back to Menu Items';
+    $label = __('← Back to Menu Items', 'patlis-menu');
 
     ?>
     <script>
@@ -479,8 +528,8 @@ add_action('admin_head', function () {
             var a = document.createElement('a');
             a.id = 'patlis-back-to-menu-items';
             a.className = 'page-title-action';
-            a.href = <?php echo json_encode($back_url); ?>;
-            a.textContent = <?php echo json_encode($label); ?>;
+            a.href = <?php echo wp_json_encode($back_url); ?>;
+            a.textContent = <?php echo wp_json_encode($label); ?>;
 
             // βάλτο αμέσως μετά το H1, πριν/μετά το Add New (όπως βολεύει)
             var addNew = document.querySelector('.wrap .page-title-action');

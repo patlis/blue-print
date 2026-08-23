@@ -5,24 +5,6 @@ final class Patlis_Menu_Admin_Import
 {
     public const SLUG = 'patlis-menu-import';
 
-    public static function init(): void
-    {
-        add_action('admin_menu', [__CLASS__, 'register_submenu'], 20);
-    }
-
-    public static function register_submenu(): void
-    {
-        add_submenu_page(
-            'patlis-menu',
-            'Import Menu Items',
-            'Import',
-            'manage_options',
-            self::SLUG,
-            [__CLASS__, 'render_page'],
-            99
-        );
-    }
-
     public static function render_page(): void
     {
         if (!current_user_can('manage_options')) {
@@ -348,5 +330,3 @@ final class Patlis_Menu_Admin_Import
         return $value;
     }
 }
-
-Patlis_Menu_Admin_Import::init();

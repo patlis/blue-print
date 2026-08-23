@@ -18,6 +18,9 @@ function patlis_menu_pdfs_admin_assets(string $hook): void
 
     wp_enqueue_media();
 
+        $select_pdf_title  = wp_json_encode(__('Select PDF', 'patlis-menu'));
+        $select_pdf_button = wp_json_encode(__('Use this PDF', 'patlis-menu'));
+
     $js = <<<JS
 jQuery(function($){
   var frame = null;
@@ -36,8 +39,8 @@ jQuery(function($){
     }
 
     frame = wp.media({
-      title: 'Select PDF',
-      button: { text: 'Use this PDF' },
+            title: {$select_pdf_title},
+            button: { text: {$select_pdf_button} },
       library: { type: 'application/pdf' },
       multiple: false
     });
@@ -72,7 +75,7 @@ function patlis_menu_pdfs_add_metaboxes(): void
 {
     add_meta_box(
         'patlis_menu_pdf_details',
-        'PDF Details',
+        __('PDF details', 'patlis-menu'),
         'patlis_menu_pdfs_metabox_render',
         'menu_pdf',
         'normal',
@@ -88,7 +91,7 @@ function patlis_menu_pdfs_metabox_render(WP_Post $post): void
     $file_url = (string) get_post_meta($post->ID, 'pmpdf_file_url', true);
     ?>
     <p>
-        <label for="pmpdf_file_url"><strong>PDF file</strong></label>
+        <label for="pmpdf_file_url"><strong><?php esc_html_e('PDF file', 'patlis-menu'); ?></strong></label>
     </p>
 
     <input type="hidden" id="pmpdf_file_id" name="pmpdf_file_id" value="<?php echo esc_attr($file_id); ?>">
@@ -101,11 +104,10 @@ function patlis_menu_pdfs_metabox_render(WP_Post $post): void
            placeholder="https://example.com/file.pdf">
 
     <p style="margin-top:8px;">
-        <button type="button" class="button" id="pmpdf_file_select">Select PDF</button>
-        <button type="button" class="button" id="pmpdf_file_remove" style="<?php echo $file_url !== '' ? '' : 'display:none;'; ?>">Remove</button>
+        <button type="button" class="button" id="pmpdf_file_select"><?php esc_html_e('Select PDF', 'patlis-menu'); ?></button>
+        <button type="button" class="button" id="pmpdf_file_remove" style="<?php echo $file_url !== '' ? '' : 'display:none;'; ?>"><?php esc_html_e('Remove', 'patlis-menu'); ?></button>
     </p>
 
-    <p class="description">Use the post title as the PDF name shown on the frontend.</p>
     <?php
 }
 
@@ -146,7 +148,7 @@ add_action('admin_head', function () {
     if ($screen->post_type !== 'menu_pdf') return;
 
     $back_url = admin_url('edit.php?post_type=menu_pdf');
-    $label = '← Back to PDFs';
+    $label = __('← Back to PDFs', 'patlis-menu');
     ?>
     <script>
     (function () {

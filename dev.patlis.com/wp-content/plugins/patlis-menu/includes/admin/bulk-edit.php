@@ -108,7 +108,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 									<thead>
 										<tr>
 											<th style="width:50px;">Sort</th>
-											<th style="width:50px;">Item Nr</th>
+											<th style="width:50px;">Item No</th>
 											<th style="width:220px;">Name</th>
 											<th style="width:120px;">Size 1</th>
 											<th style="width:50px;">Price</th>

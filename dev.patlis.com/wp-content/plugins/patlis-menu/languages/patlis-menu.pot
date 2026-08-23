@@ -1,0 +1,387 @@
+# Translations template for Patlis Core.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the Patlis Core project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Patlis Core 0.1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-23 12:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;esc_html_e;esc_html__;esc_attr__;esc_attr_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/admin/menu.php:13 includes/admin/menu.php:14
+msgid "Menu"
+msgstr ""
+
+#: includes/admin/menu.php:25 includes/admin/menu.php:26
+msgid "Options"
+msgstr ""
+
+#: includes/admin/menu.php:35 includes/admin/menu.php:36
+#: includes/post-types.php:11
+msgid "Food & drinks"
+msgstr ""
+
+#: includes/admin/menu.php:44 includes/admin/menu.php:45
+msgid "Categories"
+msgstr ""
+
+#: includes/admin/menu.php:53 includes/admin/menu.php:54
+msgid "PDF files"
+msgstr ""
+
+#: includes/admin/pages/options.php:11 includes/admin/pages/options.php:27
+msgid "Normal"
+msgstr ""
+
+#: includes/admin/pages/options.php:12
+msgid "Centered"
+msgstr ""
+
+#: includes/admin/pages/options.php:207
+msgid "Default"
+msgstr ""
+
+#: includes/admin/pages/options.php:253
+msgid "Menu – Options"
+msgstr ""
+
+#: includes/admin/pages/options.php:256
+msgid "Saved."
+msgstr ""
+
+#: includes/admin/pages/options.php:267
+msgid "Show prices in the menu"
+msgstr ""
+
+#: includes/admin/pages/options.php:273 includes/admin/pages/options.php:308
+#: includes/admin/pages/options.php:323 includes/menu-items.php:246
+#: includes/menu-items.php:251
+msgid "Yes"
+msgstr ""
+
+#: includes/admin/pages/options.php:278
+msgid "If disabled, prices will not be displayed in the menu."
+msgstr ""
+
+#: includes/admin/pages/options.php:286
+msgid "Display mode"
+msgstr ""
+
+#: includes/admin/pages/options.php:297
+msgid "Choose how the menu layout is displayed."
+msgstr ""
+
+#: includes/admin/pages/options.php:304
+msgid "Show vegetarian and vegan filter"
+msgstr ""
+
+#: includes/admin/pages/options.php:312
+msgid "If enabled, vegetarian and vegan filter buttons can be displayed in the menu."
+msgstr ""
+
+#: includes/admin/pages/options.php:319
+msgid "Show allergen information"
+msgstr ""
+
+#: includes/admin/pages/options.php:327
+msgid "If disabled, allergen information will not be displayed."
+msgstr ""
+
+#: includes/admin/pages/options.php:331
+msgid "Allergen description"
+msgstr ""
+
+#: includes/admin/pages/options.php:364
+msgid "Save"
+msgstr ""
+
+#: includes/categories.php:34
+msgid "Select category image"
+msgstr ""
+
+#: includes/categories.php:35
+msgid "Use this image"
+msgstr ""
+
+#: includes/categories.php:90
+msgid "Drag to reorder"
+msgstr ""
+
+#: includes/categories.php:121 includes/categories.php:181
+#: includes/menu-items.php:94 includes/menu-items.php:245
+msgid "Enabled"
+msgstr ""
+
+#: includes/categories.php:126 includes/categories.php:187
+msgid "Image"
+msgstr ""
+
+#: includes/categories.php:130 includes/categories.php:192
+msgid "Select image"
+msgstr ""
+
+#: includes/categories.php:131 includes/categories.php:193
+#: includes/menu-pdfs.php:108
+msgid "Remove"
+msgstr ""
+
+#: includes/categories.php:136 includes/categories.php:199
+msgid "Category visibility schedule"
+msgstr ""
+
+#: includes/categories.php:137 includes/categories.php:213
+msgid "If both fields are empty, the category is visible all day."
+msgstr ""
+
+#: includes/categories.php:141 includes/categories.php:204
+msgid "Day"
+msgstr ""
+
+#: includes/categories.php:142 includes/categories.php:205
+msgid "From"
+msgstr ""
+
+#: includes/categories.php:143 includes/categories.php:206
+msgid "To"
+msgstr ""
+
+#: includes/categories.php:177 includes/menu-items.php:91
+msgid "Show"
+msgstr ""
+
+#: includes/categories.php:222
+msgid "Sunday"
+msgstr ""
+
+#: includes/categories.php:223
+msgid "Monday"
+msgstr ""
+
+#: includes/categories.php:224
+msgid "Tuesday"
+msgstr ""
+
+#: includes/categories.php:225
+msgid "Wednesday"
+msgstr ""
+
+#: includes/categories.php:226
+msgid "Thursday"
+msgstr ""
+
+#: includes/categories.php:227
+msgid "Friday"
+msgstr ""
+
+#: includes/categories.php:228
+msgid "Saturday"
+msgstr ""
+
+#: includes/menu-items.php:31
+msgid "Menu item details"
+msgstr ""
+
+#: includes/menu-items.php:80 includes/menu-items.php:349
+msgid "Item No"
+msgstr ""
+
+#: includes/menu-items.php:85
+msgid "Display order (optional)"
+msgstr ""
+
+#: includes/menu-items.php:87
+msgid "If empty, items are sorted by item number, then by name."
+msgstr ""
+
+#: includes/menu-items.php:99 includes/menu-items.php:350
+msgid "Price 1"
+msgstr ""
+
+#: includes/menu-items.php:104
+msgid "Price 2"
+msgstr ""
+
+#: includes/menu-items.php:109
+msgid "Price 3"
+msgstr ""
+
+#: includes/menu-items.php:114
+msgid "Size 1"
+msgstr ""
+
+#: includes/menu-items.php:119
+msgid "Size 2"
+msgstr ""
+
+#: includes/menu-items.php:124
+msgid "Size 3"
+msgstr ""
+
+#: includes/menu-items.php:131
+msgid "Allergens"
+msgstr ""
+
+#: includes/menu-items.php:136
+msgid "Description"
+msgstr ""
+
+#: includes/menu-items.php:141
+msgid "Vegetarian"
+msgstr ""
+
+#: includes/menu-items.php:142
+msgid "Vegan"
+msgstr ""
+
+#: includes/menu-items.php:143
+msgid "Add to carousel"
+msgstr ""
+
+#: includes/menu-items.php:232 includes/post-types.php:80
+msgid "All categories"
+msgstr ""
+
+#: includes/menu-items.php:247 includes/menu-items.php:252
+msgid "No"
+msgstr ""
+
+#: includes/menu-items.php:250
+msgid "Carousel"
+msgstr ""
+
+#: includes/menu-items.php:348
+msgid "Display order"
+msgstr ""
+
+#: includes/menu-items.php:516
+msgid "← Back to Menu Items"
+msgstr ""
+
+#: includes/menu-pdfs.php:21 includes/menu-pdfs.php:107
+msgid "Select PDF"
+msgstr ""
+
+#: includes/menu-pdfs.php:22
+msgid "Use this PDF"
+msgstr ""
+
+#: includes/menu-pdfs.php:78
+msgid "PDF details"
+msgstr ""
+
+#: includes/menu-pdfs.php:94
+msgid "PDF file"
+msgstr ""
+
+#: includes/menu-pdfs.php:151
+msgid "← Back to PDFs"
+msgstr ""
+
+#: includes/post-types.php:12
+msgid "Food or drink"
+msgstr ""
+
+#: includes/post-types.php:13
+msgid "Add new food or drink"
+msgstr ""
+
+#: includes/post-types.php:14
+msgid "Edit food or drink"
+msgstr ""
+
+#: includes/post-types.php:15
+msgid "New food or drink"
+msgstr ""
+
+#: includes/post-types.php:16
+msgid "View food or drink"
+msgstr ""
+
+#: includes/post-types.php:17
+msgid "Search food or drinks"
+msgstr ""
+
+#: includes/post-types.php:18
+msgid "No food or drinks found"
+msgstr ""
+
+#: includes/post-types.php:19
+msgid "No food or drinks found in trash"
+msgstr ""
+
+#: includes/post-types.php:20
+msgid "All food or drinks"
+msgstr ""
+
+#: includes/post-types.php:49
+msgid "Add New PDF"
+msgstr ""
+
+#: includes/post-types.php:50
+msgid "Edit PDF"
+msgstr ""
+
+#: includes/post-types.php:51
+msgid "New PDF"
+msgstr ""
+
+#: includes/post-types.php:52
+msgid "View PDF"
+msgstr ""
+
+#: includes/post-types.php:53
+msgid "Search PDFs"
+msgstr ""
+
+#: includes/post-types.php:54
+msgid "No PDFs found"
+msgstr ""
+
+#: includes/post-types.php:55
+msgid "No PDFs found in trash"
+msgstr ""
+
+#: includes/post-types.php:56
+msgid "All PDFs"
+msgstr ""
+
+#: includes/post-types.php:77 includes/post-types.php:85
+msgid "Menu categories"
+msgstr ""
+
+#: includes/post-types.php:78
+msgid "Menu category"
+msgstr ""
+
+#: includes/post-types.php:79
+msgid "Search categories"
+msgstr ""
+
+#: includes/post-types.php:81
+msgid "Edit category"
+msgstr ""
+
+#: includes/post-types.php:82
+msgid "Update category"
+msgstr ""
+
+#: includes/post-types.php:83
+msgid "Add new category"
+msgstr ""
+
+#: includes/post-types.php:84
+msgid "New category"
+msgstr ""
