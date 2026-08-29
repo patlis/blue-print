@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Menu
  * Description: Menu module for gastro/dining sites.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Patlis Ioannis
  * Text Domain: patlis-menu
  * Domain Path: /languages
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) { exit; }
 
 define('PATLIS_MENU_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_MENU_URL', plugin_dir_url(__FILE__));
-define('PATLIS_MENU_VERSION', '1.1.0');
+define('PATLIS_MENU_VERSION', '1.2.0');
 
 add_action('init', static function (): void {
     load_plugin_textdomain('patlis-menu', false, dirname(plugin_basename(__FILE__)) . '/languages');

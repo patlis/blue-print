@@ -79,7 +79,16 @@ final class Patlis_Admin_Menu {
       ['Patlis_Admin_Page_Homepage', 'render']
     );
 
-    /* ------------- Administrator only ------------------ */
+    add_submenu_page(
+      'patlis-basic',
+      __('AI Labels', 'patlis-core'),
+      __('AI Labels', 'patlis-core'),
+      $capability,
+      'patlis-ai-labels',
+      ['Patlis_Admin_Page_AI_Labels', 'render']
+    );
+
+    /* ------------- Administrator only * also don't need translation ------------------ */
     add_submenu_page(
       'patlis-basic',
       'Instance Tools',

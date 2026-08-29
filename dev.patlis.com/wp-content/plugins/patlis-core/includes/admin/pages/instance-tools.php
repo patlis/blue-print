@@ -27,6 +27,17 @@ final class Patlis_Admin_Page_Instance_Tools
         return max(0, (int) $count);
     }
 
+    private static function count_published_pages(): int
+    {
+        global $wpdb;
+
+        $count = $wpdb->get_var(
+            "SELECT COUNT(1) FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish'"
+        );
+
+        return max(0, (int) $count);
+    }
+
     private static function count_taxonomy_terms(string $taxonomy): int
     {
         global $wpdb;
@@ -210,6 +221,7 @@ final class Patlis_Admin_Page_Instance_Tools
 
         $sections = self::definition();
         $nonce    = wp_create_nonce('patlis_instance_tool');
+        $page_count = self::count_published_pages();
         ?>
         
             <style>
@@ -268,6 +280,17 @@ final class Patlis_Admin_Page_Instance_Tools
                     background: #cc1818 !important;
                     color: #fff !important;
                     border-color: #cc1818 !important;
+                }
+
+                .patlis-instance-tool-seo {
+                    border-color: #2271b1 !important;
+                    color: #2271b1 !important;
+                }
+
+                .patlis-instance-tool-seo:hover {
+                    background: #2271b1 !important;
+                    color: #fff !important;
+                    border-color: #2271b1 !important;
                 }
 
                 .patlis-instance-tool-running {
@@ -346,20 +369,43 @@ final class Patlis_Admin_Page_Instance_Tools
                 <?php endforeach; ?>
             </div>
 
+            <h2 style="margin-top: 4em;">SEO</h2>
+            <div class="patlis-instance-tools-grid">
+                <section class="patlis-instance-tools-card">
+                    <h2>Rank Math Page Indexing</h2>
+                    <div class="patlis-instance-tools-list">
+                        <button
+                            type="button"
+                            class="button patlis-instance-tool-button patlis-instance-tool-seo"
+                            data-action="set_page_language_indexing"
+                            data-label="Set page indexing by language"
+                            data-count="<?php echo (int) $page_count; ?>"
+                        >
+                            <span>Index active-version default pages / noindex all others</span>
+                            <span class="patlis-instance-tool-badge"><?php echo (int) $page_count; ?></span>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
             <script>
             (function () {
                 var ajaxUrl = <?php echo wp_json_encode(admin_url('admin-ajax.php')); ?>;
                 var nonce   = <?php echo wp_json_encode($nonce); ?>;
 
-                document.querySelectorAll('.patlis-instance-tool-live').forEach(function (btn) {
+                                document.querySelectorAll('.patlis-instance-tool-live, .patlis-instance-tool-seo').forEach(function (btn) {
                     btn.addEventListener('click', function () {
                         var label  = btn.dataset.label  || btn.innerText.trim();
                         var count  = btn.dataset.count  || '?';
                         var action = btn.dataset.action;
-
-                        var msg = 'Are you sure you want to run:\n"' + label + '"?\n\n' +
-                                  'This will permanently delete ' + count + ' item(s).\n' +
-                                  'This cannot be undone.';
+                                                var isSeoAction = btn.classList.contains('patlis-instance-tool-seo');
+                                                var msg = isSeoAction
+                                                        ? 'Are you sure you want to run:\n"' + label + '"?\n\n' +
+                                                            'This will update Rank Math robots settings on ' + count + ' published page(s).\n' +
+                                                            'Only active-version default-language pages will be index; all other pages will be noindex.'
+                                                        : 'Are you sure you want to run:\n"' + label + '"?\n\n' +
+                                                            'This will permanently delete ' + count + ' item(s).\n' +
+                                                            'This cannot be undone.';
 
                         if (!window.confirm(msg)) {
                             return;
@@ -437,12 +483,179 @@ final class Patlis_Admin_Page_Instance_Tools
             case 'delete_experiences':          $message = self::do_delete_post_types(['experience']); break;
             case 'delete_rate_periods':         $message = self::do_delete_post_types(['hotel_rate_periods']); break;
             case 'delete_room_rates':           $message = self::do_delete_post_types(['patlis_room_rate']); break;
+            case 'set_page_language_indexing':  $message = self::do_set_page_language_indexing(); break;
             default:
                 wp_send_json_error(['message' => 'Unknown action.'], 400);
                 return;
         }
 
         wp_send_json_success(['message' => $message]);
+    }
+
+    private static function do_set_page_language_indexing(): string
+    {
+        if (!defined('RANK_MATH_VERSION')) {
+            return 'Rank Math must be active before updating page indexing.';
+        }
+
+        if (!function_exists('pll_default_language') || !function_exists('pll_get_post_language')) {
+            return 'Polylang must be active before updating page indexing.';
+        }
+
+        $default_language = sanitize_key((string) pll_default_language('slug'));
+        if ($default_language === '') {
+            return 'No Polylang default language is configured.';
+        }
+
+        $page_ids = get_posts([
+            'post_type'        => 'page',
+            'post_status'      => 'publish',
+            'posts_per_page'   => -1,
+            'fields'           => 'ids',
+            'lang'             => '',
+            'suppress_filters' => true,
+        ]);
+
+        $indexed_count          = 0;
+        $always_noindex_count   = 0;
+        $inactive_version_count = 0;
+        $other_language_count   = 0;
+        $skipped_count          = 0;
+
+        foreach ($page_ids as $page_id) {
+            $language = sanitize_key((string) pll_get_post_language((int) $page_id, 'slug'));
+            if ($language === '') {
+                $skipped_count++;
+                continue;
+            }
+
+            if ($language !== $default_language) {
+                self::set_rank_math_indexing((int) $page_id, false);
+                $other_language_count++;
+                continue;
+            }
+
+            if (self::is_always_noindex_page((int) $page_id)) {
+                self::set_rank_math_indexing((int) $page_id, false);
+                $always_noindex_count++;
+                continue;
+            }
+
+            $is_active_version_page = self::is_active_version_page((int) $page_id);
+            self::set_rank_math_indexing((int) $page_id, $is_active_version_page);
+
+            if ($is_active_version_page) {
+                $indexed_count++;
+            } else {
+                $inactive_version_count++;
+            }
+        }
+
+        if (class_exists('RankMath\\Sitemap\\Cache')) {
+            \RankMath\Sitemap\Cache::invalidate_storage('page');
+        }
+
+        return sprintf(
+            'Updated Rank Math robots settings and refreshed the Page sitemap cache: %1$d active-version default-language page(s) set to index, %2$d always-noindex default-language page(s) set to noindex, %3$d inactive-version default-language page(s) set to noindex, and %4$d other-language page(s) set to noindex. Skipped %5$d page(s) without a Polylang language.',
+            $indexed_count,
+            $always_noindex_count,
+            $inactive_version_count,
+            $other_language_count,
+            $skipped_count
+        );
+    }
+
+    private static function is_always_noindex_page(int $page_id): bool
+    {
+        $page_path = trim((string) get_page_uri($page_id), '/');
+        if (in_array($page_path, ['under-construction', 'coming-soon'], true)) {
+            return true;
+        }
+
+        $taxonomy = function_exists('patlis_version_get_page_template_taxonomy')
+            ? patlis_version_get_page_template_taxonomy()
+            : 'template';
+
+        if (!taxonomy_exists($taxonomy)) {
+            return false;
+        }
+
+        $page_template_terms = wp_get_object_terms($page_id, $taxonomy, ['fields' => 'slugs']);
+        if (is_wp_error($page_template_terms) || $page_template_terms === []) {
+            return false;
+        }
+
+        $always_noindex_templates = [
+            'about',
+            'coming-soon',
+            'contact',
+            'experience',
+            'image-gallery',
+            'kiosk',
+            'reviews',
+            'booking',
+            'reservation',
+            'text-pages',
+        ];
+
+        return array_intersect($page_template_terms, $always_noindex_templates) !== [];
+    }
+
+    private static function is_active_version_page(int $page_id): bool
+    {
+        $taxonomy = function_exists('patlis_version_get_page_template_taxonomy')
+            ? patlis_version_get_page_template_taxonomy()
+            : 'template';
+
+        if (!taxonomy_exists($taxonomy)) {
+            return true;
+        }
+
+        $page_template_terms = wp_get_object_terms($page_id, $taxonomy, ['fields' => 'slugs']);
+        if (is_wp_error($page_template_terms) || $page_template_terms === []) {
+            return true;
+        }
+
+        $term_map = function_exists('patlis_version_get_page_template_term_map')
+            ? patlis_version_get_page_template_term_map()
+            : [];
+
+        if ($term_map === []) {
+            return true;
+        }
+
+        $versioned_terms = [];
+        foreach ($term_map as $version => $terms) {
+            if ($version === 'all-versions') {
+                continue;
+            }
+
+            $versioned_terms = array_merge($versioned_terms, $terms);
+        }
+
+        $page_template_terms = array_values(array_filter(array_map('sanitize_key', $page_template_terms)));
+        $versioned_terms     = array_values(array_unique(array_filter(array_map('sanitize_key', $versioned_terms))));
+        $active_terms        = function_exists('patlis_version_get_allowed_page_template_terms')
+            ? patlis_version_get_allowed_page_template_terms()
+            : [];
+
+        if (array_intersect($page_template_terms, $active_terms) !== []) {
+            return true;
+        }
+
+        return array_intersect($page_template_terms, $versioned_terms) === [];
+    }
+
+    private static function set_rank_math_indexing(int $post_id, bool $should_index): void
+    {
+        $current_robots = get_post_meta($post_id, 'rank_math_robots', true);
+        $robots = is_array($current_robots) ? $current_robots : [];
+        $robots = array_values(array_filter($robots, static function ($directive): bool {
+            return is_string($directive) && !in_array(strtolower($directive), ['index', 'noindex'], true);
+        }));
+        $robots[] = $should_index ? 'index' : 'noindex';
+
+        update_post_meta($post_id, 'rank_math_robots', $robots);
     }
 
     private static function do_truncate_table(string $table_suffix): string

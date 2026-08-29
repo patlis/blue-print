@@ -656,6 +656,9 @@ function patlis_gallery_get_items(int $post_id): array
             'url' => $full_url,
             'width' => (int) ($full[1] ?? 0),
             'height' => (int) ($full[2] ?? 0),
+            'ai_status' => function_exists('patlis_core_get_attachment_ai_status')
+                ? patlis_core_get_attachment_ai_status((int) $id)
+                : 'none',
             'thumbnail' => $thumb_url,
             'medium' => $medium_url,
             'large' => $large_url,

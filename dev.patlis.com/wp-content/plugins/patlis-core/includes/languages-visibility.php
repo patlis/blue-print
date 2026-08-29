@@ -219,6 +219,48 @@ function patlis_get_frontend_languages(): array
 }
 
 /**
+ * Redirect frontend URLs in a configured but non-visible language to the default language home URL.
+ */
+add_action('template_redirect', function (): void {
+    if (is_admin() || !function_exists('pll_current_language')) {
+        return;
+    }
+
+    $current_language = sanitize_key((string) pll_current_language('slug'));
+    $all_languages = patlis_get_all_polylang_language_slugs();
+
+    if ($current_language === '' || !in_array($current_language, $all_languages, true)) {
+        return;
+    }
+
+    $visible_languages = patlis_get_site_visible_language_slugs();
+    if (in_array($current_language, $visible_languages, true)) {
+        return;
+    }
+
+    $target_language = function_exists('pll_default_language')
+        ? sanitize_key((string) pll_default_language('slug'))
+        : '';
+
+    if (!in_array($target_language, $visible_languages, true)) {
+        $target_language = $visible_languages[0] ?? '';
+    }
+
+    $redirect_url = $target_language !== '' && function_exists('pll_home_url')
+        ? pll_home_url($target_language)
+        : home_url('/');
+    $request_path = (string) wp_parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    $home_path = (string) wp_parse_url($redirect_url, PHP_URL_PATH);
+
+    if (untrailingslashit($request_path) === untrailingslashit($home_path)) {
+        return;
+    }
+
+    wp_safe_redirect($redirect_url, 302);
+    exit;
+});
+
+/**
  * Restrict Polylang language switcher items inside WP menus on frontend.
  * Applies to the current header menu language switcher.
  */

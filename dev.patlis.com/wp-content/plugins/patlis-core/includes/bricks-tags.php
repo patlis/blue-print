@@ -7,6 +7,28 @@ if (!defined('ABSPATH')) exit;
  * - Renders {patlis_*} inside Text/Heading/etc
  */
 
+function patlis_get_cta_bg_image_ai_status(): string {
+  $options = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+  $attachment_id = isset($options['cta_bg_image_id']) ? (int) $options['cta_bg_image_id'] : 0;
+
+  if ($attachment_id <= 0 || !function_exists('patlis_core_get_attachment_ai_status')) {
+    return 'none';
+  }
+
+  return patlis_core_get_attachment_ai_status($attachment_id);
+}
+
+function patlis_get_center_image_ai_status(): string {
+  $options = get_option(Patlis_Core::OPTION_CENTER_POPUP, []);
+  $attachment_id = isset($options['image_id']) ? (int) $options['image_id'] : 0;
+
+  if ($attachment_id <= 0 || !function_exists('patlis_core_get_attachment_ai_status')) {
+    return 'none';
+  }
+
+  return patlis_core_get_attachment_ai_status($attachment_id);
+}
+
 /* --------------------------------------------------------------------------
  * 1) Show tags in Bricks UI (Dynamic Data list)
  * -------------------------------------------------------------------------- */
@@ -24,6 +46,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_company_name}',      'label' => 'Company name', 'patlis-core',            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => 'Logo image URL', 'patlis-core',          'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => 'CTA background image URL', 'patlis-core', 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_cta_bg_image_url_ai_status}', 'label' => 'CTA background image AI status', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_home_video_url}',    'label' => 'Home welcome video URL', 'patlis-core',   'group' => $group_basic];
   $tags[] = ['name' => '{patlis_icon_tag:leaf-solid}', 'label' => 'Icon URL by name (SVG)', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_address}',           'label' => 'Address', 'patlis-core',                 'group' => $group_basic];
@@ -68,6 +91,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_center_link_url}',      'label' => 'Link URL', 'patlis-core',                         'group' => $group_center];
   $tags[] = ['name' => '{patlis_center_video}',         'label' => 'Video URL', 'patlis-core',                        'group' => $group_center];
   $tags[] = ['name' => '{patlis_center_image_id}',      'label' => 'Image ID', 'patlis-core',                         'group' => $group_center];
+  $tags[] = ['name' => '{patlis_center_image_id_ai_status}', 'label' => 'Image AI status', 'patlis-core',                 'group' => $group_center];
   $tags[] = ['name' => '{patlis_center_image_url}',     'label' => 'Image URL', 'patlis-core',                        'group' => $group_center];
   $tags[] = ['name' => '{patlis_center_code}',          'label' => 'Code', 'patlis-core',                             'group' => $group_center];
   $tags[] = ['name' => '{patlis_center_html}',          'label' => 'Html', 'patlis-core',                             'group' => $group_center];
@@ -306,6 +330,14 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       $id  = isset($opt['cta_bg_image_id']) ? (int)$opt['cta_bg_image_id'] : 0;
       $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : '';
       return is_string($url) ? $url : '';
+    }
+
+    if ($tag === 'patlis_cta_bg_image_url_ai_status') {
+      return patlis_get_cta_bg_image_ai_status();
+    }
+
+    if ($tag === 'patlis_center_image_id_ai_status') {
+      return patlis_get_center_image_ai_status();
     }
 
     if ($tag === 'patlis_home_video_url') {
@@ -640,6 +672,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (
     $base !== 'patlis_logo_image_url' &&
     $base !== 'patlis_cta_bg_image_url' &&
+    $base !== 'patlis_cta_bg_image_url_ai_status' &&
     $base !== 'patlis_home_video_url' &&
     $base !== 'patlis_icon_tag' &&
     $base !== 'patlis_events_gallery_json' &&
@@ -648,6 +681,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $base !== 'patlis_gallery_all_images_json' &&
     $base !== 'patlis_home_gallery_json' &&
     $base !== 'patlis_center_image_id' &&
+    $base !== 'patlis_center_image_id_ai_status' &&
     $base !== 'patlis_center_image_url' &&
     $base !== 'patlis_center_title' &&
     $base !== 'patlis_center_start_date' &&
@@ -737,6 +771,10 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     return $ctaBgUrl ?: '';
   }
 
+  if ($base === 'patlis_cta_bg_image_url_ai_status') {
+    return patlis_get_cta_bg_image_ai_status();
+  }
+
   // BASIC: Home welcome video URL
   if ($base === 'patlis_home_video_url') {
     $url = function_exists('patlis_get_welcome_video_url') ? (string) patlis_get_welcome_video_url() : '';
@@ -810,6 +848,10 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if ($base === 'patlis_center_image_id') {
     if ($context === 'image') return $id > 0 ? [$id] : [];
     return $id;
+  }
+
+  if ($base === 'patlis_center_image_id_ai_status') {
+    return patlis_get_center_image_ai_status();
   }
 
   // patlis_center_image_url (derived)

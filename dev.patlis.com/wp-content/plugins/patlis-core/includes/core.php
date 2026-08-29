@@ -10,6 +10,7 @@ final class Patlis_Core {
   const OPTION_NOTIFICATION_BAR = 'patlis_notification_bar';
   const OPTION_HOMEPAGE         = 'patlis_homepage';
   const OPTION_WHITE_LABEL      = 'patlis_white_label';
+  const OPTION_AI_LABELS        = 'patlis_ai_labels';
   
     // One capability for all Patlis admin pages
   const CAP_MANAGE = 'patlis_manage';
@@ -31,11 +32,14 @@ final class Patlis_Core {
   }
 
   public static function enqueue_frontend_scripts(): void {
+    $script_path = PATLIS_CORE_PATH . 'assets/js/tracking.min.js';
+    $script_version = is_file($script_path) ? (string) filemtime($script_path) : PATLIS_CORE_VERSION;
+
     wp_enqueue_script(
         'patlis-tracking',
         PATLIS_CORE_URL . 'assets/js/tracking.min.js',
         [],
-        PATLIS_CORE_VERSION,
+      $script_version,
         ['strategy' => 'defer', 'in_footer' => true]
     );
   }

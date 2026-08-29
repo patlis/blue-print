@@ -26,6 +26,9 @@
   $vegan          = trim(bricks_render_dynamic_data('{patlis_menu_item_vegan}'));
   $image_url      = trim(bricks_render_dynamic_data('{patlis_menu_item_image_url}'));
   $image_id       = (int) trim(bricks_render_dynamic_data('{patlis_menu_item_image_id}'));
+  $image_ai_status = function_exists('patlis_core_get_attachment_ai_status')
+    ? patlis_core_get_attachment_ai_status($image_id)
+    : 'none';
 
   $show_prices    = trim(bricks_render_dynamic_data('{patlis_menu_show_prices}'));
   $show_allergies = trim(bricks_render_dynamic_data('{patlis_menu_show_allergies}'));
@@ -98,6 +101,7 @@
           data-pswp-height="<?php echo esc_attr($full_h); ?>"
           data-pswp-id="menu-images"
           data-gtm="menu-img"
+          data-patlis-ai-status="<?php echo esc_attr($image_ai_status); ?>"
         >
           <img
             src="<?php echo esc_url($thumb_url); ?>"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-22 16:14+0200\n"
-"PO-Revision-Date: 2026-08-22 16:16+0200\n"
+"POT-Creation-Date: 2026-08-29 13:10+0200\n"
+"PO-Revision-Date: 2026-08-29 13:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: de_DE <LL@li.org>\n"
 "Language: de_DE\n"
@@ -186,6 +186,147 @@ msgstr "Übersetzungen"
 msgid "Home page"
 msgstr "Start Seite"
 
+#: includes/admin/menu.php:84 includes/admin/menu.php:85
+msgid "AI Labels"
+msgstr "KI-Kennzeichnungen"
+
+#: includes/admin/pages/ai-labels.php:44
+msgid "Labelling for AI-generated content"
+msgstr "Kennzeichnung von KI-generierten Inhalten"
+
+#: includes/admin/pages/ai-labels.php:47
+#: includes/admin/pages/notification-bar.php:151
+#: includes/admin/pages/opening-times.php:127
+msgid "Saved."
+msgstr "Gespeichert."
+
+#: includes/admin/pages/ai-labels.php:57
+msgid "Enable AI labeling"
+msgstr "KI-Kennzeichnung aktivieren"
+
+#: includes/admin/pages/ai-labels.php:61
+msgid "Enable labels on frontend images"
+msgstr "Kennzeichnungen auf Bildern im Frontend anzeigen"
+
+#: includes/admin/pages/ai-labels.php:66
+msgid "Minimum image size"
+msgstr "Mindestbildgröße"
+
+#: includes/admin/pages/ai-labels.php:69
+msgid "Labels are shown only when the rendered image width exceeds this value."
+msgstr ""
+"Kennzeichnungen werden nur angezeigt, wenn die dargestellte Bildbreite "
+"diesen Wert überschreitet."
+
+#: includes/admin/pages/ai-labels.php:70
+msgid "Recommended minimum: 150px"
+msgstr "Empfohlenes Minimum: 150 px"
+
+#: includes/admin/pages/ai-labels.php:74
+msgid "AI-Assisted Label"
+msgstr "Kennzeichnung „KI-gestützt“"
+
+#: includes/admin/pages/ai-labels.php:77
+msgid "Text shown on frontend images marked as AI-assisted."
+msgstr ""
+"Text, der bei im Frontend als KI-gestützt gekennzeichneten Bildern angezeigt "
+"wird."
+
+#: includes/admin/pages/ai-labels.php:81
+msgid "AI-Generated Label"
+msgstr "Kennzeichnung „KI-generiert“"
+
+#: includes/admin/pages/ai-labels.php:84
+msgid "Text shown on frontend images marked as AI-Generated."
+msgstr ""
+"Text, der bei im Frontend als KI-generiert gekennzeichneten Bildern "
+"angezeigt wird."
+
+#: includes/admin/pages/ai-labels.php:88
+msgid "AI-Modified Label"
+msgstr "Kennzeichnung „KI-modifiziert“"
+
+#: includes/admin/pages/ai-labels.php:91
+msgid "Text shown on frontend images marked as AI-Modified."
+msgstr ""
+"Text, der bei im Frontend als KI-modifiziert gekennzeichneten Bildern "
+"angezeigt wird."
+
+#: includes/admin/pages/ai-labels.php:96 includes/admin/pages/basic.php:115
+#: includes/admin/pages/center-popup.php:297
+#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/notification-bar.php:150
+#: includes/admin/pages/opening-times.php:126
+#: includes/admin/pages/social.php:27
+msgid "Save"
+msgstr "Speichern"
+
+#: includes/admin/pages/ai-labels.php:100
+msgid "Labelling of images created or modified with AI"
+msgstr "Kennzeichnung von Bildern, die mit KI erstellt oder verändert wurden"
+
+#: includes/admin/pages/ai-labels.php:101
+msgid ""
+"As of 2 Aug. 2026, new transparency requirements apply in the EU to content "
+"that has been created or modified with AI."
+msgstr ""
+"Seit dem 2. Aug. 2026 gelten in der EU neue Transparenzanforderungen für "
+"Inhalte, die mit KI erstellt oder verändert wurden."
+
+#: includes/admin/pages/ai-labels.php:102
+msgid ""
+"The obligation particularly concerns content that could be mistakenly "
+"perceived as authentic."
+msgstr ""
+"Die Verpflichtung betrifft insbesondere Inhalte, die fälschlicherweise als "
+"authentisch wahrgenommen werden könnten."
+
+#: includes/admin/pages/ai-labels.php:108
+msgid "More information from the European Commission"
+msgstr "Weitere Informationen der Europäischen Kommission"
+
+#: includes/admin/pages/ai-labels.php:112
+msgid "The website owner is responsible for:"
+msgstr "Der Websitebetreiber ist verantwortlich für:"
+
+#: includes/admin/pages/ai-labels.php:115
+msgid "correctly labelling the images."
+msgstr "die Bilder korrekt zu kennzeichnen."
+
+#: includes/admin/pages/ai-labels.php:116
+msgid "selecting the appropriate label for each image."
+msgstr "die passende Kennzeichnung für jedes Bild auszuwählen."
+
+#: includes/admin/pages/ai-labels.php:117
+msgid "enabling or disabling the labelling feature."
+msgstr "die Kennzeichnungsfunktion zu aktivieren oder zu deaktivieren."
+
+#: includes/admin/pages/ai-labels.php:118
+msgid ""
+"the text displayed together with the label. (The options are shown above.)"
+msgstr ""
+"die zusammen mit der Kennzeichnung angezeigten Texte. (Die Optionen finden "
+"Sie oben.)"
+
+#: includes/admin/pages/ai-labels.php:121
+msgid ""
+"The website only provides the technical labelling functionality and does not "
+"constitute legal advice."
+msgstr ""
+"Die Website stellt lediglich die technische Kennzeichnungsfunktion bereit "
+"und bietet keine Rechtsberatung."
+
+#: includes/admin/pages/ai-labels.php:123
+msgid "How to label an image:"
+msgstr "So kennzeichnen Sie ein Bild:"
+
+#: includes/admin/pages/ai-labels.php:124
+msgid ""
+"The label is selected in the Media Library, as shown in the image below."
+msgstr ""
+"Die Kennzeichnung wird in der Mediathek ausgewählt, wie in der folgenden "
+"Abbildung gezeigt."
+
 #: includes/admin/pages/basic.php:91
 msgid "Basic"
 msgstr "Grundlegend"
@@ -283,14 +424,6 @@ msgstr "Thema (%s)"
 #, php-format
 msgid "Body (%s)"
 msgstr "Text (%s)"
-
-#: includes/admin/pages/basic.php:115 includes/admin/pages/center-popup.php:297
-#: includes/admin/pages/homepage.php:44
-#: includes/admin/pages/notification-bar.php:150
-#: includes/admin/pages/opening-times.php:126
-#: includes/admin/pages/social.php:27
-msgid "Save"
-msgstr "Speichern"
 
 #: includes/admin/pages/basic.php:156
 msgid "Logo image"
@@ -476,11 +609,6 @@ msgstr "Willkommensvideo auswählen"
 msgid "Use this video"
 msgstr "Nutze dieses Video"
 
-#: includes/admin/pages/notification-bar.php:151
-#: includes/admin/pages/opening-times.php:127
-msgid "Saved."
-msgstr "Gespeichert."
-
 #: includes/admin/pages/notification-bar.php:193
 msgid "Active"
 msgstr "Aktiv"
@@ -649,29 +777,29 @@ msgstr "Zeitleisten"
 msgid "Slide"
 msgstr "Slide"
 
-#: includes/events-gallery.php:153 includes/events-gallery.php:391
+#: includes/events-gallery.php:156 includes/events-gallery.php:394
 #: includes/gallery-manager.php:463
 msgid "Add Images"
 msgstr "Bilder hinzufügen"
 
-#: includes/events-gallery.php:154 includes/events-gallery.php:392
+#: includes/events-gallery.php:157 includes/events-gallery.php:395
 #: includes/gallery-manager.php:464
 msgid "Delete all"
 msgstr "Alle löschen"
 
-#: includes/events-gallery.php:156 includes/events-gallery.php:394
+#: includes/events-gallery.php:159 includes/events-gallery.php:397
 #: includes/gallery-manager.php:466
 msgid "Select multiple images, drag to reorder, then save."
 msgstr ""
 "Wählen Sie mehrere Bilder aus, ziehen Sie sie an die gewünschte Position, um "
 "die Reihenfolge zu ändern, und speichern Sie sie anschließend."
 
-#: includes/events-gallery.php:241 includes/events-gallery.php:479
+#: includes/events-gallery.php:244 includes/events-gallery.php:482
 #: includes/gallery-manager.php:553
 msgid "Select gallery images"
 msgstr "Galeriebilder auswählen"
 
-#: includes/events-gallery.php:243 includes/events-gallery.php:481
+#: includes/events-gallery.php:246 includes/events-gallery.php:484
 msgid "Use selected images"
 msgstr "Ausgewählte Bilder verwenden"
 
@@ -720,6 +848,30 @@ msgstr "Keine Galerien in Trash zu finden."
 #: includes/gallery-manager.php:445 includes/gallery-manager.php:594
 msgid "Gallery images"
 msgstr "Galeriebilder"
+
+#: includes/media-ai-status.php:7
+msgid "None"
+msgstr "Keine KI-Beteiligung"
+
+#: includes/media-ai-status.php:8
+msgid "AI-assisted"
+msgstr "KI-gestützt"
+
+#: includes/media-ai-status.php:9
+msgid "AI-Generated"
+msgstr "KI-generiert"
+
+#: includes/media-ai-status.php:10
+msgid "AI-Modified"
+msgstr "KI-modifiziert"
+
+#: includes/media-ai-status.php:92 includes/media-ai-status.php:116
+msgid "AI Status"
+msgstr "KI-Teilnahme"
+
+#: includes/media-ai-status.php:141
+msgid "All AI statuses"
+msgstr "Alle KI-Status"
 
 #~ msgid "Offers & Packages"
 #~ msgstr "Angebote und Pakete"

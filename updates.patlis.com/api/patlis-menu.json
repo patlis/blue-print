@@ -1,14 +1,14 @@
 {
   "name": "Patlis Menu",
   "slug": "patlis-menu",
-  "version": "1.1.0",
-  "download_url": "https://updates.patlis.com/downloads/patlis-menu-1.1.0.zip",
+  "version": "1.2.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-menu-1.2.0.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "6.0",
   "tested": "6.9.4",
   "requires_php": "8.1",
-  "last_updated": "2026-04-18",
+  "last_updated": "2026-08-29",
   "sections": {
     "description": "Menu module for gastro/dining sites",
     "installation": "<p>Upload and activate.</p>",

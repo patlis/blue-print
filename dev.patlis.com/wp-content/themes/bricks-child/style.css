@@ -308,3 +308,44 @@ footer a:hover svg path {
 form .message.success {
   column-span: all;
 }
+
+
+/* ai image labels */
+.ai-label-container { 
+  position: relative;
+
+}
+.ai-label {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    z-index: 2;
+    pointer-events: none;
+    color: #fff;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px 6px;
+    line-height: 1.2;
+
+  }
+  /* Responsive label sizes */
+.ai-label.small-label {
+        font-size: 10px !important;
+}
+.ai-label.medium-label {
+    font-size: 11px !important;
+}
+.ai-label.large-label {
+    font-size: 13px !important;
+}
+
+/*class fro lightbox image label */
+.pswp__item .ai-label {
+    z-index: 999999999999 !important;
+    width: 100px !important;
+    right: 0 !important;
+    left: 0 !important;
+    top: 4px !important;
+    bottom: auto !important;
+     height: 20px !important;
+}

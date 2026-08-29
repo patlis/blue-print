@@ -1,14 +1,14 @@
 {
   "name": "Patlis Accommodation",
   "slug": "patlis-accommodation",
-  "version": "1.0.1",
-  "download_url": "https://updates.patlis.com/downloads/patlis-accommodation-1.0.1.zip",
+  "version": "1.2.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-accommodation-1.2.0.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "7.0",
   "tested": "7.0.4",
   "requires_php": "8.1",
-  "last_updated": "2026-08-16",
+  "last_updated": "2026-08-29",
   "sections": {
     "description": "Accommodation management for Patlis sites.",
     "installation": "<p>Upload and activate.</p>",

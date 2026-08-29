@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-22 16:14+0200\n"
-"PO-Revision-Date: 2026-08-22 16:16+0200\n"
+"POT-Creation-Date: 2026-08-29 13:10+0200\n"
+"PO-Revision-Date: 2026-08-29 13:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: el_GR <LL@li.org>\n"
 "Language: el_GR\n"
@@ -186,6 +186,146 @@ msgstr "Μεταφράσεις"
 msgid "Home page"
 msgstr "Αρχική σελίδα"
 
+#: includes/admin/menu.php:84 includes/admin/menu.php:85
+msgid "AI Labels"
+msgstr "Σήμανση Τ.Ν."
+
+#: includes/admin/pages/ai-labels.php:44
+msgid "Labelling for AI-generated content"
+msgstr "Επισήμανση για περιεχόμενο που δημιουργείται από τεχνητή νοημοσύνη"
+
+#: includes/admin/pages/ai-labels.php:47
+#: includes/admin/pages/notification-bar.php:151
+#: includes/admin/pages/opening-times.php:127
+msgid "Saved."
+msgstr "Αποθηκεύτηκε."
+
+#: includes/admin/pages/ai-labels.php:57
+msgid "Enable AI labeling"
+msgstr "Ενεργοποίηση επισήμανσης με Τ.Ν."
+
+#: includes/admin/pages/ai-labels.php:61
+msgid "Enable labels on frontend images"
+msgstr "Ενεργοποίηση ετικετών σε εικόνες"
+
+#: includes/admin/pages/ai-labels.php:66
+msgid "Minimum image size"
+msgstr "Ελάχιστο μέγεθος εικόνας"
+
+#: includes/admin/pages/ai-labels.php:69
+msgid "Labels are shown only when the rendered image width exceeds this value."
+msgstr ""
+"Οι ετικέτες εμφανίζονται μόνο όταν το πλάτος της εικόνας υπερβαίνει αυτήν "
+"την τιμή."
+
+#: includes/admin/pages/ai-labels.php:70
+msgid "Recommended minimum: 150px"
+msgstr "Συνιστώμενο ελάχιστο μέγεθος: 150px"
+
+#: includes/admin/pages/ai-labels.php:74
+msgid "AI-Assisted Label"
+msgstr "Ετικέτα για: Με τη βοήθεια Τ.Ν."
+
+#: includes/admin/pages/ai-labels.php:77
+msgid "Text shown on frontend images marked as AI-assisted."
+msgstr ""
+"Κείμενο που εμφανίζεται σε εικόνες που έχουν επισημανθεί ως υποβοηθούμενες "
+"από T.N."
+
+#: includes/admin/pages/ai-labels.php:81
+msgid "AI-Generated Label"
+msgstr "Ετικέτα για: Δημιουργήθηκε με Τ.Ν."
+
+#: includes/admin/pages/ai-labels.php:84
+msgid "Text shown on frontend images marked as AI-Generated."
+msgstr ""
+"Κείμενο που εμφανίζεται σε εικόνες που έχουν επισημανθεί ως δημιουργημένες "
+"από T.N."
+
+#: includes/admin/pages/ai-labels.php:88
+msgid "AI-Modified Label"
+msgstr "Ετικέτα για: Τροποποιημένο με Τ.Ν."
+
+#: includes/admin/pages/ai-labels.php:91
+msgid "Text shown on frontend images marked as AI-Modified."
+msgstr ""
+"Κείμενο που εμφανίζεται σε εικόνες που έχουν επισημανθεί ως τροποποιημένες "
+"με Τ.Ν."
+
+#: includes/admin/pages/ai-labels.php:96 includes/admin/pages/basic.php:115
+#: includes/admin/pages/center-popup.php:297
+#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/notification-bar.php:150
+#: includes/admin/pages/opening-times.php:126
+#: includes/admin/pages/social.php:27
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: includes/admin/pages/ai-labels.php:100
+msgid "Labelling of images created or modified with AI"
+msgstr "Σήμανση εικόνων που δημιουργήθηκαν ή τροποποιήθηκαν με T.N."
+
+#: includes/admin/pages/ai-labels.php:101
+msgid ""
+"As of 2 Aug. 2026, new transparency requirements apply in the EU to content "
+"that has been created or modified with AI."
+msgstr ""
+"Από τις 2 Αυγ. 2026 ισχύουν στην E.E. νέες υποχρεώσεις διαφάνειας για "
+"περιεχόμενο που έχει δημιουργηθεί ή τροποποιηθεί με T.N."
+
+#: includes/admin/pages/ai-labels.php:102
+msgid ""
+"The obligation particularly concerns content that could be mistakenly "
+"perceived as authentic."
+msgstr ""
+"Η υποχρέωση αφορά ιδίως περιεχόμενο που μπορεί να εκληφθεί λανθασμένα ως "
+"αυθεντικό."
+
+#: includes/admin/pages/ai-labels.php:108
+msgid "More information from the European Commission"
+msgstr "Περισσότερες πληροφορίες από την Ευρωπαϊκή Επιτροπή"
+
+#: includes/admin/pages/ai-labels.php:112
+msgid "The website owner is responsible for:"
+msgstr "Ο ιδιοκτήτης της ιστοσελίδας είναι υπεύθυνος για:"
+
+#: includes/admin/pages/ai-labels.php:115
+msgid "correctly labelling the images."
+msgstr "τη σωστή επισήμανση των εικόνων."
+
+#: includes/admin/pages/ai-labels.php:116
+msgid "selecting the appropriate label for each image."
+msgstr "την επιλογή της κατάλληλης σήμανσης για κάθε εικόνα."
+
+#: includes/admin/pages/ai-labels.php:117
+msgid "enabling or disabling the labelling feature."
+msgstr "την ενεργοποίηση ή απενεργοποίηση της λειτουργίας."
+
+#: includes/admin/pages/ai-labels.php:118
+msgid ""
+"the text displayed together with the label. (The options are shown above.)"
+msgstr ""
+"τα κείμενα που εμφανίζονται μαζί με τη σήμανση. (Η επιλογή είναι πιο πάνω)"
+
+#: includes/admin/pages/ai-labels.php:121
+msgid ""
+"The website only provides the technical labelling functionality and does not "
+"constitute legal advice."
+msgstr ""
+"Η ιστοσελίδα παρέχει μόνο την δυνατότητα σήμανσης και δεν αποτελεί νομική "
+"συμβουλή."
+
+#: includes/admin/pages/ai-labels.php:123
+msgid "How to label an image:"
+msgstr "Πως επισημάνετε μια εικόνα:"
+
+#: includes/admin/pages/ai-labels.php:124
+msgid ""
+"The label is selected in the Media Library, as shown in the image below."
+msgstr ""
+"Η επιλογή της σήμανσης γίνεται στη Βιβλιοθήκη Πολυμέσων, όπως φαίνεται στην "
+"παρακάτω εικόνα"
+
 #: includes/admin/pages/basic.php:91
 msgid "Basic"
 msgstr "Βασικό"
@@ -283,14 +423,6 @@ msgstr "Θέμα (%s)"
 #, php-format
 msgid "Body (%s)"
 msgstr "Σώμα (%s)"
-
-#: includes/admin/pages/basic.php:115 includes/admin/pages/center-popup.php:297
-#: includes/admin/pages/homepage.php:44
-#: includes/admin/pages/notification-bar.php:150
-#: includes/admin/pages/opening-times.php:126
-#: includes/admin/pages/social.php:27
-msgid "Save"
-msgstr "Αποθήκευση"
 
 #: includes/admin/pages/basic.php:156
 msgid "Logo image"
@@ -475,11 +607,6 @@ msgstr "Επιλέξτε βίντεο καλωσορίσματος"
 msgid "Use this video"
 msgstr "Χρησιμοποιήστε αυτό το βίντεο"
 
-#: includes/admin/pages/notification-bar.php:151
-#: includes/admin/pages/opening-times.php:127
-msgid "Saved."
-msgstr "Αποθηκεύτηκε."
-
 #: includes/admin/pages/notification-bar.php:193
 msgid "Active"
 msgstr "Ενεργό"
@@ -648,29 +775,29 @@ msgstr "Χρονολόγια"
 msgid "Slide"
 msgstr "Διαφάνεια"
 
-#: includes/events-gallery.php:153 includes/events-gallery.php:391
+#: includes/events-gallery.php:156 includes/events-gallery.php:394
 #: includes/gallery-manager.php:463
 msgid "Add Images"
 msgstr "Προσθήκη εικόνων"
 
-#: includes/events-gallery.php:154 includes/events-gallery.php:392
+#: includes/events-gallery.php:157 includes/events-gallery.php:395
 #: includes/gallery-manager.php:464
 msgid "Delete all"
 msgstr "Διαγραφή όλων"
 
-#: includes/events-gallery.php:156 includes/events-gallery.php:394
+#: includes/events-gallery.php:159 includes/events-gallery.php:397
 #: includes/gallery-manager.php:466
 msgid "Select multiple images, drag to reorder, then save."
 msgstr ""
 "Επιλέξτε πολλές εικόνες, σύρετε για αναδιάταξη και, στη συνέχεια, "
 "αποθηκεύστε."
 
-#: includes/events-gallery.php:241 includes/events-gallery.php:479
+#: includes/events-gallery.php:244 includes/events-gallery.php:482
 #: includes/gallery-manager.php:553
 msgid "Select gallery images"
 msgstr "Επιλογή εικόνων γκαλερι"
 
-#: includes/events-gallery.php:243 includes/events-gallery.php:481
+#: includes/events-gallery.php:246 includes/events-gallery.php:484
 msgid "Use selected images"
 msgstr "Χρήση επιλεγμένων εικόνων"
 
@@ -719,6 +846,30 @@ msgstr "Δεν βρέθηκαν γκαλερί στα σκουπίδια."
 #: includes/gallery-manager.php:445 includes/gallery-manager.php:594
 msgid "Gallery images"
 msgstr "Εικόνες Γκαλερί"
+
+#: includes/media-ai-status.php:7
+msgid "None"
+msgstr "Καμιά συμμετοχή ΤΝ"
+
+#: includes/media-ai-status.php:8
+msgid "AI-assisted"
+msgstr "Με τη βοήθεια ΤΝ"
+
+#: includes/media-ai-status.php:9
+msgid "AI-Generated"
+msgstr "Δημιουργήθηκε με ΤΝ"
+
+#: includes/media-ai-status.php:10
+msgid "AI-Modified"
+msgstr "Τροποποιημένο με ΤΝ"
+
+#: includes/media-ai-status.php:92 includes/media-ai-status.php:116
+msgid "AI Status"
+msgstr "Συμμετοχή ΤΝ"
+
+#: includes/media-ai-status.php:141
+msgid "All AI statuses"
+msgstr "Όλες οι καταστάσεις ΤΝ"
 
 #~ msgid "Offers & Packages"
 #~ msgstr "Προσφορές και πακέτα"

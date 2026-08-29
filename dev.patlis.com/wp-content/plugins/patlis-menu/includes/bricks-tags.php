@@ -1,6 +1,18 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
+function patlis_menu_pdf_attachment_url(int $post_id): string
+{
+    $attachment_id = (int) get_post_meta($post_id, 'pmpdf_file_id', true);
+    if ($attachment_id <= 0) {
+        return '';
+    }
+
+    $url = wp_get_attachment_url($attachment_id);
+
+    return is_string($url) ? trim($url) : '';
+}
+
 /**
  * Bricks Dynamic Tags for Patlis Menu (FINAL CLEAN VERSION)
  */
@@ -23,6 +35,7 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
     $tags[] = ['name' => '{patlis_menu_cat_show}',        'label' => 'Category: Show',         'group' => $gCat];
     $tags[] = ['name' => '{patlis_menu_cat_image_id}',    'label' => 'Category: Image ID',     'group' => $gCat];
     $tags[] = ['name' => '{patlis_menu_cat_image_url}',   'label' => 'Category: Image URL',    'group' => $gCat];
+    $tags[] = ['name' => '{patlis_menu_cat_image_url_as_status}', 'label' => 'Category: Image AI status', 'group' => $gCat];
 
     for ($d = 0; $d <= 6; $d++) {
         $tags[] = ['name' => '{patlis_menu_cat_day' . $d . 'a}', 'label' => 'Category: day' . $d . ' from', 'group' => $gCat];
@@ -209,10 +222,18 @@ function patlis_menu_bricks_get_value(string $tag, $post = null, $context = null
             return $default_pdf ? trim((string) get_the_title($default_pdf->ID)) : '';
         }
 
-        $url = trim(patlis_menu_post_meta($p->ID, 'pmpdf_file_url'));
+        $url = patlis_menu_pdf_attachment_url($p->ID);
+        if ($url === '') {
+            $url = trim(patlis_menu_post_meta($p->ID, 'pmpdf_file_url'));
+        }
         if ($url !== '') return $url;
 
-        return $default_pdf ? trim(patlis_menu_post_meta($default_pdf->ID, 'pmpdf_file_url')) : '';
+        if (!$default_pdf) return '';
+
+        $default_url = patlis_menu_pdf_attachment_url($default_pdf->ID);
+        if ($default_url !== '') return $default_url;
+
+        return trim(patlis_menu_post_meta($default_pdf->ID, 'pmpdf_file_url'));
     }
 
 
@@ -242,6 +263,12 @@ function patlis_menu_bricks_get_value(string $tag, $post = null, $context = null
             if ($id <= 0) return '';
             $url = wp_get_attachment_image_url($id, 'full');
             return $url ? (string) $url : '';
+        }
+
+        if ($tag === 'patlis_menu_cat_image_url_as_status') {
+            $id = patlis_menu_term_image_id($tid);
+            if ($id <= 0 || !function_exists('patlis_core_get_attachment_ai_status')) return 'none';
+            return patlis_core_get_attachment_ai_status($id);
         }
 
         if (preg_match('/^patlis_menu_cat_day([0-6])(a|b)$/', $tag, $mm)) {

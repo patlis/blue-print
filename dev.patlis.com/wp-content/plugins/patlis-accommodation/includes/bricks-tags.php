@@ -857,6 +857,9 @@ function patlis_acc_get_room_gallery_items(int $post_id): array
             'url' => $full_url,
             'width' => (int) ($full[1] ?? 0),
             'height' => (int) ($full[2] ?? 0),
+            'ai_status' => function_exists('patlis_core_get_attachment_ai_status')
+                ? patlis_core_get_attachment_ai_status((int) $id)
+                : 'none',
             // Flat size keys for Bricks query_array access: {query_array @key:'thumbnail'}
             'thumbnail' => $thumb_url,
             'medium' => $medium_url,

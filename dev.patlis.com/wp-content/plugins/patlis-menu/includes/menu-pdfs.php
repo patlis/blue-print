@@ -133,7 +133,9 @@ function patlis_menu_pdfs_save(int $post_id, WP_Post $post): void
         delete_post_meta($post_id, 'pmpdf_file_id');
     }
 
-    if ($file_url !== '') {
+    if ($file_id > 0) {
+        delete_post_meta($post_id, 'pmpdf_file_url');
+    } elseif ($file_url !== '') {
         update_post_meta($post_id, 'pmpdf_file_url', $file_url);
     } else {
         delete_post_meta($post_id, 'pmpdf_file_url');

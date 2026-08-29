@@ -1,14 +1,14 @@
 {
   "name": "Patlis Core",
   "slug": "patlis-core",
-  "version": "2.0.0",
-  "download_url": "https://updates.patlis.com/downloads/patlis-core-2.0.0.zip",
+  "version": "2.1.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-core-2.1.0.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "6.0",
   "tested": "7.1",
   "requires_php": "8.1",
-  "last_updated": "2026-08-16",
+  "last_updated": "2026-08-29",
   "sections": {
     "description": "Core settings & helpers for Patlis sites.",
     "installation": "<p>Upload and activate.</p>",

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Patlis Core 0.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-22 16:14+0200\n"
+"POT-Creation-Date: 2026-08-29 13:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,6 +188,121 @@ msgstr ""
 msgid "Home page"
 msgstr ""
 
+#: includes/admin/menu.php:84 includes/admin/menu.php:85
+msgid "AI Labels"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:44
+msgid "Labelling for AI-generated content"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:47
+#: includes/admin/pages/notification-bar.php:151
+#: includes/admin/pages/opening-times.php:127
+msgid "Saved."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:57
+msgid "Enable AI labeling"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:61
+msgid "Enable labels on frontend images"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:66
+msgid "Minimum image size"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:69
+msgid "Labels are shown only when the rendered image width exceeds this value."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:70
+msgid "Recommended minimum: 150px"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:74
+msgid "AI-Assisted Label"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:77
+msgid "Text shown on frontend images marked as AI-assisted."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:81
+msgid "AI-Generated Label"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:84
+msgid "Text shown on frontend images marked as AI-Generated."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:88
+msgid "AI-Modified Label"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:91
+msgid "Text shown on frontend images marked as AI-Modified."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:96 includes/admin/pages/basic.php:115
+#: includes/admin/pages/center-popup.php:297
+#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/notification-bar.php:150
+#: includes/admin/pages/opening-times.php:126
+#: includes/admin/pages/social.php:27
+msgid "Save"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:100
+msgid "Labelling of images created or modified with AI"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:101
+msgid "As of 2 Aug. 2026, new transparency requirements apply in the EU to content that has been created or modified with AI."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:102
+msgid "The obligation particularly concerns content that could be mistakenly perceived as authentic."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:108
+msgid "More information from the European Commission"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:112
+msgid "The website owner is responsible for:"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:115
+msgid "correctly labelling the images."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:116
+msgid "selecting the appropriate label for each image."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:117
+msgid "enabling or disabling the labelling feature."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:118
+msgid "the text displayed together with the label. (The options are shown above.)"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:121
+msgid "The website only provides the technical labelling functionality and does not constitute legal advice."
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:123
+msgid "How to label an image:"
+msgstr ""
+
+#: includes/admin/pages/ai-labels.php:124
+msgid "The label is selected in the Media Library, as shown in the image below."
+msgstr ""
+
 #: includes/admin/pages/basic.php:91
 msgid "Basic"
 msgstr ""
@@ -284,14 +399,6 @@ msgstr ""
 #: includes/admin/pages/basic.php:114
 #, php-format
 msgid "Body (%s)"
-msgstr ""
-
-#: includes/admin/pages/basic.php:115 includes/admin/pages/center-popup.php:297
-#: includes/admin/pages/homepage.php:44
-#: includes/admin/pages/notification-bar.php:150
-#: includes/admin/pages/opening-times.php:126
-#: includes/admin/pages/social.php:27
-msgid "Save"
 msgstr ""
 
 #: includes/admin/pages/basic.php:156
@@ -466,11 +573,6 @@ msgstr ""
 msgid "Use this video"
 msgstr ""
 
-#: includes/admin/pages/notification-bar.php:151
-#: includes/admin/pages/opening-times.php:127
-msgid "Saved."
-msgstr ""
-
 #: includes/admin/pages/notification-bar.php:193
 msgid "Active"
 msgstr ""
@@ -639,27 +741,27 @@ msgstr ""
 msgid "Slide"
 msgstr ""
 
-#: includes/events-gallery.php:153 includes/events-gallery.php:391
+#: includes/events-gallery.php:156 includes/events-gallery.php:394
 #: includes/gallery-manager.php:463
 msgid "Add Images"
 msgstr ""
 
-#: includes/events-gallery.php:154 includes/events-gallery.php:392
+#: includes/events-gallery.php:157 includes/events-gallery.php:395
 #: includes/gallery-manager.php:464
 msgid "Delete all"
 msgstr ""
 
-#: includes/events-gallery.php:156 includes/events-gallery.php:394
+#: includes/events-gallery.php:159 includes/events-gallery.php:397
 #: includes/gallery-manager.php:466
 msgid "Select multiple images, drag to reorder, then save."
 msgstr ""
 
-#: includes/events-gallery.php:241 includes/events-gallery.php:479
+#: includes/events-gallery.php:244 includes/events-gallery.php:482
 #: includes/gallery-manager.php:553
 msgid "Select gallery images"
 msgstr ""
 
-#: includes/events-gallery.php:243 includes/events-gallery.php:481
+#: includes/events-gallery.php:246 includes/events-gallery.php:484
 msgid "Use selected images"
 msgstr ""
 
@@ -707,4 +809,28 @@ msgstr ""
 
 #: includes/gallery-manager.php:445 includes/gallery-manager.php:594
 msgid "Gallery images"
+msgstr ""
+
+#: includes/media-ai-status.php:7
+msgid "None"
+msgstr ""
+
+#: includes/media-ai-status.php:8
+msgid "AI-assisted"
+msgstr ""
+
+#: includes/media-ai-status.php:9
+msgid "AI-Generated"
+msgstr ""
+
+#: includes/media-ai-status.php:10
+msgid "AI-Modified"
+msgstr ""
+
+#: includes/media-ai-status.php:92 includes/media-ai-status.php:116
+msgid "AI Status"
+msgstr ""
+
+#: includes/media-ai-status.php:141
+msgid "All AI statuses"
 msgstr ""
