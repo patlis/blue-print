@@ -45,6 +45,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   // BASIC
   $tags[] = ['name' => '{patlis_company_name}',      'label' => 'Company name', 'patlis-core',            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => 'Logo image URL', 'patlis-core',          'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_cta_bg_image_id}',   'label' => 'CTA background image ID', 'patlis-core',  'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => 'CTA background image URL', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cta_bg_image_url_ai_status}', 'label' => 'CTA background image AI status', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_home_video_url}',    'label' => 'Home welcome video URL', 'patlis-core',   'group' => $group_basic];
@@ -323,6 +324,12 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       $id = (int) Patlis_Core::get_basic('logo_image_id', 0);
       $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : '';
       return is_string($url) ? $url : '';
+    }
+
+    if ($tag === 'patlis_cta_bg_image_id') {
+      $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+      $id  = isset($opt['cta_bg_image_id']) ? (int)$opt['cta_bg_image_id'] : 0;
+      return $id > 0 ? (string)$id : '';
     }
 
     if ($tag === 'patlis_cta_bg_image_url') {
@@ -671,6 +678,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   // Only handle these tags here
   if (
     $base !== 'patlis_logo_image_url' &&
+    $base !== 'patlis_cta_bg_image_id' &&
     $base !== 'patlis_cta_bg_image_url' &&
     $base !== 'patlis_cta_bg_image_url_ai_status' &&
     $base !== 'patlis_home_video_url' &&
@@ -760,6 +768,14 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $logoUrl = $logoId > 0 ? wp_get_attachment_image_url($logoId, 'full') : '';
     if ($context === 'image') return $logoUrl ? [$logoUrl] : [];
     return $logoUrl ?: '';
+  }
+
+  // BASIC: CTA background image ID
+  if ($base === 'patlis_cta_bg_image_id') {
+    $hopt    = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+    $ctaBgId = isset($hopt['cta_bg_image_id']) ? (int)$hopt['cta_bg_image_id'] : 0;
+    if ($context === 'image') return $ctaBgId > 0 ? [$ctaBgId] : [];
+    return $ctaBgId > 0 ? (string)$ctaBgId : '';
   }
 
   // BASIC: CTA background image URL

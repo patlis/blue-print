@@ -1,0 +1,25 @@
+UPDATE xxxxxxx_patlis_com.wp_f4bb67_postmeta AS client_m
+
+JOIN xxxxxxx_patlis_com.wp_f4bb67_posts AS client_p
+    ON client_p.ID = client_m.post_id
+    AND client_p.post_type = 'bricks_template'
+
+JOIN dev_patli_arnn8a.wp_f4bb67_posts AS dev_p
+    ON dev_p.post_type = 'bricks_template'
+    AND dev_p.post_name = client_p.post_name
+
+JOIN dev_patli_arnn8a.wp_f4bb67_postmeta AS dev_m
+    ON dev_m.post_id = dev_p.ID
+    AND dev_m.meta_key = '_bricks_page_content_2'
+
+SET client_m.meta_value = dev_m.meta_value
+
+WHERE client_m.meta_key = '_bricks_page_content_2'
+  AND client_m.meta_value <> dev_m.meta_value;
+
+  ----------------------------------------
+  replace xxxxxxx me onoma db client
+
+  0203_patlis_com
+  0210_patlis_com
+  0211_patlis_com

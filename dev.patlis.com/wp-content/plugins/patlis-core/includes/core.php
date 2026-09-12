@@ -25,6 +25,7 @@ final class Patlis_Core {
     
     add_action('admin_menu', ['Patlis_Admin_Menu', 'register']);
     add_shortcode('patlis', [__CLASS__, 'shortcode_patlis']);
+    add_shortcode('patlis_template', [__CLASS__, 'shortcode_patlis_template']);
     add_filter('body_class', 'patlis_filter_body_classes', 20);
 
     add_action('wp_enqueue_scripts', [__CLASS__, 'enqueue_frontend_scripts']);
@@ -99,5 +100,24 @@ final class Patlis_Core {
     }
 
     return '';
+  }
+
+  /**
+   * Shortcode: [patlis_template slug="top-rooms"]
+   */
+  public static function shortcode_patlis_template($atts): string {
+    $atts = shortcode_atts([
+      'slug' => '',
+    ], $atts, 'patlis_template');
+
+    $slug = is_string($atts['slug']) ? sanitize_title($atts['slug']) : '';
+
+    if ($slug === '' || !shortcode_exists('bricks_template')) return '';
+
+    $template = get_page_by_path($slug, OBJECT, 'bricks_template');
+
+    if (!$template instanceof WP_Post || $template->post_status !== 'publish') return '';
+
+    return do_shortcode(sprintf('[bricks_template id="%d"]', $template->ID));
   }
 }

@@ -93,13 +93,40 @@ add_filter('bricks/dynamic_tags_list', function ($tags) {
 /* ============================================================
  * 2) Render tag values
  * ============================================================ */
-add_filter('bricks/dynamic_data/render_tag', function ($value, $tag, $post = null, $context = null) {
-    if (!is_string($tag)) return $value;
-    $tag = trim($tag, '{}');
-    if (strpos(strtolower($tag), 'patlis_menu_') !== 0) return $value;
+add_filter('bricks/dynamic_data/render_tag', function ($tag, $post, $context = 'text') {
 
-    return patlis_menu_bricks_get_value(strtolower($tag), $post, $context);
-}, 20, 4);
+    if (!is_string($tag)) {
+        return $tag;
+    }
+
+    $clean_tag = strtolower(trim($tag, '{}'));
+
+    if (strpos($clean_tag, 'patlis_menu_') !== 0) {
+        return $tag;
+    }
+
+    $resolved = patlis_menu_bricks_get_value(
+        $clean_tag,
+        $post,
+        $context
+    );
+
+    // Image element: return attachment ID as array.
+    if (
+        $context === 'image' &&
+        in_array($clean_tag, [
+            'patlis_menu_cat_image_id',
+            'patlis_menu_item_image_id',
+        ], true)
+    ) {
+        $id = absint($resolved);
+
+        return $id > 0 ? [$id] : [];
+    }
+
+    return $resolved;
+
+}, 20, 3);
 
 add_filter('bricks/dynamic_data/render_content', function ($content, $post, $context = 'text') {
     return patlis_menu_bricks_replace_in_string($content, $post, $context);
