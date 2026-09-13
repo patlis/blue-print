@@ -736,11 +736,10 @@ if (!function_exists('patlis_video_html')) {
 
         $embed = patlis_video_embed_url($url);
 
-        return '<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;" class="brxe-video">'
-            . '<iframe src="' . esc_attr($embed) . '" '
-            . 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" '
-            . 'allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin">'
-            . '</iframe>'
+        return '<div style="display:none;position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;" class="brxe-video">'
+            . '<div class="patlis-cookie-iframe-source" data-cookie-src="' . esc_attr($embed) . '" '
+            . 'style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">'
+            . '</div>'
             . '</div>';
     }
 }

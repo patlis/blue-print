@@ -82,6 +82,8 @@ function updateConsentDataLayer() {
 document.addEventListener("DOMContentLoaded", function() {
     if ($loadBasicModal) { showBasicModal();}
 
+    loadConsentVideoIframes();
+
     document.querySelectorAll('a[href="#cookies"]').forEach(function(element) {
         element.addEventListener('click', function(event) {
             userClick = true;
@@ -90,6 +92,27 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+function loadConsentVideoIframes() {
+    if (marketingCookies !== true || statisticsCookies !== true) return;
+
+    document.querySelectorAll('.patlis-cookie-iframe-source[data-cookie-src]').forEach(function(source) {
+        const iframe = document.createElement('iframe');
+        iframe.src = source.dataset.cookieSrc;
+        iframe.style.cssText = source.style.cssText;
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.setAttribute('allowfullscreen', '');
+        source.replaceWith(iframe);
+
+        const videoWrapper = iframe.closest('.brxe-video');
+        if (videoWrapper) videoWrapper.style.display = 'block';
+
+        document.querySelectorAll('.patlis-consent-placeholder').forEach(function(placeholder) {
+            placeholder.style.setProperty('display', 'none', 'important');
+        });
+    });
+}
 
 function openCookieSettings(reload){
     userClick = true;

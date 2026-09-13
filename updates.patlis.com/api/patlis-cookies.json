@@ -1,8 +1,8 @@
 {
   "name": "Patlis Cookies",
   "slug": "patlis-cookies",
-  "version": "0.1.0",
-  "download_url": "https://updates.patlis.com/downloads/patlis-cookies-0.1.0.zip",
+  "version": "1.0.0",
+  "download_url": "https://updates.patlis.com/downloads/patlis-cookies-1.0.0.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "6.0",

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Patlis Cookies
  * Description: Cookie banner for Patlis sites.
- * Version: 0.1.0
+ * Version: 1.0.0
  * Author: Patlis Ioannis
  * Text Domain: patlis-cookies
  * Update URI: https://updates.patlis.com/patlis-cookies/
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_COOKIES_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_COOKIES_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_COOKIES_VERSION', '0.1.0');
+define('PATLIS_COOKIES_VERSION', '1.0.0');
 
 require_once PATLIS_COOKIES_PATH . 'includes/admin/settings.php';
 
