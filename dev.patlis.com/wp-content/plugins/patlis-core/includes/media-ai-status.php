@@ -129,6 +129,61 @@ add_action('manage_media_custom_column', function (string $column, int $attachme
     echo esc_html($options[$status]);
 }, 10, 2);
 
+add_filter('bulk_actions-upload', function (array $actions): array {
+    foreach (patlis_core_get_ai_status_options() as $status => $label) {
+        $actions['patlis_ai_status_' . $status] = sprintf(
+            '%s: %s',
+            __('AI Status', 'patlis-core'),
+            $label
+        );
+    }
+
+    return $actions;
+});
+
+add_filter('handle_bulk_actions-upload', function (string $redirect_url, string $action, array $attachment_ids): string {
+    $prefix = 'patlis_ai_status_';
+    if (strpos($action, $prefix) !== 0) {
+        return $redirect_url;
+    }
+
+    $status = sanitize_key(substr($action, strlen($prefix)));
+    if (!array_key_exists($status, patlis_core_get_ai_status_options())) {
+        return $redirect_url;
+    }
+
+    $updated = 0;
+    foreach ($attachment_ids as $attachment_id) {
+        $attachment_id = (int) $attachment_id;
+        if (
+            $attachment_id <= 0 ||
+            !current_user_can('edit_post', $attachment_id) ||
+            !wp_attachment_is_image($attachment_id)
+        ) {
+            continue;
+        }
+
+        update_post_meta($attachment_id, 'ai_status', $status);
+        $updated++;
+    }
+
+    return add_query_arg('patlis_ai_status_updated', $updated, $redirect_url);
+}, 10, 3);
+
+add_action('admin_notices', function (): void {
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'upload' || !isset($_GET['patlis_ai_status_updated'])) {
+        return;
+    }
+
+    $updated = max(0, (int) $_GET['patlis_ai_status_updated']);
+    ?>
+    <div class="notice notice-success is-dismissible">
+        <p><?php echo esc_html(sprintf(_n('%d image AI status updated.', '%d image AI statuses updated.', $updated, 'patlis-core'), $updated)); ?></p>
+    </div>
+    <?php
+});
+
 add_action('restrict_manage_posts', function (string $post_type): void {
     if ($post_type !== 'attachment') {
         return;
