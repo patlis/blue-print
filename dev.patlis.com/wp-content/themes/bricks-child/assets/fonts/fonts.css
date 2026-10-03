@@ -1,31 +1,163 @@
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("./Roboto-Regular.woff2") format("woff2");
-}
+/* 1: Roboto */
+    @font-face {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./Roboto-Regular.woff2") format("woff2");
+    }
 
-@font-face {
-  font-family: "Roboto";
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("./Roboto-Italic.woff2") format("woff2");
-}
+    @font-face {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("./Roboto-Medium.woff2") format("woff2");
+    }
 
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("./Roboto-Medium.woff2") format("woff2");
-}
+    @font-face {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("./Roboto-Bold.woff2") format("woff2");
+    }
 
-@font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("./Roboto-Bold.woff2") format("woff2");
-}
+    @font-face {
+      font-family: "Roboto";
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./Roboto-Italic.woff2") format("woff2");
+    }
+
+/* 2: Inter */
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./Inter-Regular.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("./Inter-Medium.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("./Inter-Bold.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Inter";
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./Inter-Italic.woff2") format("woff2");
+    }
+
+/* 3: Open Sans */
+    @font-face {
+      font-family: "Open Sans";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./OpenSans-Regular.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Open Sans";
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./OpenSans-Italic.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Open Sans";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("./OpenSans-Medium.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Open Sans";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("./OpenSans-Bold.woff2") format("woff2");
+    }
+
+/* 4: Lato */
+    @font-face {
+      font-family: "Lato";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./Lato-Regular.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Lato";
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./Lato-Italic.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Lato";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("./Lato-Medium.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Lato";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("./Lato-Bold.woff2") format("woff2");
+    }
+
+/* 5:  Noto Serif */
+    @font-face {
+      font-family: "Noto Serif";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./NotoSerif-Regular.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Noto Serif";
+      font-style: italic;
+      font-weight: 400;
+      font-display: swap;
+      src: url("./NotoSerif-Italic.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Noto Serif";
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url("./NotoSerif-Medium.woff2") format("woff2");
+    }
+
+    @font-face {
+      font-family: "Noto Serif";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url("./NotoSerif-Bold.woff2") format("woff2");
+    }

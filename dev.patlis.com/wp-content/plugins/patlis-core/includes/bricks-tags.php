@@ -41,6 +41,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $group_events = 'Patlis – Events';
   $group_services = 'Patlis – Services';
   $group_gallery = 'Patlis – Gallery';
+  $group_design = 'Patlis – Design options';
 
   // BASIC
   $tags[] = ['name' => '{patlis_company_name}',      'label' => 'Company name', 'patlis-core',            'group' => $group_basic];
@@ -66,12 +67,9 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_contact_form_email_subject}',   'label' => 'Contact form: Email subject', 'patlis-core',   'group' => $group_basic];
   $tags[] = ['name' => '{patlis_reviews_featured_count}',       'label' => 'Reviews: Featured count', 'patlis-core',       'group' => $group_basic];
 
-  // HOME PAGE sections order
-  $hp_sections = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
-  $hp_labels   = ['Welcome','Dishes','Rooms','Offers','Experience','Services','Events','Gallery','Reviews','CTA'];
-  foreach ($hp_sections as $i => $s) {
-    $tags[] = ['name' => '{patlis_section_order_' . $s . '}', 'label' => 'Home section order: ' . $hp_labels[$i], 'group' => $group_basic];
-  }
+  // HOME PAGE section controls
+  $tags[] = ['name' => '{patlis_section_order:section}', 'label' => 'Home section order', 'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_section_visible:section}', 'label' => 'Home section visible (1/0)', 'group' => $group_basic];
 
   // SOCIAL
   $tags[] = ['name' => '{patlis_facebook}',        'label' => 'Facebook URL',        'group' => $group_social];
@@ -105,6 +103,8 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
 
   $tags[] = ['name' => '{patlis_events_gallery_json}', 'label' => 'Events: Gallery JSON (ids + urls + meta)', 'group' => $group_events];
   $tags[] = ['name' => '{patlis_services_gallery_json}', 'label' => 'Services: Gallery JSON (ids + urls + meta)', 'patlis-core', 'group' => $group_services];
+  $tags[] = ['name' => '{patlis_slogan}', 'label' => 'Company slogan', 'group' => $group_design];
+  $tags[] = ['name' => '{patlis_design:top_services:background_image}', 'label' => 'Design option: Top Services background image', 'group' => $group_design];
   $tags[] = ['name' => '{patlis_gallery_json}', 'label' => 'Gallery: Images JSON (ids + urls + meta)', 'patlis-core', 'group' => $group_gallery];
   $tags[] = ['name' => '{patlis_gallery_all_images_json:gallery}', 'label' => 'Gallery: All images JSON (except Home)', 'patlis-core', 'group' => $group_gallery];
   $tags[] = ['name' => '{patlis_gallery_all_images_json:home}', 'label' => 'Gallery: Home images JSON', 'patlis-core', 'group' => $group_gallery];
@@ -218,15 +218,27 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     'patlis_bar_end_date'   => 'end_date',
   ];
 
-  return preg_replace_callback('/{(patlis_[a-z0-9_]+(?::[a-z0-9_-]+)?)}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
+  return preg_replace_callback('/{(patlis_[a-z0-9_]+(?::[a-z0-9_-]+){0,2})}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
 
     $tag = $m[1];
-    $tag_parts = explode(':', $tag, 2);
+    $tag_parts = explode(':', $tag, 3);
     $tag_base = $tag_parts[0];
     $tag_arg = isset($tag_parts[1]) ? sanitize_key($tag_parts[1]) : '';
 
     if (!class_exists('Patlis_Core')) {
       return $m[0];
+    }
+
+    if ($tag === 'patlis_slogan') {
+      return Patlis_Core::get_basic_text('slogan');
+    }
+
+    if ($tag_base === 'patlis_section_visible') {
+      return Patlis_Core::is_home_section_visible($tag_arg) ? '1' : '0';
+    }
+
+    if ($tag_base === 'patlis_section_order') {
+      return (string) Patlis_Core::get_home_section_order($tag_arg);
     }
 
     if ($tag === 'patlis_events_gallery_json') {
@@ -271,6 +283,20 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       }
 
       return wp_json_encode(patlis_core_get_services_gallery_items((int) $post_obj->ID));
+    }
+
+    if ($tag_base === 'patlis_design') {
+      $field = isset($tag_parts[2]) ? sanitize_key($tag_parts[2]) : '';
+      $design_field = Patlis_Core::get_design_field($tag_arg, $field);
+      if (!is_array($design_field)) return '';
+
+      if ($design_field['type'] === 'image') {
+        $image_id = (int) $design_field['value'];
+        $image_url = $image_id > 0 ? wp_get_attachment_image_url($image_id, 'full') : '';
+        return $image_url ?: '';
+      }
+
+      return is_scalar($design_field['value']) ? (string) $design_field['value'] : '';
     }
 
     if ($tag === 'patlis_gallery_json') {
@@ -371,17 +397,6 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
         ]],
       ]);
       return (string) count($q->posts);
-    }
-
-    // HOME PAGE section order tags
-    if (strpos($tag, 'patlis_section_order_') === 0) {
-      $slug = substr($tag, strlen('patlis_section_order_'));
-      $allowed = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
-      if (!in_array($slug, $allowed, true)) return '';
-      $opt   = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-      $order = isset($opt['sections_order']) && is_array($opt['sections_order']) ? $opt['sections_order'] : $allowed;
-      $pos   = array_search($slug, $order, true);
-      return $pos !== false ? (string)($pos + 1) : (string)(array_search($slug, $allowed, true) + 1);
     }
 
     if (isset($basic_map[$tag])) {
@@ -671,7 +686,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (!is_string($tag)) return $tag;
 
   $clean = str_replace(['{', '}'], '', $tag);
-  $parts = explode(':', $clean, 2);
+  $parts = explode(':', $clean, 3);
   $base  = $parts[0];
   $arg   = isset($parts[1]) ? sanitize_key($parts[1]) : '';
 
@@ -685,6 +700,10 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $base !== 'patlis_icon_tag' &&
     $base !== 'patlis_events_gallery_json' &&
     $base !== 'patlis_services_gallery_json' &&
+    $base !== 'patlis_slogan' &&
+    $base !== 'patlis_section_order' &&
+    $base !== 'patlis_section_visible' &&
+    $base !== 'patlis_design' &&
     $base !== 'patlis_gallery_json' &&
     $base !== 'patlis_gallery_all_images_json' &&
     $base !== 'patlis_home_gallery_json' &&
@@ -696,37 +715,23 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $base !== 'patlis_center_end_date' &&
     $base !== 'patlis_bar_enabled' &&
     $base !== 'patlis_bar_start_date' &&
-    $base !== 'patlis_bar_end_date' &&
-    $base !== 'patlis_section_order_welcome' &&
-    $base !== 'patlis_section_order_dishes' &&
-    $base !== 'patlis_section_order_rooms' &&
-    $base !== 'patlis_section_order_offers' &&
-    $base !== 'patlis_section_order_experience' &&
-    $base !== 'patlis_section_order_services' &&
-    $base !== 'patlis_section_order_events' &&
-    $base !== 'patlis_section_order_gallery' &&
-    $base !== 'patlis_section_order_reviews' &&
-    $base !== 'patlis_section_order_cta'
+    $base !== 'patlis_bar_end_date'
   ) {
     return $tag;
   }
 
   if (!class_exists('Patlis_Core')) return $tag;
 
-  // HOME PAGE section order tags
-  $_so_allowed = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
-  $_so_tags    = [
-    'patlis_section_order_welcome', 'patlis_section_order_dishes',  'patlis_section_order_rooms',
-    'patlis_section_order_offers',  'patlis_section_order_experience', 'patlis_section_order_services',
-    'patlis_section_order_events',  'patlis_section_order_gallery', 'patlis_section_order_reviews',
-    'patlis_section_order_cta',
-  ];
-  if (in_array($base, $_so_tags, true)) {
-    $slug  = substr($base, strlen('patlis_section_order_'));
-    $hopt  = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-    $order = isset($hopt['sections_order']) && is_array($hopt['sections_order']) ? $hopt['sections_order'] : $_so_allowed;
-    $pos   = array_search($slug, $order, true);
-    return $pos !== false ? (string)($pos + 1) : (string)(array_search($slug, $_so_allowed, true) + 1);
+  if ($base === 'patlis_slogan') {
+    return Patlis_Core::get_basic_text('slogan');
+  }
+
+  if ($base === 'patlis_section_visible') {
+    return Patlis_Core::is_home_section_visible($arg) ? '1' : '0';
+  }
+
+  if ($base === 'patlis_section_order') {
+    return (string) Patlis_Core::get_home_section_order($arg);
   }
 
   // GALLERY
@@ -760,6 +765,21 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     $post_obj = ($post instanceof WP_Post) ? $post : (is_numeric($post) ? get_post((int)$post) : get_post());
     if (!($post_obj instanceof WP_Post) || get_post_type($post_obj) !== 'services') return '';
     return wp_json_encode(patlis_core_get_services_gallery_items((int)$post_obj->ID));
+  }
+
+  if ($base === 'patlis_design') {
+    $field = isset($parts[2]) ? sanitize_key($parts[2]) : '';
+    $design_field = Patlis_Core::get_design_field($arg, $field);
+    if (!is_array($design_field)) return '';
+
+    if ($design_field['type'] === 'image') {
+      $image_id = (int) $design_field['value'];
+      if ($context === 'image') return $image_id > 0 ? [$image_id] : [];
+      $image_url = $image_id > 0 ? wp_get_attachment_image_url($image_id, 'full') : '';
+      return $image_url ?: '';
+    }
+
+    return is_scalar($design_field['value']) ? (string) $design_field['value'] : '';
   }
 
   // BASIC: Logo image URL
@@ -876,3 +896,45 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   return $url ?: '';
 
 }, 20, 3);
+
+
+add_filter('pre_http_request', function ($preempt, $args, $url) {
+
+    $base_url = trailingslashit(PATLIS_CORE_URL) . 'assets/svg/';
+
+    if (strpos($url, $base_url) !== 0) {
+        return $preempt;
+    }
+
+    $filename = basename(parse_url($url, PHP_URL_PATH));
+
+    if (!preg_match('/^[a-zA-Z0-9_-]+\.svg$/', $filename)) {
+        return $preempt;
+    }
+
+    $file = PATLIS_CORE_PATH . 'assets/svg/' . $filename;
+
+    if (!is_file($file) || !is_readable($file)) {
+        return $preempt;
+    }
+
+    $body = file_get_contents($file);
+
+    if ($body === false) {
+        return $preempt;
+    }
+
+    return [
+        'headers'  => [
+            'content-type' => 'image/svg+xml',
+        ],
+        'body'     => $body,
+        'response' => [
+            'code'    => 200,
+            'message' => 'OK',
+        ],
+        'cookies'  => [],
+        'filename' => null,
+    ];
+
+}, 10, 3);

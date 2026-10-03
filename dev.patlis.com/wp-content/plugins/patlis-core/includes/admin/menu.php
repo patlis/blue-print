@@ -24,7 +24,17 @@ final class Patlis_Admin_Menu {
       'patlis-basic',
       ['Patlis_Admin_Page_Basic', 'render']
     );
-    
+
+    add_menu_page(
+      __('Design', 'patlis-core'),
+      __('Design', 'patlis-core'),
+      $capability,
+      'patlis-design-options',
+      ['Patlis_Admin_Page_Design_Options', 'render'],
+      'dashicons-art',
+      27
+    );
+
     add_submenu_page(
       'patlis-basic',
       __('Social media', 'patlis-core'),
@@ -78,6 +88,7 @@ final class Patlis_Admin_Menu {
       'patlis-homepage',
       ['Patlis_Admin_Page_Homepage', 'render']
     );
+
 
     add_submenu_page(
       'patlis-basic',

@@ -67,7 +67,7 @@
         var wrapper = document.createElement('span');
         wrapper.className = 'ai-label-container';
         wrapper.style.position = 'relative';
-        wrapper.style.display = 'inline-block';
+        /*wrapper.style.display = 'block';*/
         wrapper.style.lineHeight = '0';
 
         if (!image.parentNode) {
@@ -112,7 +112,7 @@
         }
 
         if (style.display === 'inline') {
-            container.style.display = 'inline-block';
+            container.style.display = 'inline';
         }
     }
 

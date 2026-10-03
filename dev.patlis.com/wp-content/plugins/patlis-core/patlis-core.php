@@ -17,6 +17,7 @@ define('PATLIS_CORE_VERSION', '2.1.2');
 
 require_once PATLIS_CORE_PATH . 'includes/core.php';
 require_once PATLIS_CORE_PATH . 'includes/helpers.php';
+require_once PATLIS_CORE_PATH . 'includes/design-colors.php';
 require_once PATLIS_CORE_PATH . 'includes/database.php';
 require_once PATLIS_CORE_PATH . 'includes/form-handlers.php';
 require_once PATLIS_CORE_PATH . 'includes/translations-db.php';
@@ -39,6 +40,8 @@ if (is_admin()) {
     require_once PATLIS_CORE_PATH . 'includes/admin/menu.php';
 
     // settings registration must be loaded on EVERY admin request (also options.php)
+    require_once PATLIS_CORE_PATH . 'includes/admin/bricks-colors.php';
+    require_once PATLIS_CORE_PATH . 'includes/admin/bricks-variables.php';
     require_once PATLIS_CORE_PATH . 'includes/admin/settings.php';
 
     // admin pages (UI)
@@ -49,6 +52,7 @@ if (is_admin()) {
     require_once PATLIS_CORE_PATH . 'includes/admin/pages/opening-times.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/translations.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/homepage.php';
+    require_once PATLIS_CORE_PATH . '/includes/admin/pages/design-options.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/instance-tools.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/white-label.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/pages/ai-labels.php';

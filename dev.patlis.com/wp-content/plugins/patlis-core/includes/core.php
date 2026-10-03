@@ -11,6 +11,8 @@ final class Patlis_Core {
   const OPTION_HOMEPAGE         = 'patlis_homepage';
   const OPTION_WHITE_LABEL      = 'patlis_white_label';
   const OPTION_AI_LABELS        = 'patlis_ai_labels';
+  const OPTION_DESIGN_OPTIONS   = 'patlis_design_options';
+  const HOME_SECTIONS           = ['slides', 'welcome', 'dishes', 'rooms', 'offers', 'experience', 'services', 'events', 'gallery', 'reviews', 'cta'];
   
     // One capability for all Patlis admin pages
   const CAP_MANAGE = 'patlis_manage';
@@ -55,6 +57,12 @@ final class Patlis_Core {
     return self::get_option_value(self::OPTION_BASIC, $key, $default);
   }
 
+  public static function get_basic_text(string $key, string $default = ''): string {
+    $value = self::get_basic(sanitize_key($key), $default);
+    if (is_array($value)) return self::get_multilingual_design_value($value);
+    return is_scalar($value) ? (string) $value : $default;
+  }
+
   public static function get_center_popup(string $key, $default = '') {
     return self::get_option_value(self::OPTION_CENTER_POPUP, $key, $default);
   }
@@ -67,8 +75,239 @@ final class Patlis_Core {
     return self::get_option_value(self::OPTION_HOMEPAGE, $key, $default);
   }
 
+  public static function is_home_section_visible(string $section): bool {
+    $section = sanitize_key($section);
+    if (!in_array($section, self::HOME_SECTIONS, true)) return false;
+
+    $visibility = self::get_homepage('sections_visibility', []);
+    if (!is_array($visibility) || !array_key_exists($section, $visibility)) return true;
+    return !empty($visibility[$section]);
+  }
+
+  public static function get_home_section_order(string $section): int {
+    $section = sanitize_key($section);
+    if (!in_array($section, self::HOME_SECTIONS, true)) return 0;
+
+    $saved = self::get_homepage('sections_order', []);
+    $order = is_array($saved)
+      ? array_values(array_unique(array_filter($saved, static fn($slug) => in_array($slug, self::HOME_SECTIONS, true))))
+      : [];
+    foreach (self::HOME_SECTIONS as $slug) {
+      if (!in_array($slug, $order, true)) $order[] = $slug;
+    }
+
+    $position = array_search($section, $order, true);
+    return $position === false ? 0 : $position + 1;
+  }
+
   public static function get_white_label(string $key, $default = '') {
     return self::get_option_value(self::OPTION_WHITE_LABEL, $key, $default);
+  }
+
+  public static function get_section_design_option(string $section, string $key, $default = '') {
+    $options = get_option(self::OPTION_DESIGN_OPTIONS, []);
+    if (!is_array($options) || !isset($options[$section]) || !is_array($options[$section])) return $default;
+    return array_key_exists($key, $options[$section]) ? $options[$section][$key] : $default;
+  }
+
+  public static function get_global_design_text(string $key, string $default = ''): string {
+    $value = self::get_section_design_option('global', sanitize_key($key), $default);
+    if (is_array($value)) return self::get_multilingual_design_value($value);
+    return is_scalar($value) ? (string) $value : $default;
+  }
+
+  public static function get_design_registry(): array {
+    $registry = require PATLIS_CORE_PATH . 'includes/design-registry.php';
+    $registry = is_array($registry) ? $registry : [];
+
+    return apply_filters('patlis/design_options/registry', $registry);
+  }
+
+  public static function get_design_pages_registry(): array {
+    $registry = require PATLIS_CORE_PATH . 'includes/design-pages-registry.php';
+    $registry = is_array($registry) ? $registry : [];
+
+    return apply_filters('patlis/design_pages/registry', $registry);
+  }
+
+  public static function get_design_sets_registry(): array {
+    $registry = require PATLIS_CORE_PATH . 'includes/design-sets-registry.php';
+    $registry = is_array($registry) ? $registry : [];
+
+    return apply_filters('patlis/design_sets/registry', $registry);
+  }
+
+  public static function apply_design_set(string $set_key) {
+    $set_key = sanitize_key($set_key);
+    $sets = self::get_design_sets_registry();
+    if (!isset($sets[$set_key]) || !is_array($sets[$set_key])) {
+      return new WP_Error('design_set_not_found', __('The selected design set was not found.', 'patlis-core'));
+    }
+
+    $set_sections = isset($sets[$set_key]['sections']) && is_array($sets[$set_key]['sections'])
+      ? $sets[$set_key]['sections']
+      : [];
+    $design_registry = self::get_design_registry();
+    $applicable = [];
+
+    foreach ($set_sections as $section_key => $variant_key) {
+      $section_key = sanitize_key((string) $section_key);
+      $variant_key = sanitize_key((string) $variant_key);
+      if (!isset($design_registry[$section_key]) || !is_array($design_registry[$section_key])) {
+        return new WP_Error('invalid_design_set', __('The design set contains an unknown section.', 'patlis-core'));
+      }
+
+      $section = $design_registry[$section_key];
+      $availability = sanitize_key((string) ($section['availability'] ?? ''));
+      if ($availability !== '' && function_exists('allowed_section') && allowed_section($availability) !== 1) continue;
+
+      $variants = isset($section['variants']) && is_array($section['variants']) ? $section['variants'] : [];
+      if (!isset($variants[$variant_key]) || !is_array($variants[$variant_key])) {
+        return new WP_Error('invalid_design_set', __('The design set contains an unknown variant.', 'patlis-core'));
+      }
+
+      $applicable[$section_key] = $variant_key;
+    }
+
+    if ($applicable === []) {
+      return new WP_Error('empty_design_set', __('No sections from this design set are available.', 'patlis-core'));
+    }
+
+    $options = get_option(self::OPTION_DESIGN_OPTIONS, []);
+    $options = is_array($options) ? $options : [];
+    foreach ($applicable as $section_key => $variant_key) {
+      if (!isset($options[$section_key]) || !is_array($options[$section_key])) {
+        $options[$section_key] = [];
+      }
+      $options[$section_key]['variant'] = $variant_key;
+    }
+
+    update_option(self::OPTION_DESIGN_OPTIONS, $options);
+    do_action('patlis_design_set_applied', $set_key, $applicable);
+    return count($applicable);
+  }
+
+  public static function get_design_section_by_slug(string $slug): ?array {
+    foreach ([self::get_design_registry(), self::get_design_pages_registry()] as $registry) {
+      foreach ($registry as $section_key => $section) {
+        if (!is_array($section) || ($section['shortcode_slug'] ?? '') !== $slug) continue;
+
+        $section['key'] = $section_key;
+        return $section;
+      }
+    }
+
+    return null;
+  }
+
+  public static function get_design_field(string $section, string $field) {
+    $registry = self::get_design_registry();
+    if (!isset($registry[$section]) || !is_array($registry[$section])) return null;
+
+    $section_definition = $registry[$section];
+    $section_fields = isset($section_definition['fields']) && is_array($section_definition['fields'])
+      ? $section_definition['fields']
+      : [];
+    if (isset($section_fields[$field]) && is_array($section_fields[$field])) {
+      $definition = $section_fields[$field];
+      $type = (string) ($definition['type'] ?? 'text');
+      $value = self::get_section_design_option($section, (string) ($definition['option_key'] ?? $field), $definition['default'] ?? null);
+      if (in_array($type, ['text', 'textarea'], true) && is_array($value)) {
+        $value = self::get_multilingual_design_value($value);
+      }
+
+      return [
+        'type'  => $type,
+        'value' => $value,
+      ];
+    }
+
+    $default_variant = sanitize_key((string) ($section_definition['default_variant'] ?? 'default'));
+    $variant = sanitize_key((string) self::get_section_design_option($section, 'variant', $default_variant));
+    $variants = isset($section_definition['variants']) && is_array($section_definition['variants'])
+      ? $section_definition['variants']
+      : [];
+
+    if (!isset($variants[$variant]) || !is_array($variants[$variant])) {
+      $variant = $default_variant;
+    }
+
+    $fields = isset($variants[$variant]['fields']) && is_array($variants[$variant]['fields'])
+      ? $variants[$variant]['fields']
+      : [];
+    if (!isset($fields[$field]) || !is_array($fields[$field])) return null;
+
+    $definition = $fields[$field];
+    $variant_options = self::get_section_design_option($section, $variant, []);
+    if (!is_array($variant_options)) return null;
+
+    $type = (string) ($definition['type'] ?? 'text');
+    $value = $variant_options[$definition['option_key'] ?? $field] ?? null;
+    if (in_array($type, ['text', 'textarea'], true) && is_array($value)) {
+      $value = self::get_multilingual_design_value($value);
+    }
+
+    return [
+      'type'  => $type,
+      'value' => $value,
+    ];
+  }
+
+  private static function get_multilingual_design_value(array $values): string {
+    $current_language = function_exists('patlis_get_current_language')
+      ? sanitize_key(patlis_get_current_language())
+      : '';
+    if ($current_language === '' && function_exists('pll_current_language')) {
+      $language = pll_current_language('slug');
+      $current_language = is_string($language) ? sanitize_key($language) : '';
+    }
+
+    if ($current_language !== '' && !empty($values[$current_language]) && is_string($values[$current_language])) {
+      return $values[$current_language];
+    }
+
+    $default_language = function_exists('patlis_get_default_language')
+      ? sanitize_key(patlis_get_default_language())
+      : '';
+    if ($default_language === '' && function_exists('pll_default_language')) {
+      $language = pll_default_language('slug');
+      $default_language = is_string($language) ? sanitize_key($language) : '';
+    }
+
+    if ($default_language !== '' && !empty($values[$default_language]) && is_string($values[$default_language])) {
+      return $values[$default_language];
+    }
+
+    foreach ($values as $value) {
+      if (is_string($value) && $value !== '') return $value;
+    }
+
+    return '';
+  }
+
+  public static function get_section_template_slug(string $slug): string {
+    $slug = sanitize_title($slug);
+    $section = self::get_design_section_by_slug($slug);
+    if ($section === null) return $slug;
+
+    $default_variant = sanitize_key((string) ($section['default_variant'] ?? 'default'));
+    $variant = sanitize_key((string) self::get_section_design_option($section['key'], 'variant', $default_variant));
+    $variants = isset($section['variants']) && is_array($section['variants']) ? $section['variants'] : [];
+
+    if (!isset($variants[$variant])) {
+      $variant = $default_variant;
+    }
+
+    return sanitize_title((string) ($variants[$variant]['template'] ?? $slug));
+  }
+
+  public static function get_default_section_template_slug(string $slug): string {
+    $slug = sanitize_title($slug);
+    $section = self::get_design_section_by_slug($slug);
+    if ($section === null) return $slug;
+
+    $default_variant = sanitize_key((string) ($section['default_variant'] ?? 'default'));
+    return sanitize_title((string) ($section['variants'][$default_variant]['template'] ?? $slug));
   }
 
 
@@ -110,11 +349,19 @@ final class Patlis_Core {
       'slug' => '',
     ], $atts, 'patlis_template');
 
-    $slug = is_string($atts['slug']) ? sanitize_title($atts['slug']) : '';
+    $requested_slug = is_string($atts['slug']) ? sanitize_title($atts['slug']) : '';
+    $slug = self::get_section_template_slug($requested_slug);
 
     if ($slug === '' || !shortcode_exists('bricks_template')) return '';
 
     $template = get_page_by_path($slug, OBJECT, 'bricks_template');
+
+    if (!$template instanceof WP_Post || $template->post_status !== 'publish') {
+      $default_slug = self::get_default_section_template_slug($requested_slug);
+      if ($default_slug !== $slug) {
+        $template = get_page_by_path($default_slug, OBJECT, 'bricks_template');
+      }
+    }
 
     if (!$template instanceof WP_Post || $template->post_status !== 'publish') return '';
 

@@ -146,12 +146,12 @@ function patlis_version_get_page_template_term_map(): array {
         ],
         'gastro' => [
             'menu',
-            'menu-carousel-section',
+            'top-menu',
             'reservation',
         ],
         'dining' => [
             'menu',
-            'menu-carousel-section',
+            'top-menu',
             'reservation',
         ],
         'hotel' => [

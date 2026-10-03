@@ -5,10 +5,18 @@ final class Patlis_Admin_Page_Basic {
 
   public static function sanitize($input): array {
     $in = is_array($input) ? $input : [];
+    $existing = get_option(Patlis_Core::OPTION_BASIC, []);
+    $existing = is_array($existing) ? $existing : [];
 
     $out = [];
     $out['logo_image_id']   = isset($in['logo_image_id']) ? max(0, (int)$in['logo_image_id']) : 0;
     $out['company_name'] = isset($in['company_name']) ? sanitize_text_field($in['company_name']) : '';
+    $out['slogan'] = is_array($existing['slogan'] ?? null) ? $existing['slogan'] : [];
+    $raw_slogan = isset($in['slogan']) && is_array($in['slogan']) ? $in['slogan'] : [];
+    foreach ($raw_slogan as $lang => $text) {
+      $lang = sanitize_key((string) $lang);
+      if ($lang !== '') $out['slogan'][$lang] = sanitize_text_field((string) $text);
+    }
     $out['address']      = isset($in['address']) ? sanitize_text_field($in['address']) : '';
     $out['city']         = isset($in['city']) ? sanitize_text_field($in['city']) : '';
     $out['zip']          = isset($in['zip']) ? sanitize_text_field($in['zip']) : '';
@@ -52,12 +60,6 @@ final class Patlis_Admin_Page_Basic {
     if ($out['decimals'] < 0) $out['decimals'] = 0;
     if ($out['decimals'] > 2) $out['decimals'] = 2;
 
-    $allowed_appearance_modes = ['light_dark', 'light_only', 'dark_only'];
-    $out['appearance_mode'] = isset($in['appearance_mode']) ? sanitize_key((string) $in['appearance_mode']) : 'light_dark';
-    if (!in_array($out['appearance_mode'], $allowed_appearance_modes, true)) {
-      $out['appearance_mode'] = 'light_dark';
-    }
-
     $out['show_legal_notice']   = !empty($in['show_legal_notice'])   ? 1 : 0;
     $out['show_privacy_policy'] = !empty($in['show_privacy_policy']) ? 1 : 0;
     $out['show_terms_of_use']   = !empty($in['show_terms_of_use'])   ? 1 : 0;
@@ -78,11 +80,18 @@ final class Patlis_Admin_Page_Basic {
     $divider  = $opt['decimal_divider'] ?? ',';
     $pos      = $opt['currency_position'] ?? 'after';
     $decimals = isset($opt['decimals']) ? (int) $opt['decimals'] : 2;
-    $appearance_mode = isset($opt['appearance_mode']) ? (string) $opt['appearance_mode'] : 'light_dark';
     $logo_image_id = isset($opt['logo_image_id']) ? (int)$opt['logo_image_id'] : 0;
     $logo_preview = $logo_image_id > 0
       ? wp_get_attachment_image($logo_image_id, 'thumbnail', false, ['style' => 'max-width:120px;height:auto;border:1px solid #ddd;padding:2px;background:#fff;'])
       : '';
+    $language_slugs = [];
+    if (function_exists('patlis_get_effective_language_slugs_for_current_user')) {
+      $language_slugs = patlis_get_effective_language_slugs_for_current_user();
+    } elseif (function_exists('pll_languages_list')) {
+      $language_slugs = pll_languages_list(['fields' => 'slug']);
+    }
+    if (empty($language_slugs)) $language_slugs = ['default'];
+    $slogan_values = is_array($opt['slogan'] ?? null) ? $opt['slogan'] : [];
 
     wp_enqueue_media();
 
@@ -100,11 +109,6 @@ final class Patlis_Admin_Page_Basic {
       'after_the_amount'         => __('After the amount', 'patlis-core'),
       'before_the_amount'        => __('Before the amount', 'patlis-core'),
       'decimals'                 => __('Decimals', 'patlis-core'),
-      'appearance'               => __('Appearance', 'patlis-core'),
-      'display_mode'             => __('Display mode', 'patlis-core'),
-      'appearance_light_dark'    => __('Light and dark mode', 'patlis-core'),
-      'appearance_light_only'    => __('Light mode only', 'patlis-core'),
-      'appearance_dark_only'     => __('Dark mode only', 'patlis-core'),
       'legal_links'              => __('Legal links', 'patlis-core'),
       'show_legal_notice'        => __('Show legal notice page', 'patlis-core'),
       'show_privacy_policy'      => __('Show privacy policy page', 'patlis-core'),
@@ -144,7 +148,6 @@ final class Patlis_Admin_Page_Basic {
           <a href="#" class="nav-tab nav-tab-active" data-tab="basic"><?php echo esc_html($labels['basic']); ?></a>
           <a href="#" class="nav-tab" data-tab="contact"><?php echo esc_html($labels['contact_form']); ?></a>
           <a href="#" class="nav-tab" data-tab="currency"><?php echo esc_html($labels['currency']); ?></a>
-          <a href="#" class="nav-tab" data-tab="appearance"><?php echo esc_html($labels['appearance']); ?></a>
           <a href="#" class="nav-tab" data-tab="legal"><?php echo esc_html($labels['legal_links']); ?></a>
         </nav>
 
@@ -175,6 +178,7 @@ final class Patlis_Admin_Page_Basic {
                     value="<?php echo esc_attr($opt['company_name'] ?? ''); ?>">
                 </td>
               </tr>
+
 
               <tr>
                 <th scope="row"><label for="patlis_address"><?php esc_html_e('Address', 'patlis-core'); ?></label></th>
@@ -265,6 +269,18 @@ final class Patlis_Admin_Page_Basic {
                   </select>
                 </td>
               </tr>
+
+              <?php foreach ($language_slugs as $language_slug): $language_slug = sanitize_key((string) $language_slug); ?>
+              <tr>
+                <th scope="row"><label for="patlis_slogan_<?php echo esc_attr($language_slug); ?>"><?php echo esc_html(sprintf(__('Slogan (%s)', 'patlis-core'), strtoupper($language_slug))); ?></label></th>
+                <td>
+                  <input id="patlis_slogan_<?php echo esc_attr($language_slug); ?>" type="text" class="regular-text"
+                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[slogan][<?php echo esc_attr($language_slug); ?>]"
+                    value="<?php echo esc_attr($slogan_values[$language_slug] ?? ''); ?>">
+                </td>
+              </tr>
+              <?php endforeach; ?>
+
             </table>
           </div>
 
@@ -300,18 +316,11 @@ final class Patlis_Admin_Page_Basic {
               </tr>
 
               <?php
-              $slugs = [];
-              if (function_exists('patlis_get_effective_language_slugs_for_current_user')) {
-                $slugs = patlis_get_effective_language_slugs_for_current_user();
-              } elseif (function_exists('pll_languages_list')) {
-                $slugs = pll_languages_list(['fields' => 'slug']);
-              }
-              if (empty($slugs)) $slugs = ['default'];
               $cc_subject = is_array($opt['contact_confirm_subject'] ?? null) ? $opt['contact_confirm_subject'] : [];
               $cc_body    = is_array($opt['contact_confirm_body']    ?? null) ? $opt['contact_confirm_body']    : [];
               ?>
               <tr><td colspan="2"><h3 style="text-align: center;"><?php echo esc_html($labels['confirmation_email']); ?></h3></td></tr>
-              <?php foreach ($slugs as $ls): $ls = (string)$ls; ?>
+              <?php foreach ($language_slugs as $ls): $ls = (string)$ls; ?>
               <tr>
                 <th scope="row"><?php echo esc_html(sprintf($labels['confirmation_subject'], strtoupper($ls))); ?></th>
                 <td>
@@ -374,22 +383,6 @@ final class Patlis_Admin_Page_Basic {
                     <option value="0" <?php selected($decimals, 0); ?>>0</option>
                     <option value="1" <?php selected($decimals, 1); ?>>1</option>
                     <option value="2" <?php selected($decimals, 2); ?>>2</option>
-                  </select>
-                </td>
-              </tr>
-            </table>
-          </div>
-
-          <div class="patlis-basic-tab-panel" data-panel="appearance">
-            <table class="form-table" role="presentation">
-              <tr>
-                <th scope="row"><label for="patlis_appearance_mode"><?php echo esc_html($labels['display_mode']); ?></label></th>
-                <td>
-                  <select id="patlis_appearance_mode"
-                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[appearance_mode]">
-                    <option value="light_dark" <?php selected($appearance_mode, 'light_dark'); ?>><?php echo esc_html($labels['appearance_light_dark']); ?></option>
-                    <option value="light_only" <?php selected($appearance_mode, 'light_only'); ?>><?php echo esc_html($labels['appearance_light_only']); ?></option>
-                    <option value="dark_only" <?php selected($appearance_mode, 'dark_only'); ?>><?php echo esc_html($labels['appearance_dark_only']); ?></option>
                   </select>
                 </td>
               </tr>

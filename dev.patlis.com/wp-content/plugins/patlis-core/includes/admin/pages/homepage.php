@@ -3,18 +3,18 @@ if (!defined('ABSPATH')) exit;
 
 final class Patlis_Admin_Page_Homepage {
 
-    const DEFAULT_ORDER = ['welcome','dishes','rooms','offers','experience','services','events','gallery','reviews','cta'];
+    const DEFAULT_ORDER = Patlis_Core::HOME_SECTIONS;
 
     private static function restricted_section_slug_map(): array {
         return [
-            'dishes'     => 'menu-carousel-section',
+            'dishes'     => 'top-menu',
             'rooms'      => 'top-rooms-section',
             'offers'     => 'offers-packages-section',
             'experience' => 'experience-section',
         ];
     }
 
-    private static function is_section_allowed(string $section): bool {
+    public static function is_section_allowed(string $section): bool {
         $map = self::restricted_section_slug_map();
 
         // Sections without mapping are common sections and always visible in backend.
@@ -29,8 +29,9 @@ final class Patlis_Admin_Page_Homepage {
         return allowed_section($map[$section]) === 1;
     }
 
-    private static function labels(): array {
+    public static function labels(): array {
         return [
+            'slides'     => __('Slides section',         'patlis-core'),
             'welcome'    => __('Welcome section',        'patlis-core'),
             'dishes'     => __('Top dishes',             'patlis-core'),
             'rooms'      => __('Top rooms',              'patlis-core'),
@@ -39,17 +40,34 @@ final class Patlis_Admin_Page_Homepage {
             'services'   => __('Top services',           'patlis-core'),
             'events'     => __('Upcoming events',        'patlis-core'),
             'gallery'    => __('Home gallery',           'patlis-core'),
-            'reviews'    => __('Latest reviews',           'patlis-core'),
+            'reviews'    => __('Latest reviews',         'patlis-core'),
             'cta'        => __('Action banner (CTA)',    'patlis-core'),
             'save'       => __('Save',                   'patlis-core'),
         ];
     }
 
+    public static function get_sections_order(): array {
+        $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+        $saved = is_array($opt) && isset($opt['sections_order']) && is_array($opt['sections_order'])
+            ? $opt['sections_order']
+            : [];
+        $labels = self::labels();
+        $order = array_values(array_filter($saved, fn($section) => isset($labels[$section]) && self::is_section_allowed($section)));
+
+        foreach (self::DEFAULT_ORDER as $section) {
+            if (self::is_section_allowed($section) && !in_array($section, $order, true)) {
+                $order[] = $section;
+            }
+        }
+
+        return $order;
+    }
+
     public static function render(): void {
         if (!current_user_can('patlis_manage')) return;
 
-        $opt   = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-        $saved = isset($opt['sections_order']) && is_array($opt['sections_order']) ? $opt['sections_order'] : [];
+        $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+        $opt = is_array($opt) ? $opt : [];
 
         $cta_bg_image_id = isset($opt['cta_bg_image_id']) ? (int)$opt['cta_bg_image_id'] : 0;
         $cta_bg_preview  = $cta_bg_image_id > 0
@@ -60,20 +78,6 @@ final class Patlis_Admin_Page_Homepage {
 
         wp_enqueue_media();
 
-        $labels = self::labels();
-        $order  = array_values(array_filter($saved, fn($s) => isset($labels[$s]) && self::is_section_allowed($s)));
-
-        foreach (self::DEFAULT_ORDER as $s) {
-            if (!self::is_section_allowed($s)) {
-                continue;
-            }
-
-            if (!in_array($s, $order, true)) {
-                $order[] = $s;
-            }
-        }
-
-        wp_enqueue_script('jquery-ui-sortable');
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Home page settings', 'patlis-core'); ?></h1>
@@ -115,82 +119,7 @@ final class Patlis_Admin_Page_Homepage {
                   </tr>
                 </table>
 
-                <h2><?php esc_html_e('Display order', 'patlis-core'); ?></h2>
-                <p class="description"><?php esc_html_e('Drag to reorder.', 'patlis-core'); ?></p>
-
-                <style>
-                    #patlis-sections-sortable {
-                        list-style: none;
-                        margin: 16px 0;
-                        padding: 0;
-                        max-width: 380px;
-                    }
-                    #patlis-sections-sortable li {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        padding: 10px 14px;
-                        margin-bottom: 6px;
-                        background: #fff;
-                        border: 1px solid #ccd0d4;
-                        border-radius: 4px;
-                        cursor: grab;
-                        font-size: 14px;
-                        font-weight: 500;
-                        user-select: none;
-                    }
-                    #patlis-sections-sortable li:active { cursor: grabbing; }
-                    #patlis-sections-sortable li .patlis-drag-handle {
-                        color: #aaa;
-                        font-size: 18px;
-                        line-height: 1;
-                    }
-                    #patlis-sections-sortable li .patlis-section-nr {
-                        min-width: 22px;
-                        color: #999;
-                        font-size: 12px;
-                    }
-                    #patlis-sections-sortable li.ui-sortable-helper {
-                        box-shadow: 0 4px 12px rgba(0,0,0,.15);
-                    }
-                    #patlis-sections-sortable li.ui-sortable-placeholder {
-                        visibility: visible !important;
-                        background: #f0f6fc;
-                        border: 2px dashed #72aee6;
-                    }
-                </style>
-
-                <ul id="patlis-sections-sortable">
-                    <?php foreach ($order as $i => $slug): ?>
-                        <li data-slug="<?php echo esc_attr($slug); ?>">
-                            <span class="patlis-drag-handle" aria-hidden="true">&#9776;</span>
-                            <span class="patlis-section-nr"><?php echo ($i + 1); ?></span>
-                            <?php echo esc_html($labels[$slug] ?? $slug); ?>
-                            <input type="hidden" name="patlis_sections_order[]" value="<?php echo esc_attr($slug); ?>">
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-
-                <script>
-                jQuery(function ($) {
-                    var $list = $('#patlis-sections-sortable');
-
-                    $list.sortable({
-                        items: 'li',
-                        axis: 'y',
-                        handle: '.patlis-drag-handle',
-                        placeholder: 'ui-sortable-placeholder',
-                        update: function () {
-                            $list.find('li').each(function (idx) {
-                                $(this).find('.patlis-section-nr').text(idx + 1);
-                                $(this).find('input[type="hidden"]').val($(this).data('slug'));
-                            });
-                        }
-                    });
-                });
-                </script>
-
-                <?php submit_button($labels['save']); ?>
+                <?php submit_button(__('Save', 'patlis-core')); ?>
 
                 <script>
                 (function(){

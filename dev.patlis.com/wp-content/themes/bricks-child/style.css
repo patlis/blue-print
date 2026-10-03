@@ -19,7 +19,9 @@
 
 #brxe-layqmn { white-space: nowrap;}
 /*------------------ main sizes START */
-body { font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;}
+/* body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;}*/
+body { font-family: var(--font-family), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;}
+
 h1, h2, h3, h4, .h1, .h2, .h3, .h4 { font-family: var(--headers-font-family);}
 main {min-height:50vh}
 .w-100{width: 100% !important;}
@@ -348,4 +350,11 @@ form .message.success {
     top: 4px !important;
     bottom: auto !important;
      height: 20px !important;
+}
+
+.border-top {
+    border-top: 1px solid var(--border) !important;
+}
+.border-bottom {
+    border-bottom: 1px solid var(--border) !important;
 }
