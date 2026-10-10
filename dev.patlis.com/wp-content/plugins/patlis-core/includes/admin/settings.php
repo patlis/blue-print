@@ -64,6 +64,20 @@ final class Patlis_Admin_Settings {
         exit;
       }
 
+      if (isset($_POST['patlis_logo_image_id']) && is_scalar($_POST['patlis_logo_image_id'])) {
+        $basic_options = get_option(Patlis_Core::OPTION_BASIC, []);
+        $basic_options = is_array($basic_options) ? $basic_options : [];
+        $basic_options['logo_image_id'] = max(0, (int) wp_unslash($_POST['patlis_logo_image_id']));
+        update_option(Patlis_Core::OPTION_BASIC, $basic_options);
+      }
+
+      if (isset($_POST['patlis_match_header_colors']) && is_scalar($_POST['patlis_match_header_colors'])) {
+        $basic_options = get_option(Patlis_Core::OPTION_BASIC, []);
+        $basic_options = is_array($basic_options) ? $basic_options : [];
+        $basic_options['match_header_colors'] = wp_unslash($_POST['patlis_match_header_colors']) === '1' ? 1 : 0;
+        update_option(Patlis_Core::OPTION_BASIC, $basic_options);
+      }
+
       $raw_order = isset($_POST['patlis_sections_order']) && is_array($_POST['patlis_sections_order'])
         ? array_map('sanitize_key', wp_unslash($_POST['patlis_sections_order']))
         : [];

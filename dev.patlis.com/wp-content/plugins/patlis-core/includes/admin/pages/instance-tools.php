@@ -38,6 +38,33 @@ final class Patlis_Admin_Page_Instance_Tools
         return max(0, (int) $count);
     }
 
+    private static function get_saved_sliders(): array
+    {
+        $sliders = get_option(patlis_sliders_option_name(), []);
+
+        if (!is_array($sliders)) {
+            wp_die('Invalid saved slider data.');
+        }
+
+        foreach ($sliders as $group) {
+            if (!is_array($group) || (isset($group['slides']) && !is_array($group['slides']))) {
+                wp_die('Invalid saved slider group data.');
+            }
+        }
+
+        return $sliders;
+    }
+
+    private static function count_slides(): int
+    {
+        $count = 0;
+        foreach (self::get_saved_sliders() as $group) {
+            $count += count($group['slides'] ?? []);
+        }
+
+        return $count;
+    }
+
     private static function count_taxonomy_terms(string $taxonomy): int
     {
         global $wpdb;
@@ -127,8 +154,9 @@ final class Patlis_Admin_Page_Instance_Tools
             'Content' => [
                 [
                     'label'  => 'Delete Slides',
-                    'count'  => self::count_post_types(['slide']),
+                    'count'  => self::count_slides(),
                     'action' => 'delete_slides',
+                    'description' => 'Deletes slides from all slider groups. Slider settings and media files are kept.',
                 ],
                 [
                     'label'  => 'Delete Services',
@@ -358,6 +386,7 @@ final class Patlis_Admin_Page_Instance_Tools
                                         data-action="<?php echo esc_attr($action['action']); ?>"
                                         data-label="<?php echo esc_attr($action['label'] ?? ''); ?>"
                                         data-count="<?php echo (int) ($action['count'] ?? 0); ?>"
+                                        data-description="<?php echo esc_attr($action['description'] ?? ''); ?>"
                                     <?php endif; ?>
                                 >
                                     <span><?php echo esc_html((string) ($action['label'] ?? '')); ?></span>
@@ -405,7 +434,8 @@ final class Patlis_Admin_Page_Instance_Tools
                                                             'Only active-version default-language pages will be index; all other pages will be noindex.'
                                                         : 'Are you sure you want to run:\n"' + label + '"?\n\n' +
                                                             'This will permanently delete ' + count + ' item(s).\n' +
-                                                            'This cannot be undone.';
+                                                            'This cannot be undone.' +
+                                                            (btn.dataset.description ? '\n\n' + btn.dataset.description : '');
 
                         if (!window.confirm(msg)) {
                             return;
@@ -468,7 +498,7 @@ final class Patlis_Admin_Page_Instance_Tools
             case 'delete_table_patlis_reservations': $message = self::do_truncate_table('patlis_reservations'); break;
             case 'delete_table_patlis_bookings':$message = self::do_truncate_table('patlis_bookings'); break;
             case 'delete_services':             $message = self::do_delete_post_types(['services', 'service']); break;
-            case 'delete_slides':               $message = self::do_delete_post_types(['slide']); break;
+            case 'delete_slides':               $message = self::do_delete_slides(); break;
             case 'delete_events':               $message = self::do_delete_post_types(['events', 'event']); break;
             case 'delete_gallery':              $message = self::do_delete_post_types(['patlis_gallery', 'gallery']); break;
             case 'delete_reviews':              $message = self::do_delete_post_types(['reviews', 'review']); break;
@@ -673,6 +703,25 @@ final class Patlis_Admin_Page_Instance_Tools
         $wpdb->query("DELETE FROM {$table_name}");
 
         return sprintf('Deleted %d row(s) from %s.', $count, $table_suffix);
+    }
+
+    private static function do_delete_slides(): string
+    {
+        $sliders = self::get_saved_sliders();
+        $deleted = 0;
+
+        foreach ($sliders as &$group) {
+            $deleted += count($group['slides'] ?? []);
+            $group['slides'] = [];
+        }
+        unset($group);
+
+        if ($deleted > 0 && !update_option(patlis_sliders_option_name(), $sliders, false)) {
+            wp_send_json_error(['message' => 'Could not delete slides. Please try again.'], 500);
+            return '';
+        }
+
+        return sprintf('Deleted %d slide(s). Slider settings and media files were kept.', $deleted);
     }
 
     private static function do_delete_post_types(array $post_types): string

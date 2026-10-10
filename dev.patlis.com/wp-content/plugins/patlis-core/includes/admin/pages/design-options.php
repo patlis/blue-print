@@ -52,7 +52,8 @@ final class Patlis_Admin_Page_Design_Options {
         $output[$section_key][$option_key] = self::sanitize_field(
           $value,
           (string) ($field['type'] ?? 'text'),
-          $existing_value
+          $existing_value,
+          $field
         );
       }
 
@@ -77,7 +78,8 @@ final class Patlis_Admin_Page_Design_Options {
           $output[$section_key][$variant_key][$option_key] = self::sanitize_field(
             $value,
             (string) ($field['type'] ?? 'text'),
-            $existing_value
+            $existing_value,
+            $field
           );
         }
       }
@@ -86,7 +88,16 @@ final class Patlis_Admin_Page_Design_Options {
     return $output;
   }
 
-  private static function sanitize_field($value, string $type, $existing_value = '') {
+  private static function sanitize_field($value, string $type, $existing_value = '', array $field = []) {
+    if ($type === 'dropdown') {
+      $options = isset($field['options']) && is_array($field['options']) ? $field['options'] : [];
+      foreach ([$value, $existing_value, $field['default'] ?? ''] as $candidate) {
+        if (!is_scalar($candidate)) continue;
+        $candidate = sanitize_text_field((string) $candidate);
+        if (array_key_exists($candidate, $options)) return $candidate;
+      }
+      return $options !== [] ? (string) array_key_first($options) : '';
+    }
     if ($type === 'image') return max(0, (int) $value);
     if ($type === 'checkbox') return !empty($value) ? 1 : 0;
     if (in_array($type, ['number', 'range'], true)) return is_numeric($value) ? (float) $value : 0;
@@ -167,7 +178,7 @@ final class Patlis_Admin_Page_Design_Options {
     $options = get_option(Patlis_Core::OPTION_DESIGN_OPTIONS, []);
     $options = is_array($options) ? $options : [];
     $design_types = [
-      'global'  => __('Global', 'patlis-core'),
+      'global'  => __('Global & Home page', 'patlis-core'),
       'colors'  => __('Colors', 'patlis-core'),
       'section' => __('Sections', 'patlis-core'),
       'set'     => __('Design Sets', 'patlis-core'),
@@ -242,13 +253,17 @@ final class Patlis_Admin_Page_Design_Options {
         $font_options = class_exists('Patlis_Bricks_Variables')
           ? Patlis_Bricks_Variables::get_font_options()
           : [];
+        $basic_options = get_option(Patlis_Core::OPTION_BASIC, []);
+        $basic_options = is_array($basic_options) ? $basic_options : [];
+        $logo_image_id = max(0, (int) ($basic_options['logo_image_id'] ?? 0));
         $variable_labels = [
           'font-size'  => __('Base font size', 'patlis-core'),
           'site-width' => __('Site width', 'patlis-core'),
-          'btn-radius' => __('Button radius', 'patlis-core'),
           'logo-height' => __('Logo height', 'patlis-core'),
           'logo-padding' => __('Logo padding', 'patlis-core'),
-          'card-image-radius' => __('Card image radius', 'patlis-core'),
+          'card-image-radius' => __('Card and image radius', 'patlis-core'),
+          'btn-radius' => __('Button radius', 'patlis-core'),
+
         ];
         wp_enqueue_script('jquery-ui-sortable');
         ?>
@@ -261,6 +276,26 @@ final class Patlis_Admin_Page_Design_Options {
             <div class="notice notice-error inline"><p><?php echo esc_html($global_variables->get_error_message()); ?></p></div>
           <?php else: ?>
             <div class="patlis-global-variables">
+              <div class="patlis-logo-variable">
+                <strong><?php esc_html_e('Logo image', 'patlis-core'); ?></strong>
+                <div>
+                  <div id="patlis-logo-preview">
+                    <?php if ($logo_image_id > 0) echo wp_get_attachment_image($logo_image_id, 'medium', false, ['class' => 'patlis-global-logo-image']); ?>
+                  </div>
+                  <input type="hidden" id="patlis-logo-image-id" name="patlis_logo_image_id" value="<?php echo esc_attr($logo_image_id); ?>">
+                  <p>
+                    <button type="button" class="button" id="patlis-logo-select"><?php esc_html_e('Select image', 'patlis-core'); ?></button>
+                    <button type="button" class="button" id="patlis-logo-remove"<?php echo $logo_image_id > 0 ? '' : ' hidden'; ?>><?php esc_html_e('Remove', 'patlis-core'); ?></button>
+                  </p>
+                </div>
+              </div>
+              <div class="patlis-logo-variable">
+                <label for="patlis-match-header-colors"><strong><?php esc_html_e('Logo image matches header colors', 'patlis-core'); ?></strong></label>
+                <div>
+                  <input type="hidden" name="patlis_match_header_colors" value="0">
+                  <input type="checkbox" id="patlis-match-header-colors" name="patlis_match_header_colors" value="1" <?php checked(!empty($basic_options['match_header_colors'])); ?>>
+                </div>
+              </div>
               <?php foreach (['font-family' => __('Body font', 'patlis-core'), 'headers-font-family' => __('Headings font', 'patlis-core')] as $variable_name => $variable_label): ?>
                 <?php $input_id = 'patlis-' . $variable_name; ?>
                 <div class="patlis-font-variable">
@@ -317,6 +352,9 @@ final class Patlis_Admin_Page_Design_Options {
           #patlis-sections-sortable li.ui-sortable-helper { box-shadow: 0 4px 12px rgba(0,0,0,.15); }
           #patlis-sections-sortable li.ui-sortable-placeholder { visibility: visible !important; border: 2px dashed #72aee6; background: #f0f6fc; }
           .patlis-global-variables { display: grid; gap: 14px; max-width: 520px; margin: 16px 0 28px; }
+          .patlis-global-variables .patlis-logo-variable { display: grid; grid-template-columns: 130px minmax(0, 1fr); align-items: start; gap: 12px; }
+          .patlis-global-logo-image { display: block; width: auto; max-width: min(240px, 100%); height: auto; max-height: 120px; object-fit: contain; border: 1px solid #ddd; padding: 2px; background: #fff; box-sizing: border-box; }
+          #patlis-logo-remove[hidden] { display: none; }
           .patlis-global-variables .patlis-font-variable { display: grid; grid-template-columns: 130px minmax(180px, 1fr) 70px; align-items: center; gap: 12px; }
           .patlis-global-variables .patlis-font-variable select { grid-column: 2 / -1; width: 100%; max-width: none; }
           .patlis-global-variables .patlis-design-range-field { display: grid; grid-template-columns: 130px minmax(180px, 1fr) 70px; align-items: center; gap: 12px; }
@@ -325,6 +363,39 @@ final class Patlis_Admin_Page_Design_Options {
         <script>
           jQuery(function($) {
             var $list = $('#patlis-sections-sortable');
+            var logoFrame = null;
+            var $logoInput = $('#patlis-logo-image-id');
+            var $logoPreview = $('#patlis-logo-preview');
+            var $logoRemove = $('#patlis-logo-remove');
+
+            $('#patlis-logo-select').on('click', function() {
+              if (logoFrame) {
+                logoFrame.open();
+                return;
+              }
+
+              logoFrame = wp.media({
+                title: <?php echo wp_json_encode(__('Select logo image', 'patlis-core')); ?>,
+                button: { text: <?php echo wp_json_encode(__('Use this image', 'patlis-core')); ?> },
+                library: { type: 'image' },
+                multiple: false
+              });
+              logoFrame.on('select', function() {
+                var attachment = logoFrame.state().get('selection').first().toJSON();
+                var imageUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
+                $logoInput.val(attachment.id);
+                $logoPreview.empty().append($('<img>', { src: imageUrl, alt: '', class: 'patlis-global-logo-image' }));
+                $logoRemove.prop('hidden', false);
+              });
+              logoFrame.open();
+            });
+
+            $logoRemove.on('click', function() {
+              $logoInput.val('0');
+              $logoPreview.empty();
+              $(this).prop('hidden', true);
+            });
+
             $('.patlis-global-variables input[type="range"]').on('input', function() {
               $(this).siblings('output').text(this.value + 'px');
             });
@@ -961,6 +1032,17 @@ final class Patlis_Admin_Page_Design_Options {
       return;
     }
 
+    if ($type === 'dropdown') {
+      $options = isset($field['options']) && is_array($field['options']) ? $field['options'] : [];
+      $value = self::sanitize_field($value, $type, '', $field);
+      echo '<select name="' . esc_attr($name) . '" aria-label="' . esc_attr($label) . '">';
+      foreach ($options as $option_value => $option_label) {
+        echo '<option value="' . esc_attr((string) $option_value) . '"' . selected($value, (string) $option_value, false) . '>' . esc_html((string) $option_label) . '</option>';
+      }
+      echo '</select></div>';
+      return;
+    }
+
     if ($type === 'range') {
       $min = isset($field['min']) && is_numeric($field['min']) ? (string) $field['min'] : '0';
       $max = isset($field['max']) && is_numeric($field['max']) ? (string) $field['max'] : '100';
@@ -982,7 +1064,7 @@ final class Patlis_Admin_Page_Design_Options {
         echo '<div class="patlis-design-language-field">';
         echo '<label><strong>' . esc_html($language_label) . '</strong></label>';
         if ($type === 'textarea') {
-          echo '<textarea class="large-text" rows="4" name="' . esc_attr($translated_name) . '">' . esc_textarea((string) $translated_value) . '</textarea>';
+          echo '<textarea class="large-text" rows="2" name="' . esc_attr($translated_name) . '">' . esc_textarea((string) $translated_value) . '</textarea>';
         } else {
           echo '<input class="regular-text" type="text" name="' . esc_attr($translated_name) . '" value="' . esc_attr((string) $translated_value) . '">';
         }

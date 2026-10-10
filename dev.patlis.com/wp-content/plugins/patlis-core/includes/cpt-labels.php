@@ -37,10 +37,6 @@ add_filter('register_post_type_args', function (array $args, string $post_type):
             'plural'   => __('Timelines', 'patlis-core'),
             'singular' => __('Timeline', 'patlis-core'),
         ],
-        'slide' => [
-            'plural'   => __('Slides', 'patlis-core'),
-            'singular' => __('Slide', 'patlis-core'),
-        ],
     ];
 
     if (!isset($post_types[$post_type])) {

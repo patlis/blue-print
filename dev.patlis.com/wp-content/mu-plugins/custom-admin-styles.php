@@ -28,7 +28,8 @@ function custom_admin_css_get_config(): array {
             'menu-icon-reviews',
             'menu-icon-gallery_images',
             'menu-icon-timeline_item',
-            'menu-icon-slide',
+            'toplevel_page_patlis-slides',
+            'toplevel_page_patlis-design-options'
         ],
     ];
 }

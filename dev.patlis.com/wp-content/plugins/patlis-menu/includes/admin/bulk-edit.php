@@ -13,7 +13,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 
 		$result = null;
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['patlis_menu_bulk_edit_submit'])) {
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$result = self::handle_save();
 		}
 
@@ -84,6 +84,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 
 			<form method="post" action="" class="patlis-form">
 				<?php wp_nonce_field('patlis_menu_bulk_edit_action', 'patlis_menu_bulk_edit_nonce'); ?>
+				<input type="hidden" name="patlis_menu_bulk_edit_payload" value="">
 
 				<?php if (empty($sections)) : ?>
 					<div class="patlis-table-wrap">
@@ -159,6 +160,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 					<?php endforeach; ?>
 				<?php endif; ?>
 
+				<input type="hidden" name="patlis_menu_bulk_edit_complete" value="1">
 				<?php if ($has_items) : ?>
 					<p class="submit">
 						<button type="submit" name="patlis_menu_bulk_edit_submit" value="1" class="button button-primary">Save All Changes</button>
@@ -181,9 +183,22 @@ final class Patlis_Menu_Admin_Bulk_Edit
 				});
 			});
 
-			document.querySelector('.patlis-form')?.addEventListener('submit', function () {
-				document.querySelectorAll('.patlis-field-changed').forEach(function (f) {
-					f.classList.remove('patlis-field-changed');
+			var form = document.querySelector('.patlis-form');
+			form.addEventListener('submit', function () {
+				var items = {};
+				var fields = form.querySelectorAll('input[name^="items["]');
+				fields.forEach(function (field) {
+					var match = field.name.match(/^items\[(\d+)\]\[([a-z0-9_]+)\]$/);
+					if (!match) return;
+					if (!items[match[1]]) items[match[1]] = {};
+					items[match[1]][match[2]] = field.value;
+				});
+
+				// Keep large menus below PHP's max_input_vars limit.
+				form.elements.namedItem('patlis_menu_bulk_edit_payload').value = JSON.stringify(items);
+				fields.forEach(function (field) {
+					field.disabled = true;
+					field.classList.remove('patlis-field-changed');
 				});
 			});
 
@@ -285,8 +300,17 @@ final class Patlis_Menu_Admin_Bulk_Edit
 			wp_die('Not allowed.');
 		}
 
+		if (empty($_POST)) {
+			return [
+				'updated' => 0,
+				'skipped' => 0,
+				'errors'  => ['No form data received. The request may exceed the server post_max_size limit. No items were saved.'],
+			];
+		}
+
 		if (
 			!isset($_POST['patlis_menu_bulk_edit_nonce']) ||
+			!is_string($_POST['patlis_menu_bulk_edit_nonce']) ||
 			!wp_verify_nonce((string) $_POST['patlis_menu_bulk_edit_nonce'], 'patlis_menu_bulk_edit_action')
 		) {
 			return [
@@ -296,13 +320,51 @@ final class Patlis_Menu_Admin_Bulk_Edit
 			];
 		}
 
-		$items = $_POST['items'] ?? [];
+		if (($_POST['patlis_menu_bulk_edit_complete'] ?? '') !== '1') {
+			return [
+				'updated' => 0,
+				'skipped' => 0,
+				'errors'  => ['Incomplete form submission. Enable JavaScript or increase the server max_input_vars limit and try again. No items were saved.'],
+			];
+		}
+
+		$payload = $_POST['patlis_menu_bulk_edit_payload'] ?? '';
+		if (!is_string($payload)) {
+			return [
+				'updated' => 0,
+				'skipped' => 0,
+				'errors'  => ['Invalid bulk edit data. No items were saved.'],
+			];
+		}
+
+		$items = $payload !== '' ? json_decode(wp_unslash($payload), true) : wp_unslash($_POST['items'] ?? []);
+		if ($payload !== '' && json_last_error() !== JSON_ERROR_NONE) {
+			return [
+				'updated' => 0,
+				'skipped' => 0,
+				'errors'  => ['Invalid bulk edit data. No items were saved.'],
+			];
+		}
+
 		if (!is_array($items) || empty($items)) {
 			return [
 				'updated' => 0,
 				'skipped' => 0,
 				'errors'  => ['No items submitted.'],
 			];
+		}
+
+		$required_fields = ['post_id', 'sort', 'itemnr', 'name', 'size1', 'price', 'size2', 'price2', 'size3', 'price3'];
+		foreach ($items as $row) {
+			foreach ($required_fields as $field) {
+				if (!is_array($row) || !isset($row[$field]) || !is_string($row[$field])) {
+					return [
+						'updated' => 0,
+						'skipped' => 0,
+						'errors'  => ['Incomplete or invalid item data. No items were saved.'],
+					];
+				}
+			}
 		}
 
 		$updated = 0;
@@ -338,10 +400,15 @@ final class Patlis_Menu_Admin_Bulk_Edit
 				continue;
 			}
 
-			wp_update_post([
+			$post_result = wp_update_post([
 				'ID'         => $post_id,
-				'post_title' => $name,
-			]);
+				'post_title' => wp_slash($name),
+			], true);
+			if (is_wp_error($post_result)) {
+				$skipped++;
+				$errors[] = 'Item ID ' . $post_id . ': ' . $post_result->get_error_message();
+				continue;
+			}
 
 			$sort_raw = isset($row['sort']) ? trim((string) $row['sort']) : '';
 			if ($sort_raw === '') {
@@ -350,14 +417,14 @@ final class Patlis_Menu_Admin_Bulk_Edit
 				update_post_meta($post_id, 'pmi_sort', (string) intval($sort_raw));
 			}
 
-			update_post_meta($post_id, 'pmi_itemnr', sanitize_text_field((string) ($row['itemnr'] ?? '')));
+			update_post_meta($post_id, 'pmi_itemnr', wp_slash(sanitize_text_field((string) ($row['itemnr'] ?? ''))));
 			update_post_meta($post_id, 'pmi_price', self::sanitize_price((string) ($row['price'] ?? '')));
 			update_post_meta($post_id, 'pmi_price2', self::sanitize_price((string) ($row['price2'] ?? '')));
 			update_post_meta($post_id, 'pmi_price3', self::sanitize_price((string) ($row['price3'] ?? '')));
 
-			update_post_meta($post_id, 'pmi_size1', sanitize_text_field((string) ($row['size1'] ?? '')));
-			update_post_meta($post_id, 'pmi_size2', sanitize_text_field((string) ($row['size2'] ?? '')));
-			update_post_meta($post_id, 'pmi_size3', sanitize_text_field((string) ($row['size3'] ?? '')));
+			update_post_meta($post_id, 'pmi_size1', wp_slash(sanitize_text_field((string) ($row['size1'] ?? ''))));
+			update_post_meta($post_id, 'pmi_size2', wp_slash(sanitize_text_field((string) ($row['size2'] ?? ''))));
+			update_post_meta($post_id, 'pmi_size3', wp_slash(sanitize_text_field((string) ($row['size3'] ?? ''))));
 
 			$updated++;
 		}

@@ -11,7 +11,6 @@ add_filter('acf/load_field_group', function ($field_group) {
         'offers & packages' => __('Offers and packages', 'patlis-core'),
         'reviews'           => __('Reviews', 'patlis-core'),
         'services'          => __('Services', 'patlis-core'),
-        'slides'            => __('Slides', 'patlis-core'),
         'timeline'          => __('Timeline', 'patlis-core'),
     ];
 
@@ -60,8 +59,6 @@ add_filter('acf/load_field', function ($field) {
         'service_show'              => __('Enable', 'patlis-core'),
         'service_order'             => __('Display order', 'patlis-core'),
         'service_video_url'         => __('Video URL', 'patlis-core'),
-        /* Slides */
-        'slide_sort'      => __('Display order', 'patlis-core'),
         /* Timeline */
         'timeline_date'  => __('Date (optional)', 'patlis-core'),
         'timeline_image' => __('Image (optional)', 'patlis-core'),

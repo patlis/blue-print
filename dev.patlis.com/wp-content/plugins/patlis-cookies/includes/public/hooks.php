@@ -73,9 +73,9 @@ function patlis_cookies_enqueue_assets() {
 
     wp_enqueue_style(
         'patlis-cookies-css',
-        PATLIS_COOKIES_URL . 'assets/cookies.css',
+        PATLIS_COOKIES_URL . 'assets/cookies.min.css',
         [],
-        filemtime(PATLIS_COOKIES_PATH . 'assets/cookies.css')
+        filemtime(PATLIS_COOKIES_PATH . 'assets/cookies.min.css')
     );
 }
 
@@ -107,15 +107,10 @@ function add_cookie_banner() {
 
                 <div class="ex-modal-footer">
                     <div class="ex-row ex-w-100">
-                        <div class="ex-btn-columns ex-p-1">
-                            <button type="button"class="ex-btn ex-btn-warning ex-btn-block"
-                                    onclick="acceptAll()"><?php echo esc_html(patlis_cookies_get_text($t['btn_allow_all'])); ?></button>
-                        </div>
-                        <div class="ex-btn-columns ex-p-1">
-                            <button type="button" class="ex-btn ex-btn-outline-primary ex-btn-block"
-                                    onclick="getCookiehtml()"><?php echo esc_html(patlis_cookies_get_text($t['btn_customize'])); ?> »</button>
-                        </div>
-
+                        <button type="button"class="ex-btn ex-btn-warning"
+                            onclick="acceptAll()"><?php echo esc_html(patlis_cookies_get_text($t['btn_allow_all'])); ?></button>
+                        <button type="button" class="ex-btn ex-btn-outline"
+                            onclick="getCookiehtml()"><?php echo esc_html(patlis_cookies_get_text($t['btn_customize'])); ?> »</button>
                     </div>
                 </div>
             </div>
@@ -128,7 +123,7 @@ function add_cookie_banner() {
         document.getElementById("cookie-banner").style.display = "none";
         try { document.getElementById("cookie-settings").remove(); } catch (e) {}
 
-        fetch("<?php echo esc_js(PATLIS_COOKIES_URL . 'assets/cookies.html'); ?>")
+        fetch("<?php echo esc_js(add_query_arg('ver', filemtime(PATLIS_COOKIES_PATH . 'assets/cookies.html'), PATLIS_COOKIES_URL . 'assets/cookies.html')); ?>")
             .then(response => response.text())
             .then(html => {
                 document.body.insertAdjacentHTML("beforeend", html);

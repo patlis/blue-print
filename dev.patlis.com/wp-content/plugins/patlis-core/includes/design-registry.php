@@ -3,10 +3,100 @@ if (!defined('ABSPATH')) exit;
 
 return [
 
-    /* welcome section */
+    'header' => [
+        'type'     => 'section',
+        'label'    => __('Header', 'patlis-core'),
+        'shortcode_slug' => 'header',
+        'default_variant' => 'header-classic',
+        'fields'   => [],
+        'variants' => [
+            'header-classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'header-classic',
+                'description' => __('Traditional horizontal header with logo on the left and navigation on the right. Clear, compact and suitable for most business types.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/header/classic.webp',
+                'fields'   => [],
+            ],
+            'header-editorial' => [
+                'label'    => __('Editorial', 'patlis-core'),
+                'template' => 'header-editorial',
+                'description' => __('Centered logo with navigation arranged below for a more elegant, boutique-style presentation.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/header/editorial.webp',
+                'fields'   => [],
+            ],
+            'minimal' => [
+                'label'    => __('Minimal', 'patlis-core'),
+                'template' => 'header-minimal',
+                'description' => __('Reduced header with centered branding and a hamburger menu, keeping the interface clean and unobtrusive.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/header/minimal.webp',
+                'fields'   => [],
+            ],
+        ],
+    ],
+
+    'footer' => [
+        'type'     => 'section',
+        'label'    => __('Footer', 'patlis-core'),
+        'shortcode_slug' => 'footer',
+        'default_variant' => 'footer-classic',
+        'fields'   => [],
+        'variants' => [
+            'footer-classic' => [
+                'label'    => __('Footer Classic', 'patlis-core'),
+                'template' => 'footer-classic',
+                'preview'  => 'assets/design-previews/footer/footer-classic.webp',
+                'fields'   => [
+                    'dividerimage' => [
+                        'label'      => __('Divider Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'dividerimage',
+                        'description' => __('Optional image displayed above the footer. Transparent PNG or WebP recommended', 'patlis-core'),
+                    ],
+                    'monochrome' => [
+                        'label'      => __('Match footer color', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'monochrome',
+                        'default'    => false,
+                        'description' => __('Recolors the divider image using the current footer color while preserving transparency.', 'patlis-core'),
+
+                    ],
+                ],
+            ],
+            'footer-cinematic' => [
+                'label'    => __('Footer Cinematic', 'patlis-core'),
+                'template' => 'footer-cinematic',
+                'preview'  => 'assets/design-previews/footer/footer-cinematic.webp',
+                'fields'   => [
+                    'image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'opacity' => [
+                        'label'      => __('Background Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'opacity',
+                        'default'    => 0.5,
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+
+                    ],
+                ],
+            ],
+            'footer-floating' => [
+                'label'    => __('Footer Floating', 'patlis-core'),
+                'template' => 'footer-floating',
+                'preview'  => 'assets/design-previews/footer/footer-floating.webp',
+                'fields'   => [
+                ],
+            ],
+        ],
+    ],
+
     'welcome_section' => [
         'type'            => 'section',
-        'label'           => __('Welcome Section', 'patlis-core'),
+        'label'           => __('Intro Section (H1)', 'patlis-core'),
         'shortcode_slug'  => 'welcome-section',
         'availability'    => 'home',
         'default_variant' => 'classic',
@@ -17,13 +107,19 @@ return [
                 This template uses the Home page featured image OR a custom video.', 'patlis-core'),
                 'template' => 'welcome-classic',
                 'preview'  => 'assets/design-previews/welcome-section/classic.webp',
-                'fields'   => [
+                'fields'   => [                  
                     'cta' => [
                         'label'      => __('Show Call to Action Buttons', 'patlis-core'),
                         'type'       => 'checkbox',
                         'option_key' => 'show_cta',
                         'default'    => false,
-                    ]
+                    ],
+                     'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],                     
                 ],
             ],
             'cinematic' => [
@@ -63,6 +159,12 @@ return [
                         'option_key' => 'show_cta',
                         'default'    => false,
                     ],
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
                 ],
             ],
             'book' => [
@@ -77,6 +179,12 @@ return [
                     'option_key' => 'show_cta',
                     'default'    => false,
                     ],
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],                    
                 ],
             ],
             'floating' => [
@@ -107,10 +215,16 @@ return [
                 'preview'  => 'assets/design-previews/welcome-section/split-screen.webp',
                 'fields'   => [
                     'cta' => [
-                    'label'      => __('Show Call to Action', 'patlis-core'),
-                    'type'       => 'checkbox',
-                    'option_key' => 'show_cta',
-                    'default'    => false,
+                        'label'      => __('Show Call to Action', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'show_cta',
+                        'default'    => false,
+                    ],
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
                     ],
                 ],
             ],
@@ -121,10 +235,16 @@ return [
                 'preview'  => 'assets/design-previews/welcome-section/signature-intro.webp',
                 'fields'   => [
                     'cta' => [
-                    'label'      => __('Show Call to Action', 'patlis-core'),
-                    'type'       => 'checkbox',
-                    'option_key' => 'show_cta',
-                    'default'    => false,
+                        'label'      => __('Show Call to Action', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'show_cta',
+                        'default'    => false,
+                    ],
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
                     ],
                 ],
             ],
@@ -132,7 +252,37 @@ return [
         ],
     ],
 
-    /* top services section*/
+    'top_menu' => [
+        'type'            => 'section',
+        'label'           => __('Top Menu', 'patlis-core'),
+        'shortcode_slug'  => 'top-menu',
+        'availability'    => 'menu',
+        'default_variant' => 'editorial-cards',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'top-menu-classic',
+                'description' => __('Clean visual layout with circular dish images and concise titles, ideal for highlighting selected menu items in a simple and elegant way.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-menu/classic.webp',
+                'fields'   => [],
+            ],
+            'editorial-cards' => [
+                'label'    => __('Editorial', 'patlis-core'),
+                'template' => 'menu-editorial-cards',
+                'description' => __('Detailed card-based layout combining dish image, title, description and price, with Carousel or Grid display options for a richer presentation of featured menu items.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-menu/editorial-cards.webp',
+                'fields'   => [
+                    'grid' => [
+                        'label'      => __('Display in Grid mode (Default is Carousel)', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'display_in_grid',
+                        'default'    => false,  
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'top_services' => [
         'type'            => 'section',
         'label'           => __('Top Services', 'patlis-core'),
@@ -175,6 +325,12 @@ return [
                 'preview'  => 'assets/design-previews/top-services/split-screen.webp',
                 'description' => __('Two-column layout combining an introductory content area with a structured list of services, ideal for balancing storytelling with detailed service highlights.', 'patlis-core'),
                 'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
                     'description' => [
                         'label'      => __('Description (optional)', 'patlis-core'),
                         'type'       => 'textarea',
@@ -200,26 +356,103 @@ return [
         ],
     ],
 
-    /* top menu section */
-    'top_menu' => [
+    'top_events' => [
         'type'            => 'section',
-        'label'           => __('Top Menu', 'patlis-core'),
-        'shortcode_slug'  => 'top-menu',
+        'label'           => __('Top Events', 'patlis-core'),
+        'shortcode_slug'  => 'top-events',
         'availability'    => 'menu',
-        'default_variant' => 'editorial-cards',
+        'default_variant' => 'classic',
         'variants' => [
             'classic' => [
                 'label'    => __('Classic', 'patlis-core'),
-                'template' => 'top-menu-classic',
-                'description' => __('Clean visual layout with circular dish images and concise titles, ideal for highlighting selected menu items in a simple and elegant way.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-menu/classic.webp',
+                'template' => 'top-events-classic',
+                'description' => __('Card-based carousel displaying multiple upcoming events with image, title, description and date, ideal for a clear and familiar overview.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-events/classic.webp',
                 'fields'   => [],
             ],
-            'editorial-cards' => [
-                'label'    => __('Editorial', 'patlis-core'),
-                'template' => 'menu-editorial-cards',
-                'description' => __('Detailed card-based layout combining dish image, title, description and price, with Carousel or Grid display options for a richer presentation of featured menu items.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-menu/editorial-cards.webp',
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'top-events-cinematic',
+                'description' => __('Immersive background-image layout with event cards layered on top, ideal for creating a strong visual impact and highlighting special occasions.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-events/cinematic.webp',
+                'fields'   => [
+                    'background_image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'background_image_id',
+                    ],
+                    'overlay_opacity' => [
+                        'label'      => __('Overlay opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'overlay_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+            'split-screen' => [
+                'label'    => __('Split Screen', 'patlis-core'),
+                'template' => 'top-events-split-screen',
+                'description' => __('Two-column layout combining introductory content with a structured list of selected events, ideal for balancing storytelling with detailed event information.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-events/split-screen.webp',
+                'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ],
+                    'image' => [
+                        'label'      => __('Background Image (optional)', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image_id',
+                    ],
+                    'overlay_opacity' => [
+                        'label'      => __('Overlay opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'overlay_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+            'agenda' => [
+                'label'    => __('Agenda', 'patlis-core'),
+                'template' => 'top-events-agenda',
+                'description' => __('Date-focused list layout with prominent day and month blocks, ideal for presenting multiple events clearly even when strong imagery is not available.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-events/agenda.webp',
+                'fields'   => [
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    
+    'top_rooms' => [
+        'type'            => 'section',
+        'label'           => __('Top Rooms', 'patlis-core'),
+        'shortcode_slug'  => 'top-rooms',
+        'availability'    => 'rooms',
+        'default_variant' => 'classic',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'top-rooms-classic',
+                'description' => __('Clean card-based layout with room image, title, view and key room details.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-rooms/classic.webp',
                 'fields'   => [
                     'grid' => [
                         'label'      => __('Display in Grid mode (Default is Carousel)', 'patlis-core'),
@@ -229,16 +462,149 @@ return [
                     ],
                 ],
             ],
+            'showcase' => [
+                'label'    => __('Showcase', 'patlis-core'),
+                'template' => 'top-rooms-showcase',
+                'description' => __('Image-focused layout with room details overlaid directly on the photos.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-rooms/showcase.webp',
+                'fields'   => [
+                    'grid' => [
+                        'label'      => __('Display in Grid mode (Default is Carousel)', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'display_in_grid',
+                        'default'    => false,  
+                    ],
+                ],
+            ],
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'top-rooms-cinematic',
+                'description' => __('Full-background layout with floating room cards for a more immersive presentation.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-rooms/cinematic.webp',
+                'fields'   => [
+                    'image' => [
+                        'label'      => __('Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'opacity' => [
+                        'label'      => __('Overlay Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+            'split-screen' => [
+                'label'    => __('Split Screen', 'patlis-core'),
+                'template' => 'top-rooms-split-screen',
+                'description' => __('Two-column layout with introductory content on the left and up to 3 selected rooms displayed in compact rows on the right.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-rooms/split-screen.webp',
+                'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                    ],
+                    'image' => [
+                        'label'      => __('Image (optional)', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'overlay_opacity' => [
+                        'label'      => __('Overlay opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'overlay_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ],
+                ],
+            ],
         ],
     ],
-
-    /* top rooms section */
     
-    /* Hot Deals section */
+    'top_offers' => [
+        'type'            => 'section',
+        'label'           => __('Top Offers & Packages', 'patlis-core'),
+        'shortcode_slug'  => 'top-offers',
+        'availability'    => 'menu',
+        'default_variant' => 'classic',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'top-offers-classic',
+                'description' => __('', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-offers/classic.webp',
+                'fields'   => [],
+            ],
+            'split-screen' => [
+                'label'    => __('Split Screen', 'patlis-core'),
+                'template' => 'top-offers-split-screen',
+                'description' => __('', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-offers/split-screen.webp',
+                'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
+                    'image' => [
+                        'label'      => __('Image (optional)', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'overlay_opacity' => [
+                        'label'      => __('Overlay opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'overlay_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ]
+                ],
+            ],
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'top-offers-cinematic',
+                'preview'  => 'assets/design-previews/top-offers/cinematic.webp',
+                'description' => __('', 'patlis-core'),
+                'fields'   => [
+                    'image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'opacity' => [
+                        'label'      => __('Background Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,   
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+        ],
+    ],
     
-    /* Top events section */
-    
-    /* Top Reviews section */
     'top_reviews' => [
         'type'            => 'section',
         'label'           => __('Top Reviews', 'patlis-core'),
@@ -315,7 +681,6 @@ return [
         ],
     ],
     
-    /* Top gallery section */
     'top_gallery' => [
         'type'     => 'section',
         'label'    => __('Top Gallery', 'patlis-core'),
@@ -362,7 +727,6 @@ return [
         ],
     ],
 
-    /* CTA section */
     'cta' => [
         'type'     => 'section',
         'label'    => __('CTA (only homepage)', 'patlis-core'),
@@ -371,7 +735,6 @@ return [
         'description' => __('You can customize Text and images in every page.', 'patlis-core'),
         'default_variant' => 'cinematic',
         'fields' => [
-
             'header' => [
                 'label'      => __('Header Text', 'patlis-core'),
                 'type'       => 'text',
@@ -442,7 +805,6 @@ return [
         ],
     ],
 
-    /* Hotel experiences section */
     'top_experiences' => [
         'type'     => 'section',
         'label'    => __('Top Experiences', 'patlis-core'),
@@ -470,6 +832,12 @@ return [
                 'preview'  => 'assets/design-previews/top-experiences/split-screen.webp',
                 'description' => __('Balanced two-column layout combining an introduction area with a structured list of experiences, ideal for storytelling and a more editorial presentation.', 'patlis-core'),
                 'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
                     'image' => [
                         'label'      => __('Image (optional)', 'patlis-core'),
                         'type'       => 'image',
@@ -515,67 +883,4 @@ return [
             ],
         ],
     ],
-
-    /* footer section */
-    'footer' => [
-        'type'     => 'section',
-        'label'    => __('Footer', 'patlis-core'),
-        'shortcode_slug' => 'footer',
-        'default_variant' => 'footer-classic',
-        'fields'   => [],
-        'variants' => [
-            'footer-classic' => [
-                'label'    => __('Footer Classic', 'patlis-core'),
-                'template' => 'footer-classic',
-                'preview'  => 'assets/design-previews/footer/footer-classic.webp',
-                'fields'   => [
-                    'dividerimage' => [
-                        'label'      => __('Divider Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'dividerimage',
-                        'description' => __('Optional image displayed above the footer. Transparent PNG or WebP recommended', 'patlis-core'),
-                    ],
-                    'monochrome' => [
-                        'label'      => __('Match footer color', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'monochrome',
-                        'default'    => false,
-                        'description' => __('Recolors the divider image using the current footer color while preserving transparency.', 'patlis-core'),
-
-                    ],
-                ],
-            ],
-            'footer-cinematic' => [
-                'label'    => __('Footer Cinematic', 'patlis-core'),
-                'template' => 'footer-cinematic',
-                'preview'  => 'assets/design-previews/footer/footer-cinematic.webp',
-                'fields'   => [
-                    'image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                    'opacity' => [
-                        'label'      => __('Background Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'opacity',
-                        'default'    => 0.5,
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,
-
-                    ],
-                ],
-            ],
-            'footer-floating' => [
-                'label'    => __('Footer Floating', 'patlis-core'),
-                'template' => 'footer-floating',
-                'preview'  => 'assets/design-previews/footer/footer-floating.webp',
-                'fields'   => [
-                ],
-            ],
-        ],
-    ],
-
-
 ];

@@ -30,6 +30,7 @@ require_once PATLIS_CORE_PATH . 'includes/cpt-labels.php';
 require_once PATLIS_CORE_PATH . 'includes/events-gallery.php';
 require_once PATLIS_CORE_PATH . 'includes/gallery-manager.php';
 require_once PATLIS_CORE_PATH . 'includes/media-ai-status.php';
+require_once PATLIS_CORE_PATH . 'includes/sliders/sliders-helpers.php';
 
 // Updater 
 if (function_exists('patlis_register_plugin_updater')) {
@@ -60,6 +61,8 @@ if (is_admin()) {
     require_once PATLIS_CORE_PATH . '/includes/editor-restrictions.php';
     require_once PATLIS_CORE_PATH . '/includes/admin/admin-columns.php';
 
+    require_once PATLIS_CORE_PATH . '/includes/sliders/sliders-admin.php';
+    require_once PATLIS_CORE_PATH . '/includes/sliders/sliders-save.php';
 
 }
 

@@ -86,22 +86,6 @@ function patlis_has_dining(): string {
     return (function_exists('patlis_version_has_dining') && patlis_version_has_dining()) ? '1' : '0';
 }
 
-function patlis_core_slides_count(): int {
-    $args = [
-        'post_type'      => 'slide',
-        'posts_per_page' => -1,
-        'fields'         => 'ids',
-        'no_found_rows'  => false,
-    ];
-
-    if (function_exists('patlis_fallback_posts_query')) {
-        $args = patlis_fallback_posts_query($args);
-    }
-
-    $q = new WP_Query($args);
-    return (int) $q->found_posts;
-}
-
 function patlis_top_services_count(): int {
     $args = [
         'post_type'      => 'services',
@@ -608,7 +592,9 @@ add_filter('bricks/code/echo_function_names', function ($functions) {
 	$functions[] = 'patlis_has_hotel';
 	$functions[] = 'patlis_has_kiosk';
 	$functions[] = 'patlis_has_dining';
-	$functions[] = 'patlis_core_slides_count';
+    $functions[] = 'patlis_sliders_query';
+    $functions[] = 'patlis_sliders_count';
+    $functions[] = 'patlis_sliders_duration';
 	$functions[] = 'patlis_top_services_count';
 	$functions[] = 'patlis_sticky_services_count';
 	$functions[] = 'patlis_more_services_count';
@@ -861,5 +847,4 @@ function patlis_filter_body_classes(array $classes): array
 
     return $classes;
 }
-
 

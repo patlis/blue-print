@@ -46,6 +46,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   // BASIC
   $tags[] = ['name' => '{patlis_company_name}',      'label' => 'Company name', 'patlis-core',            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => 'Logo image URL', 'patlis-core',          'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_match_header_colors}', 'label' => 'Logo image matches header colors (1/0)', 'group' => $group_design];
   $tags[] = ['name' => '{patlis_cta_bg_image_id}',   'label' => 'CTA background image ID', 'patlis-core',  'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => 'CTA background image URL', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cta_bg_image_url_ai_status}', 'label' => 'CTA background image AI status', 'patlis-core', 'group' => $group_basic];
@@ -346,6 +347,10 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     }
 
     // BASIC
+    if ($tag === 'patlis_match_header_colors') {
+      return !empty(Patlis_Core::get_basic('match_header_colors', 0)) ? '1' : '0';
+    }
+
     if ($tag === 'patlis_logo_image_url') {
       $id = (int) Patlis_Core::get_basic('logo_image_id', 0);
       $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : '';
@@ -693,6 +698,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   // Only handle these tags here
   if (
     $base !== 'patlis_logo_image_url' &&
+    $base !== 'patlis_match_header_colors' &&
     $base !== 'patlis_cta_bg_image_id' &&
     $base !== 'patlis_cta_bg_image_url' &&
     $base !== 'patlis_cta_bg_image_url_ai_status' &&
@@ -721,6 +727,10 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   if (!class_exists('Patlis_Core')) return $tag;
+
+  if ($base === 'patlis_match_header_colors') {
+    return !empty(Patlis_Core::get_basic('match_header_colors', 0)) ? '1' : '0';
+  }
 
   if ($base === 'patlis_slogan') {
     return Patlis_Core::get_basic_text('slogan');
