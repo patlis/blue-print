@@ -7,17 +7,6 @@ if (!defined('ABSPATH')) exit;
  * - Renders {patlis_*} inside Text/Heading/etc
  */
 
-function patlis_get_cta_bg_image_ai_status(): string {
-  $options = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-  $attachment_id = isset($options['cta_bg_image_id']) ? (int) $options['cta_bg_image_id'] : 0;
-
-  if ($attachment_id <= 0 || !function_exists('patlis_core_get_attachment_ai_status')) {
-    return 'none';
-  }
-
-  return patlis_core_get_attachment_ai_status($attachment_id);
-}
-
 function patlis_get_center_image_ai_status(): string {
   $options = get_option(Patlis_Core::OPTION_CENTER_POPUP, []);
   $attachment_id = isset($options['image_id']) ? (int) $options['image_id'] : 0;
@@ -47,9 +36,6 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_company_name}',      'label' => 'Company name', 'patlis-core',            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_logo_image_url}',    'label' => 'Logo image URL', 'patlis-core',          'group' => $group_basic];
   $tags[] = ['name' => '{patlis_match_header_colors}', 'label' => 'Logo image matches header colors (1/0)', 'group' => $group_design];
-  $tags[] = ['name' => '{patlis_cta_bg_image_id}',   'label' => 'CTA background image ID', 'patlis-core',  'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_cta_bg_image_url}',  'label' => 'CTA background image URL', 'patlis-core', 'group' => $group_basic];
-  $tags[] = ['name' => '{patlis_cta_bg_image_url_ai_status}', 'label' => 'CTA background image AI status', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_home_video_url}',    'label' => 'Home welcome video URL', 'patlis-core',   'group' => $group_basic];
   $tags[] = ['name' => '{patlis_icon_tag:leaf-solid}', 'label' => 'Icon URL by name (SVG)', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_address}',           'label' => 'Address', 'patlis-core',                 'group' => $group_basic];
@@ -62,6 +48,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_whatsapp}',          'label' => 'WhatsApp',                                            'group' => $group_basic];
   $tags[] = ['name' => '{patlis_cordinates}',        'label' => 'Cordinates',                                          'group' => $group_basic];
   $tags[] = ['name' => '{patlis_show_contact_form}',        'label' => 'Show contact form (1/0)', 'patlis-core',  'group' => $group_basic];
+  $tags[] = ['name' => '{patlis_show_map}',                 'label' => 'Show map (1/0)', 'patlis-core',           'group' => $group_basic];
   $tags[] = ['name' => '{patlis_opening_show_on_footer}', 'label' => 'Opening: Show on footer (1/0)', 'patlis-core', 'group' => $group_basic];
   $tags[] = ['name' => '{patlis_opening_text}',          'label' => 'Opening: Text (HTML)', 'patlis-core',          'group' => $group_basic];
   $tags[] = ['name' => '{patlis_contact_form_recipient_email}', 'label' => 'Contact form: Recipient email', 'patlis-core', 'group' => $group_basic];
@@ -173,6 +160,7 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     'patlis_whatsapp'     => 'whatsapp',
     'patlis_cordinates'   => 'cordinates',
     'patlis_show_contact_form' => 'show_contact_form',
+    'patlis_show_map' => 'show_map',
     'patlis_contact_form_recipient_email' => 'contact_form_recipient_email',
     'patlis_contact_form_email_subject'   => 'contact_form_email_subject',
   ];
@@ -357,23 +345,6 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       return is_string($url) ? $url : '';
     }
 
-    if ($tag === 'patlis_cta_bg_image_id') {
-      $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-      $id  = isset($opt['cta_bg_image_id']) ? (int)$opt['cta_bg_image_id'] : 0;
-      return $id > 0 ? (string)$id : '';
-    }
-
-    if ($tag === 'patlis_cta_bg_image_url') {
-      $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-      $id  = isset($opt['cta_bg_image_id']) ? (int)$opt['cta_bg_image_id'] : 0;
-      $url = $id > 0 ? wp_get_attachment_image_url($id, 'full') : '';
-      return is_string($url) ? $url : '';
-    }
-
-    if ($tag === 'patlis_cta_bg_image_url_ai_status') {
-      return patlis_get_cta_bg_image_ai_status();
-    }
-
     if ($tag === 'patlis_center_image_id_ai_status') {
       return patlis_get_center_image_ai_status();
     }
@@ -405,7 +376,7 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     }
 
     if (isset($basic_map[$tag])) {
-      $val = Patlis_Core::get_basic($basic_map[$tag], '');
+      $val = Patlis_Core::get_basic($basic_map[$tag], $tag === 'patlis_show_map' ? 1 : '');
       return is_scalar($val) ? (string)$val : '';
     }
 
@@ -415,16 +386,7 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
       if (!is_array($all)) $all = [];
 
       if ($tag === 'patlis_opening_text') {
-        $raw = $all['text'] ?? '';
-        if (is_string($raw)) return $raw;
-        if (is_array($raw)) {
-          $current_lang = function_exists('pll_current_language') ? (string)(pll_current_language('slug') ?? '') : '';
-          $default_lang = function_exists('pll_default_language') ? (string)(pll_default_language('slug') ?? '') : '';
-          if ($current_lang !== '' && !empty($raw[$current_lang])) return $raw[$current_lang];
-          if ($default_lang !== '' && !empty($raw[$default_lang])) return $raw[$default_lang];
-          foreach ($raw as $v) { if (is_string($v) && $v !== '') return $v; }
-        }
-        return '';
+        return patlis_core_get_multilang_value($all['text'] ?? '');
       }
 
       $val = array_key_exists($opening_map[$tag], $all) ? $all[$opening_map[$tag]] : '';
@@ -459,47 +421,7 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     
       // multilingual text
       if ($tag === 'patlis_bar_text') {
-        $raw = $all['text'] ?? '';
-    
-        // backward compatibility: old format
-        if (is_string($raw)) {
-          return $raw;
-        }
-    
-        if (is_array($raw)) {
-          $current_lang = '';
-          $default_lang = '';
-    
-          if (function_exists('pll_current_language')) {
-            $current_lang = pll_current_language('slug');
-            if (!is_string($current_lang)) {
-              $current_lang = '';
-            }
-          }
-    
-          if (function_exists('pll_default_language')) {
-            $default_lang = pll_default_language('slug');
-            if (!is_string($default_lang)) {
-              $default_lang = '';
-            }
-          }
-    
-          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
-            return $raw[$current_lang];
-          }
-    
-          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
-            return $raw[$default_lang];
-          }
-    
-          foreach ($raw as $value) {
-            if (is_string($value) && $value !== '') {
-              return $value;
-            }
-          }
-        }
-    
-        return '';
+        return patlis_core_get_multilang_value($all['text'] ?? '');
       }
     
       $key = $bar_map[$tag];
@@ -533,130 +455,15 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
 
       if ($tag === 'patlis_center_code' || $tag === 'patlis_center_html') {
         $field = $tag === 'patlis_center_code' ? 'code' : 'html';
-        $raw = $all[$field] ?? '';
-
-        if (is_string($raw)) {
-          return $raw;
-        }
-
-        if (is_array($raw)) {
-          $current_lang = '';
-          $default_lang = '';
-
-          if (function_exists('pll_current_language')) {
-            $lang = pll_current_language('slug');
-            if (is_string($lang)) {
-              $current_lang = $lang;
-            }
-          }
-
-          if (function_exists('pll_default_language')) {
-            $lang = pll_default_language('slug');
-            if (is_string($lang)) {
-              $default_lang = $lang;
-            }
-          }
-
-          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
-            return $raw[$current_lang];
-          }
-
-          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
-            return $raw[$default_lang];
-          }
-
-          foreach ($raw as $value) {
-            if (is_string($value) && $value !== '') {
-              return $value;
-            }
-          }
-        }
-
-        return '';
+        return patlis_core_get_multilang_value($all[$field] ?? '');
       }
 
       if ($tag === 'patlis_center_link_url') {
-        $raw = $all['link_url'] ?? '';
-
-        if (is_string($raw)) {
-          return $raw;
-        }
-
-        if (is_array($raw)) {
-          $current_lang = '';
-          $default_lang = '';
-
-          if (function_exists('pll_current_language')) {
-            $lang = pll_current_language('slug');
-            if (is_string($lang)) {
-              $current_lang = $lang;
-            }
-          }
-
-          if (function_exists('pll_default_language')) {
-            $lang = pll_default_language('slug');
-            if (is_string($lang)) {
-              $default_lang = $lang;
-            }
-          }
-
-          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
-            return $raw[$current_lang];
-          }
-
-          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
-            return $raw[$default_lang];
-          }
-
-          foreach ($raw as $value) {
-            if (is_string($value) && $value !== '') {
-              return $value;
-            }
-          }
-        }
-
-        return '';
+        return patlis_core_get_multilang_value($all['link_url'] ?? '');
       }
 
       if ($tag === 'patlis_center_title') {
-        $raw = $all['title'] ?? '';
-
-        if (is_string($raw)) {
-          return $raw;
-        }
-
-        if (is_array($raw)) {
-          $current_lang = '';
-          $default_lang = '';
-
-          if (function_exists('pll_current_language')) {
-            $lang = pll_current_language('slug');
-            if (is_string($lang)) {
-              $current_lang = $lang;
-            }
-          }
-
-          if (function_exists('pll_default_language')) {
-            $lang = pll_default_language('slug');
-            if (is_string($lang)) {
-              $default_lang = $lang;
-            }
-          }
-
-          if ($current_lang !== '' && !empty($raw[$current_lang]) && is_string($raw[$current_lang])) {
-            return $raw[$current_lang];
-          }
-
-          if ($default_lang !== '' && !empty($raw[$default_lang]) && is_string($raw[$default_lang])) {
-            return $raw[$default_lang];
-          }
-
-          if ($default_lang !== '' && array_key_exists($default_lang, $raw) && is_scalar($raw[$default_lang])) {
-            return (string) $raw[$default_lang];
-          }
-        }
-
-        return '';
+        return patlis_core_get_multilang_value($all['title'] ?? '');
       }
 
       $key = $center_map[$tag];
@@ -699,9 +506,6 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (
     $base !== 'patlis_logo_image_url' &&
     $base !== 'patlis_match_header_colors' &&
-    $base !== 'patlis_cta_bg_image_id' &&
-    $base !== 'patlis_cta_bg_image_url' &&
-    $base !== 'patlis_cta_bg_image_url_ai_status' &&
     $base !== 'patlis_home_video_url' &&
     $base !== 'patlis_icon_tag' &&
     $base !== 'patlis_events_gallery_json' &&
@@ -800,27 +604,6 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
     return $logoUrl ?: '';
   }
 
-  // BASIC: CTA background image ID
-  if ($base === 'patlis_cta_bg_image_id') {
-    $hopt    = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-    $ctaBgId = isset($hopt['cta_bg_image_id']) ? (int)$hopt['cta_bg_image_id'] : 0;
-    if ($context === 'image') return $ctaBgId > 0 ? [$ctaBgId] : [];
-    return $ctaBgId > 0 ? (string)$ctaBgId : '';
-  }
-
-  // BASIC: CTA background image URL
-  if ($base === 'patlis_cta_bg_image_url') {
-    $hopt    = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-    $ctaBgId = isset($hopt['cta_bg_image_id']) ? (int)$hopt['cta_bg_image_id'] : 0;
-    $ctaBgUrl = $ctaBgId > 0 ? wp_get_attachment_image_url($ctaBgId, 'full') : '';
-    if ($context === 'image') return $ctaBgUrl ? [$ctaBgUrl] : [];
-    return $ctaBgUrl ?: '';
-  }
-
-  if ($base === 'patlis_cta_bg_image_url_ai_status') {
-    return patlis_get_cta_bg_image_ai_status();
-  }
-
   // BASIC: Home welcome video URL
   if ($base === 'patlis_home_video_url') {
     $url = function_exists('patlis_get_welcome_video_url') ? (string) patlis_get_welcome_video_url() : '';
@@ -867,16 +650,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (!is_array($opt)) $opt = [];
 
   if ($base === 'patlis_center_title') {
-    $raw = $opt['title'] ?? '';
-    if (is_string($raw)) return $raw;
-    if (is_array($raw)) {
-      $cl = function_exists('pll_current_language') ? (string)(pll_current_language('slug') ?? '') : '';
-      $dl = function_exists('pll_default_language')  ? (string)(pll_default_language('slug') ?? '')  : '';
-      if ($cl !== '' && !empty($raw[$cl]) && is_string($raw[$cl])) return $raw[$cl];
-      if ($dl !== '' && !empty($raw[$dl]) && is_string($raw[$dl])) return $raw[$dl];
-      if ($dl !== '' && array_key_exists($dl, $raw) && is_scalar($raw[$dl])) return (string)$raw[$dl];
-    }
-    return '';
+    return patlis_core_get_multilang_value($opt['title'] ?? '');
   }
 
   if ($base === 'patlis_center_start_date') {

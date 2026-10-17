@@ -685,6 +685,67 @@ return [
         ],
     ],
 
+    'royal-blue' => [
+        'name' => __('Royal Blue', 'patlis-core'),
+        'tags' => ['elegant', 'warm', 'modern'],
+        'colors' => [
+            '--notification'      => '#e0c390',
+            '--notification-text' => '#fff',
+
+            '--head'              => '#2b447a',
+            '--head-text'         => '#fff',
+            '--head-link'         => '#e0c390',
+            '--head-hover'        => '#fff',
+            '--head-active'       => '#fff',
+
+            '--body'              => '#fff',
+            '--body-zebra'        => '#eef2f8',
+            '--title'             => '#111111',
+            '--body-text'         => '#242424',
+            '--body-link'         => '#2b447a',
+            '--body-hover'        => '#1f335d',
+            '--border'            => '#bababa',
+
+            '--footer'            => '#2b447a',
+            '--footer-text'       => '#fff',
+            '--footer-link'       => '#e0c390',
+            '--footer-hover'      => '#fff',
+            '--footer-active'     => '#fff',
+
+            '--shadow'            => 'hsla(0, 0%, 0%, 0.4)',
+        ],
+    ],
+
+    'blue-orange' => [
+        'name' => __('Blue & Orange', 'patlis-core'),
+        'tags' => ['elegant', 'warm', 'modern'],
+        'colors' => [
+            '--notification'      => '#f97316',
+            '--notification-text' => '#fff',
+
+            '--head'              => '#0a2952',
+            '--head-text'         => '#fff',
+            '--head-link'         => '#fff',
+            '--head-hover'        => '#f97316',
+            '--head-active'       => '#f97316',
+
+            '--body'              => '#fff',
+            '--body-zebra'        => '#F5F7FA',
+            '--title'             => '#111111',
+            '--body-text'         => '#182230',
+            '--body-link'         => '#f97316',
+            '--body-hover'        => '#182230',
+            '--border'            => '#bababa',
+
+            '--footer'            => '#0D2035',
+            '--footer-text'       => '#fff',
+            '--footer-link'       => '#9cc4ff',
+            '--footer-hover'      => '#fff',
+            '--footer-active'     => '#fff',
+
+            '--shadow'            => 'hsla(0, 0%, 0%, 0.4)',
+        ],
+    ], 
 
 
 

@@ -12,6 +12,45 @@ if (!class_exists('Patlis_Bricks_Colors')) {
 
 final class Patlis_Admin_Page_Design_Options {
 
+  public static function defaults(): array {
+    $output = [];
+    $registry = array_merge(
+      Patlis_Core::get_design_registry(),
+      Patlis_Core::get_design_pages_registry()
+    );
+
+    foreach ($registry as $section_key => $section) {
+      if (!is_array($section)) continue;
+
+      $output[$section_key] = [
+        'variant' => sanitize_key((string) ($section['default_variant'] ?? 'default')),
+      ];
+      $field_groups = [
+        '' => isset($section['fields']) && is_array($section['fields']) ? $section['fields'] : [],
+      ];
+      $variants = isset($section['variants']) && is_array($section['variants']) ? $section['variants'] : [];
+      foreach ($variants as $variant_key => $variant) {
+        $field_groups[$variant_key] = isset($variant['fields']) && is_array($variant['fields']) ? $variant['fields'] : [];
+      }
+
+      foreach ($field_groups as $variant_key => $fields) {
+        foreach ($fields as $field_key => $field) {
+          if (!is_array($field)) continue;
+          $option_key = sanitize_key((string) ($field['option_key'] ?? $field_key));
+          // Do not pass stored values: multilingual and dropdown fallbacks must not preserve them.
+          $value = self::sanitize_field($field['default'] ?? '', (string) ($field['type'] ?? 'text'), '', $field);
+          if ($variant_key === '') {
+            $output[$section_key][$option_key] = $value;
+          } else {
+            $output[$section_key][$variant_key][$option_key] = $value;
+          }
+        }
+      }
+    }
+
+    return $output;
+  }
+
   public static function sanitize($input): array {
     $input = is_array($input) ? $input : [];
     $existing = get_option(Patlis_Core::OPTION_DESIGN_OPTIONS, []);
@@ -172,6 +211,49 @@ final class Patlis_Admin_Page_Design_Options {
     return allowed_section($availability) === 1;
   }
 
+  private static function homepage_section_labels(): array {
+    return [
+      'slides'     => __('Slides section', 'patlis-core'),
+      'welcome'    => __('Welcome section', 'patlis-core'),
+      'dishes'     => __('Top dishes', 'patlis-core'),
+      'rooms'      => __('Top rooms', 'patlis-core'),
+      'offers'     => __('Offers and packages', 'patlis-core'),
+      'experience' => __('Experience', 'patlis-core'),
+      'services'   => __('Top services', 'patlis-core'),
+      'events'     => __('Upcoming events', 'patlis-core'),
+      'gallery'    => __('Home gallery', 'patlis-core'),
+      'reviews'    => __('Latest reviews', 'patlis-core'),
+      'cta'        => __('Action banner (CTA)', 'patlis-core'),
+    ];
+  }
+
+  private static function is_homepage_section_allowed(string $section): bool {
+    $map = [
+      'dishes'     => 'top-menu',
+      'rooms'      => 'top-rooms-section',
+      'offers'     => 'offers-packages-section',
+      'experience' => 'experience-section',
+    ];
+    return !isset($map[$section]) || !function_exists('allowed_section') || allowed_section($map[$section]) === 1;
+  }
+
+  private static function homepage_sections_order(): array {
+    $opt = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+    $saved = is_array($opt) && isset($opt['sections_order']) && is_array($opt['sections_order'])
+      ? $opt['sections_order']
+      : [];
+    $labels = self::homepage_section_labels();
+    $order = array_values(array_filter($saved, static function ($section) use ($labels): bool {
+      return isset($labels[$section]) && self::is_homepage_section_allowed($section);
+    }));
+    foreach (Patlis_Core::HOME_SECTIONS as $section) {
+      if (self::is_homepage_section_allowed($section) && !in_array($section, $order, true)) {
+        $order[] = $section;
+      }
+    }
+    return $order;
+  }
+
   public static function render(): void {
     if (!current_user_can('patlis_manage')) return;
 
@@ -242,8 +324,11 @@ final class Patlis_Admin_Page_Design_Options {
 
       <?php if ($active_type === 'global'): ?>
         <?php
-        $homepage_labels = Patlis_Admin_Page_Homepage::labels();
-        $sections_order = Patlis_Admin_Page_Homepage::get_sections_order();
+        $homepage_labels = self::homepage_section_labels();
+        $sections_order = self::homepage_sections_order();
+        $homepage_options = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
+        $homepage_options = is_array($homepage_options) ? $homepage_options : [];
+        $welcome_video_url = isset($homepage_options['welcome_video_url']) ? (string) $homepage_options['welcome_video_url'] : '';
         $global_variables = class_exists('Patlis_Bricks_Variables')
           ? Patlis_Bricks_Variables::get_editable_variables()
           : new WP_Error('variables_module_missing', __('The Bricks variables module is missing.', 'patlis-core'));
@@ -321,6 +406,20 @@ final class Patlis_Admin_Page_Design_Options {
             </div>
           <?php endif; ?>
 
+          <h2><?php esc_html_e('Welcome section video', 'patlis-core'); ?></h2>
+          <p class="description"><?php esc_html_e('If a video is set, it replaces the featured image in the Welcome section.', 'patlis-core'); ?></p>
+          <table class="form-table" role="presentation">
+            <tr>
+              <th scope="row"><label for="patlis_welcome_video_url"><?php esc_html_e('Video URL', 'patlis-core'); ?></label></th>
+              <td>
+                <div style="display:flex;gap:10px;align-items:center;">
+                  <input type="url" id="patlis_welcome_video_url" name="patlis_welcome_video_url" value="<?php echo esc_attr($welcome_video_url); ?>" class="regular-text" placeholder="https://example.com/video.mp4">
+                  <button type="button" class="button" id="patlis-welcome-video-select"><?php esc_html_e('Select video', 'patlis-core'); ?></button>
+                </div>
+              </td>
+            </tr>
+          </table>
+
           <h2><?php esc_html_e('Home page display order', 'patlis-core'); ?></h2>
           <p class="description"><?php esc_html_e('Drag to reorder.', 'patlis-core'); ?></p>
           <ul id="patlis-sections-sortable">
@@ -367,6 +466,20 @@ final class Patlis_Admin_Page_Design_Options {
             var $logoInput = $('#patlis-logo-image-id');
             var $logoPreview = $('#patlis-logo-preview');
             var $logoRemove = $('#patlis-logo-remove');
+
+            $('#patlis-welcome-video-select').on('click', function() {
+              var frame = wp.media({
+                title: <?php echo wp_json_encode(__('Select welcome video', 'patlis-core')); ?>,
+                button: { text: <?php echo wp_json_encode(__('Use this video', 'patlis-core')); ?> },
+                library: { type: 'video' },
+                multiple: false
+              });
+              frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                $('#patlis_welcome_video_url').val(attachment.url);
+              });
+              frame.open();
+            });
 
             $('#patlis-logo-select').on('click', function() {
               if (logoFrame) {
@@ -604,6 +717,16 @@ final class Patlis_Admin_Page_Design_Options {
       return;
     }
 
+    $global_variables = class_exists('Patlis_Bricks_Variables')
+      ? Patlis_Bricks_Variables::get_editable_variables()
+      : new WP_Error('variables_module_missing', __('The Bricks variables module is missing.', 'patlis-core'));
+    $preview_style = '';
+    if (!is_wp_error($global_variables)) {
+      foreach (['btn-radius', 'card-image-radius'] as $name) {
+        $preview_style .= '--' . $name . ':' . rtrim(rtrim(number_format($global_variables[$name], 2, '.', ''), '0'), '.') . 'px;';
+      }
+    }
+
     $colors = isset($data['colors']) && is_array($data['colors']) ? $data['colors'] : [];
     $missing = isset($data['missing']) && is_array($data['missing']) ? $data['missing'] : [];
     $palette_registry = function_exists('patlis_get_color_palettes_registry')
@@ -630,6 +753,9 @@ final class Patlis_Admin_Page_Design_Options {
       ];
     }
     ?>
+    <?php if (is_wp_error($global_variables)): ?>
+      <div class="notice notice-error inline"><p><?php echo esc_html($global_variables->get_error_message()); ?></p></div>
+    <?php endif; ?>
     <?php if ($missing !== []): ?>
       <div class="notice notice-warning inline"><p>
         <?php echo esc_html(sprintf(__('Missing Bricks variables: %s', 'patlis-core'), implode(', ', $missing))); ?>
@@ -721,17 +847,19 @@ final class Patlis_Admin_Page_Design_Options {
             </div>
           </section>
 
-          <aside class="patlis-color-preview" aria-label="<?php esc_attr_e('Color preview', 'patlis-core'); ?>">
-            <div class="patlis-preview-notification"><?php esc_html_e('Notification text', 'patlis-core'); ?></div>
-            <header class="patlis-preview-header">
-              <strong class="logo">Company Logo</strong>
-              <nav aria-label="<?php esc_attr_e('Preview navigation', 'patlis-core'); ?>">
-                <a href="#" ><?php esc_html_e('About', 'patlis-core'); ?></a>
-                <a href="#"><?php esc_html_e('Gallery', 'patlis-core'); ?></a>
-                <a href="#"><?php esc_html_e('Services', 'patlis-core'); ?></a>
-                <a href="#"><?php esc_html_e('Contact', 'patlis-core'); ?></a>
-              </nav>
-            </header>
+          <aside class="patlis-color-preview" style="<?php echo esc_attr($preview_style); ?>" aria-label="<?php esc_attr_e('Color preview', 'patlis-core'); ?>">
+            <div style='box-shadow: 0 0 5px 3px var(--shadow); position: relative; z-index: 1;' >
+              <div class="patlis-preview-notification"><?php esc_html_e('Notification text', 'patlis-core'); ?></div>
+              <header class="patlis-preview-header" >
+                <strong class="logo">Company Logo</strong>
+                <nav aria-label="<?php esc_attr_e('Preview navigation', 'patlis-core'); ?>">
+                  <a href="#" ><?php esc_html_e('About', 'patlis-core'); ?></a>
+                  <a href="#"><?php esc_html_e('Gallery', 'patlis-core'); ?></a>
+                  <a href="#"><?php esc_html_e('Services', 'patlis-core'); ?></a>
+                  <a href="#"><?php esc_html_e('Contact', 'patlis-core'); ?></a>
+                </nav>
+              </header>
+            </div>
             <main class="patlis-preview-main">
               <section class="patlis-preview-hero">
                 <div class="patlis-preview-hero-content" style="width: 50%;">
@@ -742,10 +870,10 @@ final class Patlis_Admin_Page_Design_Options {
                   <a href="#" class="primary-link"><?php esc_html_e('Text link', 'patlis-core'); ?></a>
                 </div>
                 <div class="patlis-preview-hero-image" style="width: 50%;">
-                  <img src="<?php echo esc_url(PATLIS_CORE_URL . 'assets/design-previews/preview-image.webp'); ?>" style="max-width: 100%;" >
+                  <img src="<?php echo esc_url(PATLIS_CORE_URL . 'assets/design-previews/preview-image.webp'); ?>" style="max-width: 100%; border-radius: var(--card-image-radius);" >
                 </div>
               </section>
-              <section class="patlis-preview-feature" >
+              <section class="patlis-preview-feature" style="border-radius: var(--card-image-radius);">
                 <h3><?php esc_html_e('Alternate background', 'patlis-core'); ?></h3>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966</p>
               </section>
@@ -813,16 +941,16 @@ final class Patlis_Admin_Page_Design_Options {
 
       .patlis-preview-hero p { max-width: 470px; font-size: 14px; line-height: 1.6; }
       .patlis-preview-hero .primary, .patlis-preview-hero .primary-outline, .patlis-preview-hero .primary-link{text-decoration: none; font-weight: 600;}
-      .patlis-preview-hero .primary {border-radius: 3px; color: var(--body); background: var(--body-link); padding: 10px 14px; border: 1px solid var(--body-link); }
+      .patlis-preview-hero .primary {border-radius: var(--btn-radius); color: var(--body); background: var(--body-link); padding: 10px 14px; border: 1px solid var(--body-link); }
       .patlis-preview-hero .primary:hover {background: var(--body-hover); color: var(--body);  border: 1px solid var(--body-hover); }
 
-      .patlis-preview-hero .primary-outline {border-radius: 3px; color: var(--body-link); background: var(--body); padding: 10px 14px; border: 1px solid var(--body-link); }
+      .patlis-preview-hero .primary-outline {border-radius: var(--btn-radius ); color: var(--body-link); background: var(--body); padding: 10px 14px; border: 1px solid var(--body-link); }
       .patlis-preview-hero .primary-outline:hover {background: var(--body-hover); color: var(--body);  border: 1px solid var(--body-hover); }
 
       .patlis-preview-hero .primary-link {color: var(--body-link); }
       .patlis-preview-hero .primary-link:hover {color: var(--body-hover); }
 
-      .patlis-preview-feature {margin: 0 16px; padding: 16px 16px; background: var(--body-zebra); border: 1px solid var(--border);box-shadow: 0 2px 4px var(--shadow); }
+      .patlis-preview-feature {margin: 0 16px; padding: 16px 16px; background: var(--body-zebra); border: 1px solid var(--border);box-shadow: 0 0px 3px var(--shadow); }
       .patlis-preview-feature strong { color: var(--title); }
       .patlis-preview-footer { display: flex; justify-content: space-between; gap: 16px; padding: 24px 28px; color: var(--footer-text); background: var(--footer); }
       .patlis-preview-footer a { color: var(--footer-link); text-decoration: none; margin-right: 8px; }

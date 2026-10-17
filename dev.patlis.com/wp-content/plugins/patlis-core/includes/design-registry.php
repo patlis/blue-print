@@ -44,6 +44,7 @@ return [
             'footer-classic' => [
                 'label'    => __('Footer Classic', 'patlis-core'),
                 'template' => 'footer-classic',
+                'description' => __('Traditional footer layout presenting contact information, opening hours, social links and legal details in a clear and structured arrangement.', 'patlis-core'),
                 'preview'  => 'assets/design-previews/footer/footer-classic.webp',
                 'fields'   => [
                     'dividerimage' => [
@@ -65,6 +66,7 @@ return [
             'footer-cinematic' => [
                 'label'    => __('Footer Cinematic', 'patlis-core'),
                 'template' => 'footer-cinematic',
+                'description' => __('Full-width footer with an atmospheric background image, combining essential business information with a visually engaging presentation.', 'patlis-core'),
                 'preview'  => 'assets/design-previews/footer/footer-cinematic.webp',
                 'fields'   => [
                     'image' => [
@@ -87,6 +89,7 @@ return [
             'footer-floating' => [
                 'label'    => __('Footer Floating', 'patlis-core'),
                 'template' => 'footer-floating',
+                'description' => __('Elegant floating footer panel with subtle depth and separation from the page background, ideal for a refined and modern presentation of essential business information.', 'patlis-core'),
                 'preview'  => 'assets/design-previews/footer/footer-floating.webp',
                 'fields'   => [
                 ],
@@ -98,7 +101,6 @@ return [
         'type'            => 'section',
         'label'           => __('Intro Section (H1)', 'patlis-core'),
         'shortcode_slug'  => 'welcome-section',
-        'availability'    => 'home',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -139,7 +141,7 @@ return [
                         'default'    => 0.5,
                     ],
                     'cta' => [
-                        'label'      => __('Show Call to Action Buttons Buttons', 'patlis-core'),
+                        'label'      => __('Show Call to Action Buttons', 'patlis-core'),
                         'type'       => 'checkbox',
                         'option_key' => 'show_cta',
                         'default'    => false,
@@ -252,104 +254,77 @@ return [
         ],
     ],
 
-    'top_menu' => [
-        'type'            => 'section',
-        'label'           => __('Top Menu', 'patlis-core'),
-        'shortcode_slug'  => 'top-menu',
-        'availability'    => 'menu',
-        'default_variant' => 'editorial-cards',
-        'variants' => [
-            'classic' => [
-                'label'    => __('Classic', 'patlis-core'),
-                'template' => 'top-menu-classic',
-                'description' => __('Clean visual layout with circular dish images and concise titles, ideal for highlighting selected menu items in a simple and elegant way.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-menu/classic.webp',
-                'fields'   => [],
+    'cta' => [
+        'type'     => 'section',
+        'label'    => __('CTA (only homepage)', 'patlis-core'),
+        'shortcode_slug' => 'cta-section',
+        'description' => __('You can customize Text and images in every page.', 'patlis-core'),
+        'default_variant' => 'cinematic',
+        'fields' => [
+            'header' => [
+                'label'      => __('Header Text', 'patlis-core'),
+                'type'       => 'text',
+                'option_key' => 'header',
             ],
-            'editorial-cards' => [
-                'label'    => __('Editorial', 'patlis-core'),
-                'template' => 'menu-editorial-cards',
-                'description' => __('Detailed card-based layout combining dish image, title, description and price, with Carousel or Grid display options for a richer presentation of featured menu items.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-menu/editorial-cards.webp',
+            'subheader' => [
+                'label'      => __('Subheader Text', 'patlis-core'),
+                'type'       => 'textarea',
+                'option_key' => 'subheader',
+            ],
+        ],
+        'variants' => [
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'cta-cinematic',
+                'description' => __('Cinematic layout with a large background image and overlaid content, ideal for creating a visually striking call-to-action section.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/cta/cinematic.webp',
                 'fields'   => [
-                    'grid' => [
-                        'label'      => __('Display in Grid mode (Default is Carousel)', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'display_in_grid',
-                        'default'    => false,  
+                    'image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'opacity' => [
+                        'label'      => __('Background Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'opacity',
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                        'min'        => 0,
+                        'max'        => 1,
                     ],
                 ],
             ],
-        ],
-    ],
-
-    'top_services' => [
-        'type'            => 'section',
-        'label'           => __('Top Services', 'patlis-core'),
-        'shortcode_slug'  => 'top-services',
-        'availability'    => 'services',
-        'default_variant' => 'classic',
-        'variants' => [
-            'classic' => [
-                'label'    => __('Classic', 'patlis-core'),
-                'description' => __('Clean card-based layout presenting selected services with image, title and short description, ideal for a clear and easy-to-scan overview.', 'patlis-core'),
-                'template' => 'top-services-classic',
-                'preview'  => 'assets/design-previews/top-services/classic.webp',
+            'framed' => [
+                'label'    => __('Framed', 'patlis-core'),
+                'template' => 'cta-section-framed',
+                'description' => __('Clean bordered layout with centered text and buttons, ideal for a refined call to action that stands out without relying on large imagery.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/cta/framed.webp',
                 'fields'   => [],
             ],
-            'cinematic' => [
-                'label'    => __('Cinematic', 'patlis-core'),
-                'description' => __('Immersive background-image layout with service cards layered on top, ideal for creating a stronger visual impact and atmospheric presentation.', 'patlis-core'),
-                'template' => 'top-services-cinematic',
-                'preview'  => 'assets/design-previews/top-services/cinematic.webp',
-                    'fields'   => [
-                        'background_image' => [
-                        'label'      => __('Background image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'background_image_id',
-                        ],
-                        'overlay_opacity' => [
-                            'label'      => __('Overlay opacity', 'patlis-core'),
-                            'type'       => 'range',
-                            'option_key' => 'overlay_opacity',
-                            'min'        => 0,
-                            'max'        => 1,
-                            'step'       => 0.05,
-                            'default'    => 0.5,
-                        ],
-                    ],
+            'floating' => [
+                'label'    => __('Floating', 'patlis-core'),
+                'template' => 'cta-section-floating',
+                'description' => __('Large background image with a floating content panel, ideal for combining strong visual impact with clearly separated call-to-action content.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/cta/floating.webp',
+                'fields'   => [
+                                'image' => [
+                                'label'      => __('Background Image', 'patlis-core'),
+                                'type'       => 'image',
+                                'option_key' => 'image',
+                                ],
+                ],
             ],
             'split-screen' => [
                 'label'    => __('Split Screen', 'patlis-core'),
-                'template' => 'top-services-split-screen',
-                'preview'  => 'assets/design-previews/top-services/split-screen.webp',
-                'description' => __('Two-column layout combining an introductory content area with a structured list of services, ideal for balancing storytelling with detailed service highlights.', 'patlis-core'),
+                'template' => 'cta-section-split-screen',
+                'description' => __('Two-column layout pairing call-to-action text with a large supporting image, ideal for a modern and structured presentation with clear visual balance.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/cta/split-screen.webp',
                 'fields'   => [
-                    'reverse' => [
-                        'label'      => __('Reverse Order', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'reverse',
-                        'default'    => false,
-                    ],
-                    'description' => [
-                        'label'      => __('Description (optional)', 'patlis-core'),
-                        'type'       => 'textarea',
-                        'option_key' => 'description',
-                    ],
                     'image' => [
-                        'label'      => __('Decorative Image', 'patlis-core'),
-                        'description' => __('Optional decorative image for the split-screen layout.', 'patlis-core'),
+                        'label'      => __('Background Image', 'patlis-core'),
                         'type'       => 'image',
-                        'option_key' => 'image_id',
-                    ],
-                    'overlay_opacity' => [
-                        'label'      => __('Overlay opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'overlay_opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,
-                        'default'    => 0.5,
+                        'option_key' => 'image',
                     ],
                 ],
             ],
@@ -360,7 +335,6 @@ return [
         'type'            => 'section',
         'label'           => __('Top Events', 'patlis-core'),
         'shortcode_slug'  => 'top-events',
-        'availability'    => 'menu',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -440,12 +414,315 @@ return [
             ],
         ],
     ],
+       
+    'top_experiences' => [
+        'type'     => 'section',
+        'label'    => __('Top Experiences', 'patlis-core'),
+        'shortcode_slug' => 'top-experiences',
+        'availability'    => 'experience-section',
+        'default_variant' => 'editorial',
+        'fields'   => [],
+        'variants' => [
+            'minimal' => [
+                'label'    => __('Minimal', 'patlis-core'),
+                'template' => 'top-experiences-minimal',
+                'preview'  => 'assets/design-previews/top-experiences/minimal.webp',
+                'description' => __('Clean visual layout with circular images and concise titles, ideal for highlighting selected experiences with a light, elegant feel.', 'patlis-core'),
+                'fields'   => [],
+            ],
+            'editorial' => [
+                'label'    => __('Editorial', 'patlis-core'),
+                'template' => 'top-experiences-editorial',
+                'preview'  => 'assets/design-previews/top-experiences/editorial.webp',
+                'description' => __('Card-based layout with image, title, description and link, ideal for presenting experiences with more context while keeping them easy to scan.', 'patlis-core'),
+                'fields'   => [],
+            ],
+            'split-screen' => [
+                'label'    => __('Split Screen', 'patlis-core'),
+                'template' => 'top-experiences-split-screen',
+                'preview'  => 'assets/design-previews/top-experiences/split-screen.webp',
+                'description' => __('Balanced two-column layout combining an introduction area with a structured list of experiences, ideal for storytelling and a more editorial presentation.', 'patlis-core'),
+                'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
+                    'image' => [
+                        'label'      => __('Image (optional)', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'overlay_opacity' => [
+                        'label'      => __('Overlay opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'overlay_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ],
+                ],
+            ],
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'top-experiences-cinematic',
+                'preview'  => 'assets/design-previews/top-experiences/cinematic.webp',
+                'description' => __('Immersive layout with a large background image and prominent experience cards, ideal for creating a strong visual impact and emotional atmosphere.', 'patlis-core'),
+                'fields'   => [
+                    'image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'opacity' => [
+                        'label'      => __('Background Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,   
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+        ],
+    ],    
+
+    'top_gallery' => [
+        'type'     => 'section',
+        'label'    => __('Top Gallery', 'patlis-core'),
+        'shortcode_slug' => 'top-gallery',
+        'default_variant' => 'classic',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'top-gallery-classic',
+                'description' => __('Compact carousel layout displaying multiple gallery images in a clean horizontal presentation, ideal for adding visual variety without taking up too much space.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-gallery/classic.webp',
+                'fields'   => [],
+            ],
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'top-gallery-cinematic',
+                'preview'  => 'assets/design-previews/top-gallery/cinematic.webp',
+                'description' => __('Immersive gallery layout with a large background image and floating image carousel, ideal for creating a strong atmospheric section with high visual impact.', 'patlis-core'),
+                'fields'   => [
+                    'image-opacity' => [
+                        'label'      => __('Overlay Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'image_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                    'image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                ],
+            ],
+            'mosaic' => [
+                'label'    => __('Mosaic', 'patlis-core'),
+                'template' => 'top-gallery-mosaic',
+                'preview'  => 'assets/design-previews/top-gallery/mosaic.webp',
+                'description' => __('Large asymmetrical image grid with varied image sizes, ideal for image-rich sites that want to make the gallery a prominent visual feature of the page.', 'patlis-core'),
+                'fields'   => [],
+            ],
+        ],
+    ],
+
+    'top_menu' => [
+        'type'            => 'section',
+        'label'           => __('Top Menu', 'patlis-core'),
+        'shortcode_slug'  => 'top-menu',
+        'availability'    => 'top-menu',
+        'default_variant' => 'editorial-cards',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'top-menu-classic',
+                'description' => __('Clean visual layout with circular dish images and concise titles, ideal for highlighting selected menu items in a simple and elegant way.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-menu/classic.webp',
+                'fields'   => [],
+            ],
+            'editorial-cards' => [
+                'label'    => __('Editorial', 'patlis-core'),
+                'template' => 'menu-editorial-cards',
+                'description' => __('Detailed card-based layout combining dish image, title, description and price, with Carousel or Grid display options for a richer presentation of featured menu items.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-menu/editorial-cards.webp',
+                'fields'   => [
+                    'grid' => [
+                        'label'      => __('Display in Grid mode (Default is Carousel)', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'display_in_grid',
+                        'default'    => false,  
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'top_offers' => [
+        'type'            => 'section',
+        'label'           => __('Top Offers & Packages', 'patlis-core'),
+        'shortcode_slug'  => 'top-offers',
+        'availability'    => 'offers-packages-section',
+        'default_variant' => 'classic',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'top-offers-classic',
+                'description' => __('Clean card-based layout presenting selected offers and packages with images, key details and promotional information, ideal for a clear and easy-to-scan overview.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-offers/classic.webp',
+                'fields'   => [],
+            ],
+            'split-screen' => [
+                'label'    => __('Split Screen', 'patlis-core'),
+                'template' => 'top-offers-split-screen',
+                'description' => __('Two-column layout combining an introductory content area with a structured list of offers and packages, ideal for highlighting promotions alongside supporting text and optional imagery.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/top-offers/split-screen.webp',
+                'fields'   => [
+                    'reverse' => [
+                        'label'      => __('Reverse Order', 'patlis-core'),
+                        'type'       => 'checkbox',
+                        'option_key' => 'reverse',
+                        'default'    => false,
+                    ],
+                    'image' => [
+                        'label'      => __('Image (optional)', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'overlay_opacity' => [
+                        'label'      => __('Overlay opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'overlay_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ]
+                ],
+            ],
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'top-offers-cinematic',
+                'preview'  => 'assets/design-previews/top-offers/cinematic.webp',
+                'description' => __('Immersive background-image layout with promotional cards layered on top, ideal for showcasing special offers and creating a strong visual impact.', 'patlis-core'),
+                'fields'   => [
+                    'image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'image',
+                    ],
+                    'opacity' => [
+                        'label'      => __('Background Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,   
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+        ],
+    ], 
+    
+    'top_reviews' => [
+        'type'            => 'section',
+        'label'           => __('Top Reviews', 'patlis-core'),
+        'shortcode_slug'  => 'top-reviews',
+        'default_variant' => 'classic',
+        'variants' => [
+            'classic' => [
+                'label'    => __('Classic', 'patlis-core'),
+                'template' => 'reviews-classic',
+                'description' => __('Card-based carousel displaying multiple guest reviews at once, ideal for presenting a broader selection of feedback in a clear and familiar layout.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/reviews/classic.webp',
+                'fields'   => [],
+            ],
+            'minimal' => [
+                'label'    => __('Minimal', 'patlis-core'),
+                'template' => 'reviews-minimal',
+                'preview'  => 'assets/design-previews/reviews/minimal.webp',
+                'description' => __('Clean single-review layout with subtle navigation and generous whitespace, ideal for highlighting one testimonial at a time with an elegant and focused presentation.
+                The image is not mandatory.', 'patlis-core'),
+                'fields'   => [
+                    'decorative-image' => [
+                        'label'      => __('Decorative Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'decorative_image_id',
+                    ],
+                    'image-opacity' => [
+                        'label'      => __('Overlay Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'image_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                ],
+            ],
+            'cinematic' => [
+                'label'    => __('Cinematic', 'patlis-core'),
+                'template' => 'reviews-cinematic',
+                'description' => __('Immersive background-image layout combining review highlights with overall rating information, ideal for creating a stronger visual impact and premium atmosphere.', 'patlis-core'),
+                'preview'  => 'assets/design-previews/reviews/cinematic.webp',
+                'fields'   => [
+                    'background-image' => [
+                        'label'      => __('Background Image', 'patlis-core'),
+                        'type'       => 'image',
+                        'option_key' => 'background_image_id',
+                    ],
+                    'image-opacity' => [
+                        'label'      => __('Overlay Opacity', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'image_opacity',
+                        'min'        => 0,
+                        'max'        => 1,
+                        'step'       => 0.05,
+                        'default'    => 0.5,
+                    ],
+                    'google-summary' => [
+                        'label'      => __('Google Summary', 'patlis-core'),
+                        'type'       => 'text',
+                        'option_key' => 'google_summary',
+                    ],
+                    'google-score' => [
+                        'label'      => __('Google Score', 'patlis-core'),
+                        'type'       => 'range',
+                        'option_key' => 'google_score',
+                        'min'        => 0,
+                        'max'        => 5,
+                        'step'       => 0.1,
+                    ],
+                    
+                ],
+            ],
+        ],
+    ],
     
     'top_rooms' => [
         'type'            => 'section',
         'label'           => __('Top Rooms', 'patlis-core'),
         'shortcode_slug'  => 'top-rooms',
-        'availability'    => 'rooms',
+        'availability'    => 'top-rooms-section',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -532,305 +809,47 @@ return [
             ],
         ],
     ],
-    
-    'top_offers' => [
+
+    'top_services' => [
         'type'            => 'section',
-        'label'           => __('Top Offers & Packages', 'patlis-core'),
-        'shortcode_slug'  => 'top-offers',
-        'availability'    => 'menu',
+        'label'           => __('Top Services', 'patlis-core'),
+        'shortcode_slug'  => 'top-services',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
                 'label'    => __('Classic', 'patlis-core'),
-                'template' => 'top-offers-classic',
-                'description' => __('', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-offers/classic.webp',
+                'description' => __('Clean card-based layout presenting selected services with image, title and short description, ideal for a clear and easy-to-scan overview.', 'patlis-core'),
+                'template' => 'top-services-classic',
+                'preview'  => 'assets/design-previews/top-services/classic.webp',
                 'fields'   => [],
-            ],
-            'split-screen' => [
-                'label'    => __('Split Screen', 'patlis-core'),
-                'template' => 'top-offers-split-screen',
-                'description' => __('', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-offers/split-screen.webp',
-                'fields'   => [
-                    'reverse' => [
-                        'label'      => __('Reverse Order', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'reverse',
-                        'default'    => false,
-                    ],
-                    'image' => [
-                        'label'      => __('Image (optional)', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                    'overlay_opacity' => [
-                        'label'      => __('Overlay opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'overlay_opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,
-                        'default'    => 0.5,
-                    ],
-                    'description' => [
-                        'label'      => __('Description (optional)', 'patlis-core'),
-                        'type'       => 'textarea',
-                        'option_key' => 'description',
-                    ]
-                ],
             ],
             'cinematic' => [
                 'label'    => __('Cinematic', 'patlis-core'),
-                'template' => 'top-offers-cinematic',
-                'preview'  => 'assets/design-previews/top-offers/cinematic.webp',
-                'description' => __('', 'patlis-core'),
-                'fields'   => [
-                    'image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                    'opacity' => [
-                        'label'      => __('Background Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,   
-                        'default'    => 0.5,
-                    ],
-                ],
-            ],
-        ],
-    ],
-    
-    'top_reviews' => [
-        'type'            => 'section',
-        'label'           => __('Top Reviews', 'patlis-core'),
-        'shortcode_slug'  => 'top-reviews',
-        'availability'    => 'menu',
-        'default_variant' => 'default',
-        'variants' => [
-            'classic' => [
-                'label'    => __('Classic', 'patlis-core'),
-                'template' => 'reviews-classic',
-                'description' => __('Card-based carousel displaying multiple guest reviews at once, ideal for presenting a broader selection of feedback in a clear and familiar layout.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/reviews/classic.webp',
-                'fields'   => [],
-            ],
-            'minimal' => [
-                'label'    => __('Minimal', 'patlis-core'),
-                'template' => 'reviews-minimal',
-                'preview'  => 'assets/design-previews/reviews/minimal.webp',
-                'description' => __('Clean single-review layout with subtle navigation and generous whitespace, ideal for highlighting one testimonial at a time with an elegant and focused presentation.
-                The image is not mandatory.', 'patlis-core'),
-                'fields'   => [
-                    'decorative-image' => [
-                        'label'      => __('Decorative Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'decorative_image_id',
-                    ],
-                    'image-opacity' => [
-                        'label'      => __('Overlay Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'image_opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,
-                        'default'    => 0.5,
-                    ],
-                ],
-            ],
-            'cinematic' => [
-                'label'    => __('Cinematic', 'patlis-core'),
-                'template' => 'reviews-cinematic',
-                'description' => __('Immersive background-image layout combining review highlights with overall rating information, ideal for creating a stronger visual impact and premium atmosphere.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/reviews/cinematic.webp',
-                'fields'   => [
-                    'background-image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
+                'description' => __('Immersive background-image layout with service cards layered on top, ideal for creating a stronger visual impact and atmospheric presentation.', 'patlis-core'),
+                'template' => 'top-services-cinematic',
+                'preview'  => 'assets/design-previews/top-services/cinematic.webp',
+                    'fields'   => [
+                        'background_image' => [
+                        'label'      => __('Background image', 'patlis-core'),
                         'type'       => 'image',
                         'option_key' => 'background_image_id',
+                        ],
+                        'overlay_opacity' => [
+                            'label'      => __('Overlay opacity', 'patlis-core'),
+                            'type'       => 'range',
+                            'option_key' => 'overlay_opacity',
+                            'min'        => 0,
+                            'max'        => 1,
+                            'step'       => 0.05,
+                            'default'    => 0.5,
+                        ],
                     ],
-                    'image-opacity' => [
-                        'label'      => __('Overlay Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'image_opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,
-                        'default'    => 0.5,
-                    ],
-                    'google-summary' => [
-                        'label'      => __('Google Summary', 'patlis-core'),
-                        'type'       => 'text',
-                        'option_key' => 'google_summary',
-                    ],
-                    'google-score' => [
-                        'label'      => __('Google Score', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'google_score',
-                        'min'        => 0,
-                        'max'        => 5,
-                        'step'       => 0.1,
-                    ],
-                    
-                ],
-            ],
-        ],
-    ],
-    
-    'top_gallery' => [
-        'type'     => 'section',
-        'label'    => __('Top Gallery', 'patlis-core'),
-        'shortcode_slug' => 'top-gallery',
-        'availability'    => 'menu',
-        'default_variant' => 'classic',
-        'variants' => [
-            'classic' => [
-                'label'    => __('Classic', 'patlis-core'),
-                'template' => 'top-gallery-classic',
-                'description' => __('Compact carousel layout displaying multiple gallery images in a clean horizontal presentation, ideal for adding visual variety without taking up too much space.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/top-gallery/classic.webp',
-                'fields'   => [],
-            ],
-            'cinematic' => [
-                'label'    => __('Cinematic', 'patlis-core'),
-                'template' => 'top-gallery-cinematic',
-                'preview'  => 'assets/design-previews/top-gallery/cinematic.webp',
-                'description' => __('Immersive gallery layout with a large background image and floating image carousel, ideal for creating a strong atmospheric section with high visual impact.', 'patlis-core'),
-                'fields'   => [
-                    'image-opacity' => [
-                        'label'      => __('Overlay Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'image_opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,
-                        'default'    => 0.5,
-                    ],
-                    'image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                ],
-            ],
-            'mosaic' => [
-                'label'    => __('Mosaic', 'patlis-core'),
-                'template' => 'top-gallery-mosaic',
-                'preview'  => 'assets/design-previews/top-gallery/mosaic.webp',
-                'description' => __('Large asymmetrical image grid with varied image sizes, ideal for image-rich sites that want to make the gallery a prominent visual feature of the page.', 'patlis-core'),
-                'fields'   => [],
-            ],
-        ],
-    ],
-
-    'cta' => [
-        'type'     => 'section',
-        'label'    => __('CTA (only homepage)', 'patlis-core'),
-        'shortcode_slug' => 'cta-section',
-        'availability'    => 'menu',
-        'description' => __('You can customize Text and images in every page.', 'patlis-core'),
-        'default_variant' => 'cinematic',
-        'fields' => [
-            'header' => [
-                'label'      => __('Header Text', 'patlis-core'),
-                'type'       => 'text',
-                'option_key' => 'header',
-            ],
-            'subheader' => [
-                'label'      => __('Subheader Text', 'patlis-core'),
-                'type'       => 'textarea',
-                'option_key' => 'subheader',
-            ],
-        ],
-        'variants' => [
-            'cinematic' => [
-                'label'    => __('Cinematic', 'patlis-core'),
-                'template' => 'cta-cinematic',
-                'description' => __('Cinematic layout with a large background image and overlaid content, ideal for creating a visually striking call-to-action section.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/cta/cinematic.webp',
-                'fields'   => [
-                    'image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                    'opacity' => [
-                        'label'      => __('Background Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'opacity',
-                        'step'       => 0.05,
-                        'default'    => 0.5,
-                        'min'        => 0,
-                        'max'        => 1,
-                    ],
-                ],
-            ],
-            'framed' => [
-                'label'    => __('Framed', 'patlis-core'),
-                'template' => 'cta-section-framed',
-                'description' => __('Clean bordered layout with centered text and buttons, ideal for a refined call to action that stands out without relying on large imagery.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/cta/framed.webp',
-                'fields'   => [],
-            ],
-            'floating' => [
-                'label'    => __('Floating', 'patlis-core'),
-                'template' => 'cta-section-floating',
-                'description' => __('Large background image with a floating content panel, ideal for combining strong visual impact with clearly separated call-to-action content.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/cta/floating.webp',
-                'fields'   => [
-                                'image' => [
-                                'label'      => __('Background Image', 'patlis-core'),
-                                'type'       => 'image',
-                                'option_key' => 'image',
-                                ],
-                ],
             ],
             'split-screen' => [
                 'label'    => __('Split Screen', 'patlis-core'),
-                'template' => 'cta-section-split-screen',
-                'description' => __('Two-column layout pairing call-to-action text with a large supporting image, ideal for a modern and structured presentation with clear visual balance.', 'patlis-core'),
-                'preview'  => 'assets/design-previews/cta/split-screen.webp',
-                'fields'   => [
-                    'image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                ],
-            ],
-        ],
-    ],
-
-    'top_experiences' => [
-        'type'     => 'section',
-        'label'    => __('Top Experiences', 'patlis-core'),
-        'shortcode_slug' => 'top-experiences',
-        'default_variant' => 'editorial',
-        'fields'   => [],
-        'variants' => [
-            'minimal' => [
-                'label'    => __('Minimal', 'patlis-core'),
-                'template' => 'top-experiences-minimal',
-                'preview'  => 'assets/design-previews/top-experiences/minimal.webp',
-                'description' => __('Clean visual layout with circular images and concise titles, ideal for highlighting selected experiences with a light, elegant feel.', 'patlis-core'),
-                'fields'   => [],
-            ],
-            'editorial' => [
-                'label'    => __('Editorial', 'patlis-core'),
-                'template' => 'top-experiences-editorial',
-                'preview'  => 'assets/design-previews/top-experiences/editorial.webp',
-                'description' => __('Card-based layout with image, title, description and link, ideal for presenting experiences with more context while keeping them easy to scan.', 'patlis-core'),
-                'fields'   => [],
-            ],
-            'split-screen' => [
-                'label'    => __('Split Screen', 'patlis-core'),
-                'template' => 'top-experiences-split-screen',
-                'preview'  => 'assets/design-previews/top-experiences/split-screen.webp',
-                'description' => __('Balanced two-column layout combining an introduction area with a structured list of experiences, ideal for storytelling and a more editorial presentation.', 'patlis-core'),
+                'template' => 'top-services-split-screen',
+                'preview'  => 'assets/design-previews/top-services/split-screen.webp',
+                'description' => __('Two-column layout combining an introductory content area with a structured list of services, ideal for balancing storytelling with detailed service highlights.', 'patlis-core'),
                 'fields'   => [
                     'reverse' => [
                         'label'      => __('Reverse Order', 'patlis-core'),
@@ -838,10 +857,16 @@ return [
                         'option_key' => 'reverse',
                         'default'    => false,
                     ],
+                    'description' => [
+                        'label'      => __('Description (optional)', 'patlis-core'),
+                        'type'       => 'textarea',
+                        'option_key' => 'description',
+                    ],
                     'image' => [
-                        'label'      => __('Image (optional)', 'patlis-core'),
+                        'label'      => __('Decorative Image', 'patlis-core'),
+                        'description' => __('Optional decorative image for the split-screen layout.', 'patlis-core'),
                         'type'       => 'image',
-                        'option_key' => 'image',
+                        'option_key' => 'image_id',
                     ],
                     'overlay_opacity' => [
                         'label'      => __('Overlay opacity', 'patlis-core'),
@@ -852,35 +877,8 @@ return [
                         'step'       => 0.05,
                         'default'    => 0.5,
                     ],
-                    'description' => [
-                        'label'      => __('Description (optional)', 'patlis-core'),
-                        'type'       => 'textarea',
-                        'option_key' => 'description',
-                    ],
-                ],
-            ],
-            'cinematic' => [
-                'label'    => __('Cinematic', 'patlis-core'),
-                'template' => 'top-experiences-cinematic',
-                'preview'  => 'assets/design-previews/top-experiences/cinematic.webp',
-                'description' => __('Immersive layout with a large background image and prominent experience cards, ideal for creating a strong visual impact and emotional atmosphere.', 'patlis-core'),
-                'fields'   => [
-                    'image' => [
-                        'label'      => __('Background Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image',
-                    ],
-                    'opacity' => [
-                        'label'      => __('Background Opacity', 'patlis-core'),
-                        'type'       => 'range',
-                        'option_key' => 'opacity',
-                        'min'        => 0,
-                        'max'        => 1,
-                        'step'       => 0.05,   
-                        'default'    => 0.5,
-                    ],
                 ],
             ],
         ],
-    ],
+    ],    
 ];

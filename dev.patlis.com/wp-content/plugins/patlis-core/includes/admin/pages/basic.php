@@ -32,6 +32,7 @@ final class Patlis_Admin_Page_Basic {
     $out['timezone']     = isset($in['timezone']) ? sanitize_text_field($in['timezone']) : wp_timezone_string();
 
     $out['show_contact_form'] = !empty($in['show_contact_form']) ? 1 : 0;
+    $out['show_map'] = !empty($in['show_map']) ? 1 : 0;
     $out['contact_form_recipient_email'] = isset($in['contact_form_recipient_email']) ? sanitize_email($in['contact_form_recipient_email']) : '';
     $out['contact_form_email_subject']   = isset($in['contact_form_email_subject']) ? sanitize_text_field($in['contact_form_email_subject']) : '';
 
@@ -96,6 +97,7 @@ final class Patlis_Admin_Page_Basic {
       'contact_form'             => __('Contact form', 'patlis-core'),
       'currency'                 => __('Currency', 'patlis-core'),
       'display_contact_form'     => __('Display the contact form', 'patlis-core'),
+      'display_map'              => __('Display the map', 'patlis-core'),
       'recipient_email'          => __('Recipient email', 'patlis-core'),
       'email_subject'            => __('Email subject', 'patlis-core'),
       'currency_symbol'          => __('Currency symbol', 'patlis-core'),
@@ -274,6 +276,15 @@ final class Patlis_Admin_Page_Basic {
                       name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[show_contact_form]"
                       value="1" <?php checked(!empty($opt['show_contact_form'])); ?>>
                   </label>
+                </td>
+              </tr>
+
+              <tr>
+                <th scope="row"><label for="patlis_show_map"><?php echo esc_html($labels['display_map']); ?></label></th>
+                <td>
+                  <input id="patlis_show_map" type="checkbox"
+                    name="<?php echo esc_attr(Patlis_Core::OPTION_BASIC); ?>[show_map]"
+                    value="1" <?php checked(!array_key_exists('show_map', $opt) || !empty($opt['show_map'])); ?>>
                 </td>
               </tr>
 

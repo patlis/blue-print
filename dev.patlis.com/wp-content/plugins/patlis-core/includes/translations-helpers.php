@@ -100,30 +100,8 @@ if (!function_exists('patlis_transl')) {
 
         $translations = patlis_get_translations();
 
-        if (isset($translations[$key]) && is_array($translations[$key])) {
-            $current_lang = patlis_get_current_language();
+        $values = $translations[$key] ?? [];
 
-            if (
-                $current_lang !== ''
-                && isset($translations[$key][$current_lang])
-                && is_string($translations[$key][$current_lang])
-                && $translations[$key][$current_lang] !== ''
-            ) {
-                return $translations[$key][$current_lang];
-            }
-
-            $default_lang = patlis_get_default_language();
-
-            if (
-                $default_lang !== ''
-                && isset($translations[$key][$default_lang])
-                && is_string($translations[$key][$default_lang])
-                && $translations[$key][$default_lang] !== ''
-            ) {
-                return $translations[$key][$default_lang];
-            }
-        }
-
-        return $key;
+        return is_array($values) ? patlis_core_get_multilang_value($values) : '';
     }
 }

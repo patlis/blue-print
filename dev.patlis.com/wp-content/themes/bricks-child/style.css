@@ -32,8 +32,14 @@ main {min-height:50vh}
 .text-center{text-align: center !important;}
 .border-top {border-top: 1px solid var(--border) !important;}
 .border-bottom {border-bottom: 1px solid var(--border) !important;}
+.page-numbers{border-radius:var(--btn-radius) !important;}
 /* --------------------------------------------------- main sizes END --------------------------------------------------------- */
-/* --------------------------------------------------- Header --------------------------------------------------------- */
+/* --------------------------------------------------- gastro menu START --------------------------------------------------------- */
+.category-content > :last-child .gastro-menu-item {
+  border-bottom: none !important;
+}
+/* --------------------------------------------------- gastro menu END --------------------------------------------------------- */
+/* --------------------------------------------------- Header START --------------------------------------------------------- */
 :root {
   --header-space: calc(var(--logo-height) + 2 * var(--logo-padding)); /* gia  header classic & xoris special variables */
   --drop-down-space: var(--logo-padding) !important;
@@ -43,11 +49,11 @@ main {min-height:50vh}
 
 /* editorial menu - initial state */
 html:has(#editorial-menu) {
-  --header-space: calc(var(--logo-height) + 4 * var(--logo-padding) + var(--font-size) * 1.7 );
+  --header-space: calc(var(--logo-height) + 4 * var(--logo-padding) + var(--font-size) * 1.7 + 20px);
 }
 @media (max-width: 991px) {
   html:has(#editorial-menu) {
-    --header-space: calc(var(--logo-height) + 4 * var(--logo-padding) + var(--font-size) );
+    --header-space: calc(var(--logo-height) + 4 * var(--logo-padding) + var(--font-size));
   }
 }
 

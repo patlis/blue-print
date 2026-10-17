@@ -53,27 +53,7 @@ final class Patlis_Admin_Page_Notification_Bar {
   }
 
   public static function text(): string {
-    $all = self::text_all();
-
-    if (!$all) return '';
-
-    $current_lang = self::get_current_language();
-
-    if (!empty($all[$current_lang])) {
-      return $all[$current_lang];
-    }
-
-    $default_lang = self::get_default_language();
-
-    if (!empty($all[$default_lang])) {
-      return $all[$default_lang];
-    }
-
-    foreach ($all as $value) {
-      if (!empty($value)) return $value;
-    }
-
-    return '';
+    return patlis_core_get_multilang_value(self::text_all());
   }
 
   public static function text_all(): array {

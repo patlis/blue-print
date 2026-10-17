@@ -153,6 +153,12 @@ final class Patlis_Admin_Page_Instance_Tools
             ],
             'Content' => [
                 [
+                    'label'  => 'Reset Design Options',
+                    'count'  => count(Patlis_Admin_Page_Design_Options::defaults()),
+                    'action' => 'reset_design_options',
+                    'description' => 'Resets all fields in both design registries, including all variants and languages. Restores field defaults and each section default variant. Media files and other site settings are kept.',
+                ],
+                [
                     'label'  => 'Delete Slides',
                     'count'  => self::count_slides(),
                     'action' => 'delete_slides',
@@ -169,9 +175,10 @@ final class Patlis_Admin_Page_Instance_Tools
                     'action' => 'delete_events',
                 ],
                 [
-                    'label'  => 'Delete Galley',
+                    'label'  => 'Delete Galleries / Clear Home gallery',
                     'count'  => self::count_post_types(['patlis_gallery', 'gallery']),
                     'action' => 'delete_gallery',
+                    'description' => 'Deletes other galleries and clears images from the Home gallery. The Home gallery itself and all media files are kept.',
                 ],
                 [
                     'label'  => 'Delete Reviews',
@@ -369,6 +376,13 @@ final class Patlis_Admin_Page_Instance_Tools
 
             <h2 style="margin-top: 4em;">Database Cleanup Tools</h2>
 
+            <p>
+                <button type="button" class="button button-primary" id="patlis-instance-tools-run-all">Run All Cleanup / Reset + SEO</button>
+            </p>
+            <p>Runs all cleanup/reset tools in the order shown, followed by SEO. Future tools are included automatically. Stops at the first error; completed changes cannot be undone. Keep this page open until finished.</p>
+            <p id="patlis-instance-tools-progress" role="status" aria-live="polite" hidden></p>
+            <ol id="patlis-instance-tools-results" hidden></ol>
+
             <div class="patlis-instance-tools-grid">
                 <?php foreach ($sections as $section_title => $actions) : ?>
                     <section class="patlis-instance-tools-card">
@@ -421,9 +435,70 @@ final class Patlis_Admin_Page_Instance_Tools
             (function () {
                 var ajaxUrl = <?php echo wp_json_encode(admin_url('admin-ajax.php')); ?>;
                 var nonce   = <?php echo wp_json_encode($nonce); ?>;
+                var runAll = document.getElementById('patlis-instance-tools-run-all');
+                var progress = document.getElementById('patlis-instance-tools-progress');
+                var results = document.getElementById('patlis-instance-tools-results');
+                var busy = false;
+                var lockedButtons = [];
 
-                                document.querySelectorAll('.patlis-instance-tool-live, .patlis-instance-tool-seo').forEach(function (btn) {
-                    btn.addEventListener('click', function () {
+                function getTools() {
+                    return Array.from(document.querySelectorAll('.patlis-instance-tool-live'))
+                        .concat(Array.from(document.querySelectorAll('.patlis-instance-tool-seo')))
+                        .filter(function (btn) { return !btn.disabled && btn.dataset.action; });
+                }
+
+                function setBusy(value) {
+                    busy = value;
+                    runAll.disabled = value;
+                    if (value) {
+                        lockedButtons = getTools();
+                        lockedButtons.forEach(function (btn) { btn.disabled = true; });
+                    } else {
+                        lockedButtons.forEach(function (btn) { btn.disabled = false; });
+                        lockedButtons = [];
+                    }
+                }
+
+                function getLabel(btn) {
+                    return btn.dataset.label || btn.innerText.trim();
+                }
+
+                async function runTool(btn) {
+                    btn.classList.add('patlis-instance-tool-running');
+                    try {
+                        var formData = new FormData();
+                        formData.append('action', 'patlis_instance_tool');
+                        formData.append('nonce', nonce);
+                        formData.append('tool_action', btn.dataset.action);
+
+                        var response = await fetch(ajaxUrl, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            body: formData,
+                        });
+                        var data;
+                        try {
+                            data = await response.json();
+                        } catch (error) {
+                            throw new Error('Invalid server response (HTTP ' + response.status + '). Reload the page before retrying.');
+                        }
+                        if (!response.ok || !data || data.success !== true) {
+                            throw new Error(data && data.data && data.data.message
+                                ? data.data.message
+                                : 'Request failed (HTTP ' + response.status + ').');
+                        }
+                        if (!data.data || typeof data.data.message !== 'string') {
+                            throw new Error('The server did not return a result message. Reload the page before retrying.');
+                        }
+                        return data.data.message;
+                    } finally {
+                        btn.classList.remove('patlis-instance-tool-running');
+                    }
+                }
+
+                document.querySelectorAll('.patlis-instance-tool-live, .patlis-instance-tool-seo').forEach(function (btn) {
+                    btn.addEventListener('click', async function () {
+                        if (busy) return;
                         var label  = btn.dataset.label  || btn.innerText.trim();
                         var count  = btn.dataset.count  || '?';
                         var action = btn.dataset.action;
@@ -432,6 +507,11 @@ final class Patlis_Admin_Page_Instance_Tools
                                                         ? 'Are you sure you want to run:\n"' + label + '"?\n\n' +
                                                             'This will update Rank Math robots settings on ' + count + ' published page(s).\n' +
                                                             'Only active-version default-language pages will be index; all other pages will be noindex.'
+                                                        : action === 'reset_design_options'
+                                                        ? 'Are you sure you want to run:\n"' + label + '"?\n\n' +
+                                                            'This will reset the design settings for ' + count + ' section(s).\n' +
+                                                            'This cannot be undone.' +
+                                                            (btn.dataset.description ? '\n\n' + btn.dataset.description : '')
                                                         : 'Are you sure you want to run:\n"' + label + '"?\n\n' +
                                                             'This will permanently delete ' + count + ' item(s).\n' +
                                                             'This cannot be undone.' +
@@ -441,37 +521,62 @@ final class Patlis_Admin_Page_Instance_Tools
                             return;
                         }
 
-                        btn.disabled = true;
-                        btn.classList.add('patlis-instance-tool-running');
-
-                        var formData = new FormData();
-                        formData.append('action',      'patlis_instance_tool');
-                        formData.append('nonce',       nonce);
-                        formData.append('tool_action', action);
-
-                        fetch(ajaxUrl, {
-                            method:      'POST',
-                            credentials: 'same-origin',
-                            body:        formData,
-                        })
-                        .then(function (r) { return r.json(); })
-                        .then(function (data) {
-                            btn.classList.remove('patlis-instance-tool-running');
-                            if (data.success) {
-                                alert(data.data.message);
-                                window.location.reload();
-                            } else {
-                                var errMsg = (data.data && data.data.message) ? data.data.message : 'Unknown error.';
-                                alert('Error: ' + errMsg);
-                                btn.disabled = false;
-                            }
-                        })
-                        .catch(function () {
-                            btn.classList.remove('patlis-instance-tool-running');
-                            alert('Request failed. Please try again.');
-                            btn.disabled = false;
-                        });
+                        setBusy(true);
+                        try {
+                            var message = await runTool(btn);
+                            alert(message);
+                            window.location.reload();
+                        } catch (error) {
+                            alert('Error: ' + label + '\n' + error.message);
+                        } finally {
+                            setBusy(false);
+                        }
                     });
+                });
+
+                runAll.addEventListener('click', async function () {
+                    if (busy) return;
+                    var tools = getTools();
+                    if (tools.length === 0) return;
+                    var labels = tools.map(function (btn, index) {
+                        return (index + 1) + '. ' + getLabel(btn);
+                    });
+                    if (!window.confirm('Run all ' + tools.length + ' tools in this order?\n\n' +
+                        labels.join('\n') + '\n\nThis permanently deletes content, resets design options, and updates SEO.\n' +
+                        'It stops at the first error. Completed changes cannot be undone.')) {
+                        return;
+                    }
+
+                    setBusy(true);
+                    results.textContent = '';
+                    results.hidden = false;
+                    progress.hidden = false;
+                    var completed = 0;
+                    var currentLabel = '';
+                    var currentItem;
+                    try {
+                        for (var btn of tools) {
+                            currentLabel = getLabel(btn);
+                            progress.textContent = 'Running ' + (completed + 1) + ' of ' + tools.length + ': ' + currentLabel;
+                            currentItem = document.createElement('li');
+                            currentItem.textContent = currentLabel + ': Running...';
+                            results.appendChild(currentItem);
+                            var message = await runTool(btn);
+                            currentItem.textContent = currentLabel + ': ' + message;
+                            completed++;
+                        }
+                        progress.textContent = 'Completed all ' + completed + ' tools.';
+                        alert('Completed all ' + completed + ' cleanup/reset and SEO tools.');
+                        window.location.reload();
+                    } catch (error) {
+                        if (currentItem) currentItem.textContent = currentLabel + ': FAILED - ' + error.message;
+                        progress.textContent = 'Stopped after ' + completed + ' of ' + tools.length + ' tools. Failed: ' +
+                            currentLabel + '. Earlier changes were not rolled back. Reload the page before retrying.';
+                        alert('Error: ' + currentLabel + '\n' + error.message + '\n\nCompleted ' + completed +
+                            ' of ' + tools.length + ' tools. Earlier changes were not rolled back.');
+                    } finally {
+                        setBusy(false);
+                    }
                 });
             }());
             </script>
@@ -490,6 +595,7 @@ final class Patlis_Admin_Page_Instance_Tools
         $tool_action = isset($_POST['tool_action']) ? sanitize_key((string) $_POST['tool_action']) : '';
 
         switch ($tool_action) {
+            case 'reset_design_options':        $message = self::do_reset_design_options(); break;
             case 'delete_menu_categories':      $message = self::do_delete_taxonomy_terms('menu_section'); break;
             case 'delete_menu_items':           $message = self::do_delete_post_types(['menu_item']); break;
             case 'delete_menu_pdfs':            $message = self::do_delete_post_types(['menu_pdf']); break;
@@ -500,7 +606,7 @@ final class Patlis_Admin_Page_Instance_Tools
             case 'delete_services':             $message = self::do_delete_post_types(['services', 'service']); break;
             case 'delete_slides':               $message = self::do_delete_slides(); break;
             case 'delete_events':               $message = self::do_delete_post_types(['events', 'event']); break;
-            case 'delete_gallery':              $message = self::do_delete_post_types(['patlis_gallery', 'gallery']); break;
+            case 'delete_gallery':              $message = self::do_delete_galleries(); break;
             case 'delete_reviews':              $message = self::do_delete_post_types(['reviews', 'review']); break;
             case 'delete_timelines':            $message = self::do_delete_post_types(['timeline_item', 'timelines', 'timeline']); break;
             case 'delete_kiosk_slides':         $message = self::do_delete_post_types(['kiosk_slide']); break;
@@ -525,16 +631,19 @@ final class Patlis_Admin_Page_Instance_Tools
     private static function do_set_page_language_indexing(): string
     {
         if (!defined('RANK_MATH_VERSION')) {
-            return 'Rank Math must be active before updating page indexing.';
+            wp_send_json_error(['message' => 'Rank Math must be active before updating page indexing.'], 400);
+            return '';
         }
 
         if (!function_exists('pll_default_language') || !function_exists('pll_get_post_language')) {
-            return 'Polylang must be active before updating page indexing.';
+            wp_send_json_error(['message' => 'Polylang must be active before updating page indexing.'], 400);
+            return '';
         }
 
         $default_language = sanitize_key((string) pll_default_language('slug'));
         if ($default_language === '') {
-            return 'No Polylang default language is configured.';
+            wp_send_json_error(['message' => 'No Polylang default language is configured.'], 400);
+            return '';
         }
 
         $page_ids = get_posts([
@@ -685,7 +794,9 @@ final class Patlis_Admin_Page_Instance_Tools
         }));
         $robots[] = $should_index ? 'index' : 'noindex';
 
-        update_post_meta($post_id, 'rank_math_robots', $robots);
+        if ($current_robots !== $robots && !update_post_meta($post_id, 'rank_math_robots', $robots)) {
+            wp_send_json_error(['message' => sprintf('Could not update Rank Math settings for page %d.', $post_id)], 500);
+        }
     }
 
     private static function do_truncate_table(string $table_suffix): string
@@ -696,13 +807,32 @@ final class Patlis_Admin_Page_Instance_Tools
         $table_name   = $wpdb->prefix . $table_suffix;
 
         if (!self::table_exists($table_name)) {
-            return 'Table not found: ' . $table_name;
+            return 'Skipped: table ' . $table_name . ' does not exist.';
         }
 
         $count  = (int) $wpdb->get_var("SELECT COUNT(1) FROM {$table_name}");
-        $wpdb->query("DELETE FROM {$table_name}");
+        if ($wpdb->query("DELETE FROM {$table_name}") === false) {
+            wp_send_json_error(['message' => 'Could not delete rows from ' . $table_suffix . '.'], 500);
+            return '';
+        }
 
         return sprintf('Deleted %d row(s) from %s.', $count, $table_suffix);
+    }
+
+    private static function do_reset_design_options(): string
+    {
+        $defaults = Patlis_Admin_Page_Design_Options::defaults();
+
+        if (get_option(Patlis_Core::OPTION_DESIGN_OPTIONS, []) !== $defaults
+            && !update_option(Patlis_Core::OPTION_DESIGN_OPTIONS, $defaults)) {
+            wp_send_json_error(['message' => 'Could not reset design options. Please try again.'], 500);
+            return '';
+        }
+
+        return sprintf(
+            'Reset design options for %d section(s). All field values and variants were restored to their defaults. Media files and other site settings were kept.',
+            count($defaults)
+        );
     }
 
     private static function do_delete_slides(): string
@@ -724,7 +854,24 @@ final class Patlis_Admin_Page_Instance_Tools
         return sprintf('Deleted %d slide(s). Slider settings and media files were kept.', $deleted);
     }
 
-    private static function do_delete_post_types(array $post_types): string
+    private static function do_delete_galleries(): string
+    {
+        $home_id = patlis_gallery_get_home_id();
+        $meta_key = patlis_gallery_meta_key();
+
+        if ($home_id > 0 && metadata_exists('post', $home_id, $meta_key)) {
+            if (!delete_post_meta($home_id, $meta_key)) {
+                wp_send_json_error(['message' => 'Could not clear the Home gallery. Please try again.'], 500);
+                return '';
+            }
+        }
+
+        $message = self::do_delete_post_types(['patlis_gallery', 'gallery'], $home_id > 0 ? [$home_id] : []);
+
+        return $message . ' Home gallery images were cleared. The Home gallery itself and all media files were kept.';
+    }
+
+    private static function do_delete_post_types(array $post_types, array $exclude_ids = []): string
     {
         $deleted = 0;
         foreach ($post_types as $post_type) {
@@ -737,7 +884,12 @@ final class Patlis_Admin_Page_Instance_Tools
                 'lang'           => '',
             ]);
             foreach ($ids as $id) {
-                if (wp_delete_post((int) $id, true)) $deleted++;
+                if (in_array((int) $id, $exclude_ids, true)) continue;
+                if (!wp_delete_post((int) $id, true)) {
+                    wp_send_json_error(['message' => sprintf('Could not delete %s item %d.', $post_type, $id)], 500);
+                    return '';
+                }
+                $deleted++;
             }
         }
         return sprintf('Deleted %d item(s).', $deleted);
@@ -754,10 +906,19 @@ final class Patlis_Admin_Page_Instance_Tools
             "SELECT term_id FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s",
             $taxonomy
         ));
+        if (!is_array($term_ids)) {
+            wp_send_json_error(['message' => 'Could not load terms for ' . $taxonomy . '.'], 500);
+            return '';
+        }
 
         $deleted = 0;
         foreach ($term_ids as $term_id) {
-            if (!is_wp_error(wp_delete_term((int) $term_id, $taxonomy))) $deleted++;
+            $result = wp_delete_term((int) $term_id, $taxonomy);
+            if (is_wp_error($result) || !$result) {
+                wp_send_json_error(['message' => sprintf('Could not delete term %d from %s.', $term_id, $taxonomy)], 500);
+                return '';
+            }
+            $deleted++;
         }
         return sprintf('Deleted %d term(s) from %s.', $deleted, $taxonomy);
     }

@@ -59,7 +59,7 @@ final class Patlis_Core {
 
   public static function get_basic_text(string $key, string $default = ''): string {
     $value = self::get_basic(sanitize_key($key), $default);
-    if (is_array($value)) return self::get_multilingual_design_value($value);
+    if (is_array($value)) return patlis_core_get_multilang_value($value);
     return is_scalar($value) ? (string) $value : $default;
   }
 
@@ -112,7 +112,7 @@ final class Patlis_Core {
 
   public static function get_global_design_text(string $key, string $default = ''): string {
     $value = self::get_section_design_option('global', sanitize_key($key), $default);
-    if (is_array($value)) return self::get_multilingual_design_value($value);
+    if (is_array($value)) return patlis_core_get_multilang_value($value);
     return is_scalar($value) ? (string) $value : $default;
   }
 
@@ -213,7 +213,7 @@ final class Patlis_Core {
       $type = (string) ($definition['type'] ?? 'text');
       $value = self::get_section_design_option($section, (string) ($definition['option_key'] ?? $field), $definition['default'] ?? null);
       if (in_array($type, ['text', 'textarea'], true) && is_array($value)) {
-        $value = self::get_multilingual_design_value($value);
+        $value = patlis_core_get_multilang_value($value);
       }
 
       return [
@@ -244,45 +244,13 @@ final class Patlis_Core {
     $type = (string) ($definition['type'] ?? 'text');
     $value = $variant_options[$definition['option_key'] ?? $field] ?? null;
     if (in_array($type, ['text', 'textarea'], true) && is_array($value)) {
-      $value = self::get_multilingual_design_value($value);
+      $value = patlis_core_get_multilang_value($value);
     }
 
     return [
       'type'  => $type,
       'value' => $value,
     ];
-  }
-
-  private static function get_multilingual_design_value(array $values): string {
-    $current_language = function_exists('patlis_get_current_language')
-      ? sanitize_key(patlis_get_current_language())
-      : '';
-    if ($current_language === '' && function_exists('pll_current_language')) {
-      $language = pll_current_language('slug');
-      $current_language = is_string($language) ? sanitize_key($language) : '';
-    }
-
-    if ($current_language !== '' && !empty($values[$current_language]) && is_string($values[$current_language])) {
-      return $values[$current_language];
-    }
-
-    $default_language = function_exists('patlis_get_default_language')
-      ? sanitize_key(patlis_get_default_language())
-      : '';
-    if ($default_language === '' && function_exists('pll_default_language')) {
-      $language = pll_default_language('slug');
-      $default_language = is_string($language) ? sanitize_key($language) : '';
-    }
-
-    if ($default_language !== '' && !empty($values[$default_language]) && is_string($values[$default_language])) {
-      return $values[$default_language];
-    }
-
-    foreach ($values as $value) {
-      if (is_string($value) && $value !== '') return $value;
-    }
-
-    return '';
   }
 
   public static function get_section_template_slug(string $slug): string {

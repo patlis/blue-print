@@ -43,7 +43,7 @@
   $show_line2 = ($has_price2 || $has_price3 || $has_desc || $has_veg || $has_vegan);
 ?>
 
-<div class="menu-item pb-4">
+<div class="gastro-menu-item pb-4">
   <?php if ($show_line1): ?>
     <div class="menu-normal-line1 border-bottom">
       <div class="menu-item-groups">

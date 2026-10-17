@@ -23,11 +23,11 @@ msgstr ""
 msgid "Events"
 msgstr "Veranstaltungen"
 
-#: includes/acf-field-labels.php:10 includes/admin/pages/homepage.php:38
+#: includes/acf-field-labels.php:10 includes/admin/pages/design-options.php
 msgid "Experience"
 msgstr "Aktivitäten"
 
-#: includes/acf-field-labels.php:11 includes/admin/pages/homepage.php:37
+#: includes/acf-field-labels.php:11 includes/admin/pages/design-options.php
 msgid "Offers and packages"
 msgstr "Angebote und Pakete"
 
@@ -70,13 +70,13 @@ msgid "End time"
 msgstr "Endzeit"
 
 #: includes/acf-field-labels.php:34 includes/acf-field-labels.php:62
-#: includes/admin/pages/homepage.php:93
+#: includes/admin/pages/design-options.php
 msgid "Video URL"
 msgstr "Video-URL"
 
 #: includes/acf-field-labels.php:36 includes/acf-field-labels.php:45
 #: includes/acf-field-labels.php:61 includes/acf-field-labels.php:64
-#: includes/acf-field-labels.php:68 includes/admin/pages/homepage.php:118
+#: includes/acf-field-labels.php:68 includes/admin/pages/design-options.php
 msgid "Display order"
 msgstr "Anzeigereihenfolge"
 
@@ -182,10 +182,6 @@ msgstr "Benachrichtigungsleiste"
 msgid "Translations"
 msgstr "Übersetzungen"
 
-#: includes/admin/menu.php:75 includes/admin/menu.php:76
-msgid "Home page"
-msgstr "Start Seite"
-
 #: includes/admin/menu.php:84 includes/admin/menu.php:85
 msgid "AI Labels"
 msgstr "KI-Kennzeichnungen"
@@ -254,7 +250,7 @@ msgstr ""
 
 #: includes/admin/pages/ai-labels.php:96 includes/admin/pages/basic.php:115
 #: includes/admin/pages/center-popup.php:297
-#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/design-options.php
 #: includes/admin/pages/notification-bar.php:150
 #: includes/admin/pages/opening-times.php:126
 #: includes/admin/pages/social.php:27
@@ -343,6 +339,10 @@ msgstr "Währung"
 msgid "Display the contact form"
 msgstr "Kontaktformular anzeigen"
 
+#: includes/admin/pages/basic.php
+msgid "Display the map"
+msgstr "Karte anzeigen"
+
 #: includes/admin/pages/basic.php:95
 msgid "Recipient email"
 msgstr "E-Mail-Adresse des Empfängers"
@@ -430,13 +430,13 @@ msgid "Logo image"
 msgstr "Logo-Bild"
 
 #: includes/admin/pages/basic.php:164 includes/admin/pages/center-popup.php:463
-#: includes/admin/pages/homepage.php:111
+#: includes/admin/pages/design-options.php
 msgid "Select image"
 msgstr "Bild auswählen"
 
 #: includes/admin/pages/basic.php:165 includes/admin/pages/center-popup.php:464
 #: includes/admin/pages/center-popup.php:483
-#: includes/admin/pages/homepage.php:112
+#: includes/admin/pages/design-options.php
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -480,7 +480,7 @@ msgstr "Zeitzone"
 msgid "Select logo image"
 msgstr "Logotyp auswählen"
 
-#: includes/admin/pages/basic.php:494 includes/admin/pages/homepage.php:223
+#: includes/admin/pages/basic.php:494 includes/admin/pages/design-options.php
 msgid "Use this image"
 msgstr "Dieses Bild verwenden"
 
@@ -521,7 +521,7 @@ msgid "Title"
 msgstr "Titel"
 
 #: includes/admin/pages/center-popup.php:482
-#: includes/admin/pages/homepage.php:97
+#: includes/admin/pages/design-options.php
 msgid "Select video"
 msgstr "Video auswählen"
 
@@ -537,75 +537,59 @@ msgstr ""
 "Cookie-Banner ändern oder ersetzen, informieren Sie uns bitte, damit wir die "
 "Bedingung für die Anzeige des Popups entsprechend anpassen können."
 
-#: includes/admin/pages/homepage.php:34
+#: includes/admin/pages/design-options.php
 msgid "Welcome section"
 msgstr "Willkommensbereich"
 
-#: includes/admin/pages/homepage.php:35
+#: includes/admin/pages/design-options.php
 msgid "Top dishes"
 msgstr "Top-Gerichte"
 
-#: includes/admin/pages/homepage.php:36
+#: includes/admin/pages/design-options.php
 msgid "Top rooms"
 msgstr "Top-Zimmer"
 
-#: includes/admin/pages/homepage.php:39
+#: includes/admin/pages/design-options.php
 msgid "Top services"
 msgstr "Top-Leistungen"
 
-#: includes/admin/pages/homepage.php:40
+#: includes/admin/pages/design-options.php
 msgid "Upcoming events"
 msgstr "Bevorstehende Veranstaltungen"
 
-#: includes/admin/pages/homepage.php:41
+#: includes/admin/pages/design-options.php
 msgid "Home gallery"
 msgstr "Startseiten-Galerie"
 
-#: includes/admin/pages/homepage.php:42
+#: includes/admin/pages/design-options.php
 msgid "Latest reviews"
 msgstr "Neueste Bewertungen"
 
-#: includes/admin/pages/homepage.php:43
+#: includes/admin/pages/design-options.php
 msgid "Action banner (CTA)"
 msgstr "Aktionsbanner (CTA)"
 
-#: includes/admin/pages/homepage.php:79
-msgid "Home page settings"
-msgstr "Startseiten-Einstellungen"
-
-#: includes/admin/pages/homepage.php:89
+#: includes/admin/pages/design-options.php
 msgid "Welcome section video"
 msgstr "Begrüßungsabschnitt Video"
 
-#: includes/admin/pages/homepage.php:90
+#: includes/admin/pages/design-options.php
 msgid ""
 "If a video is set, it replaces the featured image in the Welcome section."
 msgstr ""
 "Wenn ein Video gesetzt ist, ersetzt es das Feature-Bild im Begrüßungsbereich."
 
-#: includes/admin/pages/homepage.php:103
-msgid "CTA background image"
-msgstr "CTA-Hintergrundbild"
-
-#: includes/admin/pages/homepage.php:106
-msgid "CTA background"
-msgstr "CTA-Hintergrund"
-
-#: includes/admin/pages/homepage.php:119
+#: includes/admin/pages/design-options.php
 msgid "Drag to reorder."
 msgstr ""
 "Ziehen zum Neuordnen. Der CSS-Flex-Reihenfolgewert folgt dieser Liste (1 = "
 "oben)."
 
-#: includes/admin/pages/homepage.php:222
-msgid "Select CTA background image"
-msgstr "CTA-Hintergrundbild auswählen"
-
-#: includes/admin/pages/homepage.php:246
+#: includes/admin/pages/design-options.php
 msgid "Select welcome video"
 msgstr "Willkommensvideo auswählen"
 
-#: includes/admin/pages/homepage.php:247
+#: includes/admin/pages/design-options.php
 msgid "Use this video"
 msgstr "Nutze dieses Video"
 

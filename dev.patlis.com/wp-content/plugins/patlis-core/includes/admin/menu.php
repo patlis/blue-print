@@ -82,16 +82,6 @@ final class Patlis_Admin_Menu {
 
     add_submenu_page(
       'patlis-basic',
-      __('Home page', 'patlis-core'),
-      __('Home page', 'patlis-core'),
-      $capability,
-      'patlis-homepage',
-      ['Patlis_Admin_Page_Homepage', 'render']
-    );
-
-
-    add_submenu_page(
-      'patlis-basic',
       __('AI Labels', 'patlis-core'),
       __('AI Labels', 'patlis-core'),
       $capability,

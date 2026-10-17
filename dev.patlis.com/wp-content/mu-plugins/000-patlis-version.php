@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Patlis Version & Feature Flags
- * Description: Feature flags based on PATLIS_VERSION constant (comma-separated).
+ * Description: Feature flags based on PATLIS_VERSION (comma-separated). Admin templates require an all-versions or matching version bundle when a version is configured.
  */
 
 if (!defined('PATLIS_VERSION')) {
@@ -51,8 +51,8 @@ function patlis_version_get_managed_plugins(): array {
     return [
         'patlis-core/patlis-core.php'                   => [],
         'patlis-cookies/patlis-cookies.php'             => [],
-        'patlis-menu/patlis-menu.php'                   => ['gastro', 'dining'],
-        'patlis-reservations/patlis-reservations.php'   => ['gastro', 'dining'],
+        'patlis-menu/patlis-menu.php'                   => ['gastro'],
+        'patlis-reservations/patlis-reservations.php'   => ['gastro'],
         'patlis-accommodation/patlis-accommodation.php' => ['hotel'],
         'patlis-kiosk-mode/patlis-kiosk-mode.php'       => ['kiosk'],
     ];
@@ -130,6 +130,9 @@ function patlis_version_get_page_template_taxonomy(): string {
     return 'template';
 }
 
+/**
+ * pairneis slugs apo pages > templates.
+ */
 function patlis_version_get_page_template_term_map(): array {
     return [
         'all-versions' => [
@@ -147,13 +150,8 @@ function patlis_version_get_page_template_term_map(): array {
         'gastro' => [
             'menu',
             'top-menu',
-            '   ',
-        ],
-        'dining' => [
-            'menu',
-            'top-menu',
             'reservation',
-        ],
+        ],  
         'hotel' => [
             'booking',
             'rooms',
@@ -215,6 +213,10 @@ function patlis_version_apply_tax_query(WP_Query $query, array $tax_query): void
     $query->set('tax_query', $tax_query);
 }
 
+/**
+ * φιλτραρει τα Bricks templates με βάση την έκδοση. (bundles)
+ * αν ενα template δεν ανήκει σε κανένα bundle, κρύβεται όταν έχει οριστεί έκδοση.
+ */
 add_action('pre_get_posts', function (WP_Query $query): void {
     if (!is_admin() || !$query->is_main_query()) {
         return;
@@ -238,7 +240,16 @@ add_action('pre_get_posts', function (WP_Query $query): void {
         return;
     }
 
-    patlis_version_apply_tax_query($query, patlis_version_build_optional_taxonomy_filter($taxonomy, $version_parts));
+    $allowed_bundles = array_values(array_unique(array_merge(['all-versions'], $version_parts)));
+
+    patlis_version_apply_tax_query($query, [
+        [
+            'taxonomy' => $taxonomy,
+            'field'    => 'slug',
+            'terms'    => $allowed_bundles,
+            'operator' => 'IN',
+        ],
+    ]);
 });
 
 add_action('pre_get_posts', function (WP_Query $query): void {
@@ -270,6 +281,39 @@ add_action('pre_get_posts', function (WP_Query $query): void {
 
     patlis_version_apply_tax_query($query, patlis_version_build_optional_taxonomy_filter($taxonomy, $allowed_terms));
 });
+
+// Set the error state before the theme selects its active templates.
+add_action('wp', function (): void {
+    if (is_admin() || !is_page()) {
+        return;
+    }
+
+    $taxonomy = patlis_version_get_page_template_taxonomy();
+    if (!taxonomy_exists($taxonomy)) {
+        return;
+    }
+
+    $allowed_terms = patlis_version_get_allowed_page_template_terms();
+    if ($allowed_terms === []) {
+        return;
+    }
+
+    $terms = wp_get_object_terms(get_queried_object_id(), $taxonomy, ['fields' => 'slugs']);
+    if (is_wp_error($terms)) {
+        wp_die($terms, '', ['response' => 500]);
+        return;
+    }
+
+    if ($terms === [] || array_intersect($terms, $allowed_terms) !== []) {
+        return;
+    }
+
+    global $wp_query;
+    $wp_query->set_404();
+    remove_action('template_redirect', 'redirect_canonical');
+    status_header(404);
+    nocache_headers();
+}, 0);
 
 function allowed_section(string $slug): int {
     $slug = strtolower(trim($slug));

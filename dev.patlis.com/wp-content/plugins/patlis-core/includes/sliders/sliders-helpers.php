@@ -105,33 +105,7 @@ function patlis_sliders_sanitize_multilingual_value($value, $existing_value, str
 function patlis_sliders_get_translated_value($value, string $language = ''): string {
 	$values = patlis_sliders_normalize_multilingual_value($value);
 
-	if ($values === []) {
-		return '';
-	}
-
-	if ($language === '') {
-		$language = function_exists('patlis_get_current_language')
-			? sanitize_key(patlis_get_current_language())
-			: '';
-	}
-
-	if ($language !== '' && !empty($values[$language])) {
-		return $values[$language];
-	}
-
-	$default_language = patlis_sliders_get_default_language();
-
-	if (!empty($values[$default_language])) {
-		return $values[$default_language];
-	}
-
-	foreach ($values as $text) {
-		if ($text !== '') {
-			return $text;
-		}
-	}
-
-	return '';
+	return patlis_core_get_multilang_value($values, $language);
 }
 
 function patlis_sliders_get_group(string $group, string $language = ''): array {

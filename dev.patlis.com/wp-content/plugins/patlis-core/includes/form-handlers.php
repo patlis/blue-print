@@ -119,8 +119,8 @@ function patlis_core_send_contact_notification(string $name, string $phone, stri
     $default_lang = function_exists('patlis_get_default_language') ? patlis_get_default_language() : '';
 
     $t = static function (string $key) use ($translations, $default_lang): string {
-        $val = $translations[$key][$default_lang] ?? '';
-        return $val !== '' ? $val : $key;
+        $values = $translations[$key] ?? [];
+        return is_array($values) ? patlis_core_get_multilang_value($values, $default_lang) : '';
     };
 
     $phone_href = preg_replace('/[^0-9+]/', '', $phone);

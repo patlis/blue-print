@@ -337,17 +337,34 @@ function patlis_get_contact_confirm_body(): string {
     return patlis_core_get_multilang_value($opt);
 }
 
-function patlis_core_get_multilang_value($raw): string {
+/**
+ * Resolve current-language text, then default-language text (even if empty).
+ * Legacy strings are language-independent; never fall back to a third language.
+ */
+function patlis_core_get_multilang_value($raw, string $language = ''): string {
     if (is_string($raw)) return $raw;
     if (!is_array($raw) || empty($raw)) return '';
 
-    $current = function_exists('pll_current_language') ? (string) pll_current_language('slug') : '';
-    $default = function_exists('pll_default_language') ? (string) pll_default_language('slug') : '';
+    if ($language === '') {
+        $language = function_exists('patlis_get_current_language') ? patlis_get_current_language() : '';
+        if ($language === '' && function_exists('pll_current_language')) {
+            $current = pll_current_language('slug');
+            $language = is_string($current) ? $current : '';
+        }
+    }
 
-    if ($current !== '' && !empty($raw[$current])) return (string) $raw[$current];
-    if ($default !== '' && !empty($raw[$default])) return (string) $raw[$default];
-    foreach ($raw as $v) { if (!empty($v)) return (string) $v; }
-    return '';
+    if ($language !== '' && isset($raw[$language]) && is_string($raw[$language]) && $raw[$language] !== '') {
+        return $raw[$language];
+    }
+
+    $default = function_exists('patlis_get_default_language') ? patlis_get_default_language() : '';
+    if ($default === '' && function_exists('pll_default_language')) {
+        $default_language = pll_default_language('slug');
+        $default = is_string($default_language) ? $default_language : '';
+    }
+    if ($default === '') $default = 'default';
+
+    return isset($raw[$default]) && is_string($raw[$default]) ? $raw[$default] : '';
 }
 
 function patlis_get_white_label_option(): array
@@ -847,4 +864,3 @@ function patlis_filter_body_classes(array $classes): array
 
     return $classes;
 }
-

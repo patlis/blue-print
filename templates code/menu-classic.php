@@ -49,7 +49,7 @@
   $show_line2 = ($has_price2 || $has_price3 || $has_desc || $has_veg || $has_vegan || ($has_image && $image_id > 0));
 ?>
 
-<div class="menu-item">
+<div class="gastro-menu-item">
   <?php if ($show_line1): ?>
     <div class="menu-normal-line1">
       <div class="menu-item-groups">

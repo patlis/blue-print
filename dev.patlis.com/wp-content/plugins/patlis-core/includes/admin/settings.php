@@ -9,7 +9,6 @@ final class Patlis_Admin_Settings {
       add_action('admin_post_patlis_save_center_popup', [__CLASS__, 'handle_save_center_popup']);
       add_action('admin_post_patlis_save_notification_bar', [__CLASS__, 'handle_save_notification_bar']);
       add_action('admin_post_patlis_save_opening',           [__CLASS__, 'handle_save_opening']);
-      add_action('admin_post_patlis_save_homepage',           [__CLASS__, 'handle_save_homepage']);
       add_action('admin_post_patlis_save_design_global',      [__CLASS__, 'handle_save_design_global']);
       add_action('admin_post_patlis_save_design_colors',      [__CLASS__, 'handle_save_design_colors']);
       add_action('admin_post_patlis_reset_design_colors',     [__CLASS__, 'handle_reset_design_colors']);
@@ -81,7 +80,7 @@ final class Patlis_Admin_Settings {
       $raw_order = isset($_POST['patlis_sections_order']) && is_array($_POST['patlis_sections_order'])
         ? array_map('sanitize_key', wp_unslash($_POST['patlis_sections_order']))
         : [];
-      $allowed_sections = Patlis_Admin_Page_Homepage::DEFAULT_ORDER;
+      $allowed_sections = Patlis_Core::HOME_SECTIONS;
       $sections_order = array_values(array_unique(array_filter(
         $raw_order,
         static fn($section) => in_array($section, $allowed_sections, true)
@@ -107,6 +106,11 @@ final class Patlis_Admin_Settings {
 
       $homepage['sections_order'] = $sections_order;
       $homepage['sections_visibility'] = $sections_visibility;
+      if (isset($_POST['patlis_welcome_video_url'])) {
+        if (!is_string($_POST['patlis_welcome_video_url'])) wp_die('Invalid welcome video URL.');
+        $homepage['welcome_video_url'] = esc_url_raw(wp_unslash($_POST['patlis_welcome_video_url']));
+      }
+      unset($homepage['cta_bg_image_id']);
       update_option(Patlis_Core::OPTION_HOMEPAGE, $homepage);
 
       wp_safe_redirect(admin_url('admin.php?page=patlis-design-options&design_type=global&patlis_saved=1'));
@@ -221,26 +225,6 @@ final class Patlis_Admin_Settings {
       update_option(Patlis_Core::OPTION_OPENING, $clean);
 
       wp_safe_redirect(admin_url('admin.php?page=patlis-opening&patlis_saved=1'));
-      exit;
-    }
-
-    public static function handle_save_homepage(): void {
-      if (!current_user_can('patlis_manage')) { wp_die('Not allowed.'); }
-      check_admin_referer('patlis_save_homepage');
-
-      $cta_bg_image_id   = isset($_POST['patlis_cta_bg_image_id']) ? max(0, (int) $_POST['patlis_cta_bg_image_id']) : 0;
-      $welcome_video_url = isset($_POST['patlis_welcome_video_url']) ? esc_url_raw(wp_unslash((string) $_POST['patlis_welcome_video_url'])) : '';
-
-      // Preserve existing option values, only update what we manage
-      $existing = get_option(Patlis_Core::OPTION_HOMEPAGE, []);
-      if (!is_array($existing)) $existing = [];
-
-      update_option(Patlis_Core::OPTION_HOMEPAGE, array_merge($existing, [
-        'cta_bg_image_id'   => $cta_bg_image_id,
-        'welcome_video_url' => $welcome_video_url,
-      ]));
-
-      wp_safe_redirect(admin_url('admin.php?page=patlis-homepage&patlis_saved=1'));
       exit;
     }
 

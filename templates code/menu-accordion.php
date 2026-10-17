@@ -49,7 +49,7 @@
   $show_line2 = ($has_price2 || $has_price3 || $has_desc || $has_veg || $has_vegan || ($has_image && $image_id > 0));
 ?>
 
-<div class="menu-item border-bottom pb-2">
+<div class="gastro-menu-item border-bottom pb-2">
   <?php if ($show_line1): ?>
     <div class="menu-normal-line1">
       <div class="menu-item-groups">
@@ -144,7 +144,7 @@
             <?php endif; ?>
 
             <?php if ($has_vegan): ?>
-              <span class="menu-vv-icons">🌱</span>
+              <span class="menu-vv-icons">Ⓥ</span>
             <?php endif; ?>
 
             <?php if ($has_desc): ?>

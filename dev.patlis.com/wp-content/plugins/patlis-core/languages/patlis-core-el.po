@@ -23,11 +23,11 @@ msgstr ""
 msgid "Events"
 msgstr "Εκδηλώσεις"
 
-#: includes/acf-field-labels.php:10 includes/admin/pages/homepage.php:38
+#: includes/acf-field-labels.php:10 includes/admin/pages/design-options.php
 msgid "Experience"
 msgstr "Εμπειρία"
 
-#: includes/acf-field-labels.php:11 includes/admin/pages/homepage.php:37
+#: includes/acf-field-labels.php:11 includes/admin/pages/design-options.php
 msgid "Offers and packages"
 msgstr "Προσφορές και πακέτα"
 
@@ -70,13 +70,13 @@ msgid "End time"
 msgstr "Ώρα λήξης"
 
 #: includes/acf-field-labels.php:34 includes/acf-field-labels.php:62
-#: includes/admin/pages/homepage.php:93
+#: includes/admin/pages/design-options.php
 msgid "Video URL"
 msgstr "URL βίντεο"
 
 #: includes/acf-field-labels.php:36 includes/acf-field-labels.php:45
 #: includes/acf-field-labels.php:61 includes/acf-field-labels.php:64
-#: includes/acf-field-labels.php:68 includes/admin/pages/homepage.php:118
+#: includes/acf-field-labels.php:68 includes/admin/pages/design-options.php
 msgid "Display order"
 msgstr "Σειρά εμφάνισης"
 
@@ -182,10 +182,6 @@ msgstr "Γραμμή ειδοποιήσεων"
 msgid "Translations"
 msgstr "Μεταφράσεις"
 
-#: includes/admin/menu.php:75 includes/admin/menu.php:76
-msgid "Home page"
-msgstr "Αρχική σελίδα"
-
 #: includes/admin/menu.php:84 includes/admin/menu.php:85
 msgid "AI Labels"
 msgstr "Σήμανση Τ.Ν."
@@ -254,7 +250,7 @@ msgstr ""
 
 #: includes/admin/pages/ai-labels.php:96 includes/admin/pages/basic.php:115
 #: includes/admin/pages/center-popup.php:297
-#: includes/admin/pages/homepage.php:44
+#: includes/admin/pages/design-options.php
 #: includes/admin/pages/notification-bar.php:150
 #: includes/admin/pages/opening-times.php:126
 #: includes/admin/pages/social.php:27
@@ -341,6 +337,10 @@ msgstr "Νόμισμα"
 #: includes/admin/pages/basic.php:94
 msgid "Display the contact form"
 msgstr "Εμφάνιση φόρμας επικοινωνίας"
+
+#: includes/admin/pages/basic.php
+msgid "Display the map"
+msgstr "Εμφάνιση χάρτη"
 
 #: includes/admin/pages/basic.php:95
 msgid "Recipient email"
@@ -429,13 +429,13 @@ msgid "Logo image"
 msgstr "Εικόνα λογότυπου"
 
 #: includes/admin/pages/basic.php:164 includes/admin/pages/center-popup.php:463
-#: includes/admin/pages/homepage.php:111
+#: includes/admin/pages/design-options.php
 msgid "Select image"
 msgstr "Επιλογή εικόνας"
 
 #: includes/admin/pages/basic.php:165 includes/admin/pages/center-popup.php:464
 #: includes/admin/pages/center-popup.php:483
-#: includes/admin/pages/homepage.php:112
+#: includes/admin/pages/design-options.php
 msgid "Remove"
 msgstr "Αφαίρεση"
 
@@ -479,7 +479,7 @@ msgstr "Ζώνη ώρας"
 msgid "Select logo image"
 msgstr "Επιλογή εικόνας λογότυπου"
 
-#: includes/admin/pages/basic.php:494 includes/admin/pages/homepage.php:223
+#: includes/admin/pages/basic.php:494 includes/admin/pages/design-options.php
 msgid "Use this image"
 msgstr "Χρήση αυτής της εικόνας"
 
@@ -520,7 +520,7 @@ msgid "Title"
 msgstr "Τίτλος"
 
 #: includes/admin/pages/center-popup.php:482
-#: includes/admin/pages/homepage.php:97
+#: includes/admin/pages/design-options.php
 msgid "Select video"
 msgstr "Επιλέξτε βίντεο"
 
@@ -536,74 +536,58 @@ msgstr ""
 "αντικαταστήσετε το cookie banner, παρακαλούμε ενημερώστε μας ώστε να "
 "προσαρμόσουμε ανάλογα τη συνθήκη εμφάνισης του popup."
 
-#: includes/admin/pages/homepage.php:34
+#: includes/admin/pages/design-options.php
 msgid "Welcome section"
 msgstr "Ενότητα καλωσορίσματος"
 
-#: includes/admin/pages/homepage.php:35
+#: includes/admin/pages/design-options.php
 msgid "Top dishes"
 msgstr "Κορυφαία πιάτα"
 
-#: includes/admin/pages/homepage.php:36
+#: includes/admin/pages/design-options.php
 msgid "Top rooms"
 msgstr "Κορυφαία δωμάτια"
 
-#: includes/admin/pages/homepage.php:39
+#: includes/admin/pages/design-options.php
 msgid "Top services"
 msgstr "Κορυφαίες υπηρεσίες"
 
-#: includes/admin/pages/homepage.php:40
+#: includes/admin/pages/design-options.php
 msgid "Upcoming events"
 msgstr "Επερχόμενες εκδηλώσεις"
 
-#: includes/admin/pages/homepage.php:41
+#: includes/admin/pages/design-options.php
 msgid "Home gallery"
 msgstr "Γκαλερί αρχικής σελίδας"
 
-#: includes/admin/pages/homepage.php:42
+#: includes/admin/pages/design-options.php
 msgid "Latest reviews"
 msgstr "Τελευταίες κριτικές"
 
-#: includes/admin/pages/homepage.php:43
+#: includes/admin/pages/design-options.php
 msgid "Action banner (CTA)"
 msgstr "Banner δράσης (CTA)"
 
-#: includes/admin/pages/homepage.php:79
-msgid "Home page settings"
-msgstr "Ρυθμίσεις αρχικής σελίδας"
-
-#: includes/admin/pages/homepage.php:89
+#: includes/admin/pages/design-options.php
 msgid "Welcome section video"
 msgstr "Βίντεο ενότητας καλωσορίσματος"
 
-#: includes/admin/pages/homepage.php:90
+#: includes/admin/pages/design-options.php
 msgid ""
 "If a video is set, it replaces the featured image in the Welcome section."
 msgstr ""
 "Εάν έχει οριστεί ένα βίντεο, αντικαθιστά την επιλεγμένη εικόνα στην ενότητα "
 "Καλώς ορίσατε."
 
-#: includes/admin/pages/homepage.php:103
-msgid "CTA background image"
-msgstr "Εικόνα φόντου CTA"
-
-#: includes/admin/pages/homepage.php:106
-msgid "CTA background"
-msgstr "Φόντο CTA"
-
-#: includes/admin/pages/homepage.php:119
+#: includes/admin/pages/design-options.php
 msgid "Drag to reorder."
 msgstr "Σύρετε για αναδιάταξη."
 
-#: includes/admin/pages/homepage.php:222
-msgid "Select CTA background image"
-msgstr "Επιλογή εικόνας φόντου CTA"
-
-#: includes/admin/pages/homepage.php:246
+#: includes/admin/pages/design-options.php
 msgid "Select welcome video"
 msgstr "Επιλέξτε βίντεο καλωσορίσματος"
 
-#: includes/admin/pages/homepage.php:247
+#: includes/admin/pages/design-options.php
 msgid "Use this video"
 msgstr "Χρησιμοποιήστε αυτό το βίντεο"
 
