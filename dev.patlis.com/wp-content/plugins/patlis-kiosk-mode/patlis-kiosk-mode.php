@@ -3,7 +3,7 @@
  * Plugin Name: Patlis Kiosk Mode
  * Plugin URI: https://patlis.com/kiosk-mode
  * Description: Simple kiosk inactivity redirect.
- * Version: 1.0.1
+ * Version: 1.0.13
  * Author: Patlis
  * Author URI: https://patlis.com
  * License: GPL v2 or later
@@ -15,7 +15,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Plugin constants
-define('PATLIS_KIOSK_VERSION', '1.0.12');
+define('PATLIS_KIOSK_VERSION', '1.0.13');
 define('PATLIS_KIOSK_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PATLIS_KIOSK_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PATLIS_KIOSK_ASSETS_URL', PATLIS_KIOSK_PLUGIN_URL . 'assets/');

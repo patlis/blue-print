@@ -55,14 +55,14 @@ add_filter( 'bricks/element/form/datepicker_options', function( $options, $eleme
 }, 10, 2 );
 
 /**
- * Load Roboto Fonts
+ * Load local fonts
 */
 add_action('wp_enqueue_scripts', function () {
   wp_enqueue_style(
     'patlis-fonts-roboto',
     get_stylesheet_directory_uri() . '/assets/fonts/fonts.css',
     [],
-    '1.0.1'
+    filemtime(get_stylesheet_directory() . '/assets/fonts/fonts.css')
   );
 }, 5);
 

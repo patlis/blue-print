@@ -19,6 +19,18 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 "X-Generator: Poedit 3.8\n"
 
+#: includes/core.php includes/admin/pages/design-options.php
+msgid "The selected color set is unavailable or invalid."
+msgstr "Το επιλεγμένο σετ χρωμάτων δεν είναι διαθέσιμο ή δεν είναι έγκυρο."
+
+#: includes/core.php includes/admin/pages/design-options.php
+msgid "The design variants could not be saved. Colors may already have been applied."
+msgstr "Δεν ήταν δυνατή η αποθήκευση των παραλλαγών σχεδίασης. Τα χρώματα ενδέχεται να έχουν ήδη εφαρμοστεί."
+
+#: includes/admin/pages/design-options.php
+msgid "Apply section variants, page variants and a color set together. Existing content and field values are preserved."
+msgstr "Εφαρμόστε μαζί παραλλαγές ενοτήτων, παραλλαγές σελίδων και ένα σετ χρωμάτων. Το υπάρχον περιεχόμενο και οι τιμές των πεδίων διατηρούνται."
+
 #: includes/acf-field-labels.php:9 includes/cpt-labels.php:25
 msgid "Events"
 msgstr "Εκδηλώσεις"

@@ -94,7 +94,9 @@ final class Patlis_Bricks_Colors {
       return new WP_Error('invalid_color', __('One or more color values are invalid.', 'patlis-core'));
     }
 
-    update_option(self::OPTION, $palettes);
+    if (!update_option(self::OPTION, $palettes) && get_option(self::OPTION, []) !== $palettes) {
+      return new WP_Error('colors_save_failed', __('The colors could not be saved. Check the values and try again.', 'patlis-core'));
+    }
     do_action('patlis_bricks_colors_updated', self::PALETTE_ID);
     return true;
   }

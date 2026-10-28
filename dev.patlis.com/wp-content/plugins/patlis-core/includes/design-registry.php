@@ -99,23 +99,26 @@ return [
 
     'welcome_section' => [
         'type'            => 'section',
-        'label'           => __('Intro Section (H1)', 'patlis-core'),
+        'label'           => __('Welcome Section', 'patlis-core'),
         'shortcode_slug'  => 'welcome-section',
+        'description'     => __('This section contains the main page heading (H1), which is important for SEO. We recommend keeping it enabled.<br>The image is the Home page featured image<br><span style="color: #ff0000;">Video is available only in the classic Template.</span>', 'patlis-core'),
         'default_variant' => 'classic',
+        'fields'          => [
+            'cta' => [
+                'label'      => __('Show Call to Action Buttons', 'patlis-core'),
+                'type'       => 'checkbox',
+                'option_key' => 'show_cta',
+                'default'    => false,
+            ],
+        ],
         'variants' => [
             'classic' => [
                 'label'    => __('Classic', 'patlis-core'),
                 'description'     => __('Clean and balanced introductory layout combining a decorative visual element with structured welcome text, ideal for a timeless and elegant presentation.
-                This template uses the Home page featured image OR a custom video.', 'patlis-core'),
+                This template uses the Home page featured image OR a <b>custom video</b>.', 'patlis-core'),
                 'template' => 'welcome-classic',
                 'preview'  => 'assets/design-previews/welcome-section/classic.webp',
                 'fields'   => [                  
-                    'cta' => [
-                        'label'      => __('Show Call to Action Buttons', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'show_cta',
-                        'default'    => false,
-                    ],
                      'reverse' => [
                         'label'      => __('Reverse Order', 'patlis-core'),
                         'type'       => 'checkbox',
@@ -140,12 +143,6 @@ return [
                         'step'       => 0.05,
                         'default'    => 0.5,
                     ],
-                    'cta' => [
-                        'label'      => __('Show Call to Action Buttons', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'show_cta',
-                        'default'    => false,
-                    ],
                 ],
             ],
             'framed' => [
@@ -155,12 +152,6 @@ return [
                 'template' => 'welcome-framed',
                 'preview'  => 'assets/design-previews/welcome-section/framed.webp',
                 'fields'   => [
-                    'cta' => [
-                        'label'      => __('Show Call to Action Buttons', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'show_cta',
-                        'default'    => false,
-                    ],
                     'reverse' => [
                         'label'      => __('Reverse Order', 'patlis-core'),
                         'type'       => 'checkbox',
@@ -175,12 +166,6 @@ return [
                 'template' => 'welcome-book',
                 'preview'  => 'assets/design-previews/welcome-section/book.webp',
                 'fields'   => [
-                    'cta' => [
-                    'label'      => __('Show Call to Action Buttons', 'patlis-core'),
-                    'type'       => 'checkbox',
-                    'option_key' => 'show_cta',
-                    'default'    => false,
-                    ],
                     'reverse' => [
                         'label'      => __('Reverse Order', 'patlis-core'),
                         'type'       => 'checkbox',
@@ -195,19 +180,7 @@ return [
                 This template uses the Home page featured image.', 'patlis-core'),
                 'template' => 'welcome-floating',
                 'preview'  => 'assets/design-previews/welcome-section/floating.webp',
-                'fields'   => [
-                    'image' => [
-                        'label'      => __('Image', 'patlis-core'),
-                        'type'       => 'image',
-                        'option_key' => 'image_id',
-                    ],
-                    'cta' => [
-                        'label'      => __('Show Call to Action Buttons', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'show_cta',
-                        'default'    => false,
-                    ],
-                ],
+                'fields'   => [],
             ],
             'split-screen' => [
                 'label'    => __('Split Screen', 'patlis-core'),
@@ -216,12 +189,6 @@ return [
                 'template' => 'welcome-section-split-screen',
                 'preview'  => 'assets/design-previews/welcome-section/split-screen.webp',
                 'fields'   => [
-                    'cta' => [
-                        'label'      => __('Show Call to Action', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'show_cta',
-                        'default'    => false,
-                    ],
                     'reverse' => [
                         'label'      => __('Reverse Order', 'patlis-core'),
                         'type'       => 'checkbox',
@@ -236,12 +203,6 @@ return [
                 'template' => 'welcome-section-signature-intro',
                 'preview'  => 'assets/design-previews/welcome-section/signature-intro.webp',
                 'fields'   => [
-                    'cta' => [
-                        'label'      => __('Show Call to Action', 'patlis-core'),
-                        'type'       => 'checkbox',
-                        'option_key' => 'show_cta',
-                        'default'    => false,
-                    ],
                     'reverse' => [
                         'label'      => __('Reverse Order', 'patlis-core'),
                         'type'       => 'checkbox',
@@ -256,7 +217,7 @@ return [
 
     'cta' => [
         'type'     => 'section',
-        'label'    => __('CTA (only homepage)', 'patlis-core'),
+        'label'    => __('CTA (Call to Action)', 'patlis-core'),
         'shortcode_slug' => 'cta-section',
         'description' => __('You can customize Text and images in every page.', 'patlis-core'),
         'default_variant' => 'cinematic',
@@ -333,7 +294,7 @@ return [
 
     'top_events' => [
         'type'            => 'section',
-        'label'           => __('Top Events', 'patlis-core'),
+        'label'           => __('Events', 'patlis-core'),
         'shortcode_slug'  => 'top-events',
         'default_variant' => 'classic',
         'variants' => [
@@ -350,10 +311,10 @@ return [
                 'description' => __('Immersive background-image layout with event cards layered on top, ideal for creating a strong visual impact and highlighting special occasions.', 'patlis-core'),
                 'preview'  => 'assets/design-previews/top-events/cinematic.webp',
                 'fields'   => [
-                    'background_image' => [
+                    'bg_image' => [
                         'label'      => __('Background Image', 'patlis-core'),
                         'type'       => 'image',
-                        'option_key' => 'background_image_id',
+                        'option_key' => 'bg_image_id',
                     ],
                     'overlay_opacity' => [
                         'label'      => __('Overlay opacity', 'patlis-core'),
@@ -417,9 +378,10 @@ return [
        
     'top_experiences' => [
         'type'     => 'section',
-        'label'    => __('Top Experiences', 'patlis-core'),
+        'label'    => __('Experiences', 'patlis-core'),
         'shortcode_slug' => 'top-experiences',
         'availability'    => 'experience-section',
+        'description' => __('Only experiences with images will be displayed in this section.', 'patlis-core'),
         'default_variant' => 'editorial',
         'fields'   => [],
         'variants' => [
@@ -497,7 +459,7 @@ return [
 
     'top_gallery' => [
         'type'     => 'section',
-        'label'    => __('Top Gallery', 'patlis-core'),
+        'label'    => __('Gallery', 'patlis-core'),
         'shortcode_slug' => 'top-gallery',
         'default_variant' => 'classic',
         'variants' => [
@@ -542,9 +504,10 @@ return [
 
     'top_menu' => [
         'type'            => 'section',
-        'label'           => __('Top Menu', 'patlis-core'),
+        'label'           => __('Menu', 'patlis-core'),
         'shortcode_slug'  => 'top-menu',
         'availability'    => 'top-menu',
+        'description' => __('Only items with images will be displayed in this section.', 'patlis-core'),
         'default_variant' => 'editorial-cards',
         'variants' => [
             'classic' => [
@@ -573,7 +536,7 @@ return [
 
     'top_offers' => [
         'type'            => 'section',
-        'label'           => __('Top Offers & Packages', 'patlis-core'),
+        'label'           => __('Offers & Packages', 'patlis-core'),
         'shortcode_slug'  => 'top-offers',
         'availability'    => 'offers-packages-section',
         'default_variant' => 'classic',
@@ -720,7 +683,7 @@ return [
     
     'top_rooms' => [
         'type'            => 'section',
-        'label'           => __('Top Rooms', 'patlis-core'),
+        'label'           => __('Rooms', 'patlis-core'),
         'shortcode_slug'  => 'top-rooms',
         'availability'    => 'top-rooms-section',
         'default_variant' => 'classic',
@@ -812,7 +775,7 @@ return [
 
     'top_services' => [
         'type'            => 'section',
-        'label'           => __('Top Services', 'patlis-core'),
+        'label'           => __('Services', 'patlis-core'),
         'shortcode_slug'  => 'top-services',
         'default_variant' => 'classic',
         'variants' => [

@@ -19,6 +19,18 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 "X-Generator: Poedit 3.8\n"
 
+#: includes/core.php includes/admin/pages/design-options.php
+msgid "The selected color set is unavailable or invalid."
+msgstr "Das ausgewählte Farbset ist nicht verfügbar oder ungültig."
+
+#: includes/core.php includes/admin/pages/design-options.php
+msgid "The design variants could not be saved. Colors may already have been applied."
+msgstr "Die Designvarianten konnten nicht gespeichert werden. Die Farben wurden möglicherweise bereits angewendet."
+
+#: includes/admin/pages/design-options.php
+msgid "Apply section variants, page variants and a color set together. Existing content and field values are preserved."
+msgstr "Abschnittsvarianten, Seitenvarianten und ein Farbset gemeinsam anwenden. Bestehende Inhalte und Feldwerte bleiben erhalten."
+
 #: includes/acf-field-labels.php:9 includes/cpt-labels.php:25
 msgid "Events"
 msgstr "Veranstaltungen"

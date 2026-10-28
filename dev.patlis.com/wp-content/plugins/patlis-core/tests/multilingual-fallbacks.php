@@ -42,6 +42,10 @@ function absint($value): int {
     return abs((int) $value);
 }
 
+function wp_get_attachment_image_url($id, $size = 'thumbnail') {
+    return $id > 0 ? 'https://example.test/image-' . $id . '.jpg' : false;
+}
+
 function __($text, $domain = ''): string {
     return $text;
 }
@@ -186,16 +190,85 @@ foreach ($cases as $index => [$language, $values, $expected]) {
         test_same($expected, patlis_sliders_get_group('test')['slides'][0][$field], $label . ' slide ' . $field);
     }
 
-    foreach (['patlis_slogan', 'patlis_opening_text', 'patlis_bar_text', 'patlis_center_title', 'patlis_center_code', 'patlis_center_html', 'patlis_center_link_url', 'patlis_design:test:title', 'patlis_design:test:content'] as $tag) {
+    foreach (['patlis_slogan', 'patlis_opening_text', 'patlis_bar_text', 'patlis_center_title', 'patlis_center_code', 'patlis_center_html', 'patlis_center_link_url', 'patlis_design:test:title', 'patlis_design:test:content', 'patlis_design:test:classic:content'] as $tag) {
         $input = '{' . $tag . '}';
         test_same($expected, patlis_render_dynamic_tags_in_content($input), $label . ' content ' . $tag);
         test_same($expected, apply_filters('bricks/dynamic_data/render_content', $input, null), $label . ' Bricks content ' . $tag);
         test_same($expected, apply_filters('bricks/frontend/render_data', $input, null), $label . ' frontend ' . $tag);
     }
-    foreach (['patlis_slogan', 'patlis_center_title', 'patlis_design:test:title', 'patlis_design:test:content'] as $tag) {
+    foreach (['patlis_slogan', 'patlis_center_title', 'patlis_design:test:title', 'patlis_design:test:content', 'patlis_design:test:classic:content'] as $tag) {
         test_same($expected, apply_filters('bricks/dynamic_data/render_tag', '{' . $tag . '}', null), $label . ' direct tag ' . $tag);
     }
 }
+
+add_filter('patlis/design_options/registry', static function ($registry): array {
+    $registry['top_events'] = [
+        'fields' => ['heading' => ['type' => 'text', 'default' => 'Shared heading']],
+        'default_variant' => 'classic',
+        'variants' => [
+            'classic' => ['fields' => ['description' => ['type' => 'textarea']]],
+            'cinematic' => ['fields' => [
+                'bg_image' => ['type' => 'image', 'option_key' => 'bg_image_id'],
+                'overlay_opacity' => ['type' => 'range'],
+            ]],
+            'split-screen' => ['fields' => ['description' => ['type' => 'textarea']]],
+            'agenda' => ['fields' => ['description' => ['type' => 'textarea']]],
+        ],
+    ];
+    return $registry;
+}, 20);
+$test_current_language = 'en';
+$test_options[Patlis_Core::OPTION_DESIGN_OPTIONS]['top_events'] = [
+    'variant' => 'classic',
+    'classic' => ['description' => ['en' => 'Classic']],
+    'cinematic' => ['bg_image_id' => 42, 'overlay_opacity' => 0],
+    'split-screen' => ['description' => ['en' => 'Split']],
+    'agenda' => ['description' => ['en' => 'Agenda']],
+];
+$original_design_options = $test_options[Patlis_Core::OPTION_DESIGN_OPTIONS];
+$tags = [
+    'patlis_design:top_events:description' => 'Classic',
+    'patlis_design:top_events:classic:description' => 'Classic',
+    'patlis_design:top_events:cinematic:bg_image' => 'https://example.test/image-42.jpg',
+    'patlis_design:top_events:cinematic:overlay_opacity' => '0',
+    'patlis_design:top_events:split-screen:description' => 'Split',
+    'patlis_design:top_events:agenda:description' => 'Agenda',
+    'patlis_design:top_events:heading' => 'Shared heading',
+    'patlis_design:top_events:cinematic:heading' => 'Shared heading',
+    'patlis_design:top_events:bg_image' => '',
+    'patlis_design:top_events:classic:bg_image' => '',
+    'patlis_design:top_events:missing:description' => '',
+    'patlis_design:missing:cinematic:bg_image' => '',
+    'patlis_design:top_events:cinematic:missing' => '',
+];
+foreach ($tags as $tag => $expected) {
+    $input = '{' . $tag . '}';
+    test_same($expected, patlis_render_dynamic_tags_in_content($input), 'Variant content ' . $tag);
+    test_same($expected, apply_filters('bricks/dynamic_data/render_content', $input, null), 'Variant Bricks content ' . $tag);
+    test_same($expected, apply_filters('bricks/frontend/render_data', $input, null), 'Variant frontend ' . $tag);
+    test_same($expected, apply_filters('bricks/dynamic_data/render_tag', $input, null), 'Variant direct ' . $tag);
+    test_same($expected, apply_filters('bricks/dynamic_data/render_tag', $tag, null), 'Variant direct without braces ' . $tag);
+}
+test_same(
+    'Classic / https://example.test/image-42.jpg / Split / Agenda',
+    patlis_render_dynamic_tags_in_content('{patlis_design:top_events:description} / {patlis_design:top_events:cinematic:bg_image} / {patlis_design:top_events:split-screen:description} / {patlis_design:top_events:agenda:description}'),
+    'Simultaneous rendering of all variants'
+);
+test_same(['type' => 'image', 'value' => 42], Patlis_Core::get_design_field('top_events', 'bg_image', 'cinematic'), 'Explicit helper image');
+test_same(null, Patlis_Core::get_design_field('top_events', 'description', 'missing'), 'Explicit invalid variant must not fall back');
+test_same(null, Patlis_Core::get_design_field('top_events', 'description', ''), 'Explicit empty variant must not fall back');
+test_same([42], apply_filters('bricks/dynamic_data/render_tag', '{patlis_design:top_events:cinematic:bg_image}', null, 'image'), 'Explicit image context IDs');
+test_same($original_design_options, $test_options[Patlis_Core::OPTION_DESIGN_OPTIONS], 'Variant reads must not change saved settings');
+$test_options[Patlis_Core::OPTION_DESIGN_OPTIONS]['top_events']['variant'] = 'cinematic';
+test_same('https://example.test/image-42.jpg', patlis_render_dynamic_tags_in_content('{patlis_design:top_events:bg_image}'), 'Legacy tag follows changed selection');
+test_same([42], apply_filters('bricks/dynamic_data/render_tag', '{patlis_design:top_events:bg_image}', null, 'image'), 'Legacy image context IDs');
+test_same('Classic', patlis_render_dynamic_tags_in_content('{patlis_design:top_events:classic:description}'), 'Explicit variant ignores changed selection');
+$test_options[Patlis_Core::OPTION_DESIGN_OPTIONS]['top_events']['variant'] = 'missing';
+test_same('Classic', patlis_render_dynamic_tags_in_content('{patlis_design:top_events:description}'), 'Legacy invalid selection falls back to default');
+unset($test_options[Patlis_Core::OPTION_DESIGN_OPTIONS]['top_events']['cinematic']['bg_image_id']);
+test_same([], apply_filters('bricks/dynamic_data/render_tag', '{patlis_design:top_events:cinematic:bg_image}', null, 'image'), 'Missing explicit image context');
+test_same('', patlis_render_dynamic_tags_in_content('{patlis_design:top_events:cinematic:bg_image}'), 'Missing explicit image content');
+test_same('', apply_filters('bricks/dynamic_data/render_tag', '{patlis_design:top_events:cinematic:bg_image:extra}', null), 'Reject extra direct arguments');
 
 test_same('', patlis_transl('patlis_missing'), 'Missing translation must not expose key');
 test_same('', patlis_transl(''), 'Empty translation key');

@@ -2,94 +2,295 @@
 if (!defined('ABSPATH')) exit;
 
 return [
-
-    /*
-     * 1. BALANCED
-     * Safe, elegant, με αρκετή ποικιλία χωρίς πολλά full-image sections.
-     */
-    'balanced' => [
-        'label'   => __('Balanced Set', 'patlis-core'),
-        'preview' => 'assets/design-previews/design-sets/balanced.webp',
-        'description' => __('A balanced design set with a mix of different section types.', 'patlis-core'),
+    'london' => [
+        'label'       => __('London', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/london.webp',
+        'description' => __('', 'patlis-core'),
 
         'sections' => [
-            'welcome_section' => 'default',
-            'top_services'    => 'split-screen',
-            'top_menu'        => 'editorial-cards',
-            'top_reviews'     => 'minimal',
-            'top_gallery'     => 'default',
-            'cta'             => 'split-screen',
-            'footer'          => 'footer-classic',
-        ],
-    ],
-
-
-    /*
-     * 2. CINEMATIC
-     * Δυνατά visual σημεία, αλλά όχι full-image section πάνω σε full-image section.
-     */
-    'cinematic' => [
-        'label'   => __('Cinematic Set', 'patlis-core'),
-        'preview' => 'assets/design-previews/design-sets/cinematic.webp',
-        'description' => __('Do not use slides.', 'patlis-core'),
-
-        'sections' => [
-            'welcome_section' => 'cinematic',
-            'top_services'    => 'split-screen',
-            'top_menu'        => 'editorial-cards',
-            'top_reviews'     => 'cinematic',
-            'top_gallery'     => 'default',
+            'header'          => 'header-classic',
+            'footer'          => 'footer-floating',
+            'welcome_section' => 'framed',
             'cta'             => 'framed',
-            'footer'          => 'footer-cinematic',
+            'top_events'      => 'agenda',
+            'top_experiences'  => 'editorial',
+            'top_gallery'      => 'mosaic',
+            'top_menu'         => 'editorial-cards',
+            'top_offers'       => 'classic',
+            'top_reviews'      => 'minimal',
+            'top_rooms'        => 'classic',
+            'top_services'     => 'split-screen',
         ],
-        'colors' => [
-            'primary'   => '#ff0000',
-            'secondary' => '#00ff00',
-            'accent'    => '#0000ff',
+        'color_set' => 'ivory-gold',
+        'pages' => [
+            'about'    => 'timeline',
+            'events'   => 'classic',
+            'event'    => 'classic',
+            'gallery'  => 'mosaic',
+            'menu'     => 'classic',
+            'offers'   => 'classic',
+            'offer'    => 'classic',
+            'reviews'  => 'editorial',
+            'rooms'    => 'classic',
+            'room'     => 'classic',
+            'services' => 'editorial',
+            'service'  => 'classic',
         ],
     ],
 
-
-    /*
-     * 3. EDITORIAL
-     * Περισσότερο restaurant / boutique χαρακτήρας.
-     * Πιο ήρεμο, με cards και whitespace.
-     */
-    'editorial' => [
-        'label'   => __('Editorial Set', 'patlis-core'),
-        'preview' => 'assets/design-previews/design-sets/editorial.webp',
-        'description' => __('An editorial design set with a calm, card-based layout.', 'patlis-core'),
+    'paris' => [
+        'label'       => __('Paris', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/paris.webp',
+        'description' => __('', 'patlis-core'),
 
         'sections' => [
-            'welcome_section' => 'image-with-corners',
-            'top_services'    => 'default',
-            'top_menu'        => 'editorial-cards',
-            'top_reviews'     => 'classic',
-            'top_gallery'     => 'default',
-            'cta'             => 'floating',
-            'footer'          => 'footer-floating',
+            'header'           => 'header-editorial',
+            'footer'           => 'footer-floating',
+            'welcome_section'  => 'book',
+            'cta'              => 'framed',
+            'top_events'       => 'split-screen',
+            'top_experiences'  => 'editorial',
+            'top_gallery'      => 'classic',
+            'top_menu'         => 'editorial-cards',
+            'top_offers'       => 'split-screen',
+            'top_reviews'      => 'minimal',
+            'top_rooms'        => 'showcase',
+            'top_services'     => 'classic',
+        ],
+        'color_set' => 'bordeaux-elegance',
+        'pages' => [
+            'about'      => 'editorial',
+            'events'     => 'editorial',
+            'event'      => 'floating',
+            'gallery'    => 'cinematic',
+            'menu'       => 'centered',
+            'offers'     => 'list',
+            'offer'      => 'split-screen',
+            'reviews'    => 'editorial',
+            'rooms'      => 'editorial',
+            'room'       => 'slider',
+            'services'   => 'editorial',
+            'service'    => 'floating',
         ],
     ],
 
-
-    /*
-     * 4. VISUAL
-     * Πιο έντονο design, αλλά κρατάμε spacing μεταξύ των image-heavy sections.
-     */
-    'visual' => [
-        'label'   => __('Visual Set', 'patlis-core'),
-        'preview' => 'assets/design-previews/design-sets/visual.webp',
-        'description' => __('Do not use Slides.', 'patlis-core'),
+    'rome' => [
+        'label'       => __('Rome', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/rome.webp',
+        'description' => __('', 'patlis-core'),
 
         'sections' => [
-            'welcome_section' => 'image-floating-content',
-            'top_services'    => 'cinematic',
-            'top_menu'        => 'default',
-            'top_reviews'     => 'minimal',
-            'top_gallery'     => 'cinematic',
-            'cta'             => 'split-screen',
-            'footer'          => 'footer-floating',
+            'header'           => 'header-classic',
+            'footer'           => 'footer-classic',
+            'welcome_section'  => 'split-screen',
+            'cta'              => 'split-screen',
+            'top_events'       => 'classic',
+            'top_experiences'  => 'split-screen',
+            'top_gallery'      => 'mosaic',
+            'top_menu'         => 'classic',
+            'top_offers'       => 'classic',
+            'top_reviews'      => 'classic',
+            'top_rooms'        => 'classic',
+            'top_services'     => 'split-screen',
+        ],
+        'color_set' => 'terracotta-olive',
+        'pages' => [
+            'about'      => 'timeline',
+            'events'     => 'classic',
+            'event'      => 'split-screen',
+            'gallery'    => 'mosaic',
+            'menu'       => 'classic',
+            'offers'     => 'classic',
+            'offer'      => 'classic',
+            'reviews'    => 'classic',
+            'rooms'      => 'classic',
+            'room'       => 'classic',
+            'services'   => 'list',
+            'service'    => 'classic',
         ],
     ],
+
+    'new-york' => [
+        'label'       => __('New York', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/new-york.webp',
+        'description' => __('', 'patlis-core'),
+
+        'sections' => [
+            'header'           => 'minimal',
+            'footer'           => 'footer-cinematic',
+            'welcome_section'  => 'signature-intro',
+            'cta'              => 'split-screen',
+            'top_events'       => 'split-screen',
+            'top_experiences'  => 'editorial',
+            'top_gallery'      => 'mosaic',
+            'top_menu'         => 'editorial-cards',
+            'top_offers'       => 'classic',
+            'top_reviews'      => 'cinematic',
+            'top_rooms'        => 'showcase',
+            'top_services'     => 'classic',
+        ],
+        'color_set' => 'slate-copper',
+        'pages' => [
+            'about'      => 'editorial',
+            'events'     => 'editorial',
+            'event'      => 'floating',
+            'gallery'    => 'cinematic',
+            'menu'       => 'compact',
+            'offers'     => 'classic',
+            'offer'      => 'split-screen',
+            'reviews'    => 'classic',
+            'rooms'      => 'editorial',
+            'room'       => 'slider',
+            'services'   => 'editorial',
+            'service'    => 'floating',
+        ],
+    ],
+
+    'athens' => [
+        'label'       => __('Athens', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/athens.webp',
+        'description' => __('', 'patlis-core'),
+
+        'sections' => [
+            'header'           => 'header-editorial',
+            'footer'           => 'footer-floating',
+            'welcome_section'  => 'classic',
+            'cta'              => 'split-screen',
+            'top_events'       => 'agenda',
+            'top_experiences'  => 'minimal',
+            'top_gallery'      => 'mosaic',
+            'top_menu'         => 'classic',
+            'top_offers'       => 'split-screen',
+            'top_reviews'      => 'classic',
+            'top_rooms'        => 'showcase',
+            'top_services'     => 'classic',
+        ],
+        'color_set' => 'aegean-blue',
+        'pages' => [
+            'about'      => 'editorial',
+            'events'     => 'agenda',
+            'event'      => 'split-screen',
+            'gallery'    => 'mosaic',
+            'menu'       => 'accordion',
+            'offers'     => 'list',
+            'offer'      => 'split-screen',
+            'reviews'    => 'classic',
+            'rooms'      => 'classic',
+            'room'       => 'slider',
+            'services'   => 'classic',
+            'service'    => 'floating',
+        ],
+    ],
+
+    'vienna' => [
+        'label'       => __('Vienna', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/vienna.webp',
+        'description' => __('', 'patlis-core'),
+
+        'sections' => [
+            'header' => 'header-editorial',
+            'footer' => 'footer-classic',
+            'welcome_section' => 'classic',
+            'cta' => 'framed',
+            'top_events' => 'agenda',
+            'top_experiences' => 'minimal',
+            'top_gallery' => 'classic',
+            'top_menu' => 'editorial-cards',
+            'top_offers' => 'split-screen',
+            'top_reviews' => 'minimal',
+            'top_rooms' => 'classic',
+            'top_services' => 'split-screen',
+        ],
+        'color_set' => 'espresso-cream',
+        'pages' => [
+            'about' => 'timeline',
+            'events' => 'agenda',
+            'event' => 'classic',
+            'gallery' => 'classic',
+            'menu' => 'centered',
+            'offers' => 'list',
+            'offer' => 'classic',
+            'reviews' => 'editorial',
+            'rooms' => 'list',
+            'room' => 'slider',
+            'services' => 'list',
+            'service' => 'classic',
+        ],
+    ],
+
+    'barcelona' => [
+        'label'       => __('Barcelona', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/barcelona.webp',
+        'description' => __('', 'patlis-core'),
+
+        'sections' => [
+            'header' => 'header-classic',
+            'footer' => 'footer-floating',
+            'welcome_section' => 'signature-intro',
+            'cta' => 'floating',
+            'top_events' => 'cinematic',
+            'top_experiences' => 'editorial',
+            'top_gallery' => 'classic',
+            'top_menu' => 'classic',
+            'top_offers' => 'classic',
+            'top_reviews' => 'classic',
+            'top_rooms' => 'showcase',
+            'top_services' => 'cinematic',
+        ],
+        'color_set' => 'coral-sunset',
+        'pages' => [
+            'about' => 'editorial',
+            'events' => 'classic',
+            'event' => 'split-screen',
+            'gallery' => 'mosaic',
+            'menu' => 'accordion',
+            'offers' => 'classic',
+            'offer' => 'split-screen',
+            'reviews' => 'classic',
+            'rooms' => 'editorial',
+            'room' => 'classic',
+            'services' => 'classic',
+            'service' => 'floating',
+        ],
+    ],
+
+    'tokyo' => [
+        'label'       => __('Tokyo', 'patlis-core'),
+        'preview'     => 'assets/design-previews/design-sets/tokyo.webp',
+        'description' => __('', 'patlis-core'),
+
+        'sections' => [
+            'header' => 'minimal',
+            'footer' => 'footer-cinematic',
+            'welcome_section' => 'split-screen',
+            'cta' => 'split-screen',
+            'top_events' => 'classic',
+            'top_experiences' => 'cinematic',
+            'top_gallery' => 'cinematic',
+            'top_menu' => 'editorial-cards',
+            'top_offers' => 'cinematic',
+            'top_reviews' => 'minimal',
+            'top_rooms' => 'cinematic',
+            'top_services' => 'classic',
+        ],
+        'color_set' => 'midnight-gold',
+        'pages' => [
+            'about' => 'editorial',
+            'events' => 'editorial',
+            'event' => 'floating',
+            'gallery' => 'cinematic',
+            'menu' => 'compact',
+            'offers' => 'list',
+            'offer' => 'classic',
+            'reviews' => 'editorial',
+            'rooms' => 'list',
+            'room' => 'slider',
+            'services' => 'editorial',
+            'service' => 'floating',
+        ],
+    ],  
+
+
+
 
 ];

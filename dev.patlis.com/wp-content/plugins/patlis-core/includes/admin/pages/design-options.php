@@ -260,11 +260,11 @@ final class Patlis_Admin_Page_Design_Options {
     $options = get_option(Patlis_Core::OPTION_DESIGN_OPTIONS, []);
     $options = is_array($options) ? $options : [];
     $design_types = [
-      'global'  => __('Global & Home page', 'patlis-core'),
+      'global'  => __('Global & Home Page', 'patlis-core'),
       'colors'  => __('Colors', 'patlis-core'),
-      'section' => __('Sections', 'patlis-core'),
+      'section' => __('Section Templates', 'patlis-core'),
+      'page'    => __('Page Templates', 'patlis-core'),
       'set'     => __('Design Sets', 'patlis-core'),
-      'page'    => __('Pages', 'patlis-core'),
     ];
     $active_type = isset($_GET['design_type']) ? sanitize_key((string) $_GET['design_type']) : 'global';
     if (!isset($design_types[$active_type])) $active_type = 'global';
@@ -294,7 +294,13 @@ final class Patlis_Admin_Page_Design_Options {
       <?php if (!empty($_GET['patlis_error'])): ?>
         <div class="notice notice-error"><p>
           <?php if ($active_type === 'set'): ?>
-            <?php esc_html_e('The design set could not be applied.', 'patlis-core'); ?>
+            <?php if ($_GET['patlis_error'] === 'design_set_save_failed'): ?>
+              <?php esc_html_e('The design variants could not be saved. Colors may already have been applied.', 'patlis-core'); ?>
+            <?php elseif ($_GET['patlis_error'] === 'invalid_color_set'): ?>
+              <?php esc_html_e('The selected color set is unavailable or invalid.', 'patlis-core'); ?>
+            <?php else: ?>
+              <?php esc_html_e('The design set could not be applied.', 'patlis-core'); ?>
+            <?php endif; ?>
           <?php elseif ($active_type === 'global'): ?>
             <?php esc_html_e('The Bricks global variables could not be updated.', 'patlis-core'); ?>
           <?php else: ?>
@@ -356,7 +362,7 @@ final class Patlis_Admin_Page_Design_Options {
           <input type="hidden" name="action" value="patlis_save_design_global">
           <?php wp_nonce_field('patlis_save_design_global'); ?>
 
-          <h2><?php esc_html_e('Global variables', 'patlis-core'); ?></h2>
+          <h2><?php esc_html_e('Global Options', 'patlis-core'); ?></h2>
           <?php if (is_wp_error($global_variables)): ?>
             <div class="notice notice-error inline"><p><?php echo esc_html($global_variables->get_error_message()); ?></p></div>
           <?php else: ?>
@@ -408,6 +414,7 @@ final class Patlis_Admin_Page_Design_Options {
 
           <h2><?php esc_html_e('Welcome section video', 'patlis-core'); ?></h2>
           <p class="description"><?php esc_html_e('If a video is set, it replaces the featured image in the Welcome section.', 'patlis-core'); ?></p>
+          <p class="description" style="color: #ff0000;"><?php esc_html_e('Available only in classic Template.', 'patlis-core'); ?></p>
           <table class="form-table" role="presentation">
             <tr>
               <th scope="row"><label for="patlis_welcome_video_url"><?php esc_html_e('Video URL', 'patlis-core'); ?></label></th>
@@ -420,7 +427,7 @@ final class Patlis_Admin_Page_Design_Options {
             </tr>
           </table>
 
-          <h2><?php esc_html_e('Home page display order', 'patlis-core'); ?></h2>
+          <h2><?php esc_html_e('Home page options', 'patlis-core'); ?></h2>
           <p class="description"><?php esc_html_e('Drag to reorder.', 'patlis-core'); ?></p>
           <ul id="patlis-sections-sortable">
             <?php foreach ($sections_order as $index => $slug): ?>
@@ -576,6 +583,14 @@ final class Patlis_Admin_Page_Design_Options {
             <?php if ($section_description !== ''): ?>
               <div class="patlis-design-description"><?php echo wp_kses_post(wpautop($section_description)); ?></div>
             <?php endif; ?>
+            <?php if ($section_fields !== []): ?>
+              <div class="patlis-design-section-fields">
+                <h3><?php echo esc_html(sprintf(__('%s content', 'patlis-core'), (string) ($section['label'] ?? $section_key))); ?></h3>
+                <?php foreach ($section_fields as $field_key => $field): ?>
+                  <?php self::render_field($section_key, '', $field_key, $field, $section_options); ?>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
             <div class="patlis-design-choices">
               <?php foreach ($variants as $variant_key => $variant): ?>
                 <?php
@@ -611,14 +626,6 @@ final class Patlis_Admin_Page_Design_Options {
                 </div>
               <?php endforeach; ?>
             </div>
-            <?php if ($section_fields !== []): ?>
-              <div class="patlis-design-section-fields">
-                <h3><?php echo esc_html(sprintf(__('%s content', 'patlis-core'), (string) ($section['label'] ?? $section_key))); ?></h3>
-                <?php foreach ($section_fields as $field_key => $field): ?>
-                  <?php self::render_field($section_key, '', $field_key, $field, $section_options); ?>
-                <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
           </section>
         <?php endforeach; ?>
 
@@ -1051,9 +1058,10 @@ final class Patlis_Admin_Page_Design_Options {
       echo '<p>' . esc_html__('No design sets are available.', 'patlis-core') . '</p>';
       return;
     }
+    add_thickbox();
     ?>
     <h2><?php esc_html_e('Design Sets', 'patlis-core'); ?></h2>
-    <p class="description"><?php esc_html_e('Apply a coordinated design across multiple sections. Existing content and field values are preserved.', 'patlis-core'); ?></p>
+    <p class="description"><?php esc_html_e('Choose a ready-made design set for your website. You can customize colors, section templates and page templates individually at any time.', 'patlis-core'); ?></p>
 
     <div class="patlis-design-sets">
       <?php foreach ($sets as $set_key => $set): ?>
@@ -1066,31 +1074,38 @@ final class Patlis_Admin_Page_Design_Options {
         ?>
         <article class="patlis-design-set">
           <div class="patlis-design-set-body">
-            <h3><?php echo esc_html((string) ($set['label'] ?? $set_key)); ?></h3>
+            <div class="patlis-design-set-header">
+              <h3><?php echo esc_html((string) ($set['label'] ?? $set_key)); ?></h3>
+              <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="patlis-apply-design-set-form">
+                <input type="hidden" name="action" value="patlis_apply_design_set">
+                <input type="hidden" name="patlis_design_set" value="<?php echo esc_attr($set_key); ?>">
+                <?php wp_nonce_field('patlis_apply_design_set'); ?>
+                <?php submit_button(__('Apply', 'patlis-core'), 'primary', 'submit', false); ?>
+              </form>
+            </div>
             <?php if (!empty($set['description'])): ?>
               <p class="patlis-design-set-description"><?php echo esc_html((string) $set['description']); ?></p>
             <?php endif; ?>
-            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="patlis-apply-design-set-form">
-              <input type="hidden" name="action" value="patlis_apply_design_set">
-              <input type="hidden" name="patlis_design_set" value="<?php echo esc_attr($set_key); ?>">
-              <?php wp_nonce_field('patlis_apply_design_set'); ?>
-              <?php submit_button(__('Apply design set', 'patlis-core'), 'primary', 'submit', false); ?>
-            </form>
           </div>
           <?php if ($preview_url !== ''): ?>
-            <img src="<?php echo esc_url($preview_url); ?>" alt="" class="patlis-design-set-preview">
+            <a href="<?php echo esc_url($preview_url); ?>" class="thickbox patlis-design-set-preview-link" title="<?php echo esc_attr((string) ($set['label'] ?? $set_key)); ?>">
+              <img src="<?php echo esc_url($preview_url); ?>" alt="<?php echo esc_attr((string) ($set['label'] ?? $set_key)); ?>" class="patlis-design-set-preview">
+            </a>
           <?php endif; ?>
         </article>
       <?php endforeach; ?>
     </div>
 
     <style>
-      .patlis-design-sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 360px)); gap: 16px; margin-top: 20px; }
+      .patlis-design-sets { display: grid; grid-template-columns: repeat(auto-fill, min(380px, 100%)); gap: 16px; margin-top: 20px; }
       .patlis-design-set { overflow: hidden; border: 1px solid #c3c4c7; border-radius: 4px; background: #fff; }
-      .patlis-design-set-preview { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-top: 1px solid #dcdcde; }
+      .patlis-design-set-preview-link { display: block; cursor: zoom-in; }
+      .patlis-design-set-preview { display: block; width: 100%; object-fit: cover; aspect-ratio: 9/16; object-position: top;}
       .patlis-design-set-body { padding: 16px; }
-      .patlis-design-set-body h3 { margin: 0 0 8px; }
-      .patlis-design-set-description { margin: 0 0 16px; color: #50575e; }
+      .patlis-design-set-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .patlis-design-set-header h3 { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+      .patlis-design-set-header form { margin: 0; flex-shrink: 0; }
+      .patlis-design-set-description { margin: 8px 0 0; color: #50575e; }
     </style>
 
     <script>

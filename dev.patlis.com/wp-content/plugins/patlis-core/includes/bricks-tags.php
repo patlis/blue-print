@@ -5,6 +5,8 @@ if (!defined('ABSPATH')) exit;
  * Bricks Dynamic Tags for Patlis
  * - Groups: Patlis – Basic, Patlis – Social, Patlis – Center Popup, Patlis – Notification bar
  * - Renders {patlis_*} inside Text/Heading/etc
+ * - Design fields: {patlis_design:section:field} uses the selected variant;
+ *   {patlis_design:section:variant:field} reads a specific variant without changing selection.
  */
 
 function patlis_get_center_image_ai_status(): string {
@@ -93,6 +95,7 @@ add_filter('bricks/dynamic_tags_list', function($tags) {
   $tags[] = ['name' => '{patlis_services_gallery_json}', 'label' => 'Services: Gallery JSON (ids + urls + meta)', 'patlis-core', 'group' => $group_services];
   $tags[] = ['name' => '{patlis_slogan}', 'label' => 'Company slogan', 'group' => $group_design];
   $tags[] = ['name' => '{patlis_design:top_services:background_image}', 'label' => 'Design option: Top Services background image', 'group' => $group_design];
+  $tags[] = ['name' => '{patlis_design:top_events:cinematic:bg_image}', 'label' => 'Design option: Top Events cinematic background image (explicit variant)', 'group' => $group_design];
   $tags[] = ['name' => '{patlis_gallery_json}', 'label' => 'Gallery: Images JSON (ids + urls + meta)', 'patlis-core', 'group' => $group_gallery];
   $tags[] = ['name' => '{patlis_gallery_all_images_json:gallery}', 'label' => 'Gallery: All images JSON (except Home)', 'patlis-core', 'group' => $group_gallery];
   $tags[] = ['name' => '{patlis_gallery_all_images_json:home}', 'label' => 'Gallery: Home images JSON', 'patlis-core', 'group' => $group_gallery];
@@ -207,10 +210,10 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     'patlis_bar_end_date'   => 'end_date',
   ];
 
-  return preg_replace_callback('/{(patlis_[a-z0-9_]+(?::[a-z0-9_-]+){0,2})}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
+  return preg_replace_callback('/{(patlis_design(?::[a-z0-9_-]+){3}|patlis_[a-z0-9_]+(?::[a-z0-9_-]+){0,2})}/i', function($m) use ($basic_map, $social_map, $center_map, $bar_map, $opening_map, $post) {
 
     $tag = $m[1];
-    $tag_parts = explode(':', $tag, 3);
+    $tag_parts = explode(':', $tag);
     $tag_base = $tag_parts[0];
     $tag_arg = isset($tag_parts[1]) ? sanitize_key($tag_parts[1]) : '';
 
@@ -275,8 +278,10 @@ function patlis_render_dynamic_tags_in_content($content, $post = null) {
     }
 
     if ($tag_base === 'patlis_design') {
-      $field = isset($tag_parts[2]) ? sanitize_key($tag_parts[2]) : '';
-      $design_field = Patlis_Core::get_design_field($tag_arg, $field);
+      if (count($tag_parts) !== 3 && count($tag_parts) !== 4) return '';
+      $variant = isset($tag_parts[3]) ? sanitize_key($tag_parts[2]) : null;
+      $field = sanitize_key($tag_parts[3] ?? $tag_parts[2]);
+      $design_field = Patlis_Core::get_design_field($tag_arg, $field, $variant);
       if (!is_array($design_field)) return '';
 
       if ($design_field['type'] === 'image') {
@@ -498,7 +503,7 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   if (!is_string($tag)) return $tag;
 
   $clean = str_replace(['{', '}'], '', $tag);
-  $parts = explode(':', $clean, 3);
+  $parts = explode(':', $clean);
   $base  = $parts[0];
   $arg   = isset($parts[1]) ? sanitize_key($parts[1]) : '';
 
@@ -582,8 +587,10 @@ add_filter('bricks/dynamic_data/render_tag', function($tag, $post, $context = 't
   }
 
   if ($base === 'patlis_design') {
-    $field = isset($parts[2]) ? sanitize_key($parts[2]) : '';
-    $design_field = Patlis_Core::get_design_field($arg, $field);
+    if (count($parts) !== 3 && count($parts) !== 4) return '';
+    $variant = isset($parts[3]) ? sanitize_key($parts[2]) : null;
+    $field = sanitize_key($parts[3] ?? $parts[2]);
+    $design_field = Patlis_Core::get_design_field($arg, $field, $variant);
     if (!is_array($design_field)) return '';
 
     if ($design_field['type'] === 'image') {

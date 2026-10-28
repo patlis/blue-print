@@ -21,6 +21,18 @@ msgstr ""
 "X-Poedit-KeywordsList: __;esc_html_e;esc_html__;esc_attr__;esc_attr_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: includes/core.php includes/admin/pages/design-options.php
+msgid "The selected color set is unavailable or invalid."
+msgstr ""
+
+#: includes/core.php includes/admin/pages/design-options.php
+msgid "The design variants could not be saved. Colors may already have been applied."
+msgstr ""
+
+#: includes/admin/pages/design-options.php
+msgid "Apply section variants, page variants and a color set together. Existing content and field values are preserved."
+msgstr ""
+
 #: includes/acf-field-labels.php:9 includes/cpt-labels.php:25
 msgid "Events"
 msgstr ""

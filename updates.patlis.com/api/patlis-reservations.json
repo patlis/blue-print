@@ -1,8 +1,8 @@
 {
   "name": "Patlis Reservations",
   "slug": "patlis-reservations",
-  "version": "0.2.0",
-  "download_url": "https://updates.patlis.com/downloads/patlis-reservations-0.2.0.zip",
+  "version": "0.2.1",
+  "download_url": "https://updates.patlis.com/downloads/patlis-reservations-0.2.1.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "6.0",
@@ -12,7 +12,7 @@
   "sections": {
     "description": "Reservation module for gastronomy sites.",
     "installation": "<p>Upload and activate.</p>",
-    "changelog": "<ul><li>Load the reservation calendar automatically on reservation template pages.</li><li>Improved owner notification emails with formatted dates, communication language, and clickable phone links.</li></ul>",
+    "changelog": "<h4>0.2.1</h4><ul><li>Minor bug fixes and improvements.</li><li>Improved owner notification emails with formatted dates, communication language, and clickable phone links.</li></ul>",
     "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>What does this plugin do?</h4><p>It allows you to manage table reservations and customer booking requests directly from your website.</p><h4>Does it support automatic confirmations?</h4><p>Yes, the plugin can handle reservation requests and send automatic confirmations based on your settings.</p><h4>Can I control availability and time slots?</h4><p>Yes, you can define available days, time slots, and reservation rules from the admin panel.</p><h4>Can I use an external reservation system?</h4><p>Yes, the plugin supports integration with third-party reservation systems or custom code.</p><h4>Can I redirect users to another booking page?</h4><p>Yes, you can redirect users to an external booking page or platform if needed.</p><h4>Does it reduce phone calls and manual work?</h4><p>Yes, the plugin automates the reservation process, reducing the need for phone calls and manual confirmations.</p>",
     "screenshots": "<p>No screenshots yet.</p>"
   },

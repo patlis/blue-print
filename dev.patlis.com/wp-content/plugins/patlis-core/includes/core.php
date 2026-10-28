@@ -137,6 +137,10 @@ final class Patlis_Core {
     return apply_filters('patlis/design_sets/registry', $registry);
   }
 
+  /**
+   * Apply exact registry variant keys from sections/pages and an optional color_set.
+   * Existing section/page field values are preserved; returns the variant count.
+   */
   public static function apply_design_set(string $set_key) {
     $set_key = sanitize_key($set_key);
     $sets = self::get_design_sets_registry();
@@ -144,32 +148,58 @@ final class Patlis_Core {
       return new WP_Error('design_set_not_found', __('The selected design set was not found.', 'patlis-core'));
     }
 
-    $set_sections = isset($sets[$set_key]['sections']) && is_array($sets[$set_key]['sections'])
-      ? $sets[$set_key]['sections']
-      : [];
-    $design_registry = self::get_design_registry();
+    $set = $sets[$set_key];
     $applicable = [];
 
-    foreach ($set_sections as $section_key => $variant_key) {
-      $section_key = sanitize_key((string) $section_key);
-      $variant_key = sanitize_key((string) $variant_key);
-      if (!isset($design_registry[$section_key]) || !is_array($design_registry[$section_key])) {
+    foreach (['sections' => self::get_design_registry(), 'pages' => self::get_design_pages_registry()] as $group => $design_registry) {
+      if (isset($set[$group]) && !is_array($set[$group])) {
         return new WP_Error('invalid_design_set', __('The design set contains an unknown section.', 'patlis-core'));
       }
+      foreach (($set[$group] ?? []) as $section_key => $variant_key) {
+        if (!is_string($variant_key)) {
+          return new WP_Error('invalid_design_set', __('The design set contains an unknown variant.', 'patlis-core'));
+        }
+        $section_key = sanitize_key((string) $section_key);
+        $variant_key = sanitize_key($variant_key);
+        if (!isset($design_registry[$section_key]) || !is_array($design_registry[$section_key])) {
+          return new WP_Error('invalid_design_set', __('The design set contains an unknown section.', 'patlis-core'));
+        }
 
-      $section = $design_registry[$section_key];
-      $availability = sanitize_key((string) ($section['availability'] ?? ''));
-      if ($availability !== '' && function_exists('allowed_section') && allowed_section($availability) !== 1) continue;
+        $section = $design_registry[$section_key];
+        $availability = sanitize_key((string) ($section['availability'] ?? ''));
+        if ($availability !== '' && function_exists('allowed_section') && allowed_section($availability) !== 1) continue;
 
-      $variants = isset($section['variants']) && is_array($section['variants']) ? $section['variants'] : [];
-      if (!isset($variants[$variant_key]) || !is_array($variants[$variant_key])) {
-        return new WP_Error('invalid_design_set', __('The design set contains an unknown variant.', 'patlis-core'));
+        $variants = isset($section['variants']) && is_array($section['variants']) ? $section['variants'] : [];
+        if (!isset($variants[$variant_key]) || !is_array($variants[$variant_key])) {
+          return new WP_Error('invalid_design_set', __('The design set contains an unknown variant.', 'patlis-core'));
+        }
+
+        $applicable[$section_key] = $variant_key;
       }
-
-      $applicable[$section_key] = $variant_key;
     }
 
-    if ($applicable === []) {
+    $colors = [];
+    if (isset($set['color_set']) && $set['color_set'] !== '') {
+      if (!is_string($set['color_set']) || !function_exists('patlis_get_color_palettes_registry') || !class_exists('Patlis_Bricks_Colors')) {
+        return new WP_Error('invalid_color_set', __('The selected color set is unavailable or invalid.', 'patlis-core'));
+      }
+      $palettes = patlis_get_color_palettes_registry();
+      $palette = $palettes[$set['color_set']] ?? null;
+      if (!is_array($palette) || empty($palette['colors']) || !is_array($palette['colors'])) {
+        return new WP_Error('invalid_color_set', __('The selected color set is unavailable or invalid.', 'patlis-core'));
+      }
+      $editable = Patlis_Bricks_Colors::get_editable_colors();
+      if (is_wp_error($editable)) return $editable;
+      foreach ($palette['colors'] as $variable => $value) {
+        $name = sanitize_key(ltrim((string) $variable, '-'));
+        if (!isset($editable['colors'][$name]) || !is_string($value) || patlis_sanitize_css_color($value) === '') {
+          return new WP_Error('invalid_color_set', __('The selected color set is unavailable or invalid.', 'patlis-core'));
+        }
+        $colors[$name] = ['color' => $value];
+      }
+    }
+
+    if ($applicable === [] && $colors === []) {
       return new WP_Error('empty_design_set', __('No sections from this design set are available.', 'patlis-core'));
     }
 
@@ -182,7 +212,13 @@ final class Patlis_Core {
       $options[$section_key]['variant'] = $variant_key;
     }
 
-    update_option(self::OPTION_DESIGN_OPTIONS, $options);
+    if ($colors !== []) {
+      $result = Patlis_Bricks_Colors::update_editable_colors($colors);
+      if (is_wp_error($result)) return $result;
+    }
+    if (!update_option(self::OPTION_DESIGN_OPTIONS, $options) && get_option(self::OPTION_DESIGN_OPTIONS, []) !== $options) {
+      return new WP_Error('design_set_save_failed', __('The design variants could not be saved. Colors may already have been applied.', 'patlis-core'));
+    }
     do_action('patlis_design_set_applied', $set_key, $applicable);
     return count($applicable);
   }
@@ -200,7 +236,7 @@ final class Patlis_Core {
     return null;
   }
 
-  public static function get_design_field(string $section, string $field) {
+  public static function get_design_field(string $section, string $field, ?string $variant = null) {
     $registry = self::get_design_registry();
     if (!isset($registry[$section]) || !is_array($registry[$section])) return null;
 
@@ -223,12 +259,14 @@ final class Patlis_Core {
     }
 
     $default_variant = sanitize_key((string) ($section_definition['default_variant'] ?? 'default'));
-    $variant = sanitize_key((string) self::get_section_design_option($section, 'variant', $default_variant));
+    $explicit_variant = $variant !== null;
+    $variant = sanitize_key($variant ?? (string) self::get_section_design_option($section, 'variant', $default_variant));
     $variants = isset($section_definition['variants']) && is_array($section_definition['variants'])
       ? $section_definition['variants']
       : [];
 
     if (!isset($variants[$variant]) || !is_array($variants[$variant])) {
+      if ($explicit_variant) return null;
       $variant = $default_variant;
     }
 
