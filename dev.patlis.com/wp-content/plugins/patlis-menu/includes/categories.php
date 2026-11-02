@@ -381,12 +381,9 @@ add_filter('manage_edit-menu_section_sortable_columns', function (array $sortabl
 add_action('pre_get_terms', function (WP_Term_Query $query): void {
     if (!is_admin()) return;
 
-    $taxonomy = $query->query_vars['taxonomy'] ?? null;
-    if (is_array($taxonomy)) {
-        if (!in_array('menu_section', $taxonomy, true)) return;
-    } elseif ($taxonomy !== 'menu_section') {
-        return;
-    }
+    $taxonomies = (array) ($query->query_vars['taxonomy'] ?? []);
+    // Never filter mixed-taxonomy or object relationship queries (including Polylang's term cache).
+    if (array_values($taxonomies) !== ['menu_section'] || !empty($query->query_vars['object_ids'])) return;
 
     $orderby      = (string)($query->query_vars['orderby'] ?? '');
     $user_orderby = isset($_GET['orderby']) ? sanitize_key((string)$_GET['orderby']) : '';

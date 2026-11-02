@@ -911,15 +911,65 @@ final class Patlis_Admin_Page_Instance_Tools
             return '';
         }
 
-        $deleted = 0;
-        foreach ($term_ids as $term_id) {
-            $result = wp_delete_term((int) $term_id, $taxonomy);
-            if (is_wp_error($result) || !$result) {
-                wp_send_json_error(['message' => sprintf('Could not delete term %d from %s.', $term_id, $taxonomy)], 500);
+        $temporary_taxonomy = $term_ids !== [] && !taxonomy_exists($taxonomy);
+        if ($temporary_taxonomy) {
+            // Version-gated plugins can leave terms in the database without registering their taxonomy.
+            $result = register_taxonomy($taxonomy, [], [
+                'public'       => false,
+                'show_ui'      => false,
+                'show_in_rest' => false,
+                'rewrite'      => false,
+                'query_var'    => false,
+                'hierarchical' => true,
+            ]);
+            if (is_wp_error($result)) {
+                wp_send_json_error(['message' => sprintf('Could not register %s for cleanup: %s', $taxonomy, $result->get_error_message())], 500);
                 return '';
             }
-            $deleted++;
         }
+
+        $deleted = 0;
+        $error_message = '';
+        try {
+            foreach ($term_ids as $term_id) {
+                // Earlier deletions can cascade to translated terms from the original ID list.
+                $remaining = $wpdb->get_var($wpdb->prepare(
+                    "SELECT COUNT(*) FROM {$wpdb->term_taxonomy} WHERE term_id = %d AND taxonomy = %s",
+                    (int) $term_id,
+                    $taxonomy
+                ));
+                if ($remaining === null) {
+                    $error_message = sprintf('Could not verify term %d in %s before deletion.', $term_id, $taxonomy);
+                    break;
+                }
+                if ((int) $remaining === 0) {
+                    $deleted++;
+                    continue;
+                }
+                $result = wp_delete_term((int) $term_id, $taxonomy);
+                if (is_wp_error($result) || !$result) {
+                    $reason = is_wp_error($result)
+                        ? $result->get_error_message()
+                        : ($result === 0 ? 'WordPress refused to delete the default term.' : 'WordPress returned no deletion result.');
+                    $error_message = sprintf('Could not delete term %d from %s: %s', $term_id, $taxonomy, $reason);
+                    break;
+                }
+                $deleted++;
+            }
+        } finally {
+            if ($temporary_taxonomy) {
+                $result = unregister_taxonomy($taxonomy);
+                if (is_wp_error($result)) {
+                    $error_message .= ($error_message !== '' ? ' ' : '') .
+                        sprintf('Could not unregister temporary taxonomy %s: %s', $taxonomy, $result->get_error_message());
+                }
+            }
+        }
+        if ($error_message !== '') {
+            wp_send_json_error(['message' => $error_message], 500);
+            return '';
+        }
+
         return sprintf('Deleted %d term(s) from %s.', $deleted, $taxonomy);
     }
 

@@ -274,7 +274,7 @@ final class Patlis_Admin_Page_Design_Options {
 
     $visible_sections = array_filter($registry, static function ($section) use ($active_type): bool {
       if (!is_array($section)) return false;
-      if ($active_type === 'section' && !self::is_section_allowed($section)) return false;
+      if (!self::is_section_allowed($section)) return false;
       return sanitize_key((string) ($section['type'] ?? 'section')) === $active_type;
     });
     $active_section = isset($_GET['section']) ? sanitize_key((string) $_GET['section']) : '';

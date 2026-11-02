@@ -22,6 +22,14 @@ $test_posts = [];
 $test_deleted_posts = [];
 $test_post_delete_fails = false;
 $test_term_delete_fails = false;
+$test_taxonomy_active = true;
+$test_taxonomy_registrations = [];
+$test_taxonomy_unregistrations = [];
+$test_registration_fails = false;
+$test_unregistration_fails = false;
+$test_term_error = null;
+$test_term_cascade = [];
+$test_term_delete_calls = [];
 $test_home_has_images = true;
 
 function get_option($name, $default = []) {
@@ -69,8 +77,37 @@ function wp_delete_post($id, $force) {
     $GLOBALS['test_deleted_posts'][] = $id;
     return $GLOBALS['test_post_delete_fails'] ? false : (object) ['ID' => $id];
 }
-function wp_delete_term($id, $taxonomy) { return $GLOBALS['test_term_delete_fails'] ? false : ['term_id' => $id]; }
-function is_wp_error($value): bool { return false; }
+final class WP_Error {
+    private $message;
+    public function __construct($code, $message) { $this->message = $message; }
+    public function get_error_message(): string { return $this->message; }
+}
+function taxonomy_exists($taxonomy): bool { return $GLOBALS['test_taxonomy_active']; }
+function register_taxonomy($taxonomy, $types, $args) {
+    $GLOBALS['test_taxonomy_registrations'][] = [$taxonomy, $types, $args];
+    if ($GLOBALS['test_registration_fails']) return new WP_Error('registration_failed', 'Registration blocked.');
+    $GLOBALS['test_taxonomy_active'] = true;
+    return (object) ['name' => $taxonomy];
+}
+function unregister_taxonomy($taxonomy) {
+    $GLOBALS['test_taxonomy_unregistrations'][] = $taxonomy;
+    if ($GLOBALS['test_unregistration_fails']) return new WP_Error('unregistration_failed', 'Unregistration blocked.');
+    $GLOBALS['test_taxonomy_active'] = false;
+    return true;
+}
+function wp_delete_term($id, $taxonomy) {
+    $GLOBALS['test_term_delete_calls'][] = $id;
+    if (!taxonomy_exists($taxonomy)) return new WP_Error('invalid_taxonomy', 'Invalid taxonomy.');
+    if ($GLOBALS['test_term_error'] !== null) return $GLOBALS['test_term_error'];
+    if (isset($GLOBALS['test_term_cascade'][$id])) {
+        $GLOBALS['wpdb']->term_ids = array_values(array_diff(
+            $GLOBALS['wpdb']->term_ids,
+            array_merge([$id], $GLOBALS['test_term_cascade'][$id])
+        ));
+    }
+    return $GLOBALS['test_term_delete_fails'] ? false : ['term_id' => $id];
+}
+function is_wp_error($value): bool { return $value instanceof WP_Error; }
 function patlis_gallery_get_home_id(): int { return 1; }
 function patlis_gallery_meta_key(): string { return 'patlis_gallery_image_ids'; }
 function metadata_exists($type, $id, $key): bool { return $GLOBALS['test_home_has_images']; }
@@ -257,9 +294,15 @@ $wpdb = new class {
     public $table_exists = false;
     public $delete_fails = false;
     public $term_ids = [];
-    public function prepare($sql, ...$args) { return $sql; }
+    public $prepared_args = [];
+    public $term_check_fails = false;
+    public function prepare($sql, ...$args) { $this->prepared_args = $args; return $sql; }
     public function get_var($sql) {
         if (strpos($sql, 'SHOW TABLES') === 0) return $this->table_exists ? 'test_patlis_leads' : null;
+        if (strpos($sql, 'SELECT COUNT(*)') === 0) {
+            if ($this->term_check_fails) return null;
+            return in_array($this->prepared_args[0], $this->term_ids ?? [], true) ? '1' : '0';
+        }
         return 0;
     }
     public function query($sql) { return $this->delete_fails ? false : 0; }
@@ -288,6 +331,59 @@ $wpdb->term_ids = [20];
 $test_term_delete_fails = true;
 test_same(500, test_reset('delete_menu_categories')->getCode(), 'Term deletion failure reported');
 $test_term_delete_fails = false;
+test_same([], $test_taxonomy_registrations, 'Existing taxonomy registration preserved');
+test_same([], $test_taxonomy_unregistrations, 'Existing taxonomy not unregistered');
+$test_taxonomy_active = false;
+foreach (['delete_property_facilities' => 'property_facility', 'delete_property_services' => 'property_service', 'delete_room_amenities' => 'room_amenity'] as $action => $taxonomy) {
+    $response = test_reset($action);
+    test_same(true, $response->success, 'Inactive accommodation taxonomy cleanup succeeds: ' . $taxonomy);
+    test_same('Deleted 1 term(s) from ' . $taxonomy . '.', $response->data['message'], 'Inactive taxonomy deletion count');
+    test_same(false, $test_taxonomy_active, 'Temporary registration removed');
+    $registration = end($test_taxonomy_registrations);
+    test_same($taxonomy, $registration[0], 'Correct taxonomy registered');
+    test_same([], $registration[1], 'No object types attached');
+    test_same(false, $registration[2]['public'], 'Temporary taxonomy not public');
+    test_same(false, $registration[2]['show_ui'], 'Temporary taxonomy has no UI');
+}
+$test_term_error = new WP_Error('delete_failed', 'Underlying deletion error.');
+$response = test_reset('delete_property_facilities');
+test_same(500, $response->getCode(), 'Deletion error surfaced');
+test_same(true, strpos($response->data['message'], 'Underlying deletion error.') !== false, 'WordPress error message retained');
+test_same(false, $test_taxonomy_active, 'Temporary registration removed before error response');
+$test_term_error = 0;
+test_same(true, strpos(test_reset('delete_property_facilities')->data['message'], 'default term') !== false, 'Default term refusal explained');
+$test_term_error = null;
+$wpdb->term_ids = [1685, 1686, 1687];
+$test_term_cascade = [1685 => [1686, 1687]];
+$test_term_delete_calls = [];
+$response = test_reset('delete_room_amenities');
+test_same(true, $response->success, 'Translation cascade cleanup succeeds');
+test_same('Deleted 3 term(s) from room_amenity.', $response->data['message'], 'Cascade-deleted terms counted');
+test_same([1685], $test_term_delete_calls, 'Cascade-deleted translations are not deleted twice');
+test_same([], $wpdb->term_ids, 'Cascade cleanup leaves no terms');
+test_same(false, $test_taxonomy_active, 'Cascade cleanup removes temporary registration');
+$test_term_cascade = [];
+$wpdb->term_ids = [20];
+$wpdb->term_check_fails = true;
+$test_term_delete_calls = [];
+$response = test_reset('delete_room_amenities');
+test_same(500, $response->getCode(), 'Term existence query failure surfaced');
+test_same([], $test_term_delete_calls, 'Failed verification does not delete terms');
+test_same(false, $test_taxonomy_active, 'Verification failure removes temporary registration');
+$wpdb->term_check_fails = false;
+$test_registration_fails = true;
+$unregistrations = $test_taxonomy_unregistrations;
+test_same(true, strpos(test_reset('delete_property_facilities')->data['message'], 'Registration blocked.') !== false, 'Registration failure surfaced');
+test_same($unregistrations, $test_taxonomy_unregistrations, 'Failed registration not unregistered');
+$test_registration_fails = false;
+$test_unregistration_fails = true;
+test_same(true, strpos(test_reset('delete_property_facilities')->data['message'], 'Unregistration blocked.') !== false, 'Unregistration failure surfaced');
+$test_unregistration_fails = false;
+$test_taxonomy_active = false;
+$wpdb->term_ids = [];
+$registrations = $test_taxonomy_registrations;
+test_same(true, test_reset('delete_property_facilities')->success, 'Empty inactive taxonomy cleanup succeeds');
+test_same($registrations, $test_taxonomy_registrations, 'Empty taxonomy does not need registration');
 $wpdb->term_ids = null;
 test_same(500, test_reset('delete_menu_categories')->getCode(), 'Term query failure reported');
 $wpdb->term_ids = [];

@@ -10,6 +10,7 @@ set_error_handler(static function (int $severity, string $message, string $file,
 
 define('ABSPATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('PATLIS_CORE_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+define('PATLIS_CORE_URL', 'https://example.test/patlis-core/');
 
 $test_options = [];
 $test_filters = [];
@@ -30,6 +31,8 @@ function esc_html_e($text, $domain = ''): void { echo esc_html($text); }
 function esc_js($value): string { return $value; }
 function esc_url($value): string { return $value; }
 function esc_url_raw($value): string { return $value; }
+function wp_kses_post($value): string { return $value; }
+function wpautop($value): string { return '<p>' . $value . '</p>'; }
 function wp_unslash($value) { return is_array($value) ? array_map('wp_unslash', $value) : stripslashes($value); }
 function sanitize_text_field($value): string { return trim(strip_tags((string) $value)); }
 function admin_url($path): string { return $path; }
@@ -126,6 +129,12 @@ $test_options = [
 ];
 $original = $test_options;
 
+if (in_array('--page-templates', $argv, true)) {
+    test_page_templates();
+    echo "PASS: {$test_assertions} page template checks.\n";
+    exit;
+}
+
 ob_start();
 Patlis_Admin_Page_Design_Options::render();
 $html = ob_get_clean();
@@ -202,6 +211,38 @@ $restricted_html = ob_get_clean();
 test_same(false, strpos($restricted_html, 'data-slug="rooms"') !== false, 'Version-restricted homepage section remains hidden');
 test_same(true, strpos($restricted_html, 'data-slug="welcome"') !== false, 'Common homepage section retained');
 $test_blocked_sections = [];
+
+function test_page_templates(): void {
+    global $test_options, $test_blocked_sections;
+
+$page_registry = Patlis_Core::get_design_pages_registry();
+foreach (['menu' => 'menu', 'offers' => 'offers-packages', 'offer' => 'offers-packages', 'rooms' => 'rooms', 'room' => 'rooms'] as $key => $availability) {
+    test_same($availability, $page_registry[$key]['availability'] ?? '', 'Restricted page declares its version flag: ' . $key);
+}
+$before_pages = $test_options;
+foreach ([
+    'general' => ['menu', 'rooms', 'offers-packages'],
+    'gastro' => ['rooms', 'offers-packages'],
+    'hotel' => ['menu'],
+    'combined' => [],
+] as $version => $blocked) {
+    $test_blocked_sections = $blocked;
+    $_GET = ['design_type' => 'page', 'section' => 'rooms'];
+    ob_start();
+    Patlis_Admin_Page_Design_Options::render();
+    $page_html = ob_get_clean();
+    foreach (['menu' => 'menu', 'offers' => 'offers-packages', 'offer' => 'offers-packages', 'rooms' => 'rooms', 'room' => 'rooms'] as $key => $availability) {
+        test_same(!in_array($availability, $blocked, true), strpos($page_html, 'section=' . $key . '"') !== false, $version . ' page visibility: ' . $key);
+    }
+    test_same(true, strpos($page_html, 'section=about"') !== false, $version . ' common page retained');
+    test_same(!in_array('rooms', $blocked, true), strpos($page_html, 'data-section="rooms"') !== false, $version . ' direct selection respects restriction');
+}
+test_same($before_pages, $test_options, 'Page visibility does not change stored settings');
+$test_blocked_sections = [];
+$_GET = [];
+}
+
+test_page_templates();
 
 $test_allowed = false;
 ob_start();

@@ -150,6 +150,13 @@ function patlis_menu_items_metabox_render(WP_Post $post): void
  * Save meta
  * ------------------------------------------------------------ */
 add_action('save_post_menu_item', 'patlis_menu_items_save', 10, 2);
+function patlis_menu_sanitize_item_number(string $value): string
+{
+    $clean = sanitize_text_field($value);
+    // Keep intentional left padding without bypassing WordPress text sanitization.
+    return $clean === '' ? '' : str_repeat(' ', strspn($value, ' ')) . $clean;
+}
+
 function patlis_menu_sanitize_basic_description_html(string $html): string
 {
     $allowed = [
@@ -178,8 +185,8 @@ function patlis_menu_items_save(int $post_id, WP_Post $post): void
 
     update_post_meta($post_id, 'pmi_show', isset($_POST['pmi_show']) ? '1' : '0');
 
-    $itemnr = isset($_POST['pmi_itemnr']) ? sanitize_text_field((string)$_POST['pmi_itemnr']) : '';
-    update_post_meta($post_id, 'pmi_itemnr', $itemnr);
+    $itemnr = isset($_POST['pmi_itemnr']) ? patlis_menu_sanitize_item_number(wp_unslash((string) $_POST['pmi_itemnr'])) : '';
+    update_post_meta($post_id, 'pmi_itemnr', wp_slash($itemnr));
 
     // pmi_sort optional
     $sort_raw = isset($_POST['pmi_sort']) ? trim((string)$_POST['pmi_sort']) : '';
@@ -376,6 +383,12 @@ add_action('pre_get_posts', function (WP_Query $q) {
     $orderby = (string) $q->get('orderby');
     if ($orderby === '') return;
 
+    if ($orderby === 'pmi_sort') {
+        $q->set('patlis_menu_order', 1);
+        $q->set('patlis_menu_admin_sort', 1);
+        return;
+    }
+
     $numeric = ['pmi_sort', 'pmi_price', 'pmi_price2', 'pmi_price3'];
     $bool    = ['pmi_show', 'pmi_carousel', 'pmi_vegan', 'pmi_vegetarian'];
 
@@ -445,6 +458,17 @@ add_filter('posts_orderby', function ($orderby, WP_Query $q) {
     if ($q->get('post_type') !== 'menu_item') return $orderby;
 
     global $wpdb;
+
+    if ($q->get('patlis_menu_admin_sort')) {
+        $direction = strtoupper((string) $q->get('order')) === 'DESC' ? 'DESC' : 'ASC';
+        return "
+            (pmi_sort_meta.meta_value IS NULL OR pmi_sort_meta.meta_value = '') ASC,
+            CAST(pmi_sort_meta.meta_value AS SIGNED) {$direction},
+            pmi_itemnr_meta.meta_value ASC,
+            {$wpdb->posts}.post_title ASC,
+            {$wpdb->posts}.ID ASC
+        ";
+    }
 
     $orderby = "
         (pmi_sort_meta.meta_value IS NULL OR pmi_sort_meta.meta_value = '') ASC,

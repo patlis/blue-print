@@ -158,6 +158,7 @@ return [
         'type'            => 'page',
         'label'           => __('Offers & Packages', 'patlis-core'),
         'shortcode_slug'  => 'page-offers',
+        'availability'    => 'offers-packages',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -190,6 +191,7 @@ return [
         'type'            => 'page',
         'label'           => __('Offer (Single page)', 'patlis-core'),
         'shortcode_slug'  => 'offer-single',
+        'availability'    => 'offers-packages',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -236,6 +238,7 @@ return [
         'type'            => 'page',
         'label'           => __('Rooms', 'patlis-core'),
         'shortcode_slug'  => 'page-rooms',
+        'availability'    => 'rooms',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -266,6 +269,7 @@ return [
         'type'            => 'page',
         'label'           => __('Room (Single page)', 'patlis-core'),
         'shortcode_slug'  => 'room-single',
+        'availability'    => 'rooms',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [

@@ -417,7 +417,7 @@ final class Patlis_Menu_Admin_Bulk_Edit
 				update_post_meta($post_id, 'pmi_sort', (string) intval($sort_raw));
 			}
 
-			update_post_meta($post_id, 'pmi_itemnr', wp_slash(sanitize_text_field((string) ($row['itemnr'] ?? ''))));
+			update_post_meta($post_id, 'pmi_itemnr', wp_slash(patlis_menu_sanitize_item_number((string) ($row['itemnr'] ?? ''))));
 			update_post_meta($post_id, 'pmi_price', self::sanitize_price((string) ($row['price'] ?? '')));
 			update_post_meta($post_id, 'pmi_price2', self::sanitize_price((string) ($row['price2'] ?? '')));
 			update_post_meta($post_id, 'pmi_price3', self::sanitize_price((string) ($row['price3'] ?? '')));

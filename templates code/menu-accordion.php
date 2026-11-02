@@ -58,7 +58,7 @@
         <?php endif; ?>
 
         <?php if ($title !== ''): ?>
-          <span class="h6 item-title"><?php echo esc_html($title); ?></span>
+          <span class="item-title"><?php echo esc_html($title); ?></span>
         <?php endif; ?>
 
         <?php if ($has_allergies): ?>

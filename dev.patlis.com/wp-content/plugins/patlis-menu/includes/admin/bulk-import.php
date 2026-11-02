@@ -147,7 +147,7 @@ final class Patlis_Menu_Admin_Import
 
         $rows = [];
         foreach ($lines as $line) {
-            $rows[] = str_getcsv($line, $delimiter);
+            $rows[] = str_getcsv($line, $delimiter, '"', '\\');
         }
 
         if (empty($rows[0]) || !is_array($rows[0])) {
@@ -216,7 +216,9 @@ final class Patlis_Menu_Admin_Import
 
             $row = array_pad($row, count($expected_header), '');
             $row = array_slice($row, 0, count($expected_header));
+            $item_number = (string) $row[1];
             $row = array_map('trim', $row);
+            $row[1] = $item_number;
 
             $data = array_combine($expected_header, $row);
             if ($data === false) {
@@ -255,7 +257,7 @@ final class Patlis_Menu_Admin_Import
             wp_set_object_terms($post_id, [$category_id], $taxonomy);
 
             update_post_meta($post_id, 'pmi_show', '1');
-            update_post_meta($post_id, 'pmi_itemnr', self::sanitize_text($data['item-nr']));
+            update_post_meta($post_id, 'pmi_itemnr', wp_slash(patlis_menu_sanitize_item_number($data['item-nr'])));
             update_post_meta($post_id, 'pmi_description', self::sanitize_textarea($data['description']));
             update_post_meta($post_id, 'pmi_allergies', self::sanitize_text($data['allergies']));
 
