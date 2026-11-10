@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) exit;
  */
 add_action('admin_post_patlis_save_sliders', function () {
 
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can('edit_posts')) {
         wp_die(esc_html__('You are not allowed to perform this action.', 'patlis-core'));
     }
 

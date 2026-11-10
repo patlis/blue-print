@@ -44,6 +44,8 @@ final class Patlis_Admin_Page_Translations
             wp_die(__('Not allowed.', 'patlis-core'));
         }
 
+        $show_keys = patlis_current_user_is_administrator();
+
         $labels = [
             'translations'        => __('Translations', 'patlis-core'),
             'polylang_required'   => __('Polylang is required.', 'patlis-core'),
@@ -54,17 +56,17 @@ final class Patlis_Admin_Page_Translations
             'add'                 => __('Add', 'patlis-core'),
             'cancel'              => __('Cancel', 'patlis-core'),
             'delete'              => __('Delete', 'patlis-core'),
-            'filter_keys'         => __('Filter keys...', 'patlis-core'),
+            'filter_keys'         => $show_keys ? __('Filter keys...', 'patlis-core') : __('Search translations...', 'patlis-core'),
             'filter'              => __('Filter', 'patlis-core'),
             'clear'               => __('Clear filter', 'patlis-core'),
             'key'                 => __('Key', 'patlis-core'),
             'language'            => __('Language', 'patlis-core'),
             'translation'         => __('Translation', 'patlis-core'),
-            'no_keys_found'       => __('No keys found.', 'patlis-core'),
+            'no_keys_found'       => $show_keys ? __('No keys found.', 'patlis-core') : __('No translations found.', 'patlis-core'),
             'default'             => __('Default', 'patlis-core'),
             'save_translations'   => __('Save translations', 'patlis-core'),
-            'key_singular'        => __('%d key', 'patlis-core'),
-            'key_plural'          => __('%d keys', 'patlis-core'),
+            'key_singular'        => $show_keys ? __('%d key', 'patlis-core') : __('%d entry', 'patlis-core'),
+            'key_plural'          => $show_keys ? __('%d keys', 'patlis-core') : __('%d entries', 'patlis-core'),
             'matching'            => __('matching %s', 'patlis-core'),
             'page_of'             => __('Page %1$d of %2$d', 'patlis-core'),
         ];
@@ -269,10 +271,20 @@ final class Patlis_Admin_Page_Translations
                 <input type="hidden" name="_search" value="<?php echo esc_attr($search); ?>">
                 <input type="hidden" name="_paged" value="<?php echo esc_attr($paged); ?>">
 
-                <table class="widefat striped" style="max-width:1100px;">
+                <?php if (!$show_keys) : ?>
+                    <style>
+                        .patlis-translations-table .patlis-translation-group-start > td {
+                            border-top: 2px solid var(--wp-admin-theme-color, #2271b1);
+                        }
+                    </style>
+                <?php endif; ?>
+
+                <table class="widefat striped patlis-translations-table" style="max-width:1100px;">
                     <thead>
                         <tr>
-                            <th style="width:260px;"><?php echo esc_html($labels['key']); ?></th>
+                            <?php if ($show_keys) : ?>
+                                <th style="width:260px;"><?php echo esc_html($labels['key']); ?></th>
+                            <?php endif; ?>
                             <th style="width:120px;"><?php echo esc_html($labels['language']); ?></th>
                             <th><?php echo esc_html($labels['translation']); ?></th>
                         </tr>
@@ -280,13 +292,13 @@ final class Patlis_Admin_Page_Translations
                     <tbody>
                         <?php if (empty($page_keys)) : ?>
                             <tr>
-                                <td colspan="3"><?php echo esc_html($labels['no_keys_found']); ?></td>
+                                <td colspan="<?php echo $show_keys ? 3 : 2; ?>"><?php echo esc_html($labels['no_keys_found']); ?></td>
                             </tr>
                         <?php else : ?>
-                            <?php foreach ($page_keys as $key) : ?>
+                            <?php foreach ($page_keys as $key_index => $key) : ?>
                                 <?php foreach ($languages as $index => $lang) : ?>
-                                    <tr>
-                                        <?php if ($index === 0) : ?>
+                                    <tr<?php if (!$show_keys && $key_index > 0 && $index === 0) echo ' class="patlis-translation-group-start"'; ?>>
+                                        <?php if ($show_keys && $index === 0) : ?>
                                             <td rowspan="<?php echo esc_attr(count($languages)); ?>" style="vertical-align:top;">
                                                 <code><?php echo esc_html($key); ?></code>
                                             </td>

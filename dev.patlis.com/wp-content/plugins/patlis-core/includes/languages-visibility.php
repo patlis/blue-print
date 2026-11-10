@@ -133,7 +133,8 @@ add_action('admin_footer', function (): void {
 
         function filterTranslations() {
             document.querySelectorAll('[name^="post_tr_lang["], [data-language], [lang]').forEach(function(element) {
-                if (element.closest('#wpadminbar')) {
+                // The profile locale controls the admin UI, not content translations.
+                if (element.closest('#wpadminbar, .user-language-wrap')) {
                     return;
                 }
 

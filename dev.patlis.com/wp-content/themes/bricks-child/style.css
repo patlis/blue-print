@@ -141,6 +141,13 @@ html:has(#notification-bar) {
 .room-cart-img:hover {transform: scale(1.1);}
 .room-cart-img { transition: transform 0.5s ease;}
 
+.read-container-post p, .read-container-post ul,
+.read-container-post ol, .read-container-post li, .read-container-post blockquote {
+  max-width:800px;
+	margin-left:auto;
+  margin-right:auto;
+}
+
 /* --------------------------------------------------- check-list --------------------------------------------------------- */
 .check-list ul, ul.check-list{
   list-style: none;

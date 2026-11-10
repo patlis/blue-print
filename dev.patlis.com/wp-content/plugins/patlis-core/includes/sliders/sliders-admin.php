@@ -8,7 +8,7 @@ add_action('admin_menu', function () {
     add_menu_page(
         __('Slides', 'patlis-core'),
         __('Slides', 'patlis-core'),
-        'manage_options',
+        'edit_posts',
         'patlis-slides',
         'patlis_render_slides_admin',
         'dashicons-images-alt2',
@@ -465,6 +465,10 @@ function patlis_render_slide_admin($group, $index, $slide = [], $is_template = f
 
 /** ADMIN PAGE */
 function patlis_render_slides_admin() {
+
+    if (!current_user_can('edit_posts')) {
+        wp_die(esc_html__('You are not allowed to perform this action.', 'patlis-core'));
+    }
 
     global $slider_groups;
 
