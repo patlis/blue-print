@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Patlis Version & Feature Flags
- * Description: Feature flags based on PATLIS_VERSION (comma-separated). Admin templates require an all-versions or matching version bundle when a version is configured.
+ * Description: Feature flags based on PATLIS_VERSION (comma-separated). Admin templates require an all-versions or matching version bundle when a version is configured. Use hotel,house to apply House exclusions and allow one saved room per language (excluding trash and auto-drafts).
  */
 
 if (!defined('PATLIS_VERSION')) {
@@ -142,10 +142,12 @@ function patlis_version_get_page_template_term_map(): array {
             'home',
             'image-gallery',
             'reviews',
+            'top-reviews',
             'services',
             'text-pages',
             'slider-section',
             'events',
+            'top-events'
         ],
         'gastro' => [
             'menu',
@@ -155,6 +157,7 @@ function patlis_version_get_page_template_term_map(): array {
         'hotel' => [
             'booking',
             'rooms',
+            'room',
             'top-rooms-section',
             'offers-packages',
             'offers-packages-section',
@@ -163,8 +166,55 @@ function patlis_version_get_page_template_term_map(): array {
         ],
         'kiosk' => [
             'kiosk',
+        ]
+    ];
+}
+
+function patlis_version_get_blocked_page_template_term_map(): array {
+    return [
+        'house' => [
+            'rooms',
+            'top-rooms-section',
+            'events',
+            'top-events',
+
         ],
     ];
+}
+
+function patlis_version_get_room_limit_map(): array {
+    return [
+        'house' => 1,
+    ];
+}
+
+/** Return the strictest active room limit, or 0 for unlimited. */
+function patlis_version_get_room_limit(): int {
+    $limit_map = patlis_version_get_room_limit_map();
+    $limits = [];
+
+    foreach (patlis_version_get_parts() as $version) {
+        if (isset($limit_map[$version]) && $limit_map[$version] > 0) {
+            $limits[] = $limit_map[$version];
+        }
+    }
+
+    return $limits === [] ? 0 : min($limits);
+}
+
+function patlis_version_get_blocked_page_template_terms(): array {
+    $term_map      = patlis_version_get_blocked_page_template_term_map();
+    $blocked_terms = [];
+
+    foreach (patlis_version_get_parts() as $version) {
+        if (!isset($term_map[$version])) {
+            continue;
+        }
+
+        $blocked_terms = array_merge($blocked_terms, $term_map[$version]);
+    }
+
+    return array_values(array_unique($blocked_terms));
 }
 
 function patlis_version_get_allowed_page_template_terms(): array {
@@ -179,8 +229,14 @@ function patlis_version_get_allowed_page_template_terms(): array {
         $allowed_terms = array_merge($allowed_terms, $term_map[$version]);
     }
 
-    return array_values(array_unique($allowed_terms));
+    return array_values(array_diff(array_unique($allowed_terms), patlis_version_get_blocked_page_template_terms()));
 }
+
+add_action('admin_menu', function (): void {
+    if (allowed_section('events') !== 1) {
+        remove_menu_page('edit.php?post_type=events');
+    }
+}, 999);
 
 function patlis_version_build_optional_taxonomy_filter(string $taxonomy, array $allowed_terms): array {
     return [
@@ -279,7 +335,23 @@ add_action('pre_get_posts', function (WP_Query $query): void {
         return;
     }
 
-    patlis_version_apply_tax_query($query, patlis_version_build_optional_taxonomy_filter($taxonomy, $allowed_terms));
+    $tax_query = patlis_version_build_optional_taxonomy_filter($taxonomy, $allowed_terms);
+    $blocked_terms = patlis_version_get_blocked_page_template_terms();
+
+    if ($blocked_terms !== []) {
+        $tax_query = [
+            'relation' => 'AND',
+            $tax_query,
+            [
+                'taxonomy' => $taxonomy,
+                'field'    => 'slug',
+                'terms'    => $blocked_terms,
+                'operator' => 'NOT IN',
+            ],
+        ];
+    }
+
+    patlis_version_apply_tax_query($query, $tax_query);
 });
 
 // Set the error state before the theme selects its active templates.
@@ -304,7 +376,8 @@ add_action('wp', function (): void {
         return;
     }
 
-    if ($terms === [] || array_intersect($terms, $allowed_terms) !== []) {
+    if (array_intersect($terms, patlis_version_get_blocked_page_template_terms()) === []
+        && ($terms === [] || array_intersect($terms, $allowed_terms) !== [])) {
         return;
     }
 
@@ -322,22 +395,11 @@ function allowed_section(string $slug): int {
         return 1;
     }
 
-    $term_map = patlis_version_get_page_template_term_map();
     $version_parts = patlis_version_get_parts();
 
     if (empty($version_parts)) {
         return 1;
     }
 
-    if (in_array($slug, $term_map['all-versions'] ?? [], true)) {
-        return 1;
-    }
-
-    foreach ($version_parts as $version) {
-        if (in_array($slug, $term_map[$version] ?? [], true)) {
-            return 1;
-        }
-    }
-
-    return 0;
+    return in_array($slug, patlis_version_get_allowed_page_template_terms(), true) ? 1 : 0;
 }

@@ -198,8 +198,8 @@ function patlis_show_previous_events(): int {
         'no_found_rows'  => true,
         'meta_query'     => [
             [
-                'key'     => 'events_date_start',
-                'value'   => date('Ymd'),
+                'key'     => 'events_date_end',
+                'value'   => current_time('Ymd'),
                 'compare' => '<',
                 'type'    => 'NUMERIC',
             ],
@@ -222,8 +222,8 @@ function patlis_show_next_events(): int {
         'no_found_rows'  => true,
         'meta_query'     => [
             [
-                'key'     => 'events_date_start',
-                'value'   => date('Ymd'),
+                'key'     => 'events_date_end',
+                'value'   => current_time('Ymd'),
                 'compare' => '>=',
                 'type'    => 'NUMERIC',
             ],

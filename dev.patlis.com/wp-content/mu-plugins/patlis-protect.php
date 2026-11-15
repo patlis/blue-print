@@ -6,6 +6,20 @@
 
 if (!defined('ABSPATH')) {  exit; }
 
+add_action('wp_before_admin_bar_render', function () {
+    if (current_user_can('administrator')) {
+        return;
+    }
+
+    global $wp_admin_bar;
+
+    foreach ($wp_admin_bar->get_nodes() as $node) {
+        if (strpos($node->id, 'bricks') !== false || $node->id === 'editor_mode') {
+            $wp_admin_bar->remove_node($node->id);
+        }
+    }
+}, PHP_INT_MAX);
+
 /**
  * Site Owner: μπορεί να διαχειρίζεται χρήστες,
  * αλλά μπορεί να αναθέτει ρόλους μόνο από whitelist.
