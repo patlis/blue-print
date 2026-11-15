@@ -2,7 +2,7 @@
 /*
 Plugin Name: Patlis Accommodation
 Description: Accommodation module (Hotel) + bookings table
-Version: 1.2.1
+Version: 1.2.2
 Author: Patlis
 Update URI: https://updates.patlis.com/patlis-accommodation/
 */
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) exit;
 
 define('PATLIS_ACCOMMODATION_PATH', plugin_dir_path(__FILE__));
 define('PATLIS_ACCOMMODATION_URL',  plugin_dir_url(__FILE__));
-define('PATLIS_ACCOMMODATION_VERSION', '1.2.1');
+define('PATLIS_ACCOMMODATION_VERSION', '1.2.2');
 
 // Updater
 if (function_exists('patlis_register_plugin_updater')) {
@@ -74,6 +74,7 @@ add_action('wp_enqueue_scripts', function (): void {
  * ============================================================ */
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/settings.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/post-types.php';
+require_once PATLIS_ACCOMMODATION_PATH . 'includes/room-limits.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/bricks-tags.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/rooms-query.php';
 require_once PATLIS_ACCOMMODATION_PATH . 'includes/booking-form.php';

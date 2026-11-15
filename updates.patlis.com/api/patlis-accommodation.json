@@ -1,18 +1,18 @@
 {
   "name": "Patlis Accommodation",
   "slug": "patlis-accommodation",
-  "version": "1.2.1",
-  "download_url": "https://updates.patlis.com/downloads/patlis-accommodation-1.2.1.zip",
+  "version": "1.2.2",
+  "download_url": "https://updates.patlis.com/downloads/patlis-accommodation-1.2.2.zip",
   "homepage": "https://patlis.com",
   "author": "Patlis Ioannis",
   "requires": "7.0",
   "tested": "7.0.4",
   "requires_php": "8.1",
-  "last_updated": "2026-08-29",
+  "last_updated": "2026-11-15",
   "sections": {
     "description": "Accommodation management for Patlis sites.",
     "installation": "<p>Upload and activate.</p>",
-    "changelog": "<ul><li>Added the accommodation booking form flow with booking storage, lead tracking, and customer and owner emails.</li><li>Added booking settings for email texts and owner email subjects.</li><li>Added room-specific offers, meal plans, multilingual support, and booking calendar enhancements.</li></ul>",
+    "changelog": "<h4>1.2.2</h4><ul><li>Added a House version limit of one saved room per language, including drafts, private rooms, and scheduled rooms.</li><li>Prevented duplicate rooms when creating, changing languages, or restoring from Trash, while allowing edits and translations into available languages.</li><li>Updated the top offers count to include enabled offers without a featured image.</li></ul><h4>Earlier changes</h4><ul><li>Added the accommodation booking form flow with booking storage, lead tracking, and customer and owner emails.</li><li>Added booking settings for email texts and owner email subjects.</li><li>Added room-specific offers, meal plans, multilingual support, and booking calendar enhancements.</li></ul>",
     "faq": "<h4>Can I use this plugin on any WordPress site?</h4><p>No, this plugin is designed specifically for Patlis platform websites.</p><h4>Does it support room bookings?</h4><p>Yes, the plugin includes a built-in booking system for managing room reservations.</p><h4>Can I manage multiple room types?</h4><p>Yes, you can create and manage multiple room types with different prices and details.</p><h4>Does it support availability management?</h4><p>Yes, you can control availability and booking rules directly from the admin panel.</p><h4>Is it suitable for hotels and apartments?</h4><p>Yes, the plugin is designed for hotels, apartments, and other accommodation businesses.</p>",
     "screenshots": "<p>No screenshots yet.</p>"
   },

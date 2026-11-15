@@ -30,6 +30,7 @@ return [
         'type'            => 'page',
         'label'           => __('Events', 'patlis-core'),
         'shortcode_slug'  => 'page-events',
+        'availability'     => 'events',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -60,6 +61,7 @@ return [
         'type'            => 'page',
         'label'           => __('Event (Single page)', 'patlis-core'),
         'shortcode_slug'  => 'event-single',
+        'availability'     => 'events',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [
@@ -269,7 +271,7 @@ return [
         'type'            => 'page',
         'label'           => __('Room (Single page)', 'patlis-core'),
         'shortcode_slug'  => 'room-single',
-        'availability'    => 'rooms',
+        'availability'    => 'room',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [

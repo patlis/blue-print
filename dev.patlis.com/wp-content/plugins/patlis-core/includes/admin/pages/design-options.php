@@ -233,6 +233,7 @@ final class Patlis_Admin_Page_Design_Options {
       'rooms'      => 'top-rooms-section',
       'offers'     => 'offers-packages-section',
       'experience' => 'experience-section',
+      'events'     => 'top-events',
     ];
     return !isset($map[$section]) || !function_exists('allowed_section') || allowed_section($map[$section]) === 1;
   }

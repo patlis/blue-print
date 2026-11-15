@@ -296,6 +296,7 @@ return [
         'type'            => 'section',
         'label'           => __('Events', 'patlis-core'),
         'shortcode_slug'  => 'top-events',
+        'availability'     => 'top-events',
         'default_variant' => 'classic',
         'variants' => [
             'classic' => [

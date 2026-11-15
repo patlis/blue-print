@@ -211,10 +211,6 @@ function patlis_acc_top_packages_count(): int {
                 'value'   => '1',
                 'compare' => '=',
             ],
-            [
-                'key'     => '_thumbnail_id',
-                'compare' => 'EXISTS',
-            ],
         ],
     ];
 
